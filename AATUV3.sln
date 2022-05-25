@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AATUV3", "AATUV3.csproj", "{5DAAE426-967A-4BDC-8793-3B9DBF260967}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Debug|x64.ActiveCfg = Debug|x64
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Debug|x64.Build.0 = Debug|x64
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Release|x64.ActiveCfg = Release|x64
+		{5DAAE426-967A-4BDC-8793-3B9DBF260967}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0493D49-F8E5-49B3-83E7-18C7881355F7}
+	EndGlobalSection
+EndGlobal
