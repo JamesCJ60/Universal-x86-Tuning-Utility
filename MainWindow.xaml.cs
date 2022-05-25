@@ -54,13 +54,13 @@ namespace AATUV3
 
             if((bool)Settings.Default["firstBoot"] == true)
             {
-                Backend.ApplySettings("InstallDriver.exe", "", true);
+                Backend.ApplySettings("InstallDriver.exe", "", false);
                 Settings.Default["firstBoot"] = false;
                 Settings.Default.Save();
             }
-            
 
-            
+            Families.SetFam();
+
 
             InitializeComponent();
             //load main menu on load
@@ -72,8 +72,6 @@ namespace AATUV3
 
             //Change window title
             this.Title = $"AMD APU Tuning Utility - {menu}";
-
-            Families.SetFam();
 
             //Get current directory
             if (Settings.Default["Path"].ToString() == "" || Settings.Default["Path"].ToString() == null || Settings.Default["Path"].ToString().Contains("System32"))
