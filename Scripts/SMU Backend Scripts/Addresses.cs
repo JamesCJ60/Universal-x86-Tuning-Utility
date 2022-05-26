@@ -79,20 +79,8 @@ namespace RyzenSMUBackend
         public static string[] SensorNames;
         public static string[] SensorOffsets;
 
-        [DllImport("inpoutx64.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetPhysLong(UIntPtr memAddress, out uint Data);
-
         public async static void GetPMTableVersion()
         {
-            uint msg1 = 0x0;
-            uint msg2 = 0x0;
-            uint msg3 = 0x0;
-
-            Args = new uint[6];
-            RyzenAccess = new Smu(EnableDebug);
-            RyzenAccess.Initialize();
-
             //RAVEN - 0
             //PICASSO - 1
             //DALI - 2
@@ -105,16 +93,26 @@ namespace RyzenSMUBackend
             //PHEONIX - 9
             //RAPHAEL/DRAGON RANGE - 10
 
-            //set SMU message address
-            if (Families.FAMID == 3 || Families.FAMID == 7)
-            {
-                msg1 = 0x6;
-                msg2 = 0x66;
-                msg3 = 0x65;
-            }
+            
 
             await Task.Run(() =>
             {
+                uint msg1 = 0x0;
+                uint msg2 = 0x0;
+                uint msg3 = 0x0;
+
+                //set SMU message address
+                if (Families.FAMID == 3 || Families.FAMID == 7)
+                {
+                    msg1 = 0x6;
+                    msg2 = 0x66;
+                    msg3 = 0x65;
+                }
+
+                Args = new uint[6];
+                RyzenAccess = new Smu(EnableDebug);
+                RyzenAccess.Initialize();
+
                 //Get PMTable version
                 RyzenAccess.SendPsmu(msg1, ref Args);
                 PMTableVersion = Args[0];
@@ -139,53 +137,54 @@ namespace RyzenSMUBackend
 
 
                 //Set path to PMTable
-                string path = (string)Settings.Default["Path"] + "\\bin\\pmtables\\" + Families.FAMID + "\\0x00" + PMTableVersion;
+                //string path = (string)Settings.Default["Path"] + "\\bin\\pmtables\\" + Families.FAMID + "\\0x00" + PMTableVersion;
 
-                string offsets = "";
-                string sensors = "";
+                //string offsets = "";
+                //string sensors = "";
 
 
                 //Load PMTbale data
-                offsets = path + "\\0x00" + PMTableVersion + "-offsets.txt";
-                sensors = path + "\\0x00" + PMTableVersion + "-sensors.txt";
+                //offsets = path + "\\0x00" + PMTableVersion + "-offsets.txt";
+                //sensors = path + "\\0x00" + PMTableVersion + "-sensors.txt";
 
                 //Check if PMTbale exists 
-                if (File.Exists(offsets) && File.Exists(sensors))
-                {
-                    //Load sensor details
-                    SensorNames = File.ReadAllLines(sensors);
-                    SensorOffsets = File.ReadAllLines(offsets);
+                //if (File.Exists(offsets) && File.Exists(sensors))
+                //{
+                //    //Load sensor details
+                //    SensorNames = File.ReadAllLines(sensors);
+                //    SensorOffsets = File.ReadAllLines(offsets);
 
-                    string output = "";
-                    string outputNames = "";
-                    int i = 0;
+                //    string output = "";
+                //    string outputNames = "";
+                //    int i = 0;
 
-                    foreach(string line in SensorOffsets)
-                    {
-                        int lineConvert = Convert.ToInt32(line);
-                        output = output + "0x" + string.Format("{0:x}", lineConvert) + ",\n";
-                        i++;
-                    }
-                    foreach (string line in SensorNames)
-                    {
-                        outputNames =  outputNames + $"\"{line}\",\n";
-                    }
+                //    foreach(string line in SensorOffsets)
+                //    {
+                //        int lineConvert = Convert.ToInt32(line);
+                //        output = output + "0x" + string.Format("{0:x}", lineConvert) + ",\n";
+                //        i++;
+                //    }
+                //    foreach (string line in SensorNames)
+                //    {
+                //        outputNames =  outputNames + $"\"{line}\",\n";
+                //    }
 
-                    if (File.Exists(offsets))
-                    {
-                        File.Delete(offsets);
-                    }
+                //    if (File.Exists(offsets))
+                //    {
+                //        File.Delete(offsets);
+                //    }
 
-                    if (File.Exists(sensors))
-                    {
-                        File.Delete(sensors);
-                    }
+                //    if (File.Exists(sensors))
+                //    {
+                //        File.Delete(sensors);
+                //    }
 
-                    File.WriteAllText(offsets, output);
-                    File.WriteAllText(sensors, outputNames);
-                }
+                //    File.WriteAllText(offsets, output);
+                //    File.WriteAllText(sensors, outputNames);
+                //}
+
+                RyzenAccess.Deinitialize();
             });
-            RyzenAccess.Deinitialize();
         }
     }
 }

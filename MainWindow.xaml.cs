@@ -37,7 +37,21 @@ namespace AATUV3
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static DispatcherTimer reApply = new DispatcherTimer();
+        public static string menu = "";
+
+        public static Timer reApply;
+
+        [DllImport("inpoutx64.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetPhysLong(UIntPtr memAddress, ref uint DData);
+
+        [DllImport("inpoutx64.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsInpOutDriverOpen();
+
+        [DllImport("inpoutx64.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetPhysLong(UIntPtr memAddress, uint DData);
 
         public MainWindow()
         {
@@ -100,9 +114,7 @@ namespace AATUV3
             }
 
             //Set up auto reapply timer
-            reApply.Interval = TimeSpan.FromSeconds(Convert.ToInt32(Settings.Default["AutoReapplyTime"]));
-            reApply.Tick += Auto_Reapply_Tick;
-            reApply.Start();
+            reApply = new Timer(new TimerCallback(TickTimer), null, (int)Settings.Default["AutoReapplyTime"] * 1000, 1000);
 
             //Garbage collection
             DispatcherTimer Garbage = new DispatcherTimer();
@@ -244,7 +256,7 @@ namespace AATUV3
             //Load menu
             PagesNavigation.Navigate(new System.Uri("Pages/HomeMenu.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
-            string menu = (string)rdHome.Content;
+            menu = (string)rdHome.Content;
             lblMenu.Content = menu.ToUpper();
 
             //Change window title
@@ -257,7 +269,7 @@ namespace AATUV3
             //Load menu
             PagesNavigation.Navigate(new System.Uri("Pages/ProjectSnowdrop.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
-            string menu = (string)rdSnow.Content;
+            menu = (string)rdSnow.Content;
             lblMenu.Content = menu.ToUpper();
 
             //Change window title
@@ -269,7 +281,7 @@ namespace AATUV3
             //Load menu
             PagesNavigation.Navigate(new System.Uri("Pages/CustomPresets.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
-            string menu = (string)rdCustom.Content;
+            menu = (string)rdCustom.Content;
             lblMenu.Content = menu.ToUpper();
 
             //Change window title
@@ -281,7 +293,7 @@ namespace AATUV3
             //Load menu
             PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
-            string menu = (string)rdAdaptive.Content;
+            menu = (string)rdAdaptive.Content;
             lblMenu.Content = menu.ToUpper();
 
             //Change window title
@@ -293,7 +305,7 @@ namespace AATUV3
             //Load menu
             PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
-            string menu = (string)rdClock.Content;
+            menu = (string)rdClock.Content;
             lblMenu.Content = menu.ToUpper();
 
             //Change window title
@@ -318,7 +330,7 @@ namespace AATUV3
             //PagesNavigation.Navigate(new System.Uri("Pages/Info.xaml", UriKind.RelativeOrAbsolute));
             PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
-            string menu = (string)rdInfo.Content;
+            menu = (string)rdInfo.Content;
             lblMenu.Content = menu.ToUpper();
 
             //Change window title
@@ -330,7 +342,7 @@ namespace AATUV3
             //Load menu
             PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
-            string menu = (string)rdSettings.Content;
+            menu = (string)rdSettings.Content;
             lblMenu.Content = menu.ToUpper();
 
             //Change window title
@@ -345,7 +357,7 @@ namespace AATUV3
         }
 
         //Auto reapply
-        void Auto_Reapply_Tick(object sender, EventArgs e)
+        static void TickTimer(object state)
         {
             if (Convert.ToBoolean(Settings.Default["AutoReapply"]) == true)
             {
@@ -353,7 +365,7 @@ namespace AATUV3
                 if (Settings.Default["RyzenAdjArguments"].ToString() != null || Settings.Default["RyzenAdjArguments"].ToString() != "")
                 {
                     //Cehck to make sure that Adpative Performance menu is not open
-                    if (lblMenu.Content.ToString() != rdAdaptive.Content.ToString().ToUpper())
+                    if (!menu.ToLower().Contains("adaptive"))
                     {
                         //Get RyzenAdj path
                         string path = "\\bin\\ryzenadj\\ryzenadj.exe";
@@ -362,8 +374,6 @@ namespace AATUV3
                     }
                 }
             }
-
-            reApply.Interval = TimeSpan.FromSeconds(Convert.ToInt32(Settings.Default["AutoReapplyTime"]));
         }
 
         void GarbageCollect_Tick(object sender, EventArgs e)

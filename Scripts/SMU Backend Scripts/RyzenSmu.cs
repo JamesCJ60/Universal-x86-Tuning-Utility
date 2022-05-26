@@ -75,14 +75,9 @@ namespace RyzenSmu
         {
             MemoryBaseAddress = MemoryAddress;
         }
-
-
-        
-
     }
     class Smu
     {
-        
 
         [DllImport("inpoutx64.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -93,7 +88,7 @@ namespace RyzenSmu
             uint Data = 0;
             try
             {
-                GetPhysLong((UIntPtr)(Address + Offset * 4), out Data);
+               GetPhysLong((UIntPtr)(Address + Offset * 4), out Data);
             }
             catch(Exception e)
             {

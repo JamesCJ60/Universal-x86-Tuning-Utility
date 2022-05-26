@@ -429,7 +429,7 @@ namespace AATUV3.Pages
             if (cbPL2_Dur.IsChecked == true)
             {
                 ryzenadj = ryzenadj + $"--stapm-time={nudPL2_Dur.Value} ";
-                if (apply == true) SendCommand.set_stapm_limit((uint)nudPL2.Value);
+                if (apply == true) SendCommand.set_stapm_limit((uint)nudPL2_Dur.Value);
             }
 
             if (cbRampTime.IsChecked == true)
