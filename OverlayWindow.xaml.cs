@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
 using LibreHardwareMonitor.Hardware;
+using AATUV3.Properties;
 
 namespace AATUV3
 {
@@ -27,22 +28,29 @@ namespace AATUV3
     /// </summary>
     public partial class OverlayWindow : Window
     {
+
+        public DispatcherTimer autoReapply = new DispatcherTimer();
         public OverlayWindow()
         {
             InitializeComponent();
             this.WindowState = System.Windows.WindowState.Maximized;
+            this.Hide();
 
             //set up timer for key combo system
             DispatcherTimer checkKeyInput = new DispatcherTimer();
             checkKeyInput.Interval = TimeSpan.FromSeconds(0.15);
             checkKeyInput.Tick += KeyShortCuts_Tick;
-            checkKeyInput.Start();
+            //checkKeyInput.Start();
 
             //set up timer for sensor update
             DispatcherTimer sensor = new DispatcherTimer();
             sensor.Interval = TimeSpan.FromSeconds(2);
             sensor.Tick += SensorUpdate_Tick;
-            sensor.Start();
+            //sensor.Start();
+
+            autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]);
+            autoReapply.Tick += SensorUpdate_Tick;
+            autoReapply.Start();
 
             thisPC = new Computer()
             {
@@ -60,6 +68,34 @@ namespace AATUV3
         private static CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
 
         public static bool hidden = true;
+
+        void AutoReapply_Tick(object sender, EventArgs e)
+        {
+            if (Convert.ToBoolean(Settings.Default["AutoReapply"]) == true)
+            {
+                //Check if RyzenAdjArguments is populated
+                if (Settings.Default["RyzenAdjArguments"].ToString() != null || Settings.Default["RyzenAdjArguments"].ToString() != "")
+                {
+                    //Cehck to make sure that Adpative Performance menu is not open
+                    if (!MainWindow.menu.ToLower().Contains("adaptive"))
+                    {
+                        //Get RyzenAdj path
+                        string path = "\\bin\\ryzenadj\\ryzenadj.exe";
+                        //Pass settings on to be applied
+                        Backend.ApplySettings(path, Settings.Default["RyzenAdjArguments"].ToString(), true);
+                    }
+                }
+            }
+
+            if(autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]))
+            {
+                autoReapply.Stop();
+                autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]);
+                autoReapply.Start();
+            }
+        }
+
+
         void KeyShortCuts_Tick(object sender, EventArgs e)
         {
             //Resize scrollview 

@@ -233,7 +233,7 @@ namespace AATUV3.Pages
             }
             if (btnPreset4.Content == "Find Device Presets")
             {
-                System.Diagnostics.Process.Start("https://www.dropbox.com/home/Project%20Snowdrop%20Presets");
+                System.Diagnostics.Process.Start("https://www.dropbox.com/sh/5yll57epokkcqgs/AABVsb_cjkdmMoss5JsMK4fia?dl=0");
             }
 
             else

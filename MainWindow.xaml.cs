@@ -113,17 +113,14 @@ namespace AATUV3
                 // Debug path MessageBox.Show(path);
             }
 
-            //Set up auto reapply timer
-            reApply = new Timer(new TimerCallback(TickTimer), null, (int)Settings.Default["AutoReapplyTime"] * 1000, 1000);
-
             //Garbage collection
             DispatcherTimer Garbage = new DispatcherTimer();
             Garbage.Interval = TimeSpan.FromSeconds(8);
             Garbage.Tick += GarbageCollect_Tick;
             Garbage.Start();
 
-            //OverlayWindow overlay = new OverlayWindow();
-            //overlay.Show();
+            OverlayWindow overlay = new OverlayWindow();
+            overlay.Show();
 
 
             if((bool)Settings.Default["SensorOverlay"] == true){
@@ -303,7 +300,7 @@ namespace AATUV3
         private void rdClock_Click(object sender, RoutedEventArgs e)
         {
             //Load menu
-            PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
+            PagesNavigation.Navigate(new System.Uri("Pages/ClockControl.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
             menu = (string)rdClock.Content;
             lblMenu.Content = menu.ToUpper();
@@ -354,26 +351,6 @@ namespace AATUV3
             //Make window follow cursor when button is down on top bar
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
-        }
-
-        //Auto reapply
-        static void TickTimer(object state)
-        {
-            if (Convert.ToBoolean(Settings.Default["AutoReapply"]) == true)
-            {
-                //Check if RyzenAdjArguments is populated
-                if (Settings.Default["RyzenAdjArguments"].ToString() != null || Settings.Default["RyzenAdjArguments"].ToString() != "")
-                {
-                    //Cehck to make sure that Adpative Performance menu is not open
-                    if (!menu.ToLower().Contains("adaptive"))
-                    {
-                        //Get RyzenAdj path
-                        string path = "\\bin\\ryzenadj\\ryzenadj.exe";
-                        //Pass settings on to be applied
-                        Backend.ApplySettings(path, Settings.Default["RyzenAdjArguments"].ToString(), true);
-                    }
-                }
-            }
         }
 
         void GarbageCollect_Tick(object sender, EventArgs e)
