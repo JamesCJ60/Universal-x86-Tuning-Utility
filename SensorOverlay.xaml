@@ -73,32 +73,32 @@
                 <SolidColorBrush Opacity="0.25" Color="#141414"/>
             </DockPanel.Background>
             <StackPanel DockPanel.Dock="Top" Width="auto" Height="auto" x:Name="SP1" Focusable="False">
-                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,2,2,0">
-                    <Image  Source="Assets\Icons\cpu-fill.png" Margin="0,0,5,0" Height="24"/>
+                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,2,2,-4">
+                    <Image  Source="Assets\Icons\cpu-fill.png" Margin="0,0,0,0" Height="24"/>
                     <Label  Content="iGPU:" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" />
                     <Label  Name="lbliGPU"  Content="" Foreground="White" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,0">
-                    <Image  Source="Assets\Icons\cpu-line.png" Margin="0,0,5,0" Height="24"/>
-                    <Label  Content="CPU: " Foreground="White" FontWeight="Bold" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,-4">
+                    <Image  Source="Assets\Icons\cpu-line.png" Margin="0,0,0,0" Height="24"/>
+                    <Label  Content="CPU: " Foreground="White" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,0,-4" />
                     <Label  Name="lblCPU"  Content="" Foreground="White" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,0">
-                    <Image  Source="Assets\Icons\database-2-line.png" Margin="0,0,5,0" Height="24"/>
+                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,-3">
+                    <Image  Source="Assets\Icons\database-2-line.png" Margin="0,0,0,0" Height="24"/>
                     <Label  Content="RAM: " Foreground="White" FontWeight="Bold" VerticalAlignment="Center" />
                     <Label  Name="lblRAM"  Content="" Foreground="White" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,0">
-                    <Image  Source="Assets\Icons\time-line.png" Margin="0,0,5,0" Height="24"/>
+                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,-6" Name="FPS">
+                    <Image  Source="Assets\Icons\time-line.png" Margin="0,0,0,0" Height="24"/>
                     <Label  Content="FPS: " Foreground="White" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" />
                     <Label  Name="lblFPS"  Content="" Foreground="White" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,0">
-                    <Image Name="imgBat" Source="Assets\Icons\battery-fill.png" Margin="0,0,5,0" Height="24"/>
+                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,-2">
+                    <Image Name="imgBat" Source="Assets\Icons\battery-fill.png" Margin="0,0,0,0" Height="24"/>
                     <Label  Content="Battery: " Foreground="White" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" />
                     <Label  Name="lblBat"  Content="" Foreground="White" VerticalAlignment="Center" />
                 </StackPanel>

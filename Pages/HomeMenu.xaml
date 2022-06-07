@@ -45,11 +45,11 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#eb0045"/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource PrimaryBlueColorHover}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#750123 "/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource PrimaryBlueColorDown}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
@@ -68,12 +68,12 @@
         </Border>
 
         <Label Content="Welcome To" Foreground="White" FontSize="50" Margin="0,56,0,0" Height="79" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-        <Label Content="AMD APU Tuning Utility" Foreground="White" FontSize="82" Margin="0,104,0,0" Height="126" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="35,313,565,117" Background="#FFBE0037"  FontSize="20" Foreground="White" Content="Join Our Discord" Height="70" Width="250" Click="Discord_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="300,313,300,117" Background="#FFBE0037"  FontSize="20" Foreground="White" Content="Join Our Reddit" Height="70" Width="250" Click="Reddit_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="565,313,35,117" Background="#FFBE0037"  FontSize="20" Foreground="White" Content="Support Us" Height="70" Width="250" Click="SupportUs_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="175,397,425,33" Background="#FFBE0037"  FontSize="20" Foreground="White" Content="Help" Height="70" Width="250" Click="Help_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="440,397,160,33" Background="#FFBE0037"  FontSize="20" Foreground="White" Content="Latest Releases" Height="70" Width="250" Click="Releases_Click"/>
-        <Label Content="Created by JamesCJ and sbski." Foreground="White" FontSize="16" Margin="-9,0,0,-8" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        <Label Name="lblAppName" Content="AMD APU Tuning Utility" Foreground="White" FontSize="82" Margin="0,104,0,0" Height="126" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="35,313,565,117" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Join Our Discord" Height="70" Width="250" Click="Discord_Click"/>
+        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="300,313,300,117" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Join Our Reddit" Height="70" Width="250" Click="Reddit_Click"/>
+        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="565,313,35,117" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Support Us" Height="70" Width="250" Click="SupportUs_Click"/>
+        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="175,397,425,33" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Help" Height="70" Width="250" Click="Help_Click"/>
+        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="440,397,160,33" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Latest Releases" Height="70" Width="250" Click="Releases_Click"/>
+        <Label Content="Created by JamesCJ, sbski, and ProjectSBC" Foreground="White" FontSize="16" Margin="0,0,0,-8" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

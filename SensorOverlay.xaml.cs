@@ -21,6 +21,9 @@ using System.Threading;
 using LibreHardwareMonitor.Hardware;
 using Microsoft.Diagnostics.Tracing.Session;
 using System.Windows.Forms;
+using AATUV3.Scripts.SMU_Backend_Scripts;
+using RyzenSMUBackend;
+using RyzenSmu;
 
 namespace AATUV3
 {
@@ -37,6 +40,8 @@ namespace AATUV3
         public static int iGPUPower;
         public static int iGPULoad;
         public static float iGPUMemUsed;
+        public static float iGPUVolt;
+        public static int fabricClk;
 
         public static int battery;
         public static float batTime;
@@ -47,6 +52,7 @@ namespace AATUV3
         int cpuClock;
         int cpuLoad;
         int cpuPower;
+        float cpuVolt;
 
         int RAMLoad;
         int RAMUsed;
@@ -120,9 +126,9 @@ namespace AATUV3
                 //handle event
                 m_EtwSession.Source.AllEvents += data =>
                 {
-                //filter out frame presentation events
-                if (((int)data.ID == EventID_D3D9PresentStart && data.ProviderGuid == D3D9_provider) ||
-                    ((int)data.ID == EventID_DxgiPresentStart && data.ProviderGuid == DXGI_provider))
+                    //filter out frame presentation events
+                    if (((int)data.ID == EventID_D3D9PresentStart && data.ProviderGuid == D3D9_provider) ||
+                        ((int)data.ID == EventID_DxgiPresentStart && data.ProviderGuid == DXGI_provider))
                     {
                         int pid = data.ProcessID;
                         long t;
@@ -131,8 +137,8 @@ namespace AATUV3
                         {
                             t = watch.ElapsedMilliseconds;
 
-                        //if process is not yet in Dictionary, add it
-                        if (!frames.ContainsKey(pid))
+                            //if process is not yet in Dictionary, add it
+                            if (!frames.ContainsKey(pid))
                             {
                                 frames[pid] = new TimestampCollection();
 
@@ -150,8 +156,8 @@ namespace AATUV3
                                 frames[pid].Name = name;
                             }
 
-                        //store frame timestamp in collection
-                        frames[pid].Add(t);
+                            //store frame timestamp in collection
+                            frames[pid].Add(t);
                         }
                     }
                 };
@@ -235,15 +241,18 @@ namespace AATUV3
             {
                 updateSensorsInfo();
             }
+
+            Addresses.UpdateTable();
         }
 
         int i = 0;
-        bool hasTried = false;
+        int d = 1;
+
         private void updateSensorsInfo()
         {
             try
             {
-                if(i < 1)
+                if (i < 1)
                 {
                     startFPS();
                     i++;
@@ -266,7 +275,7 @@ namespace AATUV3
                 if (pwr.BatteryChargeStatus == BatteryChargeStatus.Charging)
                 {
                     batTime = 0;
-                    
+
                 }
 
                 //avFrame = avFrame + Framerate;
@@ -276,14 +285,41 @@ namespace AATUV3
 
                 TimeSpan time = TimeSpan.FromSeconds(batTime);
 
-                lbliGPU.Content = $"{iGPUTemp}°C   {iGPULoad}%   {iGPUClock}MHz   {iGPUSoCClock}MHz   {iGPUPower}w";
-                lblCPU.Content = $"{cpuTemp}°C   {cpuLoad}%   {cpuClock}MHz   {cpuPower}w";
-                lblRAM.Content = $"{RAMLoad}%   {RAMUsed}MB   {iGPUMemClock}MHz";
+
+                if (i == d)
+                {
+
+
+                    if (Addresses.PMTableVersion == 400005 || Addresses.PMTableVersion == 400004)
+                    {
+                        iGPUClock = (int)GetSensor.getSensorValve("GFX_FREQEFF");
+                        iGPULoad = (int)GetSensor.getSensorValve("GFX_BUSY");
+                        iGPUSoCClock = (int)GetSensor.getSensorValve("SOCCLK_FREQEFF");
+                        iGPUTemp = (int)GetSensor.getSensorValve("GFX_TEMP");
+                        iGPUVolt = GetSensor.getSensorValve("GFX_VOLTAGE");
+                        fabricClk = (int)GetSensor.getSensorValve("FCLK_FREQEFF");
+                        iGPUMemClock = (int)GetSensor.getSensorValve("MEMCLK_FREQEFF");
+                        cpuVolt = GetSensor.getSensorValve("CPU_TELEMETRY_VOLTAGE");
+                        cpuPower = (int)GetSensor.getSensorValve("SOCKET_POWER");
+
+                        lbliGPU.Content = $"{iGPUTemp}°C   {iGPULoad}%   {iGPUClock}MHz   {iGPUSoCClock}MHz   {iGPUVolt.ToString("0.00")}V";
+                        lblRAM.Content = $"{RAMLoad}%   {RAMUsed}MB   {iGPUMemClock}MHz   {fabricClk}MHz";
+                        lblCPU.Content = $"{cpuTemp}°C   {cpuLoad}%   {cpuClock}MHz   {cpuVolt.ToString("0.00")}V   {cpuPower}W";
+                    }
+                    else
+                    {
+                        lbliGPU.Content = $"{iGPUTemp}°C   {iGPULoad}%   {iGPUClock}MHz   {iGPUSoCClock}MHz";
+                        lblRAM.Content = $"{RAMLoad}%   {RAMUsed}MB   {iGPUMemClock}MHz";
+                        lblCPU.Content = $"{cpuTemp}°C   {cpuLoad}%   {cpuClock}MHz   {cpuPower}w";
+                    }
+
+                    d = i + 2;
+                }
                 lblFPS.Content = $"{Framerate}FPS";
 
-                if(batTime <=1)
+                if (batTime <= 1)
                 {
-                    imgBat.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/battery-charge-line.png")); 
+                    imgBat.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/battery-charge-line.png"));
                     lblBat.Content = $"{battery}%";
                 }
                 else if (battery > 50)
@@ -296,19 +332,22 @@ namespace AATUV3
                     imgBat.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/battery-low-line.png"));
                     lblBat.Content = $"{battery}%   {time:%h} Hours {time:%m} Minutes";
                 }
-
-                if (Framerate <= 0 && iGPULoad >= 20)
-                {
-                    thETW.Abort();
-                    thOutput.Abort();
-                    startFPS();
-                }
             }
             catch (Exception ex)
             {
             }
-        }
 
+            if (Framerate <= 0)
+            {
+                FPS.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                FPS.Visibility = Visibility.Visible;
+            }
+
+            i++;
+        }
 
 
         public class UpdateVisitor : IVisitor
@@ -516,7 +555,7 @@ namespace AATUV3
                         Framerate = Convert.ToInt32((double)count / dt * 1000.0);
                     }
                 }
-            } 
+            }
             catch (Exception ex)
             {
 
@@ -527,7 +566,7 @@ namespace AATUV3
         //helper class to store frame timestamps
         public class TimestampCollection
         {
-            const int MAXNUM = 1000;
+            const int MAXNUM = 2000;
 
             public string Name { get; set; }
 
@@ -545,7 +584,8 @@ namespace AATUV3
                         if (timestamps.Count > MAXNUM) timestamps.RemoveAt(0);
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                 }
             }
 
@@ -565,7 +605,7 @@ namespace AATUV3
                     }
                     return c;
                 }
-                catch 
+                catch
                 {
                     return c;
                 }

@@ -1,4 +1,4 @@
-﻿using AATUV3.Properties;
+﻿using UXTU.Properties;
 using AATUV3.Scripts;
 using Microsoft.Win32;
 using System;

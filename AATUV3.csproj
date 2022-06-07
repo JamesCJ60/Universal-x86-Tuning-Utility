@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\build\Microsoft.Diagnostics.Tracing.TraceEvent.props" Condition="Exists('packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\build\Microsoft.Diagnostics.Tracing.TraceEvent.props')" />
+  <Import Project="packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\build\Microsoft.Diagnostics.Tracing.TraceEvent.props" Condition="Exists('packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\build\Microsoft.Diagnostics.Tracing.TraceEvent.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5DAAE426-967A-4BDC-8793-3B9DBF260967}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>AATUV3</RootNamespace>
-    <AssemblyName>AMD APU Tuning Utility</AssemblyName>
+    <RootNamespace>UXTU</RootNamespace>
+    <AssemblyName>Universal x86 Tuning Utility</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -68,7 +68,7 @@
       <HintPath>packages\AudioSwitcher.AudioApi.CoreAudio.3.0.0.1\lib\net40\AudioSwitcher.AudioApi.CoreAudio.dll</HintPath>
     </Reference>
     <Reference Include="Dia2Lib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\lib\net462\Dia2Lib.dll</HintPath>
+      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\lib\net462\Dia2Lib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="HidSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -77,15 +77,16 @@
     <Reference Include="LibreHardwareMonitorLib, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\LibreHardwareMonitorLib.0.9.0\lib\net47\LibreHardwareMonitorLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Diagnostics.FastSerialization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\lib\net462\Microsoft.Diagnostics.FastSerialization.dll</HintPath>
+    <Reference Include="Microsoft.Diagnostics.FastSerialization, Version=3.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\lib\net462\Microsoft.Diagnostics.FastSerialization.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\lib\net462\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
+    <Reference Include="Microsoft.Diagnostics.Tracing.TraceEvent, Version=3.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\lib\net462\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
     </Reference>
     <Reference Include="OSExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\lib\net462\OSExtensions.dll</HintPath>
+      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\lib\net462\OSExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -93,11 +94,16 @@
       <HintPath>packages\SharpDX.XInput.4.2.0\lib\net45\SharpDX.XInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.CodeDom, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.CodeDom.6.0.0\lib\net461\System.CodeDom.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -110,12 +116,16 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="TraceReloggerLib, Version=0.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\lib\net462\TraceReloggerLib.dll</HintPath>
+      <HintPath>packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\lib\net462\TraceReloggerLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WinFormAnimation, Version=1.6.0.4, Culture=neutral, PublicKeyToken=310fd07b25df79b3, processorArchitecture=MSIL">
+      <HintPath>packages\WinFormAnimation.1.6.0.4\lib\net40\WinFormAnimation.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock, Version=4.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>packages\Extended.Wpf.Toolkit.4.2.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
@@ -140,12 +150,16 @@
     <Compile Include="Pages\ClockControl.xaml.cs">
       <DependentUpon>ClockControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\BasicSensor.xaml.cs">
+      <DependentUpon>BasicSensor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Info.xaml.cs">
       <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scripts\SMU Backend Scripts\Addresses.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\Families.cs" />
     <Compile Include="Scripts\OpenLibSys.cs" />
+    <Compile Include="Scripts\SMU Backend Scripts\GetSensor.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\pmtables.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\RwMmioAmd.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\RyzenSmu.cs" />
@@ -165,7 +179,7 @@
     <Compile Include="Pages\CustomPresets.xaml.cs">
       <DependentUpon>CustomPresets.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Scripts\Backend.cs" />
+    <Compile Include="Scripts\BasicExeBackend.cs" />
     <Compile Include="Scripts\Sensors.cs" />
     <Page Include="Assets\Icons\Icons.xaml">
       <SubType>Designer</SubType>
@@ -184,6 +198,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\ClockControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\BasicSensor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -302,11 +320,15 @@
   <ItemGroup>
     <Resource Include="Assets\Icons\database-2-line.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\AMDCPU\" />
+    <Folder Include="Pages\Intel\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\build\Microsoft.Diagnostics.Tracing.TraceEvent.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.0\build\Microsoft.Diagnostics.Tracing.TraceEvent.props'))" />
+    <Error Condition="!Exists('packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\build\Microsoft.Diagnostics.Tracing.TraceEvent.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Diagnostics.Tracing.TraceEvent.3.0.1\build\Microsoft.Diagnostics.Tracing.TraceEvent.props'))" />
   </Target>
 </Project>

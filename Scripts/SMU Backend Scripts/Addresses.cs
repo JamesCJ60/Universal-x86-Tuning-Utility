@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AATUV3.Properties;
+using UXTU.Properties;
 using RyzenSmu;
 
 namespace RyzenSMUBackend
@@ -125,9 +125,9 @@ namespace RyzenSMUBackend
                 //Set Address and reset Args[]
                 RyzenAccess.SendPsmu(msg2, ref Args);
                 Address = Args[0];
-                //string addressString = "0x" + string.Format("{0:x}", Address);
+                //string addressString = string.Format("{0:x}", Address);
                 //Address = uint.Parse(addressString);
-                //MessageBox.Show($"Address: {addressString}");
+                //MessageBox.Show($"Address: {Address}");
                 Args[0] = 0;
                 Thread.Sleep(500);
 
@@ -137,15 +137,15 @@ namespace RyzenSMUBackend
 
 
                 //Set path to PMTable
-                //string path = (string)Settings.Default["Path"] + "\\bin\\pmtables\\" + Families.FAMID + "\\0x00" + PMTableVersion;
+                string path = (string)Settings.Default["Path"] + "\\bin\\pmtables\\" + Families.FAMID + "\\0x00" + PMTableVersion;
 
-                //string offsets = "";
-                //string sensors = "";
+                string offsets = "";
+                string sensors = "";
 
 
-                //Load PMTbale data
-                //offsets = path + "\\0x00" + PMTableVersion + "-offsets.txt";
-                //sensors = path + "\\0x00" + PMTableVersion + "-sensors.txt";
+                //Load PMTable data
+                offsets = path + "\\0x00" + PMTableVersion + "-offsets.txt";
+                sensors = path + "\\0x00" + PMTableVersion + "-sensors.txt";
 
                 //Check if PMTbale exists 
                 //if (File.Exists(offsets) && File.Exists(sensors))
@@ -158,7 +158,7 @@ namespace RyzenSMUBackend
                 //    string outputNames = "";
                 //    int i = 0;
 
-                //    foreach(string line in SensorOffsets)
+                //    foreach (string line in SensorOffsets)
                 //    {
                 //        int lineConvert = Convert.ToInt32(line);
                 //        output = output + "0x" + string.Format("{0:x}", lineConvert) + ",\n";
@@ -166,7 +166,7 @@ namespace RyzenSMUBackend
                 //    }
                 //    foreach (string line in SensorNames)
                 //    {
-                //        outputNames =  outputNames + $"\"{line}\",\n";
+                //        outputNames = outputNames + $"\"{line}\",\n";
                 //    }
 
                 //    if (File.Exists(offsets))
@@ -182,9 +182,30 @@ namespace RyzenSMUBackend
                 //    File.WriteAllText(offsets, output);
                 //    File.WriteAllText(sensors, outputNames);
                 //}
-
                 RyzenAccess.Deinitialize();
             });
         }
+
+        public async static void UpdateTable() 
+        {
+            await Task.Run(() =>
+            {
+                uint msg3 = 0x0;
+
+                //set SMU message address
+                if (Families.FAMID == 3 || Families.FAMID == 7)
+                { 
+                    msg3 = 0x65;
+                }
+
+                Args = new uint[6];
+                RyzenAccess = new Smu(EnableDebug);
+                RyzenAccess.Initialize();
+                RyzenAccess.SendPsmu(msg3, ref Args);
+                Thread.Sleep(500);
+                RyzenAccess.Deinitialize();
+            });
+        }
+
     }
 }

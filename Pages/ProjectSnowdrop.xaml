@@ -45,11 +45,11 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#eb0045"/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource PrimaryBlueColorHover}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#750123 "/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource PrimaryBlueColorDown}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
@@ -68,10 +68,10 @@
             <DockPanel LastChildFill="True">
                 <TextBlock Name="lblPresetName" DockPanel.Dock="Top" Text="Device Preset: AYANEO NEXT Pro (2022)" Foreground="White" FontSize="36" Margin="5,5,0,0" />
                 <StackPanel DockPanel.Dock="Bottom" Height="65" HorizontalAlignment="Center" Orientation="Horizontal" Width="Auto" Margin="0,5,0,0" >
-                    <Button Name="btnPreset1" Style="{DynamicResource RoundedButtonStyle}" Background="#FFBE0037"  FontSize="18" Foreground="White" Content="Battery Saver" Height="60" Width="200" Margin="0,0,0,0" Click="btnPreset1_Click"/>
-                    <Button Name="btnPreset2" Style="{DynamicResource RoundedButtonStyle}" Background="#FFBE0037"  FontSize="18" Foreground="White" Content="Balanced" Height="60" Width="200" Margin="8,0,0,0" Click="btnPreset2_Click"/>
-                    <Button Name="btnPreset3" Style="{DynamicResource RoundedButtonStyle}" Background="#FFBE0037"  FontSize="18" Foreground="White" Content="Performance" Height="60" Width="200" Margin="8,0,0,0" Click="btnPreset3_Click"/>
-                    <Button Name="btnPreset4" Style="{DynamicResource RoundedButtonStyle}" Background="#FFBE0037"  FontSize="18" Foreground="White" Content="Docked" Height="60" Width="200" Margin="8,0,0,0" Click="btnPreset4_Click"/>
+                    <Button Name="btnPreset1" Style="{DynamicResource RoundedButtonStyle}" Background="{DynamicResource PrimaryBlueColor}"  FontSize="18" Foreground="White" Content="Battery Saver" Height="60" Width="200" Margin="0,0,0,0" Click="btnPreset1_Click"/>
+                    <Button Name="btnPreset2" Style="{DynamicResource RoundedButtonStyle}" Background="{DynamicResource PrimaryBlueColor}"  FontSize="18" Foreground="White" Content="Balanced" Height="60" Width="200" Margin="8,0,0,0" Click="btnPreset2_Click"/>
+                    <Button Name="btnPreset3" Style="{DynamicResource RoundedButtonStyle}" Background="{DynamicResource PrimaryBlueColor}"  FontSize="18" Foreground="White" Content="Performance" Height="60" Width="200" Margin="8,0,0,0" Click="btnPreset3_Click"/>
+                    <Button Name="btnPreset4" Style="{DynamicResource RoundedButtonStyle}" Background="{DynamicResource PrimaryBlueColor}"  FontSize="18" Foreground="White" Content="Docked" Height="60" Width="200" Margin="8,0,0,0" Click="btnPreset4_Click"/>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Bottom" Height="auto" Orientation="Horizontal">
                     <TextBlock Name="lblPresetsHeader" Text="Device Specific Power Presets:" Foreground="White" FontSize="21" Margin="17,5,0,0" FontWeight="Bold" />

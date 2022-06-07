@@ -19,7 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
 using LibreHardwareMonitor.Hardware;
-using AATUV3.Properties;
+using UXTU.Properties;
 
 namespace AATUV3
 {
@@ -82,7 +82,7 @@ namespace AATUV3
                         //Get RyzenAdj path
                         string path = "\\bin\\ryzenadj\\ryzenadj.exe";
                         //Pass settings on to be applied
-                        Backend.ApplySettings(path, Settings.Default["RyzenAdjArguments"].ToString(), true);
+                        BasicExeBackend.ApplySettings(path, Settings.Default["RyzenAdjArguments"].ToString(), true);
                     }
                 }
             }

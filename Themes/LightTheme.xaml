@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:AATUV3.Themes">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Background Colors -->
     <SolidColorBrush x:Key="PrimaryBackgroundColor" Color="#141414"/>
@@ -8,6 +7,8 @@
 
     <!-- Primary Colors -->
     <SolidColorBrush x:Key="PrimaryBlueColor" Color="#FFBE0037"/>
+    <SolidColorBrush x:Key="PrimaryBlueColorHover" Color="#eb0045"/>
+    <SolidColorBrush x:Key="PrimaryBlueColorDown" Color="#750123"/>
     <SolidColorBrush x:Key="PrimaryGrayColor" Color="#BFBFC4"/>
     
     <!-- Secundary Colors -->

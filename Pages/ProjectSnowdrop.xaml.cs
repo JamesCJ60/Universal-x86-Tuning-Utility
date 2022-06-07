@@ -1,4 +1,4 @@
-﻿using AATUV3.Properties;
+﻿using UXTU.Properties;
 using AATUV3.Scripts;
 using System;
 using System.Collections.Generic;
@@ -169,7 +169,7 @@ namespace AATUV3.Pages
         {
             if (preset1 == null || preset1 == "")
             {
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
             }
 
             else
@@ -177,8 +177,8 @@ namespace AATUV3.Pages
                 //Get RyzenAdj path
                 string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
                 //Pass settings on to be applied
-                Backend.ApplySettings(pathRyzenAdj, preset1, true);
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+                BasicExeBackend.ApplySettings(pathRyzenAdj, preset1, true);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset1;
                 Settings.Default.Save();
                 //System.Windows.MessageBox.Show(ryzenadj);
@@ -189,7 +189,7 @@ namespace AATUV3.Pages
         {
             if (preset2 == null || preset2 == "")
             {
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
             }
 
             else
@@ -197,8 +197,8 @@ namespace AATUV3.Pages
                 //Get RyzenAdj path
                 string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
                 //Pass settings on to be applied
-                Backend.ApplySettings(pathRyzenAdj, preset2, true);
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+                BasicExeBackend.ApplySettings(pathRyzenAdj, preset2, true);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset2;
                 Settings.Default.Save();
                 //System.Windows.MessageBox.Show(ryzenadj);
@@ -209,7 +209,7 @@ namespace AATUV3.Pages
         {
             if (preset3 == null || preset3 == "")
             {
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
             }
 
             else
@@ -217,8 +217,8 @@ namespace AATUV3.Pages
                 //Get RyzenAdj path
                 string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
                 //Pass settings on to be applied
-                Backend.ApplySettings(pathRyzenAdj, preset3, true);
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+                BasicExeBackend.ApplySettings(pathRyzenAdj, preset3, true);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset3;
                 Settings.Default.Save();
                 //System.Windows.MessageBox.Show(ryzenadj);
@@ -229,7 +229,7 @@ namespace AATUV3.Pages
         {
             if (preset4 == null || preset4 == "" && btnPreset4.Content != "Find Device Presets")
             {
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
             }
             if (btnPreset4.Content == "Find Device Presets")
             {
@@ -241,8 +241,8 @@ namespace AATUV3.Pages
                 //Get RyzenAdj path
                 string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
                 //Pass settings on to be applied
-                Backend.ApplySettings(pathRyzenAdj, preset4, true);
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+                BasicExeBackend.ApplySettings(pathRyzenAdj, preset4, true);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset4;
                 Settings.Default.Save();
                 //System.Windows.MessageBox.Show(ryzenadj);

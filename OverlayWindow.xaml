@@ -68,7 +68,7 @@
         <SolidColorBrush Opacity="0" Color="#141414"/>
     </Window.Background>
     <Grid>
-        <DockPanel LastChildFill="False">
+        <DockPanel LastChildFill="False" Visibility="Hidden">
             <StackPanel DockPanel.Dock="Right" Width="auto" Height="auto" x:Name="SP1">
                 <StackPanel.Background>
                     <SolidColorBrush Color="#171717" Opacity="1"/>

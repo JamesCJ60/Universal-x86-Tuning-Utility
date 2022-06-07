@@ -66,7 +66,7 @@ namespace AATUV3.Pages
                     SendCommand.set_coall((uint)nudCOCPU.Value);
                 }else
                 {
-                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (int)nudCOCPU.Value));
+                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
                 }
             }
 
@@ -78,7 +78,7 @@ namespace AATUV3.Pages
                 }
                 else
                 {
-                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (int)nudCOIGPU.Value));
+                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOIGPU.Value)));
                 }
             }
 
@@ -92,9 +92,9 @@ namespace AATUV3.Pages
                 //Get RyzenAdj path
                 string path = "\\bin\\oc.exe";
                 //Pass settings on to be applied
-                Backend.ApplySettings(path, "0 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
-                Backend.ApplySettings(path, "1 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
-                Backend.ApplySettings(path, "2 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
+                BasicExeBackend.ApplySettings(path, "0 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
+                BasicExeBackend.ApplySettings(path, "1 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
+                BasicExeBackend.ApplySettings(path, "2 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
             }
         }
     }

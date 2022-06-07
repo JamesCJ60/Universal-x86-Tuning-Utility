@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AATUV3.Properties {
+namespace UXTU.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

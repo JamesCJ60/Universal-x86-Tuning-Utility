@@ -1,4 +1,4 @@
-﻿using AATUV3.Properties;
+﻿using UXTU.Properties;
 using AATUV3.Scripts;
 using RyzenSMUBackend;
 using System;
@@ -41,7 +41,7 @@ namespace AATUV3.Pages
 
             if (tbxPreset.Text != null || tbxPreset.Text != "")
             {
-                string path = Settings.Default["Path"].ToString() + "\\presets\\" + tbxPreset.Text + ".txt";
+                string path = Settings.Default["Path"].ToString() + "\\presets\\AMD APU\\" + tbxPreset.Text + ".txt";
                 string cpuSettings = "";
                 string vrmSettings = "";
                 string fabricSettings = "";
@@ -77,25 +77,25 @@ namespace AATUV3.Pages
                 finalOutput = finalOutput + "\nRyzenAdj Output:\n" + ryzenadj;
                 if (!File.Exists(path))
                 {
-                    Backend.ApplySettings("\\bin\\Notification.exe", "1 Preset-Saved! Preset-has-been-saved-successfully-to-the-preset-folder.", false);
+                    BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Preset-Saved! Preset-has-been-saved-successfully-to-the-preset-folder.", false);
                     File.WriteAllText(path, finalOutput);
                 }
                 else
                 {
-                    Backend.ApplySettings("\\bin\\Notification.exe", "1 Error! Preset-under-entered-name-already-exists.", false);
+                    BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! Preset-under-entered-name-already-exists.", false);
                 }
 
                 UpdatePresetList();
             }
             else
             {
-                Backend.ApplySettings("\\bin\\Notification.exe", "1 Error! Preset-requires-a-valid-name.", false);
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! Preset-requires-a-valid-name.", false);
             }
         }
 
         public void UpdatePresetList()
         {
-            string path = Settings.Default["Path"].ToString()+"\\presets";
+            string path = Settings.Default["Path"].ToString()+"\\presets\\AMD APU";
             DirectoryInfo dinfo = new DirectoryInfo(path);
             FileInfo[] Files = dinfo.GetFiles("*.txt");
 
@@ -113,7 +113,7 @@ namespace AATUV3.Pages
                 if (cmbPresets.SelectedItem.ToString() != null || cmbPresets.SelectedItem.ToString() != "")
                 {
                     string path = Settings.Default["Path"].ToString() + "\\presets";
-                    var lines = File.ReadAllLines(path + "\\" + cmbPresets.SelectedItem.ToString() + ".txt");
+                    var lines = File.ReadAllLines(path + "\\AMD APU\\" + cmbPresets.SelectedItem.ToString() + ".txt");
 
                     cbTempLimit.IsChecked = Convert.ToBoolean(lines[1]);
                     nudTempLimit.Value = Convert.ToInt32(lines[2]);
@@ -224,7 +224,7 @@ namespace AATUV3.Pages
 
                 if (ryzenadj == null || ryzenadj == "")
                 {
-                    Backend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+                    BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
                 }
 
                 else
@@ -233,14 +233,14 @@ namespace AATUV3.Pages
                     //string path = "\\bin\\ryzenadj\\ryzenadj.exe";
                     //Pass settings on to be applied
                     //Backend.ApplySettings(path, ryzenadj, true);
-                    Backend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+                    BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                     Settings.Default["RyzenAdjArguments"] = ryzenadj;
                     Settings.Default.Save();
                     //System.Windows.MessageBox.Show(ryzenadj);
                 }
 
 
-                string pathPreset = Settings.Default["Path"].ToString() + "\\LastUsedSettings.txt";
+                string pathPreset = Settings.Default["Path"].ToString() + "\\AA-LastUsedSettings.txt";
                 string cpuSettings = "";
                 string vrmSettings = "";
                 string fabricSettings = "";
@@ -296,10 +296,10 @@ namespace AATUV3.Pages
         {
             try
             {
-                string pathPreset = Settings.Default["Path"].ToString() + "\\LastUsedSettings.txt";
+                string pathPreset = Settings.Default["Path"].ToString() + "\\AA-LastUsedSettings.txt";
                 if (File.Exists(pathPreset))
                 {
-                    string path = Settings.Default["Path"].ToString() + "\\LastUsedSettings.txt";
+                    string path = Settings.Default["Path"].ToString() + "\\AA-LastUsedSettings.txt";
                     var lines = File.ReadAllLines(path);
 
                     cbTempLimit.IsChecked = Convert.ToBoolean(lines[1]);
@@ -393,7 +393,7 @@ namespace AATUV3.Pages
             if (cbTempLimit.IsChecked == true)
             {
                 ryzenadj = ryzenadj + $"--tctl-temp={nudTempLimit.Value} ";
-                if(apply == true) SendCommand.set_tctl_temp((uint)nudSkinTempLimit.Value);
+                if(apply == true) SendCommand.set_tctl_temp((uint)nudTempLimit.Value);
             }
 
             if (cbSkinTempLimit.IsChecked == true)

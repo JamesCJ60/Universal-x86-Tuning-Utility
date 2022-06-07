@@ -183,7 +183,7 @@
                 <!-- End: Button Close | Restore | Minimize -->
 
                 <Border Grid.Row="1" Margin="10">
-                    <Frame x:Name="PagesNavigation" NavigationUIVisibility="Hidden" Margin="0,-36,0,0">
+                    <Frame x:Name="PagesNavigation" NavigationUIVisibility="Hidden" Margin="-8,-36,-9,-5">
                         <!-- Page Content -->
                     </Frame>
                 </Border>

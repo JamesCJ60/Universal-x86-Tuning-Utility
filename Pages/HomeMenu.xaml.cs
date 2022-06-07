@@ -23,6 +23,8 @@ namespace AATUV3.Pages
         public HomeMenu()
         {
             InitializeComponent();
+
+            lblAppName.Content = MainWindow.AppName;
         }
 
         private void Discord_Click(object sender, RoutedEventArgs e)

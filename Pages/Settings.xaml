@@ -46,11 +46,11 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#eb0045"/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource PrimaryBlueColorHover}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#750123 "/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource PrimaryBlueColorDown}"/>
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
@@ -65,7 +65,7 @@
         </Style>
     </UserControl.Resources>
     <Grid Loaded="Grid_Loaded">
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,3,3" Background="#FFBE0037"  FontSize="16" Foreground="White" Content="Save Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="btnSave_Click"/>
+        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,3,3" Background="{DynamicResource PrimaryBlueColor}"  FontSize="16" Foreground="White" Content="Save Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="btnSave_Click"/>
         <Label Content="General Settings:" FontSize="18" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6,8,0,0" Width="310"/>
 
         <!--Temp Limit-->

@@ -7,11 +7,11 @@ using System.Windows;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("AMD APU Tuning Utility")]
+[assembly: AssemblyTitle("Universal x86 Tuning Utility")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AMD APU Tuning Utility")]
+[assembly: AssemblyProduct("Universal x86 Tuning Utility")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

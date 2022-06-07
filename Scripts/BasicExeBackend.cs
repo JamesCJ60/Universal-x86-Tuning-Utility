@@ -1,4 +1,4 @@
-﻿using AATUV3.Properties;
+﻿using UXTU.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AATUV3.Scripts
 {
-    public class Backend
+    public class BasicExeBackend
     {
         /// <summary>
         /// Open third party program within folder/sub-folders
