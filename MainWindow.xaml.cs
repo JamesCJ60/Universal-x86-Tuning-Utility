@@ -39,7 +39,7 @@ namespace AATUV3
 
         public static string menu = "";
         public static string AppName = "";
-
+        public static string mbo = "";
         public static Timer reApply;
 
         [DllImport("inpoutx64.dll")]
@@ -101,32 +101,7 @@ namespace AATUV3
                 // Debug path MessageBox.Show(path);
             }
 
-            //Garbage collection
-            DispatcherTimer Garbage = new DispatcherTimer();
-            Garbage.Interval = TimeSpan.FromSeconds(8);
-            Garbage.Tick += GarbageCollect_Tick;
-            Garbage.Start();
-
-            OverlayWindow overlay = new OverlayWindow();
-            overlay.Show();
-
-
-            if ((bool)Settings.Default["SensorOverlay"] == true)
-            {
-                try
-                {
-                    SensorWindow sensorWindow = new SensorWindow();
-                    sensorWindow.Show();
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-
-
             //Detect if an AYA Neo is being used
-            string mbo = "";
             ManagementObjectSearcher baseboardSearcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
             foreach (ManagementObject queryObj in baseboardSearcher.Get())
             {
@@ -256,7 +231,28 @@ namespace AATUV3
             //Change window title
             this.Title = $"{AppName} - {menu}";
 
-            
+            //Garbage collection
+            DispatcherTimer Garbage = new DispatcherTimer();
+            Garbage.Interval = TimeSpan.FromSeconds(8);
+            Garbage.Tick += GarbageCollect_Tick;
+            Garbage.Start();
+
+            OverlayWindow overlay = new OverlayWindow();
+            overlay.Show();
+
+
+            if ((bool)Settings.Default["SensorOverlay"] == true)
+            {
+                try
+                {
+                    SensorWindow sensorWindow = new SensorWindow();
+                    sensorWindow.Show();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
 
             Settings.Default["APUName"] = CPUName;
             Settings.Default.Save();
@@ -505,7 +501,7 @@ namespace AATUV3
             if (AppName.Contains("AMD CPU"))
             {
                 //Load menu
-                PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
+                PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdHome.Content;
                 lblMenu.Content = menu.ToUpper();
@@ -514,7 +510,7 @@ namespace AATUV3
             if (AppName.Contains("Intel CPU"))
             {
                 //Load menu
-                PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
+                PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdHome.Content;
                 lblMenu.Content = menu.ToUpper();

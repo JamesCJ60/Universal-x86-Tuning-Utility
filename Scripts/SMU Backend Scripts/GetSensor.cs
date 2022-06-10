@@ -24,7 +24,7 @@ namespace AATUV3.Scripts.SMU_Backend_Scripts
                 SensorOffset = pmtables.PMT_Offset_400005;
             }
 
-            do{i++; if (i >= SensorNames.Length && SensorNames[i] != SensorName) return 0; } while (SensorNames[i] != SensorName);
+            do{i++;} while (SensorNames[i] != SensorName && i <= SensorNames.Length);
 
             if (SensorNames[i] == SensorName)
             {

@@ -156,6 +156,11 @@
     <Compile Include="Pages\Info.xaml.cs">
       <DependentUpon>Info.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scripts\Intel\BindableBase.cs" />
+    <Compile Include="Scripts\Intel\ChangeTDP.cs" />
+    <Compile Include="Scripts\Intel\DelegateCommand.cs" />
+    <Compile Include="Scripts\Intel\RunCLI.cs" />
+    <Compile Include="Scripts\Intel\StreamWriterLog.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\Addresses.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\Families.cs" />
     <Compile Include="Scripts\OpenLibSys.cs" />

@@ -68,7 +68,7 @@
         <SolidColorBrush Opacity="0" Color="#141414"/>
     </Window.Background>
     <Grid>
-        <DockPanel LastChildFill="False" Visibility="Hidden">
+        <DockPanel Name="MainPan" LastChildFill="False" Visibility="Hidden">
             <StackPanel DockPanel.Dock="Right" Width="auto" Height="auto" x:Name="SP1">
                 <StackPanel.Background>
                     <SolidColorBrush Color="#171717" Opacity="1"/>
@@ -88,7 +88,7 @@
                     <Label  Name="lblBattery"  Content="100%" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,0,0,0" />
                 </StackPanel>
 
-                <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Margin="0,5,0,0" CanContentScroll="False" Name="rightView" Height="747" >
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,5,0,0" CanContentScroll="False" Name="rightView" Height="747" >
                     <StackPanel Width="auto" Height="auto" CanVerticallyScroll="True" VerticalAlignment="Top">
                         <StackPanel Background="#FF0F0F0F" Margin="0,0,0,0">
                             <Label Content="General Settings:" Foreground="White" FontWeight="Bold" FontSize="26"/>
@@ -105,16 +105,16 @@
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
                             </Slider>
-                            <Label Foreground="White" FontSize="22" FontWeight="Bold" Content="Max Cores/Threads:"/>
-                            <Label Name="lblMaxCores" Foreground="White" FontSize="18">16 Cores/Threads</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" x:Name="maxCores" Minimum="1" Maximum="16" Foreground="White" Value="16" Margin="10,0,10,0">
+                            <Label Foreground="White" FontSize="22" FontWeight="Bold" Content="Max Cores/Threads:" Visibility="Collapsed"/>
+                            <Label Name="lblMaxCores" Foreground="White" FontSize="18" Visibility="Collapsed">16 Cores/Threads</Label>
+                            <Slider Style="{StaticResource Horizontal_Slider}" x:Name="maxCores" Minimum="1" Maximum="16" Foreground="White" Value="16" Margin="10,0,10,0" Visibility="Collapsed">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
                             </Slider>
-                            <Label Foreground="White" FontSize="22" FontWeight="Bold" Content="Max Core Clock:"/>
-                            <Label x:Name="lblMaxCoreClock" Foreground="White" FontSize="18" Content="Unlimited"/>
-                            <Slider Style="{StaticResource Horizontal_Slider}" x:Name="maxCoreClock" Minimum="0" Maximum="6000" Foreground="White" Value="0" Margin="10,0,10,0">
+                            <Label Foreground="White" FontSize="22" FontWeight="Bold" Content="Max Core Clock:" Visibility="Collapsed"/>
+                            <Label x:Name="lblMaxCoreClock" Foreground="White" FontSize="18" Content="Unlimited" Visibility="Collapsed"/>
+                            <Slider Style="{StaticResource Horizontal_Slider}" x:Name="maxCoreClock" Minimum="0" Maximum="6000" Foreground="White" Value="0" Margin="10,0,10,0" Visibility="Collapsed">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -124,18 +124,18 @@
 
                         <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F">
                             <Label Content="Preset Quick Select:" Foreground="White" FontWeight="Bold" FontSize="26" Margin="0,0,0,5"/>
-                            <Button Name="Preset1" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="25w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0" />
-                            <Button Name="Preset2" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="35w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0"/>
-                            <Button Name="Preset3" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="45w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0"/>
-                            <Button Name="Preset4" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="55w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0"/>
+                            <Button Name="Preset1" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="25w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0" Click="Preset1_Click"/>
+                            <Button Name="Preset2" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="35w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0" Click="Preset2_Click"/>
+                            <Button Name="Preset3" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="45w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0" Click="Preset3_Click"/>
+                            <Button Name="Preset4" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="55w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0" Click="Preset4_Click"/>
                         </StackPanel>
 
                         <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F">
-                            <Label Content="NVIDIA dGPU Settings:" Foreground="White" FontWeight="Bold" FontSize="26"/>
+                            <Label Content="NVIDIA dGPU Clock Offsets:" Foreground="White" FontWeight="Bold" FontSize="26"/>
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">GPU Core:</Label>
                             <Label Name="lblCore" Foreground="White" FontSize="18">0MHz</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="core" Minimum="-250" Maximum="500" Margin="10,2,10,2">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="core" Minimum="-250" Maximum="500" Margin="10,2,10,2" ValueChanged="NVdGPU_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -143,7 +143,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">GPU Memory:</Label>
                             <Label Name="lblMem" Foreground="White" FontSize="18">0MHz</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="mem" Minimum="-500" Maximum="1000" Margin="10,2,10,2" Foreground="White">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="mem" Minimum="-500" Maximum="1000" Margin="10,2,10,2" ValueChanged="NVdGPU_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -152,12 +152,12 @@
                             <Label Height="10"/>
                         </StackPanel>
 
-                        <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F">
+                        <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F" Name="CO">
                             <Label Content="Curve Optimiser Settings:" Foreground="White" FontWeight="Bold" FontSize="26"/>
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">All Core Offset:</Label>
                             <Label Name="lblCOCPU" Foreground="White" FontSize="18">0 Offset</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="COCPU" Minimum="-30" Maximum="30" Margin="10,2,10,2">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="COCPU" Minimum="-30" Maximum="30" Margin="10,2,10,2" ValueChanged="COCPU_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -165,7 +165,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">iGPU Offset:</Label>
                             <Label Name="lbliGPUCO" Foreground="White" FontSize="18">0 Offset</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="iGPUCO" Minimum="-30" Maximum="30" Margin="10,2,10,2" Foreground="White">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="iGPUCO" Minimum="-30" Maximum="30" Margin="10,2,10,2" Foreground="White" ValueChanged="iGPUCO_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -174,7 +174,7 @@
                             <Label Height="10"/>
                         </StackPanel>
 
-                        <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F">
+                        <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F" Name="ASUSAC">
                             <Label Content="Armoury Crate Quick Select:" Foreground="White" FontWeight="Bold" FontSize="26" Margin="0,0,0,5"/>
                             <Button Name="Windows" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="Windows" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0" />
                             <Button Name="Silent" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="Silent" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0"/>

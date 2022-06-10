@@ -18,8 +18,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
+using UXTU.Scripts.Intel;
 using LibreHardwareMonitor.Hardware;
 using UXTU.Properties;
+using RyzenSMUBackend;
 
 namespace AATUV3
 {
@@ -40,18 +42,32 @@ namespace AATUV3
             DispatcherTimer checkKeyInput = new DispatcherTimer();
             checkKeyInput.Interval = TimeSpan.FromSeconds(0.15);
             checkKeyInput.Tick += KeyShortCuts_Tick;
-            //checkKeyInput.Start();
+            checkKeyInput.Start();
 
             //set up timer for sensor update
             DispatcherTimer sensor = new DispatcherTimer();
             sensor.Interval = TimeSpan.FromSeconds(2);
             sensor.Tick += SensorUpdate_Tick;
-            //sensor.Start();
+            sensor.Start();
 
             autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]);
             autoReapply.Tick += SensorUpdate_Tick;
             autoReapply.Start();
 
+            if (MainWindow.AppName.Contains("Intel"))
+            {
+                CO.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                CO.Visibility = Visibility.Visible;
+            }
+
+                ASUSAC.Visibility = Visibility.Collapsed;
+            if (MainWindow.mbo.Contains("asus"))
+            {
+                ASUSAC.Visibility = Visibility.Visible;
+            }
             thisPC = new Computer()
             {
                 IsCpuEnabled = true,
@@ -87,7 +103,7 @@ namespace AATUV3
                 }
             }
 
-            if(autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]))
+            if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]))
             {
                 autoReapply.Stop();
                 autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]);
@@ -101,6 +117,8 @@ namespace AATUV3
             //Resize scrollview 
             rightView.Height = System.Windows.SystemParameters.PrimaryScreenHeight - 54;
             rightView.MaxHeight = System.Windows.SystemParameters.PrimaryScreenHeight - 54;
+
+            MainPan.Visibility = Visibility.Visible;
 
             //Get controller
             controller = new Controller(UserIndex.One);
@@ -247,9 +265,13 @@ namespace AATUV3
                         {
                             if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
                             {
-                                if ((int)sensor.Value.GetValueOrDefault() < 10)
+                                if ((int)sensor.Value.GetValueOrDefault() < 100)
                                 {
-                                    lblTemp.Content = "0" + (int)sensor.Value.GetValueOrDefault() + "°C";
+                                    lblTemp.Content = " " + (int)sensor.Value.GetValueOrDefault() + "°C";
+                                }
+                                else if ((int)sensor.Value.GetValueOrDefault() < 10)
+                                {
+                                    lblTemp.Content = " 0" + (int)sensor.Value.GetValueOrDefault() + "°C";
                                 }
                                 else
                                 {
@@ -259,9 +281,13 @@ namespace AATUV3
 
                             if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("Package"))
                             {
-                                if ((int)sensor.Value.GetValueOrDefault() < 10)
+                                if ((int)sensor.Value.GetValueOrDefault() < 100)
                                 {
-                                    lblPower.Content = "0" + (int)sensor.Value.GetValueOrDefault() + "w";
+                                    lblPower.Content = " " + (int)sensor.Value.GetValueOrDefault() + "w";
+                                }
+                                else if ((int)sensor.Value.GetValueOrDefault() < 10)
+                                {
+                                    lblPower.Content = " 0" + (int)sensor.Value.GetValueOrDefault() + "w";
                                 }
                                 else
                                 {
@@ -276,6 +302,123 @@ namespace AATUV3
             {
 
             }
+        }
+
+        private void NVdGPU_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblCore.Content = core.Value.ToString() + "MHz";
+            lblMem.Content = mem.Value.ToString() + "MHz";
+
+            //Get RyzenAdj path
+            string path = "\\bin\\oc.exe";
+            //Pass settings on to be applied
+            BasicExeBackend.ApplySettings(path, "0 " + core.Value + " " + mem.Value, true);
+            BasicExeBackend.ApplySettings(path, "1 " + core.Value + " " + mem.Value, true);
+            BasicExeBackend.ApplySettings(path, "2 " + core.Value + " " + mem.Value, true);
+        }
+
+        private void COCPU_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblCOCPU.Content = COCPU.Value.ToString() + "Offset";
+
+            if (COCPU.Value >= 0)
+            {
+                SendCommand.set_coall((uint)COCPU.Value);
+            }
+            else
+            {
+                SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)COCPU.Value)));
+            }
+        }
+
+        private void iGPUCO_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lbliGPUCO.Content = iGPUCO.Value.ToString() + "Offset";
+
+            if (iGPUCO.Value >= 0)
+            {
+                SendCommand.set_cogfx((uint)iGPUCO.Value);
+            }
+            else
+            {
+                SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)iGPUCO.Value)));
+            }
+        }
+
+        private void Preset1_Click(object sender, RoutedEventArgs e)
+        {
+            int preset1 = 25;
+            string preset1Name = "";
+
+            applySettings(preset1, preset1Name);
+        }
+
+        private void Preset2_Click(object sender, RoutedEventArgs e)
+        {
+            int preset2 = 35;
+            string preset2Name = "";
+
+            applySettings(preset2, preset2Name);
+        }
+
+        private void Preset3_Click(object sender, RoutedEventArgs e)
+        {
+            int preset3 = 45;
+            string preset3Name = "";
+
+            applySettings(preset3, preset3Name);
+        }
+
+        private void Preset4_Click(object sender, RoutedEventArgs e)
+        {
+            int preset4 = 55;
+            string preset4Name = "";
+
+            applySettings(preset4, preset4Name);
+        }
+
+
+        public static async void applySettings(int tdp, string presetName)
+        {
+            string ryzenadj = "";
+
+            if (MainWindow.AppName.Contains("AMD APU"))
+            {
+                if(presetName == "" || presetName == null)
+                {
+                    SendCommand.set_tctl_temp(95);
+                    SendCommand.set_apu_skin_temp_limit(95);
+                    SendCommand.set_fast_limit((uint)tdp * 1000);
+                    SendCommand.set_slow_limit((uint)tdp * 1000);
+                    SendCommand.set_stapm_limit((uint)tdp * 1000);
+                    SendCommand.set_vrm_current((uint)((tdp * 1000) * 1.2));
+                    SendCommand.set_vrmmax_current((uint)((tdp * 1000) * 1.2));
+                    ryzenadj = $"--stapm-limit={tdp*1000} --fast-limit={tdp * 1000} --slow-limit={tdp * 1000} --tctl-temp={95} --apu-skin-temp={95} --vrm-current={(uint)((tdp * 1000) * 1.2)} --vrmmax-current={(uint)((tdp * 1000) * 1.2)}";
+                }
+                else
+                {
+                    //TODO: load custom presets
+                }
+            }
+            else if (MainWindow.AppName.Contains("AMD CPU"))
+            {
+                if (presetName == "" || presetName == null)
+                {
+                    SendCommand.set_ppt((uint)tdp * 1000);
+                    SendCommand.set_edc((uint)((tdp * 1000) * 1.2));
+                    SendCommand.set_tdc((uint)((tdp * 1000) * 1.2));
+                }
+            }
+            else if (MainWindow.AppName.Contains("Intel CPU"))
+            {
+                if (presetName == "" || presetName == null)
+                {
+                    await Task.Run(() => ChangeTDP.changeTDP(tdp, tdp));
+                }
+            }
+
+            Settings.Default["RyzenAdjArguments"] = ryzenadj;
+            Settings.Default.Save();
         }
     }
 }
