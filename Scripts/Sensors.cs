@@ -38,11 +38,13 @@ namespace AATUV3.Scripts
 
         public static void getBattery()
         {
-            PowerStatus pwr = SystemInformation.PowerStatus;
+            try
+            {
+                PowerStatus pwr = SystemInformation.PowerStatus;
                 //Get battery life
                 battery = Convert.ToInt32(pwr.BatteryLifePercent * 100);
 
-                if(pwr.BatteryChargeStatus != BatteryChargeStatus.Charging)
+                if (pwr.BatteryChargeStatus != BatteryChargeStatus.Charging)
                 {
                     batTime = (float)pwr.BatteryLifeRemaining;
                 }
@@ -50,6 +52,10 @@ namespace AATUV3.Scripts
                 {
                     batTime = 0;
                 }
+            } catch (Exception ex)
+            {
+
+            }
         }
 
         private static void getTime()
@@ -61,22 +67,28 @@ namespace AATUV3.Scripts
 
         private static void getBrightness()
         {
-            //create object query
-            ObjectQuery query = new ObjectQuery("SELECT * FROM WmiMonitorBrightness");
-
-            //create object searcher
-            ManagementObjectSearcher searcher =
-                                    new ManagementObjectSearcher(scope, query);
-
-            //get a collection of WMI objects
-            ManagementObjectCollection queryCollection = searcher.Get();
-
-            //enumerate the collection.
-            foreach (ManagementObject m in queryCollection)
+            try
             {
-                // access properties of the WMI object
-                brightness = m["CurrentBrightness"].ToString();
+                //create object query
+                ObjectQuery query = new ObjectQuery("SELECT * FROM WmiMonitorBrightness");
+
+                //create object searcher
+                ManagementObjectSearcher searcher =
+                                        new ManagementObjectSearcher(scope, query);
+
+                //get a collection of WMI objects
+                ManagementObjectCollection queryCollection = searcher.Get();
+
+                //enumerate the collection.
+                foreach (ManagementObject m in queryCollection)
+                {
+                    // access properties of the WMI object
+                    brightness = m["CurrentBrightness"].ToString();
+                }
+            } catch (Exception ex)
+            {
+
             }
-        }
+        } 
     }
 }

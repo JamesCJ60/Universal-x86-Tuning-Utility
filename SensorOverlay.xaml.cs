@@ -313,6 +313,10 @@ namespace AATUV3
                         lblCPU.Content = $"{cpuTemp}°C   {cpuLoad}%   {cpuClock}MHz   {cpuPower}w";
                     }
 
+                    if(iGPUClock <=0 && iGPUTemp <= 0) iGPU.Visibility = Visibility.Collapsed;
+
+                    if(MainWindow.AppName.Contains("Intel")) lblRAM.Content = $"{RAMLoad}%   {RAMUsed}MB";
+
                     d = i + 2;
                 }
                 lblFPS.Content = $"{Framerate}FPS";

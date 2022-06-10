@@ -73,7 +73,7 @@
                 <SolidColorBrush Opacity="0.25" Color="#141414"/>
             </DockPanel.Background>
             <StackPanel DockPanel.Dock="Top" Width="auto" Height="auto" x:Name="SP1" Focusable="False">
-                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,2,2,-4">
+                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,2,2,-4" Name="iGPU">
                     <Image  Source="Assets\Icons\cpu-fill.png" Margin="0,0,0,0" Height="24"/>
                     <Label  Content="iGPU:" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" />
                     <Label  Name="lbliGPU"  Content="" Foreground="White" VerticalAlignment="Center" />

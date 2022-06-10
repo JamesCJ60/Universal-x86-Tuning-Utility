@@ -30,7 +30,7 @@ namespace AATUV3
     /// </summary>
     public partial class OverlayWindow : Window
     {
-
+        public int NVGPU = 0;
         public DispatcherTimer autoReapply = new DispatcherTimer();
         public OverlayWindow()
         {
@@ -63,7 +63,8 @@ namespace AATUV3
                 CO.Visibility = Visibility.Visible;
             }
 
-                ASUSAC.Visibility = Visibility.Collapsed;
+            ASUSAC.Visibility = Visibility.Collapsed;
+
             if (MainWindow.mbo.Contains("asus"))
             {
                 ASUSAC.Visibility = Visibility.Visible;
@@ -76,6 +77,13 @@ namespace AATUV3
             };
             thisPC.Open();
             thisPC.Accept(new UpdateVisitor());
+
+            getGPUInfo();
+
+            if (NVGPU <= 0)
+            {
+                NVDGPU.Visibility = Visibility.Collapsed;
+            }
         }
 
         public static Computer thisPC;
@@ -269,9 +277,9 @@ namespace AATUV3
                                 {
                                     lblTemp.Content = " " + (int)sensor.Value.GetValueOrDefault() + "°C";
                                 }
-                                else if ((int)sensor.Value.GetValueOrDefault() < 10)
+                                if ((int)sensor.Value.GetValueOrDefault() < 10)
                                 {
-                                    lblTemp.Content = " 0" + (int)sensor.Value.GetValueOrDefault() + "°C";
+                                    lblTemp.Content = "  " + (int)sensor.Value.GetValueOrDefault() + "°C";
                                 }
                                 else
                                 {
@@ -285,9 +293,9 @@ namespace AATUV3
                                 {
                                     lblPower.Content = " " + (int)sensor.Value.GetValueOrDefault() + "w";
                                 }
-                                else if ((int)sensor.Value.GetValueOrDefault() < 10)
+                                if ((int)sensor.Value.GetValueOrDefault() < 10)
                                 {
-                                    lblPower.Content = " 0" + (int)sensor.Value.GetValueOrDefault() + "w";
+                                    lblPower.Content = "  " + (int)sensor.Value.GetValueOrDefault() + "w";
                                 }
                                 else
                                 {
@@ -304,7 +312,22 @@ namespace AATUV3
             }
         }
 
-        private void NVdGPU_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        public void getGPUInfo()
+        {
+            foreach (var hardware in thisPC.Hardware)
+            {
+                hardware.Update();
+                if (hardware.HardwareType == HardwareType.GpuNvidia)
+                {
+                    foreach (var sensor in hardware.Sensors)
+                    {
+                        NVGPU = 1;
+                    }
+                }
+            }
+        }
+
+            private void NVdGPU_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             lblCore.Content = core.Value.ToString() + "MHz";
             lblMem.Content = mem.Value.ToString() + "MHz";
@@ -413,6 +436,7 @@ namespace AATUV3
             {
                 if (presetName == "" || presetName == null)
                 {
+                    tdp = tdp + 1;
                     await Task.Run(() => ChangeTDP.changeTDP(tdp, tdp));
                 }
             }
