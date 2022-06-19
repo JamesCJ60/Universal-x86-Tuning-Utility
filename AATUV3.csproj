@@ -169,10 +169,10 @@
     <Compile Include="Scripts\SMU Backend Scripts\RwMmioAmd.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\RyzenSmu.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\SendCommand.cs" />
-    <Compile Include="SensorOverlay.xaml.cs">
+    <Compile Include="Windows\SensorOverlay.xaml.cs">
       <DependentUpon>SensorOverlay.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OverlayWindow.xaml.cs">
+    <Compile Include="Windows\OverlayWindow.xaml.cs">
       <DependentUpon>OverlayWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ProjectSnowdrop.xaml.cs">
@@ -214,11 +214,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SensorOverlay.xaml">
+    <Page Include="Windows\SensorOverlay.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="OverlayWindow.xaml">
+    <Page Include="Windows\OverlayWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
