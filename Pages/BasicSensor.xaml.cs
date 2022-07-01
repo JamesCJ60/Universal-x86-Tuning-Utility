@@ -23,6 +23,19 @@ namespace AATUV3.Pages
     /// </summary>
     public partial class BasicSensor : UserControl
     {
+
+        //RAVEN - 0
+        //PICASSO - 1
+        //DALI - 2
+        //RENOIR/LUCIENNE - 3
+        //MATISSE - 4
+        //VANGOGH - 5
+        //VERMEER - 6
+        //CEZANNE/BARCELO - 7
+        //REMBRANDT - 8
+        //PHEONIX - 9
+        //RAPHAEL/DRAGON RANGE - 10
+
         public BasicSensor()
         {
             InitializeComponent();
@@ -41,31 +54,51 @@ namespace AATUV3.Pages
             CoreLatCCD2.Visibility = Visibility.Collapsed;
             CoreClockCCD2.Visibility = Visibility.Collapsed;
 
-            if (PMT.Contains("400005") || PMT.Contains("400004") || PMT.Contains("400001") || PMT.Contains("370000") || PMT.Contains("370003") || PMT.Contains("370004") || PMT.Contains("370005"))
+            if (Families.FAMID == 6 || Families.FAMID == 7 || Families.FAMID == 3 || Families.FAMID == 4 || Families.FAMID == 8)
             {
-                if ((int)GetSensor.getSensorValve("STAPM_LIMIT") > highestPL) highestPL = (int)GetSensor.getSensorValve("STAPM_LIMIT");
-                if ((int)GetSensor.getSensorValve("PPT_LIMIT_FAST") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_FAST");
-                if ((int)GetSensor.getSensorValve("PPT_LIMIT_SLOW") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_SLOW");
+                iGPUTemp.Visibility = Visibility.Collapsed;
+                iGPUClock.Visibility = Visibility.Collapsed;
+                PL1.Visibility = Visibility.Collapsed;
+                PL2.Visibility = Visibility.Collapsed;
+                if (MainWindow.AppName.Contains("APU"))
+                {
+                    iGPUTemp.Visibility = Visibility.Visible;
+                    iGPUClock.Visibility = Visibility.Visible;
+                    PL1.Visibility = Visibility.Visible;
+                    PL2.Visibility = Visibility.Visible;
 
-                lblAPUTemp.Text = $"{(int)GetSensor.getSensorValve("THM_VALUE_CORE")}°C/{(int)GetSensor.getSensorValve("THM_LIMIT_CORE")}°C";
-                if((int)GetSensor.getSensorValve("STT_VALUE_APU") > 0)
-                {
-                    Skin.Visibility = Visibility.Visible;
-                    lblSkinTemp.Text = $"{(int)GetSensor.getSensorValve("STT_VALUE_APU")}°C/{(int)GetSensor.getSensorValve("STT_LIMIT_APU")}°C";
-                }else
-                {
-                    Skin.Visibility = Visibility.Collapsed;
+                    if ((int)GetSensor.getSensorValve("STAPM_LIMIT") > highestPL) highestPL = (int)GetSensor.getSensorValve("STAPM_LIMIT");
+                    if ((int)GetSensor.getSensorValve("PPT_LIMIT_FAST") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_FAST");
+                    if ((int)GetSensor.getSensorValve("PPT_LIMIT_SLOW") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_SLOW");
+
+                    lblAPUTemp.Text = $"{(int)GetSensor.getSensorValve("THM_VALUE_CORE")}°C/{(int)GetSensor.getSensorValve("THM_LIMIT_CORE")}°C";
+                    if ((int)GetSensor.getSensorValve("STT_VALUE_APU") > 0)
+                    {
+                        Skin.Visibility = Visibility.Visible;
+                        lblSkinTemp.Text = $"{(int)GetSensor.getSensorValve("STT_VALUE_APU")}°C/{(int)GetSensor.getSensorValve("STT_LIMIT_APU")}°C";
+                    }
+                    else
+                    {
+                        Skin.Visibility = Visibility.Collapsed;
+                    }
+
+                    lbliGPUTemp.Text = $"{(int)GetSensor.getSensorValve("GFX_TEMP")}°C/{(int)GetSensor.getSensorValve("THM_LIMIT_CORE")}°C";
+
+                    lblSTAPM.Text = $"{(int)GetSensor.getSensorValve("SOCKET_POWER")}W/{(int)GetSensor.getSensorValve("STAPM_LIMIT")}W";
+                    lblShortBoost.Text = $"{(int)GetSensor.getSensorValve("SOCKET_POWER")}W/{(int)GetSensor.getSensorValve("PPT_LIMIT_FAST")}W";
+                    lblLongBoost.Text = $"{(int)GetSensor.getSensorValve("SOCKET_POWER")}W/{(int)GetSensor.getSensorValve("PPT_LIMIT_SLOW")}W";
+
+                    lbliGPUClk.Text = $"{(int)GetSensor.getSensorValve("GFX_FREQEFF")}MHz";
                 }
-                
-                lbliGPUTemp.Text = $"{(int)GetSensor.getSensorValve("GFX_TEMP")}°C/{(int)GetSensor.getSensorValve("THM_LIMIT_CORE")}°C";
+                else
+                {
+                    lblPL0.Text = "PPT:";
+                    lblSTAPM.Text = lblSTAPM.Text = $"{(int)GetSensor.getSensorValve("PPT_VALUE")}W/{(int)GetSensor.getSensorValve("PPT_LIMIT")}W";
+                }
 
-                lblSTAPM.Text = $"{(int)GetSensor.getSensorValve("SOCKET_POWER")}W/{(int)GetSensor.getSensorValve("STAPM_LIMIT")}W";
-                lblShortBoost.Text = $"{(int)GetSensor.getSensorValve("SOCKET_POWER")}W/{(int)GetSensor.getSensorValve("PPT_LIMIT_FAST")}W";
-                lblLongBoost.Text = $"{(int)GetSensor.getSensorValve("SOCKET_POWER")}W/{(int)GetSensor.getSensorValve("PPT_LIMIT_SLOW")}W";
                 lblSocket.Text = $"{(int)GetSensor.getSensorValve("SOCKET_POWER")}W/{highestPL}W";
                 lblMem.Text = $"{GetSensor.getSensorValve("VDDIO_MEM_POWER").ToString("0.00")}W";
 
-                lbliGPUClk.Text = $"{(int)GetSensor.getSensorValve("GFX_FREQEFF")}MHz";
                 lblSoCClk.Text = $"{(int)GetSensor.getSensorValve("SOCCLK_FREQ")}MHz";
                 lblMemClk.Text = $"{(int)GetSensor.getSensorValve("MEMCLK_FREQ")}MHz";
                 lblFabricClk.Text = $"{(int)GetSensor.getSensorValve("FCLK_FREQ")}MHz";
@@ -83,7 +116,7 @@ namespace AATUV3.Pages
                 lblCore8Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_7")).ToString("0.00")}GHz";
             }
 
-            if (PMT.Contains("400005") || PMT.Contains("400004") || PMT.Contains("400001") || PMT.Contains("380805") || PMT.Contains("380804") || PMT.Contains("380904"))
+            if (Families.FAMID >=7)
             {
                 CoreLat.Visibility = Visibility.Visible;
                 lblCore1Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_0")}ns";
@@ -99,7 +132,7 @@ namespace AATUV3.Pages
 
             if(Environment.ProcessorCount > 16)
             {
-                if (PMT.Contains("380805") || PMT.Contains("380804") || PMT.Contains("380904"))
+                if (Families.FAMID == 6 && Families.FAMID == 10)
                 {
                     CoreLatCCD2.Visibility = Visibility.Visible;
                     lblCore1LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_8")}ns";
@@ -116,7 +149,7 @@ namespace AATUV3.Pages
 
             if (Environment.ProcessorCount > 16)
             {
-                if (PMT.Contains("380805") || PMT.Contains("380804") || PMT.Contains("380904"))
+                if (Families.FAMID == 6)
                 {
                     CoreClockCCD2.Visibility = Visibility.Visible;
                     lblCore1ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_8")).ToString("0.00")}GHz";
