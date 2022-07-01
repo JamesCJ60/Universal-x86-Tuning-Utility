@@ -36,10 +36,12 @@ namespace AATUV3.Pages
         void SensorUpdate_Tick(object sender, EventArgs e)
         {
             int highestPL = 0;
-
+            string PMT = string.Format("{0:x}", Addresses.PMTableVersion);
             CoreLat.Visibility = Visibility.Collapsed;
+            CoreLatCCD2.Visibility = Visibility.Collapsed;
+            CoreClockCCD2.Visibility = Visibility.Collapsed;
 
-            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400001") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370000") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370003") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370004") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370005"))
+            if (PMT.Contains("400005") || PMT.Contains("400004") || PMT.Contains("400001") || PMT.Contains("370000") || PMT.Contains("370003") || PMT.Contains("370004") || PMT.Contains("370005"))
             {
                 if ((int)GetSensor.getSensorValve("STAPM_LIMIT") > highestPL) highestPL = (int)GetSensor.getSensorValve("STAPM_LIMIT");
                 if ((int)GetSensor.getSensorValve("PPT_LIMIT_FAST") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_FAST");
@@ -81,7 +83,7 @@ namespace AATUV3.Pages
                 lblCore8Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_7")).ToString("0.00")}GHz";
             }
 
-            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400001"))
+            if (PMT.Contains("400005") || PMT.Contains("400004") || PMT.Contains("400001") || PMT.Contains("380805") || PMT.Contains("380804") || PMT.Contains("380904"))
             {
                 CoreLat.Visibility = Visibility.Visible;
                 lblCore1Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_0")}ns";
@@ -92,6 +94,40 @@ namespace AATUV3.Pages
                 lblCore6Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_5")}ns";
                 lblCore7Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_6")}ns";
                 lblCore8Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_7")}ns";
+            }
+
+
+            if(Environment.ProcessorCount > 16)
+            {
+                if (PMT.Contains("380805") || PMT.Contains("380804") || PMT.Contains("380904"))
+                {
+                    CoreLatCCD2.Visibility = Visibility.Visible;
+                    lblCore1LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_8")}ns";
+                    lblCore2LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_9")}ns";
+                    lblCore3LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_10")}ns";
+                    lblCore4LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_11")}ns";
+                    lblCore5LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_12")}ns";
+                    lblCore6LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_13")}ns";
+                    lblCore7LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_14")}ns";
+                    lblCore8LatCCD2.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_15")}ns";
+                }
+            }
+
+
+            if (Environment.ProcessorCount > 16)
+            {
+                if (PMT.Contains("380805") || PMT.Contains("380804") || PMT.Contains("380904"))
+                {
+                    CoreClockCCD2.Visibility = Visibility.Visible;
+                    lblCore1ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_8")).ToString("0.00")}GHz";
+                    lblCore2ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_9")).ToString("0.00")}GHz";
+                    lblCore3ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_10")).ToString("0.00")}GHz";
+                    lblCore4ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_11")).ToString("0.00")}GHz";
+                    lblCore5ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_12")).ToString("0.00")}GHz";
+                    lblCore6ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_13")).ToString("0.00")}GHz";
+                    lblCore7ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_14")).ToString("0.00")}GHz";
+                    lblCore8ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_15")).ToString("0.00")}GHz";
+                }
             }
         }
     }

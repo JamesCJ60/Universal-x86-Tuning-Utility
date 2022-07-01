@@ -76,14 +76,14 @@
                                 <TextBlock Foreground="White" FontSize="22" FontWeight="Bold">Current/Set</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
-                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">APU Temp:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350" Name="lblTempName">APU Temp:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblAPUTemp" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
                             <StackPanel x:Name="Skin" Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">Skin Temp:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblSkinTemp" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0" Name="iGPUTemp">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">iGPU Temp:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lbliGPUTemp" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
@@ -99,14 +99,14 @@
                                 <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47">Current/Set</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
-                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">STAPM/PL0:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350" Name="lblPL0">STAPM/PL0:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblSTAPM" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0" Name="PL1">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">Long Boost/PL1:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblLongBoost" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0" Name="PL2">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">Short Boost/PL2:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblShortBoost" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
                             </StackPanel>
@@ -128,7 +128,7 @@
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350" FontWeight="Bold" >Sensor</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47" TextAlignment="Center">Value</TextBlock>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0" Name="iGPUClock">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">iGPU Clock:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lbliGPUClk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
@@ -153,7 +153,7 @@
                     
                     <Border Name="CoreLat" BorderBrush="White" BorderThickness="2" Padding="10" CornerRadius="8" Margin="0,10,0,0">
                         <StackPanel>
-                            <TextBlock Foreground="White" FontSize="28">Core Memory Latency:</TextBlock>
+                            <TextBlock Foreground="White" FontSize="28">CCD1 Core Memory Latency:</TextBlock>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350" FontWeight="Bold" >Sensor</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47" TextAlignment="Center">Value</TextBlock>
@@ -196,9 +196,54 @@
                         </StackPanel>
                     </Border>
 
+                    <Border Name="CoreLatCCD2" BorderBrush="White" BorderThickness="2" Padding="10" CornerRadius="8" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Foreground="White" FontSize="28">CCD2 Core Memory Latency:</TextBlock>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350" FontWeight="Bold" >Sensor</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47" TextAlignment="Center">Value</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 1 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore1LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 2 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore2LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 3 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore3LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 4 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore4LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 5 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore5LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 6 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore6LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 7 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore7LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 8 Latency:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore8LatCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
                     <Border Name="CoreClock" BorderBrush="White" BorderThickness="2" Padding="10" CornerRadius="8" Margin="0,10,0,0">
                         <StackPanel>
-                            <TextBlock Foreground="White" FontSize="28">Core Clock:</TextBlock>
+                            <TextBlock Foreground="White" FontSize="28">CCD1 Core Clock:</TextBlock>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350" FontWeight="Bold" >Sensor</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47" TextAlignment="Center">Value</TextBlock>
@@ -237,6 +282,51 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 8 Clock:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblCore8Clk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Name="CoreClockCCD2" BorderBrush="White" BorderThickness="2" Padding="10" CornerRadius="8" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Foreground="White" FontSize="28">CCD2 Core Clock:</TextBlock>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350" FontWeight="Bold" >Sensor</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47" TextAlignment="Center">Value</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 1 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore1ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 2 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore2ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 3 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore3ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 4 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore4ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 5 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore5ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 6 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore6ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 7 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore7ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 8 Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore8ClkCCD2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
                             </StackPanel>
                         </StackPanel>
                     </Border>
