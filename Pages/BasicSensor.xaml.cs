@@ -37,8 +37,11 @@ namespace AATUV3.Pages
         {
             int highestPL = 0;
 
-            if (Addresses.PMTableVersion == 400005 || Addresses.PMTableVersion == 400004)
+            CoreLat.Visibility = Visibility.Collapsed;
+
+            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004"))
             {
+                CoreLat.Visibility = Visibility.Visible;
                 if ((int)GetSensor.getSensorValve("STAPM_LIMIT") > highestPL) highestPL = (int)GetSensor.getSensorValve("STAPM_LIMIT");
                 if ((int)GetSensor.getSensorValve("PPT_LIMIT_FAST") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_FAST");
                 if ((int)GetSensor.getSensorValve("PPT_LIMIT_SLOW") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_SLOW");
@@ -84,11 +87,6 @@ namespace AATUV3.Pages
                 lblCore6Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_5")).ToString("0.00")}GHz";
                 lblCore7Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_6")).ToString("0.00")}GHz";
                 lblCore8Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_7")).ToString("0.00")}GHz";
-            }
-
-            if(Addresses.PMTableVersion < 370000)
-            {
-                CoreLat.Visibility = Visibility.Collapsed;
             }
         }
     }

@@ -55,7 +55,7 @@ namespace AATUV3.Scripts
 
         [DllImport("psapi.dll")]
         static extern int EmptyWorkingSet(IntPtr hwProc);
-        public static void Garbage_Collect()
+        public static async Task Garbage_Collect()
         {
             EmptyWorkingSet(Process.GetCurrentProcess().Handle);
 

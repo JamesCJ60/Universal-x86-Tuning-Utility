@@ -13,12 +13,12 @@ namespace AATUV3.Scripts.SMU_Backend_Scripts
     internal class GetSensor
     {
         public static float getSensorValve(string SensorName)
-        {           
+        {
             int i = -1;
             string[] SensorNames = { };
             uint[] SensorOffset = { };
 
-            if (Addresses.PMTableVersion == 400005)
+            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004"))
             {
                 SensorNames = pmtables.PMT_Sensor_400005;
                 SensorOffset = pmtables.PMT_Offset_400005;

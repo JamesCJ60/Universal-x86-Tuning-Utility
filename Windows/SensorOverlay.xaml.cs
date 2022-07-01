@@ -241,8 +241,6 @@ namespace AATUV3
             {
                 updateSensorsInfo();
             }
-
-            Addresses.UpdateTable();
         }
 
         int i = 0;

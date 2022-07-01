@@ -196,13 +196,19 @@ namespace RyzenSMUBackend
             uint msg3 = 0x0;
 
             //set SMU message address
+            if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+            {
+                msg1 = 0xc;
+                msg2 = 0xb;
+                msg3 = 0x3d;
+            }
             if (Families.FAMID == 3 || Families.FAMID == 7)
             {
                 msg1 = 0x6;
                 msg2 = 0x66;
                 msg3 = 0x65;
             }
-            if (Families.FAMID == 4 || Families.FAMID == 6)
+            if (Families.FAMID == 4 || Families.FAMID == 6 || Families.FAMID == 8)
             {
                 msg1 = 0x8;
                 msg2 = 0x6;
@@ -253,9 +259,11 @@ namespace RyzenSMUBackend
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(2, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(4, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(6, 2);
+                TableDump[0] = ($"APU/CPU Version: {Settings.Default.APUName}");
                 TableDump[1] = ($"SMU Version: {SmuVersionArgs[0]:X8}");
                 TableDump[2] = ($"SMU Version: " + SmuVersion);
                 TableDump[3] = ($"PMTableBaseAddress: 0x{Address:X8}");
+                TableDump[4] = ($"PMTableVersion: 0x00{string.Format("{0:x}", PMTableVersion)}");
                 float CurrentValue = 0.0F;
                 bool OnlyZero = true;
                 for (UInt32 i = 0; i <= 700; i++)
@@ -265,7 +273,7 @@ namespace RyzenSMUBackend
                     {
                         OnlyZero = false;
                     }
-                    TableDump[4 + i] = $"0x{i:X4}\t{CurrentValue:F4}";
+                    TableDump[5 + i] = $"0x{i:X4}\t{CurrentValue:F4}";
                 }
                 File.WriteAllLines("PMTableDumpWithSensors.log", TableDump);
                 if (OnlyZero)
@@ -290,13 +298,20 @@ namespace RyzenSMUBackend
             uint msg3 = 0x0;
 
             //set SMU message address
+            //set SMU message address
+            if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+            {
+                msg1 = 0xc;
+                msg2 = 0xb;
+                msg3 = 0x3d;
+            }
             if (Families.FAMID == 3 || Families.FAMID == 7)
             {
                 msg1 = 0x6;
                 msg2 = 0x66;
                 msg3 = 0x65;
             }
-            if (Families.FAMID == 4 || Families.FAMID == 6)
+            if (Families.FAMID == 4 || Families.FAMID == 6 || Families.FAMID == 8)
             {
                 msg1 = 0x8;
                 msg2 = 0x6;
@@ -347,9 +362,11 @@ namespace RyzenSMUBackend
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(2, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(4, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(6, 2);
+                TableDump[0] = ($"APU/CPU Version: {Settings.Default.APUName}");
                 TableDump[1] = ($"SMU Version: {SmuVersionArgs[0]:X8}");
                 TableDump[2] = ($"SMU Version: " + SmuVersion);
                 TableDump[3] = ($"PMTableBaseAddress: 0x{Address:X8}");
+                TableDump[4] = ($"PMTableVersion: 0x00{string.Format("{0:x}", PMTableVersion)}");
                 float CurrentValue = 0.0F;
                 bool OnlyZero = true;
                 for (UInt32 i = 0; i <= 700; i++)
@@ -359,7 +376,7 @@ namespace RyzenSMUBackend
                     {
                         OnlyZero = false;
                     }
-                    TableDump[4 + i] = $"0x{i:X4},";
+                    TableDump[5 + i] = $"0x{i:X4},";
                 }
                 File.WriteAllLines("PMTableDumpJustOffsets.log", TableDump);
                 if (OnlyZero)

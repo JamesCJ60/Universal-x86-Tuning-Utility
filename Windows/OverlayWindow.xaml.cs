@@ -188,6 +188,11 @@ namespace AATUV3
                 updateSensorsInfo();
                 getCPUInfo();
             }
+
+            if (MainWindow.AppName.Contains("AMD"))
+            {
+                Addresses.UpdateTable();
+            }
         }
 
         int i = 0;

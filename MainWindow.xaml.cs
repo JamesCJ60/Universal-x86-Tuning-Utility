@@ -117,8 +117,6 @@ namespace AATUV3
                 this.WindowState = System.Windows.WindowState.Maximized;
             }
 
-            BasicExeBackend.Garbage_Collect();
-
             if (Convert.ToBoolean(Settings.Default["StartMinimised"]) == true)
             {
                 this.WindowState = WindowState.Minimized;
@@ -527,10 +525,10 @@ namespace AATUV3
                 this.DragMove();
         }
 
-        void GarbageCollect_Tick(object sender, EventArgs e)
+        async void GarbageCollect_Tick(object sender, EventArgs e)
         {
             //Free resources back to system
-            BasicExeBackend.Garbage_Collect();
+            await BasicExeBackend.Garbage_Collect();
         }
 
         private void home_Closing(object sender, System.ComponentModel.CancelEventArgs e)

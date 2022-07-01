@@ -651,6 +651,15 @@ namespace AATUV3.Scripts.SMU_Backend_Scripts
             "SMU_SKIP_COUNTER"
         };
 
+        public static uint[] PMT_Offset_380805 = {
+
+        };
+
+        public static string[] PMT_Sensor_380805 =
+        {
+
+        };
+
         public static uint[] PMT_Offset_400005 = { 0x0000,
 0x0001,
 0x0002,
