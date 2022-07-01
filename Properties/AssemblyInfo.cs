@@ -8,7 +8,7 @@ using System.Windows;
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
 [assembly: AssemblyTitle("Universal x86 Tuning Utility")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Tuning utility for AMD and Intel APU/CPUs")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Universal x86 Tuning Utility")]

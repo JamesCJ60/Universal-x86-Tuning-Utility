@@ -97,16 +97,17 @@ namespace AATUV3
         {
             if (Convert.ToBoolean(Settings.Default["AutoReapply"]) == true)
             {
+                string commands = (string)Settings.Default["RyzenAdjArguments"];
                 //Check if RyzenAdjArguments is populated
-                if (Settings.Default["RyzenAdjArguments"].ToString() != null || Settings.Default["RyzenAdjArguments"].ToString() != "")
+                if (commands != null || commands != "")
                 {
-                    //Cehck to make sure that Adpative Performance menu is not open
+                    //Check to make sure that Adpative Performance menu is not open
                     if (!MainWindow.menu.ToLower().Contains("adaptive"))
                     {
                         //Get RyzenAdj path
                         string path = "\\bin\\ryzenadj\\ryzenadj.exe";
                         //Pass settings on to be applied
-                        BasicExeBackend.ApplySettings(path, Settings.Default["RyzenAdjArguments"].ToString(), true);
+                        BasicExeBackend.ApplySettings(path, commands, true);
                     }
                 }
             }
@@ -206,12 +207,12 @@ namespace AATUV3
             }
         }
 
-        private void brightness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void brightness_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             updateBrightness(Convert.ToInt32(brightness.Value));
         }
 
-        private void volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void volume_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             updateVolume(Convert.ToInt32(volume.Value));
         }
@@ -327,20 +328,23 @@ namespace AATUV3
             }
         }
 
-            private void NVdGPU_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void NVdGPU_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            lblCore.Content = core.Value.ToString() + "MHz";
-            lblMem.Content = mem.Value.ToString() + "MHz";
-
             //Get RyzenAdj path
             string path = "\\bin\\oc.exe";
             //Pass settings on to be applied
-            BasicExeBackend.ApplySettings(path, "0 " + core.Value + " " + mem.Value, true);
-            BasicExeBackend.ApplySettings(path, "1 " + core.Value + " " + mem.Value, true);
-            BasicExeBackend.ApplySettings(path, "2 " + core.Value + " " + mem.Value, true);
+            BasicExeBackend.ApplySettings(path, "0 " + (int)core.Value + " " + (int)mem.Value, true);
+            BasicExeBackend.ApplySettings(path, "1 " + (int)core.Value + " " + (int)mem.Value, true);
+            BasicExeBackend.ApplySettings(path, "2 " + (int)core.Value + " " + (int)mem.Value, true);
         }
 
-        private void COCPU_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void dGPU_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lblCore.Content = ((int)core.Value).ToString() + "MHz";
+            lblMem.Content = ((int)mem.Value).ToString() + "MHz";
+        }
+
+        private void COCPU_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             lblCOCPU.Content = COCPU.Value.ToString() + "Offset";
 
@@ -354,7 +358,7 @@ namespace AATUV3
             }
         }
 
-        private void iGPUCO_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void iGPUCO_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             lbliGPUCO.Content = iGPUCO.Value.ToString() + "Offset";
 
@@ -407,16 +411,16 @@ namespace AATUV3
 
             if (MainWindow.AppName.Contains("AMD APU"))
             {
-                if(presetName == "" || presetName == null)
+                if (presetName == "" || presetName == null)
                 {
                     SendCommand.set_tctl_temp(95);
                     SendCommand.set_apu_skin_temp_limit(95);
                     SendCommand.set_fast_limit((uint)tdp * 1000);
                     SendCommand.set_slow_limit((uint)tdp * 1000);
                     SendCommand.set_stapm_limit((uint)tdp * 1000);
-                    SendCommand.set_vrm_current((uint)((tdp * 1000) * 1.2));
-                    SendCommand.set_vrmmax_current((uint)((tdp * 1000) * 1.2));
-                    ryzenadj = $"--stapm-limit={tdp*1000} --fast-limit={tdp * 1000} --slow-limit={tdp * 1000} --tctl-temp={95} --apu-skin-temp={95} --vrm-current={(uint)((tdp * 1000) * 1.2)} --vrmmax-current={(uint)((tdp * 1000) * 1.2)}";
+                    SendCommand.set_vrm_current((uint)((tdp * 1000) * 1.33));
+                    SendCommand.set_vrmmax_current((uint)((tdp * 1000) * 1.33));
+                    ryzenadj = $"--stapm-limit={tdp * 1000} --fast-limit={tdp * 1000} --slow-limit={tdp * 1000} --tctl-temp={95} --apu-skin-temp={95} --vrm-current={(uint)((tdp * 1000) * 1.2)} --vrmmax-current={(uint)((tdp * 1000) * 1.2)}";
                 }
                 else
                 {
@@ -428,15 +432,14 @@ namespace AATUV3
                 if (presetName == "" || presetName == null)
                 {
                     SendCommand.set_ppt((uint)tdp * 1000);
-                    SendCommand.set_edc((uint)((tdp * 1000) * 1.2));
-                    SendCommand.set_tdc((uint)((tdp * 1000) * 1.2));
+                    SendCommand.set_edc((uint)((tdp * 1000) * 1.33));
+                    SendCommand.set_tdc((uint)((tdp * 1000) * 1.33));
                 }
             }
             else if (MainWindow.AppName.Contains("Intel CPU"))
             {
                 if (presetName == "" || presetName == null)
                 {
-                    tdp = tdp + 1;
                     await Task.Run(() => ChangeTDP.changeTDP(tdp, tdp));
                 }
             }

@@ -93,7 +93,7 @@ namespace RyzenSMUBackend
             //PHEONIX - 9
             //RAPHAEL/DRAGON RANGE - 10
 
-            
+
 
             await Task.Run(() =>
             {
@@ -183,10 +183,199 @@ namespace RyzenSMUBackend
                 //    File.WriteAllText(sensors, outputNames);
                 //}
                 RyzenAccess.Deinitialize();
+
+                DumpPMTableWithSensors();
             });
         }
 
-        public async static void UpdateTable() 
+        public static void DumpPMTableWithSensors()
+        {
+
+            uint msg1 = 0x0;
+            uint msg2 = 0x0;
+            uint msg3 = 0x0;
+
+            //set SMU message address
+            if (Families.FAMID == 3 || Families.FAMID == 7)
+            {
+                msg1 = 0x6;
+                msg2 = 0x66;
+                msg3 = 0x65;
+            }
+            if (Families.FAMID == 4 || Families.FAMID == 6)
+            {
+                msg1 = 0x8;
+                msg2 = 0x6;
+                msg3 = 0x5;
+            }
+
+            Args = new uint[6];
+            RyzenAccess = new Smu(EnableDebug);
+            RyzenAccess.Initialize();
+            //labelRenoirMobileTuning.Text += " - " + RyzenAccess.GetCpuName();
+
+            if (RyzenAccess.SendPsmu(msg1, ref Args) == Smu.Status.OK)
+            {
+                PMTableVersion = Args[0];
+            }
+
+            if (RyzenAccess.SendPsmu(msg2, ref Args) == Smu.Status.OK)
+            {
+                //Set Address and reset Args[]
+                Address = Args[0];
+                Args[0] = 0;
+
+                //Dump the Power Monitoring Table
+                RyzenAccess.SendPsmu(msg3, ref Args);
+                //Sleep so that the SMU has time to dump the PM Table properly.
+                Thread.Sleep(100);
+
+                for (int i = 0; i <= 1000 && Smu.ReadFloat(Address, 0x0) == 0f; i++)
+                {
+                    if (i == 999)
+                        MessageBox.Show("Unable To start InpOutX64. Check the application permissions and see if anything is stopping InpOutX64 from working.");
+                    Thread.Sleep(1);
+                }
+
+                UInt32[] SmuVersionArgs = new UInt32[6];
+                string[] TableDump = new string[705];
+                Args[0] = 0;
+                RyzenAccess.SendMp1(0x2, ref Args);
+                for (int i = 0; i < 6; i++)
+                {
+                    SmuVersionArgs[i] = Args[i];
+                }
+                Thread.Sleep(1);
+
+
+                TableDump.Initialize();
+                String SmuVersion = "";//$"{SmuVersionArgs[0]:X8}".Substring(0,2) + ".";
+                SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(2, 2) + ".";
+                SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(4, 2) + ".";
+                SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(6, 2);
+                TableDump[1] = ($"SMU Version: {SmuVersionArgs[0]:X8}");
+                TableDump[2] = ($"SMU Version: " + SmuVersion);
+                TableDump[3] = ($"PMTableBaseAddress: 0x{Address:X8}");
+                float CurrentValue = 0.0F;
+                bool OnlyZero = true;
+                for (UInt32 i = 0; i <= 700; i++)
+                {
+                    CurrentValue = Smu.ReadFloat(Address, i);
+                    if (OnlyZero && CurrentValue != 0.0F)
+                    {
+                        OnlyZero = false;
+                    }
+                    TableDump[4 + i] = $"0x{i:X4}\t{CurrentValue:F4}";
+                }
+                File.WriteAllLines("PMTableDumpWithSensors.log", TableDump);
+                if (OnlyZero)
+                {
+                    MessageBox.Show("Error Dumping the PM Table\nThe PM Table only contains zeros!", "Power Monitoring Table Dump:");
+
+                }
+                else
+                {
+                    //MessageBox.Show("Successfully Dumped the PM Table", "Power Monitoring Table Dump:");
+                }
+            }
+
+            DumpPMTableJustOffsets();
+        }
+
+        public static void DumpPMTableJustOffsets()
+        {
+
+            uint msg1 = 0x0;
+            uint msg2 = 0x0;
+            uint msg3 = 0x0;
+
+            //set SMU message address
+            if (Families.FAMID == 3 || Families.FAMID == 7)
+            {
+                msg1 = 0x6;
+                msg2 = 0x66;
+                msg3 = 0x65;
+            }
+            if (Families.FAMID == 4 || Families.FAMID == 6)
+            {
+                msg1 = 0x8;
+                msg2 = 0x6;
+                msg3 = 0x5;
+            }
+
+            Args = new uint[6];
+            RyzenAccess = new Smu(EnableDebug);
+            RyzenAccess.Initialize();
+            //labelRenoirMobileTuning.Text += " - " + RyzenAccess.GetCpuName();
+
+            if (RyzenAccess.SendPsmu(msg1, ref Args) == Smu.Status.OK)
+            {
+                PMTableVersion = Args[0];
+            }
+
+            if (RyzenAccess.SendPsmu(msg2, ref Args) == Smu.Status.OK)
+            {
+                //Set Address and reset Args[]
+                Address = Args[0];
+                Args[0] = 0;
+
+                //Dump the Power Monitoring Table
+                RyzenAccess.SendPsmu(msg3, ref Args);
+                //Sleep so that the SMU has time to dump the PM Table properly.
+                Thread.Sleep(100);
+
+                for (int i = 0; i <= 1000 && Smu.ReadFloat(Address, 0x0) == 0f; i++)
+                {
+                    if (i == 999)
+                        MessageBox.Show("Unable To start InpOutX64. Check the application permissions and see if anything is stopping InpOutX64 from working.");
+                    Thread.Sleep(1);
+                }
+
+                UInt32[] SmuVersionArgs = new UInt32[6];
+                string[] TableDump = new string[705];
+                Args[0] = 0;
+                RyzenAccess.SendMp1(0x2, ref Args);
+                for (int i = 0; i < 6; i++)
+                {
+                    SmuVersionArgs[i] = Args[i];
+                }
+                Thread.Sleep(1);
+
+
+                TableDump.Initialize();
+                String SmuVersion = "";//$"{SmuVersionArgs[0]:X8}".Substring(0,2) + ".";
+                SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(2, 2) + ".";
+                SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(4, 2) + ".";
+                SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(6, 2);
+                TableDump[1] = ($"SMU Version: {SmuVersionArgs[0]:X8}");
+                TableDump[2] = ($"SMU Version: " + SmuVersion);
+                TableDump[3] = ($"PMTableBaseAddress: 0x{Address:X8}");
+                float CurrentValue = 0.0F;
+                bool OnlyZero = true;
+                for (UInt32 i = 0; i <= 700; i++)
+                {
+                    CurrentValue = Smu.ReadFloat(Address, i);
+                    if (OnlyZero && CurrentValue != 0.0F)
+                    {
+                        OnlyZero = false;
+                    }
+                    TableDump[4 + i] = $"0x{i:X4},";
+                }
+                File.WriteAllLines("PMTableDumpJustOffsets.log", TableDump);
+                if (OnlyZero)
+                {
+                    MessageBox.Show("Error Dumping the PM Table\nThe PM Table only contains zeros!", "Power Monitoring Table Dump:");
+
+                }
+                else
+                {
+                    //MessageBox.Show("Successfully Dumped the PM Table", "Power Monitoring Table Dump:");
+                }
+            }
+        }
+
+
+        public async static void UpdateTable()
         {
             await Task.Run(() =>
             {
@@ -194,7 +383,7 @@ namespace RyzenSMUBackend
 
                 //set SMU message address
                 if (Families.FAMID == 3 || Families.FAMID == 7)
-                { 
+                {
                     msg3 = 0x65;
                 }
 

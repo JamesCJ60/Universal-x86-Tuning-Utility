@@ -78,10 +78,10 @@
                     <Label  Name="lblTime"  Content="18:30" Foreground="White" FontSize="20" FontWeight="Bold" />
 
                     <Image  Source="..\Assets\Icons\temp-hot-line.png" Margin="10,0,5,0" />
-                    <Label  Name="lblTemp"  Content="85°C" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Label  Name="lblTemp"  Content="0°C" Foreground="White" FontSize="20" FontWeight="Bold" />
 
                     <Image  Source="..\Assets\Icons\flashlight-line.png" Margin="10,0,5,0" />
-                    <Label  Name="lblPower"  Content="54w" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Label  Name="lblPower"  Content="0w" Foreground="White" FontSize="20" FontWeight="Bold" />
 
 
                     <Image  Name="imgBattery"  Source="..\Assets\Icons\battery-fill.png" Margin="10,0,5,0"/>
@@ -93,14 +93,14 @@
                         <StackPanel Background="#FF0F0F0F" Margin="0,0,0,0">
                             <Label Content="General Settings:" Foreground="White" FontWeight="Bold" FontSize="26"/>
                             <Label Foreground="White" FontSize="22" FontWeight="Bold">Display Brightness:</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="brightness" Minimum="0" Maximum="100" Margin="10,2,10,2" TickFrequency="5" LargeChange="5" ValueChanged="brightness_ValueChanged">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="brightness" Minimum="0" Maximum="100" Margin="10,2,10,2" TickFrequency="5" LargeChange="5" Thumb.DragCompleted="brightness_DragCompleted">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
                             </Slider>
 
                             <Label Foreground="White" FontSize="22" FontWeight="Bold">Volume:</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="volume" Minimum="0" Maximum="100" Margin="10,2,10,2" Foreground="White" TickFrequency="5" LargeChange="5" ValueChanged="volume_ValueChanged">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="volume" Minimum="0" Maximum="100" Margin="10,2,10,2" Foreground="White" TickFrequency="5" LargeChange="5" Thumb.DragCompleted="volume_DragCompleted">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -135,7 +135,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">GPU Core:</Label>
                             <Label Name="lblCore" Foreground="White" FontSize="18">0MHz</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="core" Minimum="-250" Maximum="500" Margin="10,2,10,2" ValueChanged="NVdGPU_ValueChanged">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="core" Minimum="-250" Maximum="500" Margin="10,2,10,2" Thumb.DragCompleted="NVdGPU_DragCompleted" ValueChanged="dGPU_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -143,7 +143,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">GPU Memory:</Label>
                             <Label Name="lblMem" Foreground="White" FontSize="18">0MHz</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="mem" Minimum="-500" Maximum="1000" Margin="10,2,10,2" ValueChanged="NVdGPU_ValueChanged">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="mem" Minimum="-500" Maximum="1000" Margin="10,2,10,2" Thumb.DragCompleted="NVdGPU_DragCompleted"  ValueChanged="dGPU_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -157,7 +157,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">All Core Offset:</Label>
                             <Label Name="lblCOCPU" Foreground="White" FontSize="18">0 Offset</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="COCPU" Minimum="-30" Maximum="30" Margin="10,2,10,2" ValueChanged="COCPU_ValueChanged">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="COCPU" Minimum="-30" Maximum="30" Margin="10,2,10,2" Thumb.DragCompleted="COCPU_DragCompleted">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -165,7 +165,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">iGPU Offset:</Label>
                             <Label Name="lbliGPUCO" Foreground="White" FontSize="18">0 Offset</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="iGPUCO" Minimum="-30" Maximum="30" Margin="10,2,10,2" Foreground="White" ValueChanged="iGPUCO_ValueChanged">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="iGPUCO" Minimum="-30" Maximum="30" Margin="10,2,10,2" Foreground="White" Thumb.DragCompleted="iGPUCO_DragCompleted">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
