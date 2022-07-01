@@ -39,9 +39,8 @@ namespace AATUV3.Pages
 
             CoreLat.Visibility = Visibility.Collapsed;
 
-            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004"))
+            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400001") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370000") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370003") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370004") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("370005"))
             {
-                CoreLat.Visibility = Visibility.Visible;
                 if ((int)GetSensor.getSensorValve("STAPM_LIMIT") > highestPL) highestPL = (int)GetSensor.getSensorValve("STAPM_LIMIT");
                 if ((int)GetSensor.getSensorValve("PPT_LIMIT_FAST") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_FAST");
                 if ((int)GetSensor.getSensorValve("PPT_LIMIT_SLOW") > highestPL) highestPL = (int)GetSensor.getSensorValve("PPT_LIMIT_SLOW");
@@ -70,14 +69,7 @@ namespace AATUV3.Pages
                 lblFabricClk.Text = $"{(int)GetSensor.getSensorValve("FCLK_FREQ")}MHz";
                 lblUncoreClk.Text = $"{(int)GetSensor.getSensorValve("UCLK_FREQ")}MHz";
 
-                lblCore1Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_0")}ns";
-                lblCore2Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_1")}ns";
-                lblCore3Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_2")}ns";
-                lblCore4Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_3")}ns";
-                lblCore5Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_4")}ns";
-                lblCore6Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_5")}ns";
-                lblCore7Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_6")}ns";
-                lblCore8Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_7")}ns";
+
 
                 lblCore1Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_0")).ToString("0.00")}GHz";
                 lblCore2Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_1")).ToString("0.00")}GHz";
@@ -87,6 +79,19 @@ namespace AATUV3.Pages
                 lblCore6Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_5")).ToString("0.00")}GHz";
                 lblCore7Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_6")).ToString("0.00")}GHz";
                 lblCore8Clk.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_7")).ToString("0.00")}GHz";
+            }
+
+            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400001"))
+            {
+                CoreLat.Visibility = Visibility.Visible;
+                lblCore1Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_0")}ns";
+                lblCore2Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_1")}ns";
+                lblCore3Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_2")}ns";
+                lblCore4Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_3")}ns";
+                lblCore5Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_4")}ns";
+                lblCore6Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_5")}ns";
+                lblCore7Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_6")}ns";
+                lblCore8Lat.Text = $"{(int)GetSensor.getSensorValve("CORE_MEM_LATENCY_7")}ns";
             }
         }
     }

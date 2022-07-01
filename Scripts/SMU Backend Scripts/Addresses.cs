@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using UXTU.Properties;
 using RyzenSmu;
+using UXTU;
+using AATUV3.Scripts.SMU_Backend_Scripts;
 
 namespace RyzenSMUBackend
 {
@@ -135,53 +137,6 @@ namespace RyzenSMUBackend
 
                 Thread.Sleep(500);
 
-
-                //Set path to PMTable
-                string path = (string)Settings.Default["Path"] + "\\bin\\pmtables\\" + Families.FAMID + "\\0x00" + PMTableVersion;
-
-                string offsets = "";
-                string sensors = "";
-
-
-                //Load PMTable data
-                offsets = path + "\\0x00" + PMTableVersion + "-offsets.txt";
-                sensors = path + "\\0x00" + PMTableVersion + "-sensors.txt";
-
-                //Check if PMTbale exists 
-                //if (File.Exists(offsets) && File.Exists(sensors))
-                //{
-                //    //Load sensor details
-                //    SensorNames = File.ReadAllLines(sensors);
-                //    SensorOffsets = File.ReadAllLines(offsets);
-
-                //    string output = "";
-                //    string outputNames = "";
-                //    int i = 0;
-
-                //    foreach (string line in SensorOffsets)
-                //    {
-                //        int lineConvert = Convert.ToInt32(line);
-                //        output = output + "0x" + string.Format("{0:x}", lineConvert) + ",\n";
-                //        i++;
-                //    }
-                //    foreach (string line in SensorNames)
-                //    {
-                //        outputNames = outputNames + $"\"{line}\",\n";
-                //    }
-
-                //    if (File.Exists(offsets))
-                //    {
-                //        File.Delete(offsets);
-                //    }
-
-                //    if (File.Exists(sensors))
-                //    {
-                //        File.Delete(sensors);
-                //    }
-
-                //    File.WriteAllText(offsets, output);
-                //    File.WriteAllText(sensors, outputNames);
-                //}
                 RyzenAccess.Deinitialize();
 
                 DumpPMTableWithSensors();
@@ -244,7 +199,7 @@ namespace RyzenSMUBackend
                 }
 
                 UInt32[] SmuVersionArgs = new UInt32[6];
-                string[] TableDump = new string[705];
+                string[] TableDump = new string[706];
                 Args[0] = 0;
                 RyzenAccess.SendMp1(0x2, ref Args);
                 for (int i = 0; i < 6; i++)
@@ -259,7 +214,7 @@ namespace RyzenSMUBackend
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(2, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(4, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(6, 2);
-                TableDump[0] = ($"APU/CPU Version: {Settings.Default.APUName}");
+                TableDump[0] = ($"APU/CPU Name: {Settings.Default.APUName}");
                 TableDump[1] = ($"SMU Version: {SmuVersionArgs[0]:X8}");
                 TableDump[2] = ($"SMU Version: " + SmuVersion);
                 TableDump[3] = ($"PMTableBaseAddress: 0x{Address:X8}");
@@ -347,7 +302,7 @@ namespace RyzenSMUBackend
                 }
 
                 UInt32[] SmuVersionArgs = new UInt32[6];
-                string[] TableDump = new string[705];
+                string[] TableDump = new string[706];
                 Args[0] = 0;
                 RyzenAccess.SendMp1(0x2, ref Args);
                 for (int i = 0; i < 6; i++)
@@ -362,7 +317,7 @@ namespace RyzenSMUBackend
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(2, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(4, 2) + ".";
                 SmuVersion += $"{SmuVersionArgs[0]:X8}".Substring(6, 2);
-                TableDump[0] = ($"APU/CPU Version: {Settings.Default.APUName}");
+                TableDump[0] = ($"APU/CPU Name: {Settings.Default.APUName}");
                 TableDump[1] = ($"SMU Version: {SmuVersionArgs[0]:X8}");
                 TableDump[2] = ($"SMU Version: " + SmuVersion);
                 TableDump[3] = ($"PMTableBaseAddress: 0x{Address:X8}");
@@ -396,20 +351,27 @@ namespace RyzenSMUBackend
         {
             await Task.Run(() =>
             {
-                uint msg3 = 0x0;
-
-                //set SMU message address
-                if (Families.FAMID == 3 || Families.FAMID == 7)
+                try
                 {
-                    msg3 = 0x65;
-                }
+                    uint msg3 = 0x0;
 
-                Args = new uint[6];
-                RyzenAccess = new Smu(EnableDebug);
-                RyzenAccess.Initialize();
-                RyzenAccess.SendPsmu(msg3, ref Args);
-                Thread.Sleep(500);
-                RyzenAccess.Deinitialize();
+                    //set SMU message address
+                    if (Families.FAMID == 3 || Families.FAMID == 7)
+                    {
+                        msg3 = 0x65;
+                    }
+
+                    Args = new uint[6];
+                    RyzenAccess = new Smu(EnableDebug);
+                    RyzenAccess.Initialize();
+                    RyzenAccess.SendPsmu(msg3, ref Args);
+                    Thread.Sleep(500);
+                    RyzenAccess.Deinitialize();
+                }
+                catch (Exception ex)
+                {
+
+                }
             });
         }
 

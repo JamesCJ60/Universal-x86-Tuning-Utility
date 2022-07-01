@@ -24,6 +24,8 @@ using UXTU.Properties;
 using AATUV3.Scripts;
 using RyzenSmu;
 using RyzenSMUBackend;
+using System.IO;
+using AATUV3.Scripts.SMU_Backend_Scripts;
 
 namespace AATUV3
 {
@@ -452,6 +454,17 @@ namespace AATUV3
 
         private void rdInfo_Click(object sender, RoutedEventArgs e)
         {
+            if (AppName.Contains("AMD"))
+            {
+                if (pmtables.PMT_Sensors.Length == 0 || pmtables.PMT_Sensors == null)
+                {
+                    if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt"))
+                    {
+                        pmtables.PMT_Sensors = File.ReadAllLines(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt");
+                    }
+                }
+            }
+
             if (AppName.Contains("AMD APU"))
             {
                 //Load menu

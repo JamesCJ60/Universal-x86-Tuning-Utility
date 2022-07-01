@@ -7,30 +7,42 @@ using RyzenSmu;
 using RyzenSMUBackend;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using System.Windows.Forms;
+using System.IO;
+using UXTU.Properties;
 
 namespace AATUV3.Scripts.SMU_Backend_Scripts
 {
     internal class GetSensor
     {
+
         public static float getSensorValve(string SensorName)
         {
-            int i = -1;
-            string[] SensorNames = { };
-            uint[] SensorOffset = { };
-
-            if (string.Format("{0:x}", Addresses.PMTableVersion).Contains("400005") || string.Format("{0:x}", Addresses.PMTableVersion).Contains("400004"))
+            try
             {
-                SensorNames = pmtables.PMT_Sensor_400005;
-                SensorOffset = pmtables.PMT_Offset_400005;
+                string[] SensorNames = pmtables.PMT_Sensors;
+                uint[] SensorOffset = pmtables.PMT_Offset;
+
+                if(SensorNames.Length == 0 || SensorNames == null)
+                {
+                    if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt"))
+                    {
+                        pmtables.PMT_Sensors = File.ReadAllLines(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt");
+                    }
+                }
+
+                int i = -1;
+
+                if (SensorNames != null || SensorNames.Length != 0)
+                {
+                    do { i++; } while (SensorNames[i] != SensorName && i <= SensorNames.Length);
+
+                    if (SensorNames[i] == SensorName)
+                    {
+                        return Smu.ReadFloat(Addresses.Address, SensorOffset[i]);
+                    }
+                }
             }
-
-            do{i++;} while (SensorNames[i] != SensorName && i <= SensorNames.Length);
-
-            if (SensorNames[i] == SensorName)
-            {
-                return Smu.ReadFloat(Addresses.Address, SensorOffset[i]);
-            }
-
+            catch (Exception ex) { }
             return 0;
         }
     }
