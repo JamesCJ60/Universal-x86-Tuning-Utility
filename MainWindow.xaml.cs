@@ -226,6 +226,9 @@ namespace AATUV3
                 Application.Current.Resources["PrimaryBlueColor"] = IntelBlue;
                 Application.Current.Resources["PrimaryBlueColorHover"] = IntelBlueHover;
                 Application.Current.Resources["PrimaryBlueColorDown"] = IntelBlueDown;
+
+                rdClock.Visibility = Visibility.Collapsed;
+                rdSnow.Visibility = Visibility.Collapsed;
             }
 
             //Change window title
