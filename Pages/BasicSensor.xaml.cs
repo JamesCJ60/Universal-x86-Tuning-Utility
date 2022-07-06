@@ -149,7 +149,7 @@ namespace AATUV3.Pages
 
             if (Environment.ProcessorCount > 16)
             {
-                if (Families.FAMID == 6)
+                if (Families.FAMID == 6 && Families.FAMID == 10)
                 {
                     CoreClockCCD2.Visibility = Visibility.Visible;
                     lblCore1ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_8")).ToString("0.00")}GHz";

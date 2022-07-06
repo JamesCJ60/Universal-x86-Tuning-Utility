@@ -787,6 +787,7 @@ namespace RyzenSMUBackend
                 case 6:
                     RyzenAccess.SendMp1(0x36, ref Args);
                     break;
+                case 5:
                 case 8:
                     RyzenAccess.SendMp1(0x4c, ref Args);
                     break;
@@ -813,6 +814,7 @@ namespace RyzenSMUBackend
                 case 6:
                     RyzenAccess.SendMp1(0x35, ref Args);
                     break;
+                case 5:
                 case 8:
                     RyzenAccess.SendMp1(0x4b, ref Args);
                     break;
@@ -835,6 +837,7 @@ namespace RyzenSMUBackend
                 case 7:
                     RyzenAccess.SendMp1(0x64, ref Args);
                     break;
+                case 5:
                 case 8:
                     RyzenAccess.SendPsmu(0xb7, ref Args);
                     break;

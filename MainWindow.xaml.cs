@@ -284,8 +284,8 @@ namespace AATUV3
         }
 
         private void rdHome_Click(object sender, RoutedEventArgs e)
-        {   
-            if(AppName.Contains("AMD APU"))
+        {
+            if (AppName.Contains("AMD APU"))
             {
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/HomeMenu.xaml", UriKind.RelativeOrAbsolute));
@@ -311,6 +311,20 @@ namespace AATUV3
                 menu = (string)rdHome.Content;
                 lblMenu.Content = menu.ToUpper();
             }
+
+            //Change window title
+            this.Title = $"{AppName} - {menu}";
+        }
+
+        private void rdAC_Click(object sender, RoutedEventArgs e)
+        {
+
+            //Load menu
+            PagesNavigation.Navigate(new System.Uri("Pages/ASUSAC.xaml", UriKind.RelativeOrAbsolute));
+            //Set menu lable to menu name
+            menu = (string)rdAC.Content;
+            lblMenu.Content = menu.ToUpper();
+
 
             //Change window title
             this.Title = $"{AppName} - {menu}";
@@ -332,7 +346,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdSnow.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -341,13 +355,12 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdSnow.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
             //Change window title
             this.Title = $"{AppName} - {menu}";
-
         }
 
         private void rdCustom_Click(object sender, RoutedEventArgs e)
@@ -366,7 +379,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdCustom.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -375,7 +388,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdCustom.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -399,7 +412,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdAdaptive.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -408,7 +421,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdAdaptive.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -432,7 +445,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdClock.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -481,7 +494,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdInfo.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -490,7 +503,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdInfo.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -514,7 +527,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdSettings.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 
@@ -523,7 +536,7 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdHome.Content;
+                menu = (string)rdSettings.Content;
                 lblMenu.Content = menu.ToUpper();
             }
 

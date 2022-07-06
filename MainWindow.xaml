@@ -8,8 +8,7 @@
         Title="AMD APU Tuning Utility" Height="668" Width="1144"
         WindowStartupLocation="CenterScreen" WindowStyle="None"
         Background="Transparent" AllowsTransparency="True"
-        ResizeMode="NoResize" WindowState="Normal" Closing="home_Closing"
-        >
+        ResizeMode="NoResize" WindowState="Normal" Closing="home_Closing">
     <Window.Resources>
         <Style x:Key="Flash" TargetType="{x:Type RadioButton}">
             <Setter Property="Background" Value="Transparent"/>
@@ -139,9 +138,9 @@
                         <RadioButton x:Name="rdHome" IsChecked="True" Content="Home" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource home}" Click="rdHome_Click" Height="50"/>
                         <RadioButton x:Name="rdSnow" IsChecked="False" Content="Project Snowdrop" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource plant}" Click="rdSnow_Click" Height="50"/>
                         <RadioButton x:Name="rdCustom" IsChecked="False" Content="Custom Presets" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource custom}" Height="50" Click="rdCustom_Click"/>
+                        <RadioButton x:Name="rdAC" IsChecked="False" Content="Armoury Crate" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource ac}" Height="50" Click="rdAC_Click"/>
                         <RadioButton x:Name="rdAdaptive" IsChecked="False" Content="Adaptive Performance" Style="{DynamicResource FlashButton}" Tag="{DynamicResource flash}" Height="50" Click="rdAdaptive_Click"/>
                         <RadioButton x:Name="rdClock" IsChecked="False" Content="Clock Control" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource speed}" Height="50" Click="rdClock_Click"/>
-                        <!--<RadioButton x:Name="rdAC" IsChecked="False" Content="Armoury Crate" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource ac}" Height="50" Click="rdAC_Click"/>-->
                         <RadioButton x:Name="rdInfo" IsChecked="False" Content="Info" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource info}" Height="50" Click="rdInfo_Click"/>
                         <RadioButton x:Name="rdSettings" IsChecked="False" Content="Settings" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource settings}" Height="50" Click="rdSettings_Click"/>
                     </StackPanel>

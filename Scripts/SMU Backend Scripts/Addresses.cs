@@ -163,7 +163,7 @@ namespace RyzenSMUBackend
                 msg2 = 0x66;
                 msg3 = 0x65;
             }
-            if (Families.FAMID == 4 || Families.FAMID == 6 || Families.FAMID == 8)
+            if (Families.FAMID == 4 || Families.FAMID == 5 || Families.FAMID == 6 || Families.FAMID == 8)
             {
                 msg1 = 0x8;
                 msg2 = 0x6;
