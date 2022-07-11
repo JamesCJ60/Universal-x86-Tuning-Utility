@@ -380,7 +380,7 @@ namespace AATUV3
             if (AppName.Contains("AMD CPU"))
             {
                 //Load menu
-                PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
+                PagesNavigation.Navigate(new System.Uri("Pages/AMDCPU/AMDCustomPresets.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdCustom.Content;
                 lblMenu.Content = menu.ToUpper();
@@ -481,24 +481,13 @@ namespace AATUV3
                 }
             }
 
-            if (AppName.Contains("AMD APU"))
+            if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt"))
             {
-                //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/BasicSensor.xaml", UriKind.RelativeOrAbsolute));
-                //PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
-                //Set menu lable to menu name
-                menu = (string)rdInfo.Content;
-                lblMenu.Content = menu.ToUpper();
             }
-
-
-            if (AppName.Contains("AMD CPU"))
+            else
             {
-                //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
-                //Set menu lable to menu name
-                menu = (string)rdInfo.Content;
-                lblMenu.Content = menu.ToUpper();
             }
 
             if (AppName.Contains("Intel CPU"))

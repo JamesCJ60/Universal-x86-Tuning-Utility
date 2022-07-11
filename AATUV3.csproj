@@ -149,6 +149,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Pages\AMDCPU\AMDCustomPresets.xaml.cs">
+      <DependentUpon>AMDCustomPresets.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Intel\IntelCustomPresets.xaml.cs">
       <DependentUpon>IntelCustomPresets.xaml</DependentUpon>
     </Compile>
@@ -210,6 +213,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\AMDCPU\AMDCustomPresets.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Intel\IntelCustomPresets.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -341,9 +348,7 @@
   <ItemGroup>
     <Resource Include="Assets\Icons\database-2-line.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\AMDCPU\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

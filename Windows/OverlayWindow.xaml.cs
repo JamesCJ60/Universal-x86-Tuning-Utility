@@ -279,34 +279,16 @@ namespace AATUV3
                         {
                             if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
                             {
-                                if ((int)sensor.Value.GetValueOrDefault() < 100)
-                                {
-                                    lblTemp.Content = " " + (int)sensor.Value.GetValueOrDefault() + "°C";
-                                }
-                                if ((int)sensor.Value.GetValueOrDefault() < 10)
-                                {
-                                    lblTemp.Content = "  " + (int)sensor.Value.GetValueOrDefault() + "°C";
-                                }
-                                else
-                                {
+
                                     lblTemp.Content = (int)sensor.Value.GetValueOrDefault() + "°C";
-                                }
+                                
                             }
 
                             if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("Package"))
                             {
-                                if ((int)sensor.Value.GetValueOrDefault() < 100)
-                                {
-                                    lblPower.Content = " " + (int)sensor.Value.GetValueOrDefault() + "w";
-                                }
-                                if ((int)sensor.Value.GetValueOrDefault() < 10)
-                                {
-                                    lblPower.Content = "  " + (int)sensor.Value.GetValueOrDefault() + "w";
-                                }
-                                else
-                                {
+                                
                                     lblPower.Content = (int)sensor.Value.GetValueOrDefault() + "w";
-                                }
+                                
                             }
                         }
                     }

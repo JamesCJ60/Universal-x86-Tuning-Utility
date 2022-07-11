@@ -75,17 +75,17 @@
                 </StackPanel.Background>
                 <StackPanel Orientation="Horizontal" Height="38" HorizontalAlignment="Right" Margin="0,10,10,0">
                     <Image  Source="..\Assets\Icons\time-line.png" Margin="10,0,5,0" />
-                    <Label  Name="lblTime"  Content="18:30" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Label  Name="lblTime"  Content="18:30" Foreground="White" FontSize="20" FontWeight="Bold" MinWidth="60"/>
 
                     <Image  Source="..\Assets\Icons\temp-hot-line.png" Margin="10,0,5,0" />
-                    <Label  Name="lblTemp"  Content="0°C" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Label  Name="lblTemp"  Content="0°C" Foreground="White" FontSize="20" FontWeight="Bold" MinWidth="60"/>
 
                     <Image  Source="..\Assets\Icons\flashlight-line.png" Margin="10,0,5,0" />
-                    <Label  Name="lblPower"  Content="0w" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Label  Name="lblPower"  Content="0w" Foreground="White" FontSize="20" FontWeight="Bold" MinWidth="60"/>
 
 
                     <Image  Name="imgBattery"  Source="..\Assets\Icons\battery-fill.png" Margin="10,0,5,0"/>
-                    <Label  Name="lblBattery"  Content="100%" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,0,0,0" />
+                    <Label  Name="lblBattery"  Content="100%" Foreground="White" FontSize="20" FontWeight="Bold" MinWidth="60"/>
                 </StackPanel>
 
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,5,0,0" CanContentScroll="False" Name="rightView" Height="747" >
