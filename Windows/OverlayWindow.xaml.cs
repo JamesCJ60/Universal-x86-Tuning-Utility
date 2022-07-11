@@ -50,8 +50,8 @@ namespace AATUV3
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
-            autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]);
-            autoReapply.Tick += SensorUpdate_Tick;
+            autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
+            autoReapply.Tick += AutoReapply_Tick;
             autoReapply.Start();
 
             if (MainWindow.AppName.Contains("Intel"))
@@ -65,10 +65,10 @@ namespace AATUV3
 
             ASUSAC.Visibility = Visibility.Collapsed;
 
-            if (MainWindow.mbo.Contains("asus"))
-            {
-                ASUSAC.Visibility = Visibility.Visible;
-            }
+            //if (MainWindow.mbo.Contains("asus"))
+            //{
+            //    ASUSAC.Visibility = Visibility.Visible;
+            //}
             thisPC = new Computer()
             {
                 IsCpuEnabled = true,
@@ -95,9 +95,9 @@ namespace AATUV3
 
         void AutoReapply_Tick(object sender, EventArgs e)
         {
-            if (Convert.ToBoolean(Settings.Default["AutoReapply"]) == true)
+            if ((bool)Settings.Default.AutoReapply == true)
             {
-                string commands = (string)Settings.Default["RyzenAdjArguments"];
+                string commands = (string)Settings.Default.RyzenAdjArguments;
                 //Check if RyzenAdjArguments is populated
                 if (commands != null || commands != "")
                 {
@@ -112,10 +112,10 @@ namespace AATUV3
                 }
             }
 
-            if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]))
+            if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))
             {
                 autoReapply.Stop();
-                autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default["AutoReapplyTime"]);
+                autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
                 autoReapply.Start();
             }
         }
@@ -351,8 +351,6 @@ namespace AATUV3
 
         private void COCPU_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            lblCOCPU.Content = COCPU.Value.ToString() + "Offset";
-
             if (COCPU.Value >= 0)
             {
                 SendCommand.set_coall((uint)COCPU.Value);
@@ -365,8 +363,6 @@ namespace AATUV3
 
         private void iGPUCO_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            lbliGPUCO.Content = iGPUCO.Value.ToString() + "Offset";
-
             if (iGPUCO.Value >= 0)
             {
                 SendCommand.set_cogfx((uint)iGPUCO.Value);
@@ -451,6 +447,12 @@ namespace AATUV3
 
             Settings.Default["RyzenAdjArguments"] = ryzenadj;
             Settings.Default.Save();
+        }
+
+        private void CO_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            lbliGPUCO.Content = ((int)iGPUCO.Value).ToString() + "Offset";
+            lblCOCPU.Content = ((int)COCPU.Value).ToString() + "Offset";
         }
     }
 }

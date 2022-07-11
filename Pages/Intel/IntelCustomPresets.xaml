@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AATUV3.Pages.ClockControl"
+﻿<UserControl x:Class="AATUV3.Pages.Intel.IntelCustomPresets"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -68,8 +68,6 @@
         <Border CornerRadius="5" Background="{DynamicResource PrimaryBackgroundColor}">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,4,0">
-                    <TextBlock Width="425" TextWrapping="Wrap" Margin="0,0,60,0" FontSize="13" Foreground="{DynamicResource PrimaryBlueColor}" >Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages.</TextBlock>
-                    <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,4,3" Background="{DynamicResource PrimaryBlueColor}"  FontSize="16" Foreground="White" Content="Disable CPU OC" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="Disable_Click"/>
                     <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,3,3" Background="{DynamicResource PrimaryBlueColor}"  FontSize="16" Foreground="White" Content="Apply Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="Apply_Click"/>
                 </StackPanel>
                 <DockPanel LastChildFill="True" Margin="6,0,0,0">
@@ -77,38 +75,49 @@
                         <DockPanel LastChildFill="False">
                             <StackPanel CanVerticallyScroll="True" DockPanel.Dock="Left">
                                 <StackPanel Margin="0,6,0,0">
-                                    <Label Content="CPU Settings:" FontSize="18" Foreground="White"/>
-                                    <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
-                                        <CheckBox Name="cbCoreClock" Content="All Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudCoreClock" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1800" Increment="25"/>
+                                    <CheckBox Name="cbPower" Content="CPU Power Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
+                                    <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
+                                        <Label Content="Power Limit 1:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
+                                        <xctk:IntegerUpDown Name="nudPL1" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="20,3,0,0">
-                                        <CheckBox Name="cbCoreVolt" Content="CPU VID:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudCoreVolt" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1200" Maximum="1450" Increment="25"/>
+                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
+                                        <Label Content="Power Limit 2:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
+                                        <xctk:IntegerUpDown Name="nudPL2" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
                                     </StackPanel>
+                                </StackPanel>
+                                
+                                <StackPanel Margin="0,10,0,0">
+                                    <CheckBox Name="cbVoltage" Content="FIVR Voltage Offset Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
+                                    <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
+                                        <Label Content="Core Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
+                                        <xctk:IntegerUpDown Name="nudCore" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
+                                        <Label Content="Cache Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
+                                        <xctk:IntegerUpDown Name="nudCache" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
+                                        <Label Content="iGPU Compute Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180"/>
+                                        <xctk:IntegerUpDown Name="nudGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
+                                        <Label Content="iGPU Unslice Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180"/>
+                                        <xctk:IntegerUpDown Name="nudGPUSlice" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
+                                        <Label Content="Agent Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
+                                        <xctk:IntegerUpDown Name="nudAgent" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                    </StackPanel>
+
+
+                                    <TextBlock Foreground="White" FontSize="16" MaxWidth="295" TextWrapping="WrapWithOverflow">Only works on Intel CPUs with unlocked FIVR voltage control.</TextBlock>
+                                    <TextBlock Foreground="White" FontSize="16" MaxWidth="295" TextWrapping="WrapWithOverflow" Margin="0,10,0,0">Core and Cache must be synced with older Intel CPUs for voltage offsets to work.</TextBlock>
+                                    <TextBlock Foreground="White" FontSize="16" MaxWidth="295" TextWrapping="WrapWithOverflow" Margin="0,55,0,0">More options will be added over time.</TextBlock>
+
                                 </StackPanel>
 
-                                <StackPanel Margin="0,6,0,0">
-                                    <Label Content="Bus Settings:" FontSize="18" Foreground="White"/>
-                                    <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
-                                        <CheckBox Name="cbBus" Content="Bus Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:DoubleUpDown Name="nudBus" Watermark="Enter Double" Width="95" Height="20" Minimum="0" Value="100" Increment="0.1"/>
-                                    </StackPanel>
-                                </StackPanel>
-
-                                <StackPanel Margin="0,6,0,0">
-                                    <Label Content="Curve Optimiser Settings:" FontSize="18" Foreground="White"/>
-                                    <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
-                                        <CheckBox Name="cbCOCPU" Content="CPU:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudCOCPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-30" Value="0" Maximum="30" Increment="1"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="20,3,0,0">
-                                        <CheckBox Name="cbCOIGPU" Content="iGPU:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudCOIGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-30" Value="0" Maximum="30" Increment="1"/>
-                                    </StackPanel>
-                                </StackPanel>
                             </StackPanel>
-                            <StackPanel DockPanel.Dock="Right" Margin="0,6,0,0">
+                            <StackPanel DockPanel.Dock="Right" Margin="0,6,0,0" Visibility="Collapsed">
                                 <StackPanel Margin="0,6,0,0">
                                     <Label Content="Radeon iGPU Settings:" FontSize="18" Foreground="White"/>
                                     <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
@@ -117,17 +126,7 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <StackPanel Margin="0,6,0,0">
-                                    <CheckBox Name="cbdGPUCore" Content="NVIDIA dGPU Offset Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
-                                    <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
-                                        <Label Content="Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150" />
-                                        <xctk:IntegerUpDown Name="nuddGPUCore" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="25"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
-                                        <Label Content="Memory Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
-                                        <xctk:IntegerUpDown Name="nuddGPUMem" Watermark="Enter Integer" Width="95" Height="20" Minimum="-700" Value="0" Increment="25"/>
-                                    </StackPanel>
-                                </StackPanel>
+                                
                             </StackPanel>
                         </DockPanel>
                     </ScrollViewer>

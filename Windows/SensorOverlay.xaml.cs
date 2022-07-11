@@ -288,7 +288,7 @@ namespace AATUV3
                 {
 
 
-                    if (Addresses.PMTableVersion == 400005 || Addresses.PMTableVersion == 400004)
+                    if (Families.FAMID == 3 || Families.FAMID == 7)
                     {
                         iGPUClock = (int)GetSensor.getSensorValve("GFX_FREQEFF");
                         iGPULoad = (int)GetSensor.getSensorValve("GFX_BUSY");
@@ -318,6 +318,11 @@ namespace AATUV3
                     d = i + 2;
                 }
                 lblFPS.Content = $"{Framerate}FPS";
+
+                imgiGPU.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/cpu-fill.png"));
+                imgCPU.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/cpu-line.png"));
+                imgRAM.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/database-2-line.png"));
+                imgTime.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/time-line.png"));
 
                 if (batTime <= 1)
                 {

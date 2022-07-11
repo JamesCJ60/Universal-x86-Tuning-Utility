@@ -157,7 +157,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">All Core Offset:</Label>
                             <Label Name="lblCOCPU" Foreground="White" FontSize="18">0 Offset</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="COCPU" Minimum="-30" Maximum="30" Margin="10,2,10,2" Thumb.DragCompleted="COCPU_DragCompleted">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="COCPU" Minimum="-30" Maximum="30" Margin="10,2,10,2" Thumb.DragCompleted="COCPU_DragCompleted" ValueChanged="CO_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>
@@ -165,7 +165,7 @@
 
                             <Label Foreground="White" FontSize="23" FontWeight="Bold">iGPU Offset:</Label>
                             <Label Name="lbliGPUCO" Foreground="White" FontSize="18">0 Offset</Label>
-                            <Slider Style="{StaticResource Horizontal_Slider}" Name="iGPUCO" Minimum="-30" Maximum="30" Margin="10,2,10,2" Foreground="White" Thumb.DragCompleted="iGPUCO_DragCompleted">
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="iGPUCO" Minimum="-30" Maximum="30" Margin="10,2,10,2" Foreground="White" Thumb.DragCompleted="iGPUCO_DragCompleted" ValueChanged="CO_ValueChanged">
                                 <Slider.LayoutTransform>
                                     <ScaleTransform ScaleY="1.4"/>
                                 </Slider.LayoutTransform>

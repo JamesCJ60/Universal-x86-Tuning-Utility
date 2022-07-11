@@ -389,7 +389,7 @@ namespace AATUV3
             if (AppName.Contains("Intel CPU"))
             {
                 //Load menu
-                PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
+                PagesNavigation.Navigate(new System.Uri("Pages/Intel/IntelCustomPresets.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdCustom.Content;
                 lblMenu.Content = menu.ToUpper();
