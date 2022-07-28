@@ -137,7 +137,7 @@ namespace AATUV3
             {
                 if ((bool)Settings.Default["firstBoot"] == true)
                 {
-                    BasicExeBackend.ApplySettings("InstallDriver.exe", "", false);
+                    BasicExeBackend.ApplySettings("\\InstallDriver.exe", "", false);
                     Settings.Default["firstBoot"] = false;
                     Settings.Default.Save();
                 }
