@@ -122,6 +122,19 @@
                             <Label Height="10"/>
                         </StackPanel>
 
+                        <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F" Name="iGPU">
+                            <Label Content="Radeon iGPU Clock Control:" Foreground="White" FontWeight="Bold" FontSize="26"/>
+
+                            <Label Foreground="White" FontSize="23" FontWeight="Bold">iGPU Core:</Label>
+                            <Label Name="lbliGPCore" Foreground="White" FontSize="18">0MHz</Label>
+                            <Slider Style="{StaticResource Horizontal_Slider}" Name="iGP" Minimum="0" Maximum="2800" Margin="10,2,10,2" Thumb.DragCompleted="core_DragCompleted" ValueChanged="core_ValueChanged">
+                                <Slider.LayoutTransform>
+                                    <ScaleTransform ScaleY="1.4"/>
+                                </Slider.LayoutTransform>
+                            </Slider>
+                            <Label Height="10"/>
+                        </StackPanel>
+                        
                         <StackPanel Margin="0,10,0,0" Background="#FF0F0F0F">
                             <Label Content="Preset Quick Select:" Foreground="White" FontWeight="Bold" FontSize="26" Margin="0,0,0,5"/>
                             <Button Name="Preset1" Style="{DynamicResource PresetButtonStyle}" Background="#141414"  FontSize="22" FontWeight="Bold" Foreground="White" Content="25w" Height="40" Width="auto" Margin="0,0,0,6" BorderThickness="0" Click="Preset1_Click"/>

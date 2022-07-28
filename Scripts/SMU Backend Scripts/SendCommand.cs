@@ -603,11 +603,10 @@ namespace RyzenSMUBackend
             switch (FAMID)
             {
                 case 3:
+                case 5:
                 case 7:
-                    RyzenAccess.SendPsmu(0x89, ref Args);
-                    break;
                 case 8:
-                    RyzenAccess.SendPsmu(0x1c, ref Args);
+                    RyzenAccess.SendPsmu(0x89, ref Args);
                     break;
                 default:
                     break;

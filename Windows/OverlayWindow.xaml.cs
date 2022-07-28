@@ -63,12 +63,20 @@ namespace AATUV3
                 CO.Visibility = Visibility.Visible;
             }
 
+            iGPU.Visibility = Visibility.Hidden;
+
+            if (MainWindow.AppName.Contains("AMD APU"))
+            {
+                iGPU.Visibility = Visibility.Visible;
+            }
+
             ASUSAC.Visibility = Visibility.Collapsed;
 
             //if (MainWindow.mbo.Contains("asus"))
             //{
             //    ASUSAC.Visibility = Visibility.Visible;
             //}
+
             thisPC = new Computer()
             {
                 IsCpuEnabled = true,
@@ -433,8 +441,18 @@ namespace AATUV3
 
         private void CO_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            lbliGPUCO.Content = ((int)iGPUCO.Value).ToString() + "Offset";
-            lblCOCPU.Content = ((int)COCPU.Value).ToString() + "Offset";
+            lbliGPUCO.Content = ((int)iGPUCO.Value).ToString() + " Offset";
+            lblCOCPU.Content = ((int)COCPU.Value).ToString() + " Offset";
+        }
+
+        private void core_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            SendCommand.set_gfx_clk((uint)((int)iGP.Value));
+        }
+
+        private void core_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            lbliGPCore.Content = ((int)iGP.Value).ToString() + "MHz";
         }
     }
 }

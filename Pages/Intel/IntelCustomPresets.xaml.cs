@@ -31,11 +31,9 @@ namespace AATUV3.Pages.Intel
 
         private async void Apply_Click(object sender, RoutedEventArgs e)
         {
-            string voltageOffset = $"set --allow-overvolt --commit 0 {(int)nudCore.Value} 1 {(int)nudGPU.Value} 2 {(int)nudCache.Value} 3 {(int)nudAgent.Value} 4 {(int)nudGPUSlice.Value}";
-
             if(cbPower.IsChecked == true) await Task.Run(() => ChangeTDP.changeTDP((int)nudPL1.Value, (int)nudPL2.Value));
 
-            if (cbVoltage.IsChecked == true) BasicExeBackend.ApplySettings("bin//intel//IntelVoltageControl.exe", voltageOffset, true);
+            if (cbVoltage.IsChecked == true) { string voltageOffset = $"set --allow-overvolt --commit 0 {nudCore.Value.ToString()} 1 {nudGPU.Value.ToString()} 2 {nudCache.Value.ToString()} 3 {nudAgent.Value.ToString()} 4 {nudGPUSlice.Value.ToString()}"; BasicExeBackend.ApplySettings("bin//intel//IntelVoltageControl.exe", voltageOffset, true); }
         }
     }
 }

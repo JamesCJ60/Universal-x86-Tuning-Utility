@@ -166,5 +166,101 @@ namespace UXTU.Properties {
                 this["ACMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1800")]
+        public int AllCoreClk {
+            get {
+                return ((int)(this["AllCoreClk"]));
+            }
+            set {
+                this["AllCoreClk"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1200")]
+        public int CPUVID {
+            get {
+                return ((int)(this["CPUVID"]));
+            }
+            set {
+                this["CPUVID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int BusCLK {
+            get {
+                return ((int)(this["BusCLK"]));
+            }
+            set {
+                this["BusCLK"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int COCPU {
+            get {
+                return ((int)(this["COCPU"]));
+            }
+            set {
+                this["COCPU"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int COiGPU {
+            get {
+                return ((int)(this["COiGPU"]));
+            }
+            set {
+                this["COiGPU"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int iGPUClk {
+            get {
+                return ((int)(this["iGPUClk"]));
+            }
+            set {
+                this["iGPUClk"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int dGPUCLK {
+            get {
+                return ((int)(this["dGPUCLK"]));
+            }
+            set {
+                this["dGPUCLK"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int dGPUMem {
+            get {
+                return ((int)(this["dGPUMem"]));
+            }
+            set {
+                this["dGPUMem"] = value;
+            }
+        }
     }
 }

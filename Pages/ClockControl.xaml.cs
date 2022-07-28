@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using RyzenSMUBackend;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using AATUV3.Scripts;
+using UXTU.Properties;
 
 namespace AATUV3.Pages
 {
@@ -26,6 +27,14 @@ namespace AATUV3.Pages
         public ClockControl()
         {
             InitializeComponent();
+            nudCoreClock.Value = Settings.Default.AllCoreClk;
+            nudCoreVolt.Value = Settings.Default.CPUVID;
+            nudBus.Value = Settings.Default.BusCLK;
+            nudCOCPU.Value = Settings.Default.COCPU;
+            nudCOIGPU.Value = Settings.Default.COiGPU;
+            nudiGPU.Value = Settings.Default.iGPUClk;
+            nuddGPUCore.Value = Settings.Default.dGPUCLK;
+            nuddGPUMem.Value = Settings.Default.dGPUMem;
         }
 
         private void Disable_Click(object sender, RoutedEventArgs e)
@@ -35,6 +44,17 @@ namespace AATUV3.Pages
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
+
+            Settings.Default.AllCoreClk = (int)nudCoreClock.Value;
+            Settings.Default.CPUVID = (int)nudCoreVolt.Value;
+            Settings.Default.BusCLK = (int)nudBus.Value;
+            Settings.Default.COCPU = (int)nudCOCPU.Value;
+            Settings.Default.COiGPU = (int)nudCOIGPU.Value;
+            Settings.Default.iGPUClk = (int)nudiGPU.Value;
+            Settings.Default.dGPUCLK = (int)nuddGPUCore.Value;
+            Settings.Default.dGPUMem = (int)nuddGPUMem.Value;
+            Settings.Default.Save();
+
             if (cbCoreClock.IsChecked == true)
             {
                 SendCommand.set_oc_clk((uint)nudCoreClock.Value);
