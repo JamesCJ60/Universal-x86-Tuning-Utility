@@ -54,7 +54,7 @@ namespace AATUV3.Pages
         private void Releases_Click(object sender, RoutedEventArgs e)
         {
             //Open browser to AATU releases page 
-            System.Diagnostics.Process.Start("https://github.com/JamesCJ60/AMD-APU-Tuning-Utility/releases");
+            System.Diagnostics.Process.Start("https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases");
         }
     }
 }
