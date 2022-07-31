@@ -44,7 +44,7 @@ namespace AATUV3.Pages
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-
+            int i = 0;
             Settings.Default.AllCoreClk = (int)nudCoreClock.Value;
             Settings.Default.CPUVID = (int)nudCoreVolt.Value;
             Settings.Default.BusCLK = (int)nudBus.Value;
@@ -63,6 +63,7 @@ namespace AATUV3.Pages
                 SendCommand.set_enable_oc();
                 SendCommand.set_oc_clk((uint)nudCoreClock.Value);
                 SendCommand.set_enable_oc();
+                i++;
             }
 
             if(cbCoreVolt.IsChecked == true)
@@ -71,12 +72,14 @@ namespace AATUV3.Pages
                 SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
                 SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
                 SendCommand.set_enable_oc();
+                i++;
             }
 
             if(cbBus.IsChecked == true)
             {
                 RwMmioAmd MMIO = new RwMmioAmd();
                 MMIO.SetBclk(Convert.ToDouble(nudBus.Value));
+                i++;
             }
 
             if(cbCOCPU.IsChecked == true)
@@ -88,6 +91,7 @@ namespace AATUV3.Pages
                 {
                     SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
                 }
+                i++;
             }
 
             if (cbCOIGPU.IsChecked == true)
@@ -100,11 +104,13 @@ namespace AATUV3.Pages
                 {
                     SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOIGPU.Value)));
                 }
+                i++;
             }
 
             if(cbiGPU.IsChecked == true)
             {
                 SendCommand.set_gfx_clk((uint)nudiGPU.Value);
+                i++;
             }
 
             if(cbdGPUCore.IsChecked == true)
@@ -115,6 +121,16 @@ namespace AATUV3.Pages
                 BasicExeBackend.ApplySettings(path, "0 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
                 BasicExeBackend.ApplySettings(path, "1 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
                 BasicExeBackend.ApplySettings(path, "2 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
+                i++;
+            }
+
+            if(i == 0)
+            {
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+            }
+            else
+            {
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
             }
         }
     }

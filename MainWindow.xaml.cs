@@ -26,6 +26,7 @@ using RyzenSmu;
 using RyzenSMUBackend;
 using System.IO;
 using AATUV3.Scripts.SMU_Backend_Scripts;
+using Forms = System.Windows.Forms;
 
 namespace AATUV3
 {
@@ -117,11 +118,6 @@ namespace AATUV3
                 this.MaxHeight = SystemParameters.WorkArea.Height;
                 this.MaxWidth = SystemParameters.WorkArea.Width;
                 this.WindowState = System.Windows.WindowState.Maximized;
-            }
-
-            if (Convert.ToBoolean(Settings.Default["StartMinimised"]) == true)
-            {
-                this.WindowState = WindowState.Minimized;
             }
 
             string CPUName = "";
@@ -269,12 +265,38 @@ namespace AATUV3
 
             Settings.Default["APUName"] = CPUName;
             Settings.Default.Save();
+            Tray();
+
+            if (Convert.ToBoolean(Settings.Default["StartMinimised"]) == true)
+            {
+                this.WindowState = WindowState.Minimized;
+                _trayIcon.Visible = true;
+                this.Hide();
+            }
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             //Close application
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private Forms.NotifyIcon _trayIcon;
+
+
+        private void Tray()
+        {
+            _trayIcon = new Forms.NotifyIcon();
+            _trayIcon.Icon = new System.Drawing.Icon("favicon.ico");
+            _trayIcon.Text = $"UXTU";
+            _trayIcon.Click += trayIcon_Click;
+        }
+
+        private void trayIcon_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            WindowState = WindowState.Normal;
+            _trayIcon.Visible = false;
         }
 
         private void btnRestore_Click(object sender, RoutedEventArgs e)
@@ -293,7 +315,9 @@ namespace AATUV3
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
         {
             //Minimise window
+            _trayIcon.Visible = true;
             WindowState = WindowState.Minimized;
+            this.Hide();
         }
 
         private void rdHome_Click(object sender, RoutedEventArgs e)

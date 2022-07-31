@@ -8,7 +8,7 @@
         Title="AMD APU Tuning Utility" Height="668" Width="1144"
         WindowStartupLocation="CenterScreen" WindowStyle="None"
         Background="Transparent" AllowsTransparency="True"
-        ResizeMode="NoResize" WindowState="Normal" Closing="home_Closing">
+        ResizeMode="NoResize" WindowState="Normal" Closing="home_Closing" >
     <Window.Resources>
         <Style x:Key="Flash" TargetType="{x:Type RadioButton}">
             <Setter Property="Background" Value="Transparent"/>
