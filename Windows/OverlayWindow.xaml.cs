@@ -63,7 +63,7 @@ namespace AATUV3
                 CO.Visibility = Visibility.Visible;
             }
 
-            iGPU.Visibility = Visibility.Hidden;
+            iGPU.Visibility = Visibility.Collapsed;
 
             if (MainWindow.AppName.Contains("AMD APU"))
             {
@@ -127,6 +127,12 @@ namespace AATUV3
                 autoReapply.Start();
             }
         }
+
+
+
+        public static string[] widthArray;
+        public static string[] heightArray;
+        public static string[] refreshArray;
 
 
         void KeyShortCuts_Tick(object sender, EventArgs e)
