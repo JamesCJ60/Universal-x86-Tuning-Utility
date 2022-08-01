@@ -6,6 +6,8 @@ PLEASE READ THIS: THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY 
 
 If you come across any issues or errors with AATU please open an issue or ping `@JamesCJ#2022`, `@sbski#2700`, or `@ProjectSBC#9711` in our [discord community server](https://discord.gg/M3hVqnT4pQ). 
 
+If you would like to support the development of Universal x86 Tuning Utility by donating, you can do so via [Patreon](https://www.patreon.com/aatusoftware) or [PayPal](https://www.paypal.me/JamesCJ60)
+
 ## What is UXTU?
 - It's a tuning utility aimed to help you tune your device as you wish.
 - It's created by the devlopers of [Ryzen Controller](https://gitlab.com/ryzen-controller-team/ryzen-controller), [Renoir Mobile Tuning](https://github.com/sbski/Renoir-Mobile-Tuning), and [Power Control Panel](https://github.com/project-sbc/Power-Control-Panel-v2).
