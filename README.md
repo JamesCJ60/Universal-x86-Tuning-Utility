@@ -4,7 +4,7 @@ This project is still very much a WORK IN PROGRESS!
 
 PLEASE READ THIS: THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. MISUSE OF THIS SOFTWARE COULD CAUSE SYSTEM INSTABILITY OR MALFUNCTION.
 
-If you come across any issues or errors with AATU please open an issue or ping `@JamesCJ#2022`, `@sbski#2700`, or `@ProjectSBC#9711` in our [discord community server](https://discord.gg/M3hVqnT4pQ). 
+If you come across any issues or errors with UXTU please open an issue or ping `@JamesCJ#2022`, `@sbski#2700`, or `@ProjectSBC#9711` in our [discord community server](https://discord.gg/M3hVqnT4pQ). 
 
 If you would like to support the development of Universal x86 Tuning Utility by donating, you can do so via [Patreon](https://www.patreon.com/aatusoftware) or [PayPal](https://www.paypal.me/JamesCJ60)
 
