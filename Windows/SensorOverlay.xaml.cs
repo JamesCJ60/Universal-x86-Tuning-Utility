@@ -43,10 +43,19 @@ namespace AATUV3
         public static float iGPUVolt;
         public static int fabricClk;
 
+        public static int dGPUNVTemp;
+        public static int dGPUNVTempHot;
+        public static int dGPUNVClock;
+        public static int dGPUNVMemClock;
+        public static int dGPUNVPower;
+        public static int dGPUNVLoad;
+        public static float dGPUNVMemUsed;
+        public static float dGPUNVVolt;
+
         public static int battery;
         public static float batTime;
 
-        public static int Framerate = 1;
+        public static int Framerate = 0;
 
         int cpuTemp;
         int cpuClock;
@@ -246,47 +255,30 @@ namespace AATUV3
         int i = 0;
         int d = 1;
 
-        private void updateSensorsInfo()
+        private async void updateSensorsInfo()
         {
             try
             {
-                if (i < 1)
-                {
-                    startFPS();
-                    i++;
-                }
-
 
                 OutputThreadProc();
 
-                getCPUInfo();
-                getGPUInfo();
-                getRAMInfo();
+                await Task.Run(() => getCPUInfo());
+                await Task.Run(() => getGPUInfo());
+                await Task.Run(() => getRAMInfo());
+                await Task.Run(() => getBatteryLife());
+                UpdateGUI();
 
 
-                PowerStatus pwr = System.Windows.Forms.SystemInformation.PowerStatus;
-                //Get battery life
-                battery = Convert.ToInt32(pwr.BatteryLifePercent * 100);
+            }
+            catch (Exception ex) { }
+        }
 
-                batTime = (float)pwr.BatteryLifeRemaining;
-
-                if (pwr.BatteryChargeStatus == BatteryChargeStatus.Charging)
-                {
-                    batTime = 0;
-
-                }
-
-                //avFrame = avFrame + Framerate;
-
-                //avFrame = avFrame / f;
-                //f++;
-
-                TimeSpan time = TimeSpan.FromSeconds(batTime);
-
-
+        public void UpdateGUI()
+        {
+            try
+            {
                 if (i == d)
                 {
-
 
                     if (Families.FAMID == 3 || Families.FAMID == 7)
                     {
@@ -307,19 +299,31 @@ namespace AATUV3
                     else
                     {
                         lbliGPU.Content = $"{iGPUTemp}°C   {iGPULoad}%   {iGPUClock}MHz   {iGPUSoCClock}MHz";
+                        lbldGPUNV.Content = $"{dGPUNVTemp}°C   {dGPUNVLoad}%   {dGPUNVClock}MHz   {dGPUNVMemClock}MHz   {dGPUNVPower}w";
                         lblRAM.Content = $"{RAMLoad}%   {RAMUsed}MB   {iGPUMemClock}MHz";
                         lblCPU.Content = $"{cpuTemp}°C   {cpuLoad}%   {cpuClock}MHz   {cpuPower}w";
                     }
 
-                    if(iGPUClock <=0 && iGPUTemp <= 0) iGPU.Visibility = Visibility.Collapsed;
+                    if (iGPUClock <= 0 && iGPUTemp <= 0) iGPU.Visibility = Visibility.Collapsed;
+                    if (dGPUNVClock <= 0 && dGPUNVTemp <= 0) dGPUNV.Visibility = Visibility.Collapsed;
 
-                    if(MainWindow.AppName.Contains("Intel")) lblRAM.Content = $"{RAMLoad}%   {RAMUsed}MB";
+                    if(dGPUNVTempHot > 0)
+                    {
+                        lbldGPUNV.Content = $"{dGPUNVTemp}°C   {dGPUNVTempHot}°C   {dGPUNVLoad}%   {dGPUNVClock}MHz   {dGPUNVMemClock}MHz   {dGPUNVPower}w";
+                    }
+
+                    if (MainWindow.AppName.Contains("Intel"))
+                    {
+                        lblRAM.Content = $"{RAMLoad}%   {RAMUsed}MB";
+                        lblCPU.Content = $"{cpuTemp}°C   {cpuLoad}%   {cpuClock}MHz   {cpuVolt.ToString("0.00")}V   {cpuPower}W";
+                    }
 
                     d = i + 2;
                 }
                 lblFPS.Content = $"{Framerate}FPS";
 
                 imgiGPU.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/cpu-fill.png"));
+                imgdGPUNV.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/cpu-fill.png"));
                 imgCPU.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/cpu-line.png"));
                 imgRAM.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/database-2-line.png"));
                 imgTime.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/Icons/time-line.png"));
@@ -356,6 +360,24 @@ namespace AATUV3
             i++;
         }
 
+        public static TimeSpan time;
+
+        private void getBatteryLife()
+        {
+            PowerStatus pwr = System.Windows.Forms.SystemInformation.PowerStatus;
+            //Get battery life
+            battery = Convert.ToInt32(pwr.BatteryLifePercent * 100);
+
+            batTime = (float)pwr.BatteryLifeRemaining;
+
+            if (pwr.BatteryChargeStatus == BatteryChargeStatus.Charging)
+            {
+                batTime = 0;
+
+            }
+
+            time = TimeSpan.FromSeconds(batTime);
+        }
 
         public class UpdateVisitor : IVisitor
         {
@@ -403,6 +425,10 @@ namespace AATUV3
                                 cpuLoad = (int)sensor.Value.GetValueOrDefault();
                             }
 
+                            if (sensor.SensorType == SensorType.Voltage && sensor.Name.Contains("Core"))
+                            {
+                                cpuVolt = sensor.Value.GetValueOrDefault();
+                            }
                         }
                     }
                 }
@@ -491,6 +517,47 @@ namespace AATUV3
                                         iGPULoad = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                                     }
                                 }
+                            }
+                        }
+                    }
+
+                    if (hardware.HardwareType == HardwareType.GpuNvidia)
+                    {
+                        foreach (var sensor in hardware.Sensors)
+                        {
+                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Core"))
+                            {
+                                dGPUNVClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+
+                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Mem"))
+                            {
+                                dGPUNVMemClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+
+                            if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
+                            {
+                                dGPUNVTemp = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+
+                            if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Hot"))
+                            {
+                                dGPUNVTempHot = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+
+                            if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Core"))
+                            {
+                                dGPUNVLoad = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+
+                            if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("GPU"))
+                            {
+                                dGPUNVPower = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+
+                            if (sensor.SensorType == SensorType.Data && sensor.Name.Contains("Used"))
+                            {
+                                dGPUNVMemUsed = Convert.ToInt32(sensor.Value.GetValueOrDefault() * 1000);
                             }
                         }
                     }

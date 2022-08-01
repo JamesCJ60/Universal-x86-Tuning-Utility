@@ -79,6 +79,12 @@
                     <Label  Name="lbliGPU"  Content="" Foreground="White" VerticalAlignment="Center" />
                 </StackPanel>
 
+                <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,2,2,-4" Name="dGPUNV">
+                    <Image  Name="imgdGPUNV"  Source="Assets\Icons\cpu-fill.png" Margin="0,0,0,0" Height="24"/>
+                    <Label  Content="dGPU:" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" />
+                    <Label  Name="lbldGPUNV"  Content="" Foreground="White" VerticalAlignment="Center" />
+                </StackPanel>
+                
                 <StackPanel Orientation="Horizontal" Height="26" HorizontalAlignment="Left" Margin="2,0,0,-4">
                     <Image  Name="imgCPU" Source="Assets\Icons\cpu-line.png" Margin="0,0,0,0" Height="24"/>
                     <Label  Content="CPU: " Foreground="White" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,0,-4" />
