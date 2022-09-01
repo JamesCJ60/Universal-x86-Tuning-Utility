@@ -31,18 +31,28 @@ namespace AATUV3.Pages.AMDCPU
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            if(cbPower.IsChecked == true)
-            {
-                uint TJ = (uint)nudTJ.Value;
-                uint PPT = (uint)nudPPT.Value * 1000;
-                uint EDC = (uint)nudEDC.Value * 1000;
-                uint TDC = (uint)nudTDC.Value * 1000;
-                uint Scaler = (uint)nudpboScaler.Value;
 
+            uint TJ = (uint)nudTJ.Value;
+            uint PPT = (uint)nudPPT.Value * 1000;
+            uint EDC = (uint)nudEDC.Value * 1000;
+            uint TDC = (uint)nudTDC.Value * 1000;
+            uint Scaler = (uint)nudpboScaler.Value;
+
+            if (cbTemp.IsChecked == true)
+            {
                 SendCommand.set_tctl_temp(TJ);
+            }
+
+            if (cbPower.IsChecked == true)
+            {
                 SendCommand.set_ppt(PPT);
                 SendCommand.set_edc(EDC);
                 SendCommand.set_tdc(TDC);
+            }
+
+
+            if (cbPBO.IsChecked == true)
+            {
                 SendCommand.set_scaler(Scaler);
             }
         }
