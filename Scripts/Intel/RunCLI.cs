@@ -20,11 +20,12 @@ namespace UXTU.Scripts.Intel
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.UseShellExecute = false;
                 if (readOutput) { startInfo.RedirectStandardOutput = true; } else { startInfo.RedirectStandardOutput = false; }
-
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.FileName = processName;
                 startInfo.Arguments = "/c " + arguments;
                 startInfo.Verb = "runas";
                 process.StartInfo = startInfo;
+                startInfo.CreateNoWindow = true;
                 process.Start();
                 if (readOutput)
                 {

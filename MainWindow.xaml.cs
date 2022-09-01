@@ -189,6 +189,20 @@ namespace AATUV3
                     CPUName = CPUName.Substring(0, CPUName.IndexOf("e") + 1);
                 }
 
+                var startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#f10046");
+                var endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#be0037");
+
+                Application.Current.Resources["PrimaryBlueColor"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 1), new Point(1, 0));
+
+                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#b80036");
+                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#eb0045");
+
+                Application.Current.Resources["PrimaryBlueColorHover"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 0), new Point(1, 1));
+
+                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#a80132");
+                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#750123");
+                Application.Current.Resources["PrimaryBlueColorDown"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 0), new Point(1, 1));
+
                 //RAVEN - 0
                 //PICASSO - 1
                 //DALI - 2
@@ -226,12 +240,24 @@ namespace AATUV3
             else if (CPUName.Contains("Intel"))
             {
                 AppName = "Intel CPU Tuning Utility";
-                SolidColorBrush IntelBlue = Brushes.DodgerBlue;
-                SolidColorBrush IntelBlueHover = new SolidColorBrush(Color.FromArgb(255, 81, 169, 255));
-                SolidColorBrush IntelBlueDown = new SolidColorBrush(Color.FromArgb(255, 0, 106, 209));
-                Application.Current.Resources["PrimaryBlueColor"] = IntelBlue;
-                Application.Current.Resources["PrimaryBlueColorHover"] = IntelBlueHover;
-                Application.Current.Resources["PrimaryBlueColorDown"] = IntelBlueDown;
+
+                var startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#1e90ff");
+                var endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#1ec8ff");
+
+                Application.Current.Resources["PrimaryBlueColor"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 1), new Point(1, 0));
+
+                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#5160ff");
+                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#51a9ff");
+
+                Application.Current.Resources["PrimaryBlueColorHover"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 0), new Point(1, 1));
+
+                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#0059d1");
+                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#008dd1");
+                Application.Current.Resources["PrimaryBlueColorDown"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 0), new Point(1, 1));
+
+
+                //Application.Current.Resources["PrimaryBlueColorHover"] = IntelBlueHover;
+                //Application.Current.Resources["PrimaryBlueColorDown"] = IntelBlueDown;
 
                 rdClock.Visibility = Visibility.Collapsed;
                 rdSnow.Visibility = Visibility.Collapsed;

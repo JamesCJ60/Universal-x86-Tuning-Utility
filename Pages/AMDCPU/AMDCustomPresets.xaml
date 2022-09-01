@@ -75,20 +75,32 @@
                         <DockPanel LastChildFill="False">
                             <StackPanel CanVerticallyScroll="True" DockPanel.Dock="Left">
                                 <StackPanel Margin="0,6,0,0">
-                                    <CheckBox Name="cbPower" Content="CPU Power Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
+                                    <CheckBox Name="cbTemp" Content="Temperature Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
                                     <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
-                                        <Label Content="PPT:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="50" />
+                                        <Label Content="TJ Max:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="80" />
+                                        <xctk:IntegerUpDown Name="nudTJ" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
+                                    </StackPanel>
+                                    
+                                    <CheckBox Name="cbPower" Content="CPU Power Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,10,0,0" />
+                                    <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
+                                        <Label Content="PPT:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="80" />
                                         <xctk:IntegerUpDown Name="nudPPT" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
-                                        <Label Content="TDC:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="50" />
+                                        <Label Content="TDC:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="80" />
                                         <xctk:IntegerUpDown Name="nudTDC" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
-                                        <Label Content="EDC:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="50" />
+                                        <Label Content="EDC:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="80" />
                                         <xctk:IntegerUpDown Name="nudEDC" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
                                     </StackPanel>
 
+                                    <CheckBox Name="cbPBO" Content="PBO Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,10,0,0" />
+                                    <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
+                                        <Label Content="Scaler:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="80" />
+                                        <xctk:IntegerUpDown Name="nudpboScaler" Watermark="Enter Integer" Width="95" Height="20" Minimum="1" Value="1" Increment="1" Maximum="10"/>
+                                    </StackPanel>
+                                    
                                     <TextBlock Foreground="White" FontSize="16" MaxWidth="295" TextWrapping="WrapWithOverflow" Margin="0,55,0,0">More options will be added over time.</TextBlock>
 
                                 </StackPanel>

@@ -6,9 +6,9 @@
     <SolidColorBrush x:Key="SecundaryBackgroundColor" Color="#1e1e22"/> 
 
     <!-- Primary Colors -->
-    <SolidColorBrush x:Key="PrimaryBlueColor" Color="#FFBE0037"/>
-    <SolidColorBrush x:Key="PrimaryBlueColorHover" Color="#eb0045"/>
-    <SolidColorBrush x:Key="PrimaryBlueColorDown" Color="#750123"/>
+    <LinearGradientBrush x:Key="PrimaryBlueColor" EndPoint="0,0" StartPoint="1,1"/>
+    <LinearGradientBrush x:Key="PrimaryBlueColorHover" EndPoint="0,0" StartPoint="1,1"/>
+    <LinearGradientBrush x:Key="PrimaryBlueColorDown" EndPoint="0,0" StartPoint="1,1"/>
     <SolidColorBrush x:Key="PrimaryGrayColor" Color="#BFBFC4"/>
     
     <!-- Secundary Colors -->

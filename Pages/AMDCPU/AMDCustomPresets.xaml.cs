@@ -33,9 +33,17 @@ namespace AATUV3.Pages.AMDCPU
         {
             if(cbPower.IsChecked == true)
             {
-                SendCommand.set_ppt((uint)nudPPT.Value * 1000);
-                SendCommand.set_edc((uint)nudEDC.Value * 1000);
-                SendCommand.set_tdc((uint)nudTDC.Value * 1000);
+                uint TJ = (uint)nudTJ.Value;
+                uint PPT = (uint)nudPPT.Value * 1000;
+                uint EDC = (uint)nudEDC.Value * 1000;
+                uint TDC = (uint)nudTDC.Value * 1000;
+                uint Scaler = (uint)nudpboScaler.Value;
+
+                SendCommand.set_tctl_temp(TJ);
+                SendCommand.set_ppt(PPT);
+                SendCommand.set_edc(EDC);
+                SendCommand.set_tdc(TDC);
+                SendCommand.set_scaler(Scaler);
             }
         }
     }

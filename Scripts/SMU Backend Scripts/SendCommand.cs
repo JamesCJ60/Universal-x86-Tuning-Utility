@@ -176,6 +176,10 @@ namespace RyzenSMUBackend
                 case 8:
                     RyzenAccess.SendMp1(0x19, ref Args);
                     break;
+                case 4:
+                case 6:
+                    RyzenAccess.SendMp1(0x23, ref Args);
+                    break;
                 default:
                     break;
             }
@@ -897,6 +901,25 @@ namespace RyzenSMUBackend
                     break;
                 case 8:
                     RyzenAccess.SendPsmu(0x17, ref Args);
+                    break;
+                default:
+                    break;
+            }
+            RyzenAccess.Deinitialize();
+        }
+
+        //Set PBO Scaler
+        public static void set_scaler(uint value)
+        {
+            RyzenAccess.Initialize();
+            uint[] Args = new uint[6];
+            Args[0] = value;
+
+            switch (FAMID)
+            {
+                case 4:
+                case 6:
+                    RyzenAccess.SendPsmu(0x2F, ref Args);
                     break;
                 default:
                     break;

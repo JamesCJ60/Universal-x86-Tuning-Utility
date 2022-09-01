@@ -32,10 +32,9 @@ namespace UXTU.Scripts.Intel
 
                 if (cpuType == "Intel")
                 {
-                    //if (Properties.Settings.Default.IntelMMIOMSR.Contains("MMIO")){runIntelTDPChangeMMIO(pl1TDP, pl2TDP);}
-                    /*if (Properties.Settings.Default.IntelMMIOMSR == "MSRCMD") {}*/ 
+                    runIntelTDPChangeMMIO(pl1TDP, pl2TDP);
                     runIntelTDPChangeMSRCMD(pl1TDP, pl2TDP);
-                    //else { runIntelTDPChangeMSR(pl1TDP, pl2TDP); }
+                    runIntelTDPChangeMSR(pl1TDP, pl2TDP);
                 }
             }
             catch (Exception ex)
