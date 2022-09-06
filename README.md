@@ -1,6 +1,6 @@
 # Universal x86 Tuning Utility
 
-[![Github All Releases](https://img.shields.io/github/downloads/JamesCJ60/Universal-x86-Tuning-Utility/total.svg)]() [![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg) [![GitHub stars](https://img.shields.io/github/stars/JamesCJ60/Universal-x86-Tuning-Utility?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/) [![GitHub forks](https://img.shields.io/github/forks/JamesCJ60/Universal-x86-Tuning-Utility?style=social&label=Fork&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/network/)
+[![Github All Releases](https://img.shields.io/github/downloads/JamesCJ60/Universal-x86-Tuning-Utility/total.svg)]() [![Windows](https://svgshare.com/i/ZhY.svg)]() [![GitHub stars](https://img.shields.io/github/stars/JamesCJ60/Universal-x86-Tuning-Utility?style=social&label=Star&maxAge=2592000)]() [![GitHub forks](https://img.shields.io/github/forks/JamesCJ60/Universal-x86-Tuning-Utility?style=social&label=Fork&maxAge=2592000)]()
 
 This project is still very much a WORK IN PROGRESS!
 
