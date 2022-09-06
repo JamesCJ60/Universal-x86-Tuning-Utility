@@ -194,8 +194,8 @@ namespace AATUV3
 
                 Application.Current.Resources["PrimaryBlueColor"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 1), new Point(1, 0));
 
-                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#b80036");
-                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#eb0045");
+                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#eb0045");
+                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#b80036");
 
                 Application.Current.Resources["PrimaryBlueColorHover"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 0), new Point(1, 1));
 
@@ -313,7 +313,7 @@ namespace AATUV3
         private void Tray()
         {
             _trayIcon = new Forms.NotifyIcon();
-            _trayIcon.Icon = new System.Drawing.Icon("favicon.ico");
+            _trayIcon.Icon = new System.Drawing.Icon(Settings.Default.Path + "\\favicon.ico");
             _trayIcon.Text = $"UXTU";
             _trayIcon.Click += trayIcon_Click;
         }
