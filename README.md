@@ -1,5 +1,7 @@
 # Universal x86 Tuning Utility
 
+[![Github All Releases](https://img.shields.io/github/downloads/JamesCJ60/Universal-x86-Tuning-Utility/total.svg)]() [![Windows](https://svgshare.com/i/ZhY.svg)](https://svgshare.com/i/ZhY.svg) [![GitHub stars](https://img.shields.io/github/stars/JamesCJ60/Universal-x86-Tuning-Utility?style=social&label=Star&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/stargazers/) [![GitHub forks](https://img.shields.io/github/forks/JamesCJ60/Universal-x86-Tuning-Utility?style=social&label=Fork&maxAge=2592000)](https://GitHub.com/Naereen/StrapDown.js/network/)
+
 This project is still very much a WORK IN PROGRESS!
 
 PLEASE READ THIS: THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. MISUSE OF THIS SOFTWARE COULD CAUSE SYSTEM INSTABILITY OR MALFUNCTION.
