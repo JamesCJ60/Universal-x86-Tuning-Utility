@@ -41,9 +41,9 @@ namespace RyzenSMUBackend
             }
             else if (FAMID == 5 || FAMID == 8)
             {
-                RyzenSmu.Smu.MP1_ADDR_MSG = 0x03B10528;
-                RyzenSmu.Smu.MP1_ADDR_RSP = 0x03B10564;
-                RyzenSmu.Smu.MP1_ADDR_ARG = 0x03B10998;
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0x03010A08;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0x03010A68;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0x03010A48;
 
                 RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10A20;
                 RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10A80;
@@ -61,9 +61,9 @@ namespace RyzenSMUBackend
             }
             else if(FAMID == 10)
             {
-                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3010508;
-                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3010988;
-                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3010984;
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0x03010508;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0x03010988;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0x03010984;
 
                 RyzenSmu.Smu.PSMU_ADDR_MSG = 0;
                 RyzenSmu.Smu.PSMU_ADDR_RSP = 0;
@@ -164,6 +164,7 @@ namespace RyzenSMUBackend
                 DumpPMTableWithSensors();
             });
         }
+        public static int PMTLoop = 0;
 
         public static void DumpPMTableWithSensors()
         {
@@ -205,7 +206,7 @@ namespace RyzenSMUBackend
                 //Set Address and reset Args[]
                 Address = Args[0];
                 if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
-                else Args[0] = 0;
+                else Args[0] = Convert.ToUInt32(PMTLoop);
                 //Dump the Power Monitoring Table
                 RyzenAccess.SendPsmu(msg3, ref Args);
                 //Sleep so that the SMU has time to dump the PM Table properly.
@@ -247,7 +248,13 @@ namespace RyzenSMUBackend
                     }
                     TableDump[5 + i] = $"0x{i:X4}\t{CurrentValue:F4}";
                 }
-                File.WriteAllLines("PMTableDumpWithSensors.log", TableDump);
+                File.WriteAllLines($"PMTableDumpWithSensors{PMTLoop.ToString()}.log", TableDump);
+
+                if(PMTLoop < 6 && Families.FAMID == 8)
+                {
+                    PMTLoop++;
+                    DumpPMTableWithSensors();
+                }
             }
         }
 

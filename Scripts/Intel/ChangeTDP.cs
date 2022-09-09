@@ -34,7 +34,7 @@ namespace UXTU.Scripts.Intel
                 {
                     runIntelTDPChangeMMIO(pl1TDP, pl2TDP);
                     runIntelTDPChangeMSRCMD(pl1TDP, pl2TDP);
-                    runIntelTDPChangeMSR(pl1TDP, pl2TDP);
+                    //runIntelTDPChangeMSR(pl1TDP, pl2TDP);
                 }
             }
             catch (Exception ex)
