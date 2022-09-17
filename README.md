@@ -25,6 +25,6 @@ If you would like to support the development of Universal x86 Tuning Utility by 
 ## Installation
 - Head over to the [releases page](https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases)
 - Click on the download hyperlink
-- Once the zip file has donwloaded, extract it using 7Zip, WinRAR, etc
+- Once the zip file has downloaded, extract it using 7Zip, WinRAR, etc
 - Once the zip file has been extracted, find `Universal x86 Tuning Utility.exe` and open it
 - UXTU should now open, have fun!!!!
