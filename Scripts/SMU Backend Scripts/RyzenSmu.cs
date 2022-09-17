@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using OpenLibSys;
 using System.Reflection;
 using RyzenSMUBackend;
+using UXTU.Properties;
 
 [assembly: CLSCompliant(false)]
 
@@ -78,7 +79,6 @@ namespace RyzenSmu
     }
     class Smu
     {
-
         [DllImport("inpoutx64.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetPhysLong(UIntPtr memAddress, out uint Data);

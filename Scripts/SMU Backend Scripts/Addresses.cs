@@ -31,23 +31,23 @@ namespace RyzenSMUBackend
 
             if (FAMID == 0 || FAMID == 1 || FAMID == 2 || FAMID == 3 || FAMID == 7)
             {
-                RyzenSmu.Smu.MP1_ADDR_MSG = 0x03B10528;
-                RyzenSmu.Smu.MP1_ADDR_RSP = 0x03B10564;
-                RyzenSmu.Smu.MP1_ADDR_ARG = 0x03B10998;
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10528;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10564;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
 
-                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10A20;
-                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10A80;
-                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10A88;
+                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10A20;
+                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10A80;
+                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A88;
             }
             else if (FAMID == 5 || FAMID == 8)
             {
-                RyzenSmu.Smu.MP1_ADDR_MSG = 0x03010A08;
-                RyzenSmu.Smu.MP1_ADDR_RSP = 0x03010A68;
-                RyzenSmu.Smu.MP1_ADDR_ARG = 0x03010A48;
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3010A08;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3010A68;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3010A48;
 
-                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10A20;
-                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10A80;
-                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10A88;
+                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10a20;
+                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10a80;
+                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10a88;
             }
             else if (FAMID == 4 || FAMID == 6)
             {
@@ -61,9 +61,9 @@ namespace RyzenSMUBackend
             }
             else if(FAMID == 10)
             {
-                RyzenSmu.Smu.MP1_ADDR_MSG = 0x03010508;
-                RyzenSmu.Smu.MP1_ADDR_RSP = 0x03010988;
-                RyzenSmu.Smu.MP1_ADDR_ARG = 0x03010984;
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3010508;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3010988;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3010984;
 
                 RyzenSmu.Smu.PSMU_ADDR_MSG = 0;
                 RyzenSmu.Smu.PSMU_ADDR_RSP = 0;
@@ -113,18 +113,25 @@ namespace RyzenSMUBackend
                 uint msg3 = 0x0;
 
                 //set SMU message address
-                if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
-                {
-                    msg1 = 0xc;
-                    msg2 = 0xb;
-                    msg3 = 0x3d;
-                }
+                //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+                //{
+                //    msg1 = 0xc;
+                //    msg2 = 0xb;
+                //    msg3 = 0x3d;
+                //}
 
                 
-                if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 5 || Families.FAMID == 8)
+                if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                 {
                     msg1 = 0x6;
                     msg2 = 0x66;
+                    msg3 = 0x65;
+                }
+
+                if (Families.FAMID == 5)
+                {
+                    msg1 = 0x14;
+                    msg2 = 0x13;
                     msg3 = 0x65;
                 }
 
@@ -173,16 +180,22 @@ namespace RyzenSMUBackend
             uint msg3 = 0x0;
 
             //set SMU message address
-            if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
-            {
-                msg1 = 0xc;
-                msg2 = 0xb;
-                msg3 = 0x3d;
-            }
-            if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 5 || Families.FAMID == 8)
+            //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+            //{
+            //    msg1 = 0xc;
+            //    msg2 = 0xb;
+            //    msg3 = 0x3d;
+            //}
+            if (Families.FAMID == 3 || Families.FAMID == 7 ||  Families.FAMID == 8)
             {
                 msg1 = 0x6;
                 msg2 = 0x66;
+                msg3 = 0x65;
+            }
+            if (Families.FAMID == 5)
+            {
+                msg1 = 0x14;
+                msg2 = 0x13;
                 msg3 = 0x65;
             }
             if (Families.FAMID == 4 ||  Families.FAMID == 6)
@@ -205,8 +218,8 @@ namespace RyzenSMUBackend
             {
                 //Set Address and reset Args[]
                 Address = Args[0];
-                if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
-                else Args[0] = Convert.ToUInt32(PMTLoop);
+                //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
+                //else Args[0] = Convert.ToUInt32(PMTLoop);
                 //Dump the Power Monitoring Table
                 RyzenAccess.SendPsmu(msg3, ref Args);
                 //Sleep so that the SMU has time to dump the PM Table properly.
@@ -248,13 +261,7 @@ namespace RyzenSMUBackend
                     }
                     TableDump[5 + i] = $"0x{i:X4}\t{CurrentValue:F4}";
                 }
-                File.WriteAllLines($"PMTableDumpWithSensors{PMTLoop.ToString()}.log", TableDump);
-
-                if(PMTLoop < 6 && Families.FAMID == 8)
-                {
-                    PMTLoop++;
-                    DumpPMTableWithSensors();
-                }
+                File.WriteAllLines($"PMTableDumpWithSensors.log", TableDump);
             }
         }
 
@@ -267,11 +274,16 @@ namespace RyzenSMUBackend
                     uint msg3 = 0x0;
 
                     //set SMU message address
-                    if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+                    //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+                    //{
+                    //    msg3 = 0x3d;
+                    //}
+                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                     {
-                        msg3 = 0x3d;
+                        msg3 = 0x65;
                     }
-                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 5 || Families.FAMID == 8)
+
+                    if(Families.FAMID == 5)
                     {
                         msg3 = 0x65;
                     }
@@ -279,8 +291,8 @@ namespace RyzenSMUBackend
                     Args = new uint[6];
                     RyzenAccess = new Smu(EnableDebug);
                     RyzenAccess.Initialize();
-                    if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
-                    else Args[0] = 0;
+                    //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
+                    //else Args[0] = 0;
                     RyzenAccess.SendPsmu(msg3, ref Args);
                     Thread.Sleep(500);
                     RyzenAccess.Deinitialize();
