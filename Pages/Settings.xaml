@@ -80,6 +80,7 @@
         <Label Content="Overlay Settings:" FontSize="18" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,202,0,0" Width="310"/>
         <CheckBox x:Name="cbSensorOverlay" Content="(Alpha) Enable Sensor Overlay (UXTU Restart Required)" HorizontalAlignment="Left" Margin="33,236,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="411" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18" ToolTipService.ToolTip="Controls the APU's soft throttle temperature limit in °C"/>
         <TextBlock Margin="33,262,456,241" Foreground="White" TextWrapping="Wrap" FontSize="11.5">Enables sensor overlay that can be toggled with Left-Alt + O or Dpad-Up + Left Shoulder Button for controllers. Includes FPS counter that currently only works in DirectX games. Use fullscreen borderless for the best game compatibility.</TextBlock>
+        <CheckBox x:Name="cbApplyOC" Content="Apply OC menu options on start" HorizontalAlignment="Left" Margin="33,117,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
         <!--PL1 Limit-->
 
         <!--PL2 Limit-->

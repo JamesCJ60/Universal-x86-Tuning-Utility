@@ -38,6 +38,7 @@ namespace AATUV3.Pages
             Settings.Default["StartMinimised"] = (bool)cbStartMinimised.IsChecked;
             Settings.Default["StartOnBoot"] = (bool)cbStartOnBoot.IsChecked;
             Settings.Default["SensorOverlay"] = (bool)cbSensorOverlay.IsChecked;
+            Settings.Default.ApplyOCAtStart = (bool)cbApplyOC.IsChecked;
             Settings.Default.Save();
 
             if(cbStartOnBoot.IsChecked == true)
@@ -61,6 +62,7 @@ namespace AATUV3.Pages
             cbStartMinimised.IsChecked = Convert.ToBoolean(Settings.Default["StartMinimised"]);
             cbStartOnBoot.IsChecked = Convert.ToBoolean(Settings.Default["StartOnBoot"]);
             cbSensorOverlay.IsChecked = Convert.ToBoolean(Settings.Default["SensorOverlay"]);
+            cbApplyOC.IsChecked = Settings.Default.ApplyOCAtStart;
         }
     }
 }

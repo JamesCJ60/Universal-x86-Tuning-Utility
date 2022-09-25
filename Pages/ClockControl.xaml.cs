@@ -35,6 +35,13 @@ namespace AATUV3.Pages
             nudiGPU.Value = Settings.Default.iGPUClk;
             nuddGPUCore.Value = Settings.Default.dGPUCLK;
             nuddGPUMem.Value = Settings.Default.dGPUMem;
+
+            cbCoreClock.IsChecked = Settings.Default.isAllCoreCLK;
+            cbCoreVolt.IsChecked = Settings.Default.isVID;
+            cbBus.IsChecked = Settings.Default.isBUS;
+            cbCOCPU.IsChecked = Settings.Default.isCPUCO;
+            cbCOIGPU.IsChecked = Settings.Default.isGPUCO;
+            cbdGPUCore.IsChecked = Settings.Default.isNV;
         }
 
         private void Disable_Click(object sender, RoutedEventArgs e)
@@ -132,6 +139,14 @@ namespace AATUV3.Pages
             {
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
             }
+
+            Settings.Default.isAllCoreCLK = (bool)cbCoreClock.IsChecked;
+            Settings.Default.isVID = (bool)cbCoreVolt.IsChecked;
+            Settings.Default.isBUS = (bool)cbBus.IsChecked;
+            Settings.Default.isCPUCO = (bool)cbCOCPU.IsChecked;
+            Settings.Default.isGPUCO = (bool)cbCOIGPU.IsChecked;
+            Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
+            Settings.Default.Save();
         }
     }
 }

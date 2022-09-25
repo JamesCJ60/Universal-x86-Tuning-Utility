@@ -299,6 +299,8 @@ namespace AATUV3
                 _trayIcon.Visible = true;
                 this.Hide();
             }
+
+            if (Settings.Default.ApplyOCAtStart) ApplyOC();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -614,6 +616,89 @@ namespace AATUV3
             //Close application
             //System.Windows.Application.Current.Shutdown();
             Environment.Exit(0);
+        }
+
+        private void ApplyOC()
+        {
+            int i = 0;
+            if (Settings.Default.isAllCoreCLK == true)
+            {
+                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
+                SendCommand.set_enable_oc();
+                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
+                SendCommand.set_enable_oc();
+                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
+                SendCommand.set_enable_oc();
+                i++;
+            }
+
+            if (Settings.Default.isVID == true)
+            {
+                double vid = Math.Round((double)Settings.Default.CPUVID / 1000, 2);
+                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                SendCommand.set_enable_oc();
+                i++;
+            }
+
+            if (Settings.Default.isBUS == true)
+            {
+                RwMmioAmd MMIO = new RwMmioAmd();
+                MMIO.SetBclk(Convert.ToDouble(Settings.Default.BusCLK));
+                i++;
+            }
+
+            if (Settings.Default.isCPUCO == true)
+            {
+                if (Settings.Default.COCPU >= 0)
+                {
+                    SendCommand.set_coall((uint)Settings.Default.COCPU);
+                }
+                else
+                {
+                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COCPU)));
+                }
+                i++;
+            }
+
+            if (Settings.Default.isGPUCO == true)
+            {
+                if (Settings.Default.COiGPU >= 0)
+                {
+                    SendCommand.set_cogfx((uint)Settings.Default.COiGPU);
+                }
+                else
+                {
+                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COiGPU)));
+                }
+                i++;
+            }
+
+            //if (cbiGPU.IsChecked == true)
+            //{
+            //    SendCommand.set_gfx_clk((uint)nudiGPU.Value);
+            //    i++;
+            //}
+
+            if (Settings.Default.isNV == true)
+            {
+                //Get RyzenAdj path
+                string path = "\\bin\\oc.exe";
+                //Pass settings on to be applied
+                BasicExeBackend.ApplySettings(path, "0 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
+                BasicExeBackend.ApplySettings(path, "1 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
+                BasicExeBackend.ApplySettings(path, "2 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
+                i++;
+            }
+
+            if (i == 0)
+            {
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+            }
+            else
+            {
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+            }
         }
     }
 }
