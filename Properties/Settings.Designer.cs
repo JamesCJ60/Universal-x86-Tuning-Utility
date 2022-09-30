@@ -194,9 +194,9 @@ namespace UXTU.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public int BusCLK {
+        public double BusCLK {
             get {
-                return ((int)(this["BusCLK"]));
+                return ((double)(this["BusCLK"]));
             }
             set {
                 this["BusCLK"] = value;

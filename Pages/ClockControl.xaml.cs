@@ -29,7 +29,7 @@ namespace AATUV3.Pages
             InitializeComponent();
             nudCoreClock.Value = Settings.Default.AllCoreClk;
             nudCoreVolt.Value = Settings.Default.CPUVID;
-            nudBus.Value = Settings.Default.BusCLK;
+            nudBus.Value = (double)Settings.Default.BusCLK;
             nudCOCPU.Value = Settings.Default.COCPU;
             nudCOIGPU.Value = Settings.Default.COiGPU;
             nudiGPU.Value = Settings.Default.iGPUClk;
@@ -54,7 +54,7 @@ namespace AATUV3.Pages
             int i = 0;
             Settings.Default.AllCoreClk = (int)nudCoreClock.Value;
             Settings.Default.CPUVID = (int)nudCoreVolt.Value;
-            Settings.Default.BusCLK = (int)nudBus.Value;
+            Settings.Default.BusCLK = (double)nudBus.Value;
             Settings.Default.COCPU = (int)nudCOCPU.Value;
             Settings.Default.COiGPU = (int)nudCOIGPU.Value;
             Settings.Default.iGPUClk = (int)nudiGPU.Value;

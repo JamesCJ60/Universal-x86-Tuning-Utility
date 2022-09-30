@@ -44,7 +44,7 @@
     <Setting Name="CPUVID" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1200</Value>
     </Setting>
-    <Setting Name="BusCLK" Type="System.Int32" Scope="User">
+    <Setting Name="BusCLK" Type="System.Double" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="COCPU" Type="System.Int32" Scope="User">

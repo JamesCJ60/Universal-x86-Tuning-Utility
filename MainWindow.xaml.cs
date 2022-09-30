@@ -129,7 +129,7 @@ namespace AATUV3
                 CPUName = obj["Name"].ToString();
             }
 
-            if (CPUName.Contains("AMD") || CPUName.Contains("Ryzen") || CPUName.Contains("Athlon") || CPUName.Contains("Radeon"))
+            if (CPUName.Contains("AMD") || CPUName.Contains("Ryzen") || CPUName.Contains("Athlon") || CPUName.Contains("Radeon") || CPUName.Contains("AMD Custom APU 0405"))
             {
                 if ((bool)Settings.Default["firstBoot"] == true)
                 {
