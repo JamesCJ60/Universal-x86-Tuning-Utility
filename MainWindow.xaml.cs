@@ -275,6 +275,13 @@ namespace AATUV3
             OverlayWindow overlay = new OverlayWindow();
             overlay.Show();
 
+            if (Settings.Default.isMagpie == true)
+            {
+                foreach (var process in Process.GetProcessesByName("magpie")) process.Kill();
+                foreach (var process in Process.GetProcessesByName("Magpie")) process.Kill();
+
+                BasicExeBackend.ApplySettings("\\bin\\magpie\\Magpie.exe", "", false);
+            }
 
             if ((bool)Settings.Default["SensorOverlay"] == true)
             {
@@ -299,8 +306,6 @@ namespace AATUV3
                 _trayIcon.Visible = true;
                 this.Hide();
             }
-
-            if (Settings.Default.ApplyOCAtStart) ApplyOC();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -557,9 +562,10 @@ namespace AATUV3
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
-                menu = (string)rdInfo.Content;
-                lblMenu.Content = menu.ToUpper();
             }
+
+            menu = (string)rdInfo.Content;
+            lblMenu.Content = menu.ToUpper();
 
             //Change window title
             this.Title = $"{AppName} - {menu}";
@@ -618,87 +624,13 @@ namespace AATUV3
             Environment.Exit(0);
         }
 
-        private void ApplyOC()
+        private void rdFSR_Click(object sender, RoutedEventArgs e)
         {
-            int i = 0;
-            if (Settings.Default.isAllCoreCLK == true)
-            {
-                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
-                SendCommand.set_enable_oc();
-                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
-                SendCommand.set_enable_oc();
-                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
-                SendCommand.set_enable_oc();
-                i++;
-            }
-
-            if (Settings.Default.isVID == true)
-            {
-                double vid = Math.Round((double)Settings.Default.CPUVID / 1000, 2);
-                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
-                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
-                SendCommand.set_enable_oc();
-                i++;
-            }
-
-            if (Settings.Default.isBUS == true)
-            {
-                RwMmioAmd MMIO = new RwMmioAmd();
-                MMIO.SetBclk(Convert.ToDouble(Settings.Default.BusCLK));
-                i++;
-            }
-
-            if (Settings.Default.isCPUCO == true)
-            {
-                if (Settings.Default.COCPU >= 0)
-                {
-                    SendCommand.set_coall((uint)Settings.Default.COCPU);
-                }
-                else
-                {
-                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COCPU)));
-                }
-                i++;
-            }
-
-            if (Settings.Default.isGPUCO == true)
-            {
-                if (Settings.Default.COiGPU >= 0)
-                {
-                    SendCommand.set_cogfx((uint)Settings.Default.COiGPU);
-                }
-                else
-                {
-                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COiGPU)));
-                }
-                i++;
-            }
-
-            //if (cbiGPU.IsChecked == true)
-            //{
-            //    SendCommand.set_gfx_clk((uint)nudiGPU.Value);
-            //    i++;
-            //}
-
-            if (Settings.Default.isNV == true)
-            {
-                //Get RyzenAdj path
-                string path = "\\bin\\oc.exe";
-                //Pass settings on to be applied
-                BasicExeBackend.ApplySettings(path, "0 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
-                BasicExeBackend.ApplySettings(path, "1 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
-                BasicExeBackend.ApplySettings(path, "2 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
-                i++;
-            }
-
-            if (i == 0)
-            {
-                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
-            }
-            else
-            {
-                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
-            }
+            //Load menu
+            PagesNavigation.Navigate(new System.Uri("Pages/FSR.xaml", UriKind.RelativeOrAbsolute));
+            //Set menu lable to menu name
+            menu = (string)rdFSR.Content;
+            lblMenu.Content = menu.ToUpper();
         }
     }
 }

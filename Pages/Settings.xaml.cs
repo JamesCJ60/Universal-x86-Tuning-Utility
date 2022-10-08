@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
+using System.Diagnostics;
 
 namespace AATUV3.Pages
 {
@@ -39,6 +40,7 @@ namespace AATUV3.Pages
             Settings.Default["StartOnBoot"] = (bool)cbStartOnBoot.IsChecked;
             Settings.Default["SensorOverlay"] = (bool)cbSensorOverlay.IsChecked;
             Settings.Default.ApplyOCAtStart = (bool)cbApplyOC.IsChecked;
+            Settings.Default.isMagpie = (bool)cbMagpie.IsChecked;
             Settings.Default.Save();
 
             if(cbStartOnBoot.IsChecked == true)
@@ -53,6 +55,23 @@ namespace AATUV3.Pages
                 RegistryKey key = Registry.CurrentUser.OpenSubKey(path, true);
                 key.DeleteValue("MyApplication", false);
             }
+
+            if(cbMagpie.IsChecked == true)
+            {
+                foreach (var process in Process.GetProcessesByName("magpie")) process.Kill();
+                foreach (var process in Process.GetProcessesByName("Magpie")) process.Kill();
+
+                int i = 0;
+
+                foreach (var process in Process.GetProcessesByName("magpie")) i++;
+                foreach (var process in Process.GetProcessesByName("Magpie")) i++;
+
+                if(i <=0) BasicExeBackend.ApplySettings("\\bin\\magpie\\Magpie.exe", "", false);
+            } else 
+            {
+                foreach (var process in Process.GetProcessesByName("magpie")) process.Kill();
+                foreach (var process in Process.GetProcessesByName("Magpie")) process.Kill();
+            }
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
@@ -62,6 +81,7 @@ namespace AATUV3.Pages
             cbStartMinimised.IsChecked = Convert.ToBoolean(Settings.Default["StartMinimised"]);
             cbStartOnBoot.IsChecked = Convert.ToBoolean(Settings.Default["StartOnBoot"]);
             cbSensorOverlay.IsChecked = Convert.ToBoolean(Settings.Default["SensorOverlay"]);
+            cbMagpie.IsChecked = Settings.Default.isMagpie;
             cbApplyOC.IsChecked = Settings.Default.ApplyOCAtStart;
         }
     }

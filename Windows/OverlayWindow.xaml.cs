@@ -22,6 +22,7 @@ using UXTU.Scripts.Intel;
 using LibreHardwareMonitor.Hardware;
 using UXTU.Properties;
 using RyzenSMUBackend;
+using System.Windows.Forms;
 
 namespace AATUV3
 {
@@ -168,6 +169,11 @@ namespace AATUV3
                         hidden = false;
                         this.Show();
                     }
+                }
+
+                if (state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown) && state.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder))
+                {
+                    SendKeys.SendWait("%F");
                 }
             }
 

@@ -141,6 +141,7 @@
                         <RadioButton x:Name="rdAC" IsChecked="False" Content="Armoury Crate" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource ac}" Height="50" Click="rdAC_Click" Visibility="Collapsed"/>
                         <RadioButton x:Name="rdAdaptive" IsChecked="False" Content="Adaptive Performance" Style="{DynamicResource FlashButton}" Tag="{DynamicResource flash}" Height="50" Click="rdAdaptive_Click"/>
                         <RadioButton x:Name="rdClock" IsChecked="False" Content="Clock Control" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource speed}" Height="50" Click="rdClock_Click"/>
+                        <RadioButton x:Name="rdFSR" IsChecked="False" Content="Magpie FSR" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource FSR}" Height="50" Click="rdFSR_Click"/>
                         <RadioButton x:Name="rdInfo" IsChecked="False" Content="Info" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource info}" Height="50" Click="rdInfo_Click"/>
                         <RadioButton x:Name="rdSettings" IsChecked="False" Content="Settings" Style="{DynamicResource MenuRadioButtonStyle}" Tag="{DynamicResource settings}" Height="50" Click="rdSettings_Click"/>
                     </StackPanel>

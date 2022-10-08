@@ -170,6 +170,9 @@
     <Compile Include="Pages\AMDCPU\AMDCustomPresets.xaml.cs">
       <DependentUpon>AMDCustomPresets.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\FSR.xaml.cs">
+      <DependentUpon>FSR.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Intel\IntelCustomPresets.xaml.cs">
       <DependentUpon>IntelCustomPresets.xaml</DependentUpon>
     </Compile>
@@ -232,6 +235,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\AMDCPU\AMDCustomPresets.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\FSR.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

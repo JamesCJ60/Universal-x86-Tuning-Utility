@@ -13,6 +13,8 @@ using RyzenSmu;
 using UXTU;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using System.Windows.Interop;
+using AATUV3.Scripts;
+using System.Linq.Expressions;
 
 namespace RyzenSMUBackend
 {
@@ -261,7 +263,97 @@ namespace RyzenSMUBackend
                     }
                     TableDump[5 + i] = $"0x{i:X4}\t{CurrentValue:F4}";
                 }
-                File.WriteAllLines($"PMTableDumpWithSensors.log", TableDump);
+                try
+                {
+                    File.WriteAllLines(Settings.Default.Path + "\\PMTableDumpWithSensors.log", TableDump);
+
+                    if (Settings.Default.ApplyOCAtStart) ApplyOC();
+                }
+                catch (Exception ex) { }
+            }
+        }
+
+
+        private static void ApplyOC()
+        {
+            int i = 0;
+            if ((bool)Settings.Default.isAllCoreCLK == true)
+            {
+                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
+                SendCommand.set_enable_oc();
+                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
+                SendCommand.set_enable_oc();
+                SendCommand.set_oc_clk((uint)Settings.Default.AllCoreClk);
+                SendCommand.set_enable_oc();
+                i++;
+            }
+
+            if ((bool)Settings.Default.isVID == true)
+            {
+                double vid = Math.Round((double)Settings.Default.CPUVID / 1000, 2);
+                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                SendCommand.set_enable_oc();
+                i++;
+            }
+
+            if ((bool)Settings.Default.isBUS == true)
+            {
+                RwMmioAmd MMIO = new RwMmioAmd();
+                MMIO.SetBclk(Convert.ToDouble(Settings.Default.BusCLK));
+                i++;
+            }
+
+            if ((bool)Settings.Default.isCPUCO == true)
+            {
+                if ((int)Settings.Default.COCPU >= 0)
+                {
+                    SendCommand.set_coall((uint)Settings.Default.COCPU);
+                }
+                else
+                {
+                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COCPU)));
+                }
+                i++;
+            }
+
+            if ((bool)Settings.Default.isGPUCO == true)
+            {
+                if ((int)Settings.Default.COiGPU >= 0)
+                {
+                    SendCommand.set_cogfx((uint)Settings.Default.COiGPU);
+                }
+                else
+                {
+                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COiGPU)));
+                }
+                i++;
+            }
+
+            //if (cbiGPU.IsChecked == true)
+            //{
+            //    SendCommand.set_gfx_clk((uint)nudiGPU.Value);
+            //    i++;
+            //}
+
+            if ((bool)Settings.Default.isNV == true)
+            {
+                //Get RyzenAdj path
+                string path = "\\bin\\oc.exe";
+                //Pass settings on to be applied
+                BasicExeBackend.ApplySettings(path, "0 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
+                BasicExeBackend.ApplySettings(path, "1 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
+                BasicExeBackend.ApplySettings(path, "2 " + Settings.Default.dGPUCLK + " " + Settings.Default.dGPUMem, true);
+                i++;
+            }
+
+            if (i == 0)
+            {
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+            }
+            else
+            {
+                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
             }
         }
 
