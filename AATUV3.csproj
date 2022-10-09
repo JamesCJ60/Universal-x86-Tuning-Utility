@@ -188,6 +188,7 @@
     <Compile Include="Pages\ASUSAC.xaml.cs">
       <DependentUpon>ASUSAC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scripts\GlobalVariables.cs" />
     <Compile Include="Scripts\Intel\BindableBase.cs" />
     <Compile Include="Scripts\Intel\ChangeTDP.cs" />
     <Compile Include="Scripts\Intel\DelegateCommand.cs" />

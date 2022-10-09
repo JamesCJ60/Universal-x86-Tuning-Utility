@@ -178,7 +178,7 @@ namespace AATUV3
             }
 
             //detect if keyboard or controller combo is being activated
-            if ((Keyboard.GetKeyStates(Key.LeftAlt) & KeyStates.Down) > 0 && (Keyboard.GetKeyStates(Key.A) & KeyStates.Down) > 0)
+            if ((Keyboard.GetKeyStates(Key.LeftAlt) & KeyStates.Down) > 0 && (Keyboard.GetKeyStates(Key.M) & KeyStates.Down) > 0)
             {
                 //if hidden show window
                 if (hidden == false)

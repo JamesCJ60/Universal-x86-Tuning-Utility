@@ -27,6 +27,7 @@ using RyzenSMUBackend;
 using System.IO;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using Forms = System.Windows.Forms;
+using UXTU.Scripts;
 
 namespace AATUV3
 {
@@ -277,10 +278,12 @@ namespace AATUV3
 
             if (Settings.Default.isMagpie == true)
             {
-                foreach (var process in Process.GetProcessesByName("magpie")) process.Kill();
-                foreach (var process in Process.GetProcessesByName("Magpie")) process.Kill();
+                int i = 0;
 
-                BasicExeBackend.ApplySettings("\\bin\\magpie\\Magpie.exe", "", false);
+                foreach (var process in Process.GetProcessesByName("magpie")) i++;
+                foreach (var process in Process.GetProcessesByName("Magpie")) i++;
+
+                if (i <= 0) GlobalVariables.UpdateMagpie();
             }
 
             if ((bool)Settings.Default["SensorOverlay"] == true)

@@ -6,16 +6,22 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using UXTU.Scripts;
 
 namespace AATUV3
 {
 
     public partial class App : Application
     {
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+
+        }
+
         private void Application_SessionEnding(object sender, SessionEndingCancelEventArgs e)
         {
-            foreach (var process in Process.GetProcessesByName("magpie")) process.Kill();
-            foreach (var process in Process.GetProcessesByName("Magpie")) process.Kill();
+
         }
     }
 }

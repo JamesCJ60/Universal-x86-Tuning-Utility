@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit;
 using System.Diagnostics;
+using UXTU.Scripts;
 
 namespace AATUV3.Pages
 {
@@ -58,19 +59,12 @@ namespace AATUV3.Pages
 
             if(cbMagpie.IsChecked == true)
             {
-                foreach (var process in Process.GetProcessesByName("magpie")) process.Kill();
-                foreach (var process in Process.GetProcessesByName("Magpie")) process.Kill();
-
                 int i = 0;
 
                 foreach (var process in Process.GetProcessesByName("magpie")) i++;
                 foreach (var process in Process.GetProcessesByName("Magpie")) i++;
 
-                if(i <=0) BasicExeBackend.ApplySettings("\\bin\\magpie\\Magpie.exe", "", false);
-            } else 
-            {
-                foreach (var process in Process.GetProcessesByName("magpie")) process.Kill();
-                foreach (var process in Process.GetProcessesByName("Magpie")) process.Kill();
+                if(i <=0) GlobalVariables.UpdateMagpie();
             }
         }
 
