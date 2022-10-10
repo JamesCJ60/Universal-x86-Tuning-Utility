@@ -67,9 +67,9 @@ namespace RyzenSMUBackend
                 RyzenSmu.Smu.MP1_ADDR_RSP = 0x3010988;
                 RyzenSmu.Smu.MP1_ADDR_ARG = 0x3010984;
 
-                RyzenSmu.Smu.PSMU_ADDR_MSG = 0;
-                RyzenSmu.Smu.PSMU_ADDR_RSP = 0;
-                RyzenSmu.Smu.PSMU_ADDR_ARG = 0;
+                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10524;
+                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10570;
+                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A40;
             }
             else
             {
@@ -115,14 +115,14 @@ namespace RyzenSMUBackend
                 uint msg3 = 0x0;
 
                 //set SMU message address
-                //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
-                //{
-                //    msg1 = 0xc;
-                //    msg2 = 0xb;
-                //    msg3 = 0x3d;
-                //}
+                if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+                {
+                    msg1 = 0xc;
+                    msg2 = 0xb;
+                    msg3 = 0x3d;
+                }
 
-                
+
                 if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                 {
                     msg1 = 0x6;
@@ -141,6 +141,13 @@ namespace RyzenSMUBackend
                 {
                     msg1 = 0x8;
                     msg2 = 0x6;
+                    msg3 = 0x5;
+                }
+
+                if (Families.FAMID == 10)
+                {
+                    msg1 = 0x3;
+                    msg2 = 0x4;
                     msg3 = 0x5;
                 }
 
@@ -182,12 +189,12 @@ namespace RyzenSMUBackend
             uint msg3 = 0x0;
 
             //set SMU message address
-            //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
-            //{
-            //    msg1 = 0xc;
-            //    msg2 = 0xb;
-            //    msg3 = 0x3d;
-            //}
+            if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+            {
+                msg1 = 0xc;
+                msg2 = 0xb;
+                msg3 = 0x3d;
+            }
             if (Families.FAMID == 3 || Families.FAMID == 7 ||  Families.FAMID == 8)
             {
                 msg1 = 0x6;
@@ -206,6 +213,12 @@ namespace RyzenSMUBackend
                 msg2 = 0x6;
                 msg3 = 0x5;
             }
+            if (Families.FAMID == 10)
+            {
+                msg1 = 0x3;
+                msg2 = 0x4;
+                msg3 = 0x5;
+            }
 
             Args = new uint[6];
             RyzenAccess = new Smu(EnableDebug);
@@ -216,12 +229,15 @@ namespace RyzenSMUBackend
                 PMTableVersion = Args[0];
             }
 
+            if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
+            else Args[0] = 0;
+
             if (RyzenAccess.SendPsmu(msg2, ref Args) == Smu.Status.OK)
             {
                 //Set Address and reset Args[]
                 Address = Args[0];
-                //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
-                //else Args[0] = Convert.ToUInt32(PMTLoop);
+                if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
+                else Args[0] = 0;
                 //Dump the Power Monitoring Table
                 RyzenAccess.SendPsmu(msg3, ref Args);
                 //Sleep so that the SMU has time to dump the PM Table properly.
@@ -234,13 +250,16 @@ namespace RyzenSMUBackend
 
                 UInt32[] SmuVersionArgs = new UInt32[6];
                 string[] TableDump = new string[706];
-                RyzenAccess.SendMp1(0x2, ref Args);
-                for (int i = 0; i < 6; i++)
-                {
-                    SmuVersionArgs[i] = Args[i];
-                }
-                Thread.Sleep(100);
 
+                if(Families.FAMID != 10)
+                {
+                    RyzenAccess.SendMp1(0x2, ref Args);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        SmuVersionArgs[i] = Args[i];
+                    }
+                    Thread.Sleep(100);
+                } else Args[0] = 0;
 
                 TableDump.Initialize();
                 String SmuVersion = "";//$"{SmuVersionArgs[0]:X8}".Substring(0,2) + ".";
@@ -366,10 +385,10 @@ namespace RyzenSMUBackend
                     uint msg3 = 0x0;
 
                     //set SMU message address
-                    //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
-                    //{
-                    //    msg3 = 0x3d;
-                    //}
+                    if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
+                    {
+                        msg3 = 0x3d;
+                    }
                     if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                     {
                         msg3 = 0x65;
@@ -380,11 +399,16 @@ namespace RyzenSMUBackend
                         msg3 = 0x65;
                     }
 
+                    if (Families.FAMID == 10)
+                    {
+                        msg3 = 0x5;
+                    }
+
                     Args = new uint[6];
                     RyzenAccess = new Smu(EnableDebug);
                     RyzenAccess.Initialize();
-                    //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
-                    //else Args[0] = 0;
+                    if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2) Args[0] = 3;
+                    else Args[0] = 0;
                     RyzenAccess.SendPsmu(msg3, ref Args);
                     Thread.Sleep(500);
                     RyzenAccess.Deinitialize();

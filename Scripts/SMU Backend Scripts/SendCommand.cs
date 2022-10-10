@@ -179,6 +179,10 @@ namespace RyzenSMUBackend
                 case 4:
                 case 6:
                     RyzenAccess.SendMp1(0x23, ref Args);
+                    RyzenAccess.SendPsmu(0x56, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x59, ref Args);
                     break;
                 default:
                     break;
@@ -701,6 +705,11 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case 0:
+                case 1:
+                case 2:
+                    RyzenAccess.SendPsmu(0x7d, ref Args);
+                    break;
                 case 3:
                 case 7:
                     RyzenAccess.SendMp1(0x31, ref Args);
@@ -713,6 +722,9 @@ namespace RyzenSMUBackend
                     break;
                 case 8:
                     RyzenAccess.SendPsmu(0x19, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x5F, ref Args);
                     break;
                 default:
                     break;
@@ -729,6 +741,11 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case 0:
+                case 1:
+                case 2:
+                    RyzenAccess.SendPsmu(0x7E, ref Args);
+                    break;
                 case 3:
                 case 7:
                     RyzenAccess.SendMp1(0x32, ref Args);
@@ -741,6 +758,9 @@ namespace RyzenSMUBackend
                     break;
                 case 8:
                     RyzenAccess.SendPsmu(0x1a, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x60, ref Args);
                     break;
                 default:
                     break;
@@ -757,6 +777,11 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case 0:
+                case 1:
+                case 2:
+                    RyzenAccess.SendPsmu(0x7f, ref Args);
+                    break;
                 case 3:
                 case 7:
                     RyzenAccess.SendMp1(0x33, ref Args);
@@ -765,6 +790,9 @@ namespace RyzenSMUBackend
                 case 4:
                 case 6:
                     RyzenAccess.SendMp1(0x28, ref Args);
+                    RyzenAccess.SendPsmu(0x61, ref Args);
+                    break;
+                case 10:
                     RyzenAccess.SendPsmu(0x61, ref Args);
                     break;
                 default:
@@ -785,14 +813,20 @@ namespace RyzenSMUBackend
                 case 3:
                 case 7:
                     RyzenAccess.SendMp1(0x55, ref Args);
+                    RyzenAccess.SendPsmu(0xB1, ref Args);
                     break;
                 case 4:
                 case 6:
                     RyzenAccess.SendMp1(0x36, ref Args);
+                    RyzenAccess.SendPsmu(0xB, ref Args);
                     break;
                 case 5:
                 case 8:
                     RyzenAccess.SendMp1(0x4c, ref Args);
+                    RyzenAccess.SendPsmu(0x5D, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x7, ref Args);
                     break;
                 default:
                     break;
@@ -821,6 +855,9 @@ namespace RyzenSMUBackend
                 case 8:
                     RyzenAccess.SendMp1(0x4b, ref Args);
                     break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x6, ref Args);
+                    break;
                 default:
                     break;
             }
@@ -839,6 +876,7 @@ namespace RyzenSMUBackend
                 case 3:
                 case 7:
                     RyzenAccess.SendMp1(0x64, ref Args);
+                    RyzenAccess.SendPsmu(0x57, ref Args);
                     break;
                 case 5:
                 case 8:
@@ -860,6 +898,11 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case 0:
+                case 1:
+                case 2:
+                    RyzenAccess.SendPsmu(0x6A, ref Args);
+                    break;
                 case 3:
                 case 7:
                     RyzenAccess.SendMp1(0x30, ref Args);
@@ -872,6 +915,9 @@ namespace RyzenSMUBackend
                     break;
                 case 8:
                     RyzenAccess.SendPsmu(0x18, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x5E, ref Args);
                     break;
                 default:
                     break;
@@ -889,6 +935,11 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case 0:
+                case 1:
+                case 2:
+                    RyzenAccess.SendPsmu(0x69, ref Args);
+                    break;
                 case 3:
                 case 7:
                     RyzenAccess.SendMp1(0x2f, ref Args);
@@ -901,6 +952,9 @@ namespace RyzenSMUBackend
                     break;
                 case 8:
                     RyzenAccess.SendPsmu(0x17, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x5D, ref Args);
                     break;
                 default:
                     break;
@@ -919,7 +973,11 @@ namespace RyzenSMUBackend
             {
                 case 4:
                 case 6:
-                    RyzenAccess.SendPsmu(0x2F, ref Args);
+                    RyzenAccess.SendPsmu(0x58, ref Args);
+                    RyzenAccess.SendMp1(0x2F, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x5b, ref Args);
                     break;
                 default:
                     break;
@@ -940,6 +998,10 @@ namespace RyzenSMUBackend
                 case 4:
                 case 6:
                     RyzenAccess.SendPsmu(0x53, ref Args);
+                    RyzenAccess.SendMp1(0x3D, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x56, ref Args);
                     break;
                 default:
                     break;
@@ -960,6 +1022,10 @@ namespace RyzenSMUBackend
                 case 4:
                 case 6:
                     RyzenAccess.SendPsmu(0x54, ref Args);
+                    RyzenAccess.SendMp1(0x3B, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x57, ref Args);
                     break;
                 default:
                     break;
@@ -979,6 +1045,10 @@ namespace RyzenSMUBackend
                 case 4:
                 case 6:
                     RyzenAccess.SendPsmu(0x55, ref Args);
+                    RyzenAccess.SendMp1(0x3c, ref Args);
+                    break;
+                case 10:
+                    RyzenAccess.SendPsmu(0x58, ref Args);
                     break;
                 default:
                     break;
