@@ -12,7 +12,7 @@ If you would like to support the development of Universal x86 Tuning Utility by 
 
 ## What is UXTU?
 - It's a tuning utility aimed to help you tune your device as you wish.
-- It's created by the devlopers of [Ryzen Controller](https://gitlab.com/ryzen-controller-team/ryzen-controller), [Renoir Mobile Tuning](https://github.com/sbski/Renoir-Mobile-Tuning), and [Power Control Panel](https://github.com/project-sbc/Power-Control-Panel-v2).
+- It's created by the developers of [Ryzen Controller](https://gitlab.com/ryzen-controller-team/ryzen-controller), [Renoir Mobile Tuning](https://github.com/sbski/Renoir-Mobile-Tuning), and [Power Control Panel](https://github.com/project-sbc/Power-Control-Panel-v2).
 - It's a little lightweight Ryzen Master/XTU alternative for x86 laptops and computers that allows fine control over your devices processor and GPU/s.
 - Works best on Zen based CPUs/APUs or Intel CPUs that are 4th gen and newer.
 
