@@ -37,6 +37,11 @@ namespace RyzenSMUBackend
 
             FAMID = 99999;
 
+            if (CPUModel.Contains("Model " + Convert.ToString(1)) || CPUModel.Contains("Model " + Convert.ToString(8)))
+            {
+                FAMID = -1; //Zen1/+ DT
+            }
+
             if (CPUModel.Contains("Model " + Convert.ToString(17)))
             {
                 FAMID = 0; //RAVEN

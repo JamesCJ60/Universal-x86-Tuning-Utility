@@ -30,6 +30,17 @@ namespace RyzenSMUBackend
             RyzenSmu.Smu.SMU_OFFSET_ADDR = 0xB8;
             RyzenSmu.Smu.SMU_OFFSET_DATA = 0xBC;
 
+            if(FAMID == -1)
+            {
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0X3B10528;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0X3B10564;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0X3B10598;
+
+                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B1051C;
+                RyzenSmu.Smu.PSMU_ADDR_RSP = 0X3B10568;
+                RyzenSmu.Smu.PSMU_ADDR_ARG = 0X3B10590;
+            }
+
 
             if (FAMID == 0 || FAMID == 1 || FAMID == 2 || FAMID == 3 || FAMID == 7)
             {

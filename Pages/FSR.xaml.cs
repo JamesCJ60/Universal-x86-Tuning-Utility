@@ -47,8 +47,10 @@ namespace AATUV3.Pages
                 var lines = File.ReadAllLines(Settings.Default.Path + "\\bin\\magpie\\config.mp");
 
                 int captureMode = Convert.ToInt32(lines[1]);
-                cbVsync.IsChecked = Convert.ToBoolean(lines[4]);
-                cb3DGame.IsChecked = Convert.ToBoolean(lines[7]);
+                bool vsync = Convert.ToBoolean(lines[4]);
+                cbVsync.IsChecked = vsync;
+                bool dGame = Convert.ToBoolean(lines[7]);
+                cb3DGame.IsChecked = dGame;
                 int interpolationMode = Convert.ToInt32(lines[10]);
                 double sharpness = Convert.ToDouble(lines[13]);
 

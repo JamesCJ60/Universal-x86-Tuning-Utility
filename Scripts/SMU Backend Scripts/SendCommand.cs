@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Background;
 
 namespace RyzenSMUBackend
 {
@@ -165,6 +166,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x68, ref Args);
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -705,6 +709,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x6c, ref Args);
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -741,6 +748,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x6d, ref Args);
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -768,7 +778,7 @@ namespace RyzenSMUBackend
             RyzenAccess.Deinitialize();
         }
 
-        //Set Per Core OC
+        //Set VID
         public static void set_oc_volt(uint value)
         {
             RyzenAccess.Initialize();
@@ -777,6 +787,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x6e, ref Args);
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -898,6 +911,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendMp1(0x24, ref Args);
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -935,6 +951,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendMp1(0x23, ref Args);
+                    break;
                 case 0:
                 case 1:
                 case 2:
@@ -971,6 +990,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x6a, ref Args);
+                    break;
                 case 4:
                 case 6:
                     RyzenAccess.SendPsmu(0x58, ref Args);
@@ -995,6 +1017,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x64, ref Args);
+                    break;
                 case 4:
                 case 6:
                     RyzenAccess.SendPsmu(0x53, ref Args);
@@ -1019,6 +1044,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x65, ref Args);
+                    break;
                 case 4:
                 case 6:
                     RyzenAccess.SendPsmu(0x54, ref Args);
@@ -1033,7 +1061,7 @@ namespace RyzenSMUBackend
             RyzenAccess.Deinitialize();
         }
 
-        //Set TDC
+        //Set EDC
         public static void set_edc(uint value)
         {
             RyzenAccess.Initialize();
@@ -1042,6 +1070,9 @@ namespace RyzenSMUBackend
 
             switch (FAMID)
             {
+                case -1:
+                    RyzenAccess.SendPsmu(0x66, ref Args);
+                    break;
                 case 4:
                 case 6:
                     RyzenAccess.SendPsmu(0x55, ref Args);
