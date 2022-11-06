@@ -358,5 +358,17 @@ namespace UXTU.Properties {
                 this["isMagpie"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isiGPUClk {
+            get {
+                return ((bool)(this["isiGPUClk"]));
+            }
+            set {
+                this["isiGPUClk"] = value;
+            }
+        }
     }
 }

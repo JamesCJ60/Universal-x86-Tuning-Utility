@@ -42,6 +42,7 @@ namespace AATUV3.Pages
             cbCOCPU.IsChecked = Settings.Default.isCPUCO;
             cbCOIGPU.IsChecked = Settings.Default.isGPUCO;
             cbdGPUCore.IsChecked = Settings.Default.isNV;
+            cbiGPU.IsChecked = Settings.Default.isiGPUClk;
         }
 
         private void Disable_Click(object sender, RoutedEventArgs e)
@@ -146,6 +147,7 @@ namespace AATUV3.Pages
             Settings.Default.isCPUCO = (bool)cbCOCPU.IsChecked;
             Settings.Default.isGPUCO = (bool)cbCOIGPU.IsChecked;
             Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
+            Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
             Settings.Default.Save();
         }
     }
