@@ -100,11 +100,11 @@
                                     <Label Content="Curve Optimiser Settings:" FontSize="18" Foreground="White"/>
                                     <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
                                         <CheckBox Name="cbCOCPU" Content="CPU:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudCOCPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-50" Value="0" Maximum="30" Increment="1"/>
+                                        <xctk:IntegerUpDown Name="nudCOCPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-999" Value="0" Maximum="30" Increment="1"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,3,0,0">
                                         <CheckBox Name="cbCOIGPU" Content="iGPU:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudCOIGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-50" Value="0" Maximum="30" Increment="1"/>
+                                        <xctk:IntegerUpDown Name="nudCOIGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-999" Value="0" Maximum="30" Increment="1"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>

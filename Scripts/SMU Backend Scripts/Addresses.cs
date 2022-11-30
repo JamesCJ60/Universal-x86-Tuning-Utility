@@ -54,9 +54,9 @@ namespace RyzenSMUBackend
             }
             else if (FAMID == 5 || FAMID == 8)
             {
-                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3010A08;
-                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3010A68;
-                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3010A48;
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10528;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10578;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
 
                 RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10a20;
                 RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10a80;
