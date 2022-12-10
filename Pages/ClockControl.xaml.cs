@@ -16,6 +16,7 @@ using RyzenSMUBackend;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using AATUV3.Scripts;
 using UXTU.Properties;
+using UXTU.Scripts.Adpative_Modes.Performance;
 
 namespace AATUV3.Pages
 {

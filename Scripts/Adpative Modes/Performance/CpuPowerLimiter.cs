@@ -12,21 +12,21 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
 {
     public class CpuPowerLimiter
     {
-        private int MaxPowerLimit = 125; // watts
-        private int MinPowerLimit = 5; // watts
-        private int MaxCurveOptimiser = 30; // CO
-        private int MinCurveOptimiser = 0; // CO
-        private int MaxTemperature = 105; // degrees Celsius
+        private static int MaxPowerLimit = 125; // watts
+        private static int MinPowerLimit = 5; // watts
+        private static int MaxCurveOptimiser = 30; // CO
+        private static int MinCurveOptimiser = 0; // CO
+        private static int MaxTemperature = 105; // degrees Celsius
         private const int PowerLimitIncrement = 1; // watts
         private const int CurveOptimiserIncrement = 1; // CO
 
-        private int _newPowerLimit;
-        private int _currentPowerLimit;
-        private int _newCO;
-        private int _lastPowerLimit;
-        private int _lastCO;
+        private static int _newPowerLimit;
+        private static int _currentPowerLimit;
+        private static int _newCO;
+        private static int _lastPowerLimit;
+        private static int _lastCO;
 
-        public void UpdateLimits(int maxPower, int minPower, int maxTemp, int maxCO)
+        public static void UpdateLimits(int maxPower, int minPower, int maxTemp, int maxCO)
         {
             // Update max and min power limti and max temp limit
             MaxPowerLimit = maxPower;
@@ -47,7 +47,7 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
         //REMBRANDT - 8
         //PHEONIX - 9
         //RAPHAEL/DRAGON RANGE - 10
-        public void GetCurrentPowerLimit()
+        public static void GetCurrentPowerLimit()
         {
             // Get current fast PPT from APU
             if (Families.FAMID == 3 || Families.FAMID == 7)
@@ -61,7 +61,7 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
             }
         }
 
-        public void UpdatePowerLimit(int temperature, int cpuLoad)
+        public static void UpdatePowerLimit(int temperature, int cpuLoad)
         {
             if (temperature > MaxTemperature)
             {
@@ -78,16 +78,16 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
             if(_newPowerLimit != _lastPowerLimit / 1000 || _currentPowerLimit != _newPowerLimit) UpdateTDP(_newPowerLimit);
         }
 
-        private int prevCpuLoad = 0;
-        public void CurveOptimiserLimit(int cpuLoad)
+        private static int prevCpuLoad = 0;
+        public static void CurveOptimiserLimit(int cpuLoad)
         {
             int newMaxCO = MaxCurveOptimiser;
 
             // Change max CO limit based on CPU usage
             if(cpuLoad < 10) newMaxCO = MaxCurveOptimiser;
-            else if(cpuLoad > 10 && cpuLoad < 40) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement;
-            else if (cpuLoad >= 40 && cpuLoad < 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 4;
-            else if (cpuLoad >= 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 6;
+            else if(cpuLoad > 10 && cpuLoad < 40) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 4;
+            else if (cpuLoad >= 40 && cpuLoad < 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 6;
+            else if (cpuLoad >= 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 8;
 
             // Decrease the number by 10 if the CPU load is increased by 10
             if (cpuLoad > prevCpuLoad + 10)
@@ -104,11 +104,17 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
             if(_newCO <= MinCurveOptimiser) _newCO = MinCurveOptimiser;
             if (_newCO >= newMaxCO) _newCO = newMaxCO;
 
+            // Make sure CO is within CO max limit
+            if(_newCO > 30) _newCO = 30;
+
             // Store the current CPU load for the next iteration
             prevCpuLoad = cpuLoad;
+
+            // Apply new CO
+            if (_newCO != _lastCO) UpdateCO(_newCO);
         }
 
-        private void UpdateTDP(int _newPowerLimit)
+        private static void UpdateTDP(int _newPowerLimit)
         {
             // Turn power limit into mW
             _newPowerLimit = _newPowerLimit * 1000;
@@ -140,9 +146,12 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
             _lastPowerLimit = _newPowerLimit;
         }
 
-        private void UpdateCO(int _newCO)
+        private static void UpdateCO(int _newCO)
         {
+            // Apply new CO
             SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(_newCO)));
+
+            // Save new CO to avoid unnecessary reapplies
             _lastCO = _newCO;
         }
     }
