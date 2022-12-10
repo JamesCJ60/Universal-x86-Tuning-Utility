@@ -20,11 +20,11 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
         private const int PowerLimitIncrement = 1; // watts
         private const int CurveOptimiserIncrement = 1; // CO
 
-        private static int _newPowerLimit;
-        private static int _currentPowerLimit;
-        private static int _newCO;
-        private static int _lastPowerLimit;
-        private static int _lastCO;
+        private static int _newPowerLimit; // watts
+        private static int _currentPowerLimit; // watts
+        private static int _newCO; // CO
+        private static int _lastPowerLimit = 0; // watts
+        private static int _lastCO = 0; // CO
 
         public static void UpdateLimits(int maxPower, int minPower, int maxTemp, int maxCO)
         {
@@ -85,27 +85,26 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
 
             // Change max CO limit based on CPU usage
             if(cpuLoad < 10) newMaxCO = MaxCurveOptimiser;
-            else if(cpuLoad > 10 && cpuLoad < 40) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 4;
-            else if (cpuLoad >= 40 && cpuLoad < 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 6;
-            else if (cpuLoad >= 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 8;
+            else if (cpuLoad >= 10 && cpuLoad < 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 2;
+            else if (cpuLoad >= 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 3;
 
             // Decrease the number by 10 if the CPU load is increased by 10
             if (cpuLoad > prevCpuLoad + 10)
             {
-                _newCO -= CurveOptimiserIncrement;
+                _newCO = _lastCO - CurveOptimiserIncrement;
             }
             // Increase the number by 10 if the CPU load is decreased by 10
             else if (cpuLoad < prevCpuLoad - 10)
             {
-                _newCO += CurveOptimiserIncrement;
+                _newCO = _lastCO + CurveOptimiserIncrement;
             }
 
             // Make sure min and max CO is not exceeded
             if(_newCO <= MinCurveOptimiser) _newCO = MinCurveOptimiser;
             if (_newCO >= newMaxCO) _newCO = newMaxCO;
 
-            // Make sure CO is within CO max limit
-            if(_newCO > 30) _newCO = 30;
+            // Make sure CO is within CO max limit + 5
+            if(_newCO > 35) _newCO = 35;
 
             // Store the current CPU load for the next iteration
             prevCpuLoad = cpuLoad;
