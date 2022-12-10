@@ -14,6 +14,7 @@ namespace RyzenSMUBackend
 
         public static string CPUModel = "";
 
+        //Zen1/+ - -1
         //RAVEN - 0
         //PICASSO - 1
         //DALI - 2

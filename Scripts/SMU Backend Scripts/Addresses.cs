@@ -15,6 +15,7 @@ using AATUV3.Scripts.SMU_Backend_Scripts;
 using System.Windows.Interop;
 using AATUV3.Scripts;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace RyzenSMUBackend
 {
@@ -105,6 +106,7 @@ namespace RyzenSMUBackend
         public static string[] SensorNames;
         public static string[] SensorOffsets;
 
+        //Zen1/+ - -1
         //RAVEN - 0
         //PICASSO - 1
         //DALI - 2
@@ -124,15 +126,6 @@ namespace RyzenSMUBackend
                 uint msg1 = 0x0;
                 uint msg2 = 0x0;
                 uint msg3 = 0x0;
-
-                //set SMU message address
-                //if (Families.FAMID == 0 || Families.FAMID == 1 || Families.FAMID == 2)
-                //{
-                //    msg1 = 0xc;
-                //    msg2 = 0xb;
-                //    msg3 = 0x3d;
-                //}
-
 
                 if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                 {
@@ -232,15 +225,20 @@ namespace RyzenSMUBackend
             if (RyzenAccess.SendPsmu(msg1, ref Args) == Smu.Status.OK)
             {
                 PMTableVersion = Args[0];
-            }
+            }          
 
             if (RyzenAccess.SendPsmu(msg2, ref Args) == Smu.Status.OK)
             {
                 //Set Address
-                if(Families.FAMID == 8) Address = Args[1] << 32 | Args[0];
-                else Address = Args[0];
+                Address = Args[0];
 
                 Args[0] = Address;
+                if (Families.FAMID == 8) 
+                {
+                    RyzenAccess.SendMp1(0xE, ref Args);
+                    Address = Args[0];
+                }
+
                 //Dump the Power Monitoring Table
                 RyzenAccess.SendPsmu(msg3, ref Args);
                 //Sleep so that the SMU has time to dump the PM Table properly.
