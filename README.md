@@ -8,7 +8,7 @@ PLEASE READ THIS: THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY 
 
 If you come across any issues or errors with UXTU please open an issue or ping `@JamesCJ#2022`, `@sbski#2700`, or `@ProjectSBC#9711` in our [discord community server](https://discord.gg/M3hVqnT4pQ). 
 
-If you would like to support the development of Universal x86 Tuning Utility by donating, you can do so via [Patreon](https://www.patreon.com/aatusoftware) or [PayPal](https://www.paypal.me/JamesCJ60)
+If you would like to support the development of Universal x86 Tuning Utility by donating, you can do so via [Patreon](https://www.patreon.com/uxtusoftware) or [PayPal](https://www.paypal.me/JamesCJ60)
 
 ## What is UXTU?
 - It's a tuning utility aimed to help you tune your device as you wish.
