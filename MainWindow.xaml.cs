@@ -168,6 +168,10 @@ namespace AATUV3
                 {
                     CPUName = CPUName.Substring(0, CPUName.IndexOf("U") + 1);
                 }
+                else if (CPUName.Contains("X3D"))
+                {
+                    CPUName = CPUName.Substring(0, CPUName.IndexOf("X3D") + 1);
+                }
                 else if (CPUName.Contains("X"))
                 {
                     CPUName = CPUName.Substring(0, CPUName.IndexOf("X") + 1);
@@ -176,7 +180,7 @@ namespace AATUV3
                 {
                     CPUName = CPUName.Substring(0, CPUName.IndexOf("V") + 1);
                 }
-                else if (CPUName.Contains("X"))
+                else if (CPUName.Contains("Z"))
                 {
                     CPUName = CPUName.Substring(0, CPUName.IndexOf("Z") + 1);
 
@@ -189,6 +193,9 @@ namespace AATUV3
                 {
                     CPUName = CPUName.Substring(0, CPUName.IndexOf("e") + 1);
                 }
+
+                Settings.Default.CPUName = CPUName;
+                Settings.Default.Save();
 
                 var startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#f10046");
                 var endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#be0037");

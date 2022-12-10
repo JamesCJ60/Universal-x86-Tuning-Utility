@@ -3,6 +3,7 @@ using RyzenSmu;
 using RyzenSMUBackend;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,19 +14,25 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
     {
         private int MaxPowerLimit = 125; // watts
         private int MinPowerLimit = 5; // watts
+        private int MaxCurveOptimiser = 30; // CO
+        private int MinCurveOptimiser = 0; // CO
         private int MaxTemperature = 105; // degrees Celsius
         private const int PowerLimitIncrement = 1; // watts
+        private const int CurveOptimiserIncrement = 1; // CO
 
         private int _newPowerLimit;
         private int _currentPowerLimit;
+        private int _newCO;
         private int _lastPowerLimit;
+        private int _lastCO;
 
-        public void UpdateLimits(int maxPower, int minPower, int maxTemp)
+        public void UpdateLimits(int maxPower, int minPower, int maxTemp, int maxCO)
         {
             // Update max and min power limti and max temp limit
             MaxPowerLimit = maxPower;
             MinPowerLimit = minPower;
             MaxTemperature = maxTemp;
+            MaxCurveOptimiser = maxCO;
         }
 
         //Zen1/+ - -1
@@ -42,10 +49,12 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
         //RAPHAEL/DRAGON RANGE - 10
         public void GetCurrentPowerLimit()
         {
+            // Get current fast PPT from APU
             if (Families.FAMID == 3 || Families.FAMID == 7)
             {
                 _currentPowerLimit = (int)GetSensor.getSensorValve("PPT_LIMIT_FAST");
             }
+            // Get Current PPT from CPU
             else if(Families.FAMID == 4 || Families.FAMID == 6)
             {
                 _currentPowerLimit = (int)GetSensor.getSensorValve("PPT_LIMIT");
@@ -67,6 +76,36 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
 
             // Apply new power limit if power limit has changed
             if(_newPowerLimit != _lastPowerLimit / 1000 || _currentPowerLimit != _newPowerLimit) UpdateTDP(_newPowerLimit);
+        }
+
+        private int prevCpuLoad = 0;
+        public void CurveOptimiserLimit(int cpuLoad)
+        {
+            int newMaxCO = MaxCurveOptimiser;
+
+            // Change max CO limit based on CPU usage
+            if(cpuLoad < 10) newMaxCO = MaxCurveOptimiser;
+            else if(cpuLoad > 10 && cpuLoad < 40) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement;
+            else if (cpuLoad >= 40 && cpuLoad < 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 4;
+            else if (cpuLoad >= 80) newMaxCO = MaxCurveOptimiser - CurveOptimiserIncrement * 6;
+
+            // Decrease the number by 10 if the CPU load is increased by 10
+            if (cpuLoad > prevCpuLoad + 10)
+            {
+                _newCO -= CurveOptimiserIncrement;
+            }
+            // Increase the number by 10 if the CPU load is decreased by 10
+            else if (cpuLoad < prevCpuLoad - 10)
+            {
+                _newCO += CurveOptimiserIncrement;
+            }
+
+            // Make sure min and max CO is not exceeded
+            if(_newCO <= MinCurveOptimiser) _newCO = MinCurveOptimiser;
+            if (_newCO >= newMaxCO) _newCO = newMaxCO;
+
+            // Store the current CPU load for the next iteration
+            prevCpuLoad = cpuLoad;
         }
 
         private void UpdateTDP(int _newPowerLimit)
@@ -99,6 +138,12 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
 
             // Save new TDP to avoid unnecessary reapplies
             _lastPowerLimit = _newPowerLimit;
+        }
+
+        private void UpdateCO(int _newCO)
+        {
+            SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(_newCO)));
+            _lastCO = _newCO;
         }
     }
 }
