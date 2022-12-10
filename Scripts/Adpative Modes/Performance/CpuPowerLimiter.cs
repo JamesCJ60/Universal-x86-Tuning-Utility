@@ -14,7 +14,6 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
 {
     public class CpuPowerLimiter
     {
-        public static int MaxCurveOptimiser = 30; // CO
         private static int MinCurveOptimiser = 0; // CO
         private const int PowerLimitIncrement = 2; // watts
         private const int CurveOptimiserIncrement = 1; // CO
@@ -109,7 +108,7 @@ namespace UXTU.Scripts.Adpative_Modes.Performance
         }
 
         private static int prevCpuLoad = -1;
-        public static void CurveOptimiserLimit(int cpuLoad)
+        public static void CurveOptimiserLimit(int cpuLoad, int MaxCurveOptimiser)
         {
             int newMaxCO = MaxCurveOptimiser;
 

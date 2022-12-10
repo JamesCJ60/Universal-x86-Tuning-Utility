@@ -115,56 +115,60 @@ namespace AATUV3
 
         void Adaptive_Tick(object sender, EventArgs e)
         {
-            if (GlobalVariables.AdaptivePerf == true)
+            try
             {
-                int maxPower, minPower, maxTemp, maxCO;
 
-                maxCO = 10;
-                maxPower = 65;
-                minPower = 5;
-                maxTemp = 95;
 
-                if (Families.FAMID == 3 || Families.FAMID == 7)
+                if (GlobalVariables.AdaptivePerf == true)
                 {
-                    maxTemp = 100;
+                    int maxPower, minPower, maxTemp, maxCO;
 
-                    if (Settings.Default.CPUName.Contains("GE")) { maxPower = 75; maxCO = 20; minPower = 8; maxTemp = 95; }
-                    else if (Settings.Default.CPUName.Contains("G")) { maxPower = 100; maxCO = 22; minPower = 8; maxTemp = 95; }
-                    else if (Settings.Default.CPUName.Contains("HX")) { maxPower = 105; maxCO = 22; }
-                    else if (Settings.Default.CPUName.Contains("HS")) { maxPower = 65; maxCO = 18; }
-                    else if (Settings.Default.CPUName.Contains("H")) { maxPower = 80; maxCO = 16; }
-                    else if (Settings.Default.CPUName.Contains("U")) { maxPower = 40; maxCO = 14; }
-                    else maxPower = 65;
+                    maxCO = 10;
+                    maxPower = 65;
+                    minPower = 5;
+                    maxTemp = 95;
 
-                    int cpuTemp = (int)GetSensor.getSensorValve("THM_VALUE_CORE");
-
-                    CpuPowerLimiter.GetCurrentPowerLimit(maxPower, minPower, maxTemp);
-                    CpuPowerLimiter.UpdatePowerLimit(cpuTemp, cpuLoad, maxPower, minPower, maxTemp);
-                    CpuPowerLimiter.CurveOptimiserLimit(cpuLoad);
-                }
-                else if (Families.FAMID == 4 || Families.FAMID == 6)
-                {
-                    minPower = 35;
-
-                    if (Settings.Default.CPUName.Contains("Ryzen 9") && Settings.Default.CPUName.Contains("X")) { maxPower = 235; maxCO = 15; }
-                    else if (Settings.Default.CPUName.Contains("Ryzen 9") && Settings.Default.CPUName.Contains("X3D")) { maxPower = 235; maxCO = 28; }
-                    else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("5800X3D")) { maxPower = 140; maxCO = 35; }
-                    else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("X3D")) { maxPower = 230; maxCO = 35; }
-                    else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("X")) { maxPower = 160; maxCO = 15; }
-                    else if (Settings.Default.CPUName.Contains("Ryzen 5") && Settings.Default.CPUName.Contains("X")) { maxPower = 140; maxCO = 15; }
-                    else
+                    if (Families.FAMID == 3 || Families.FAMID == 7)
                     {
-                        maxPower = 95; maxCO = 15;
+                        maxTemp = 100;
+
+                        if (Settings.Default.CPUName.Contains("GE")) { maxPower = 75; maxCO = 20; minPower = 8; maxTemp = 95; }
+                        else if (Settings.Default.CPUName.Contains("G")) { maxPower = 100; maxCO = 22; minPower = 8; maxTemp = 95; }
+                        else if (Settings.Default.CPUName.Contains("HX")) { maxPower = 105; maxCO = 22; }
+                        else if (Settings.Default.CPUName.Contains("HS")) { maxPower = 65; maxCO = 18; }
+                        else if (Settings.Default.CPUName.Contains("H")) { maxPower = 80; maxCO = 16; }
+                        else if (Settings.Default.CPUName.Contains("U")) { maxPower = 40; maxCO = 14; }
+                        else maxPower = 65;
+
+                        int cpuTemp = (int)GetSensor.getSensorValve("THM_VALUE_CORE");
+
+                        CpuPowerLimiter.GetCurrentPowerLimit(maxPower, minPower, maxTemp);
+                        CpuPowerLimiter.UpdatePowerLimit(cpuTemp, cpuLoad, maxPower, minPower, maxTemp);
+                        CpuPowerLimiter.CurveOptimiserLimit(cpuLoad, maxCO);
                     }
+                    else if (Families.FAMID == 4 || Families.FAMID == 6)
+                    {
+                        minPower = 35;
 
-                    int cpuTemp = (int)GetSensor.getSensorValve("THM_VALUE");
+                        if (Settings.Default.CPUName.Contains("Ryzen 9") && Settings.Default.CPUName.Contains("X")) { maxPower = 235; maxCO = 15; }
+                        else if (Settings.Default.CPUName.Contains("Ryzen 9") && Settings.Default.CPUName.Contains("X3D")) { maxPower = 235; maxCO = 28; }
+                        else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("5800X3D")) { maxPower = 140; maxCO = 35; }
+                        else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("X3D")) { maxPower = 230; maxCO = 35; }
+                        else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("X")) { maxPower = 160; maxCO = 15; }
+                        else if (Settings.Default.CPUName.Contains("Ryzen 5") && Settings.Default.CPUName.Contains("X")) { maxPower = 140; maxCO = 15; }
+                        else
+                        {
+                            maxPower = 95; maxCO = 15;
+                        }
 
-                    CpuPowerLimiter.GetCurrentPowerLimit(maxPower, minPower, maxTemp);
-                    CpuPowerLimiter.UpdatePowerLimit(cpuTemp, cpuLoad, maxPower, minPower, maxTemp);
-                    CpuPowerLimiter.CurveOptimiserLimit(cpuLoad);
+                        int cpuTemp = (int)GetSensor.getSensorValve("THM_VALUE");
+
+                        CpuPowerLimiter.GetCurrentPowerLimit(maxPower, minPower, maxTemp);
+                        CpuPowerLimiter.UpdatePowerLimit(cpuTemp, cpuLoad, maxPower, minPower, maxTemp);
+                        CpuPowerLimiter.CurveOptimiserLimit(cpuLoad, maxCO);
+                    }
                 }
-            }
-
+            } catch { }
         }
 
         public int cpuLoad = 0;

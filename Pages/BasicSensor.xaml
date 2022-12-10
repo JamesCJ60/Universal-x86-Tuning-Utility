@@ -115,6 +115,22 @@
                                 <TextBlock Foreground="White" FontSize="22" Name="lblSocket" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">CPU Power:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCPUpw" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">CPU L3$ Power:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblL3pw" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">SoC Power:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblSoCpw" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">RoC Power:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblRoCpw" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">Memory Power:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblMem" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
                             </StackPanel>
@@ -127,6 +143,10 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350" FontWeight="Bold" >Sensor</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47" TextAlignment="Center">Value</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">CPU L3$ Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblL3Clk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0" Name="iGPUClock">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">iGPU Clock:</TextBlock>
