@@ -67,7 +67,7 @@
     <Grid>
         <Border CornerRadius="5" Background="{DynamicResource PrimaryBackgroundColor}">
             <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0" CanContentScroll="False" Name="rightView" >
-                <StackPanel Margin="35,12,35,10">
+                <StackPanel Margin="35,35,35,10">
                     <Border BorderBrush="White" BorderThickness="2" Padding="10" CornerRadius="8">
                         <StackPanel>
                             <TextBlock Foreground="White" FontSize="28">Temperatures:</TextBlock>
@@ -137,16 +137,24 @@
                                 <TextBlock Foreground="White" FontSize="22" Name="lblSoCClk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
-                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Memory Clock:</TextBlock>
-                                <TextBlock Foreground="White" FontSize="22" Name="lblMemClk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Uncore Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblUncoreClk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
                                 <TextBlock Foreground="White" FontSize="22" MinWidth="350">Fabric Clock:</TextBlock>
                                 <TextBlock Foreground="White" FontSize="22" Name="lblFabricClk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
-                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Uncore Clock:</TextBlock>
-                                <TextBlock Foreground="White" FontSize="22" Name="lblUncoreClk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Memory Clock:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblMemClk" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Memory Transfer:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblMemClk2" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Max Bandwidth:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblMemBW" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80°C/105°C</TextBlock>
                             </StackPanel>
                         </StackPanel>
                     </Border>

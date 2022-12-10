@@ -23,6 +23,10 @@ using LibreHardwareMonitor.Hardware;
 using UXTU.Properties;
 using RyzenSMUBackend;
 using System.Windows.Forms;
+using UXTU.Scripts;
+using UXTU.Scripts.Adpative_Modes.Performance;
+using AATUV3.Scripts.SMU_Backend_Scripts;
+using MessageBox = System.Windows.MessageBox;
 
 namespace AATUV3
 {
@@ -43,13 +47,19 @@ namespace AATUV3
             DispatcherTimer checkKeyInput = new DispatcherTimer();
             checkKeyInput.Interval = TimeSpan.FromSeconds(0.15);
             checkKeyInput.Tick += KeyShortCuts_Tick;
-            checkKeyInput.Start();
+            //checkKeyInput.Start();
 
             //set up timer for sensor update
             DispatcherTimer sensor = new DispatcherTimer();
-            sensor.Interval = TimeSpan.FromSeconds(2);
+            sensor.Interval = TimeSpan.FromSeconds(1);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
+
+            //set up timer for sensor update
+            DispatcherTimer Adaptive = new DispatcherTimer();
+            Adaptive.Interval = TimeSpan.FromSeconds(1);
+            Adaptive.Tick += Adaptive_Tick;
+            Adaptive.Start();
 
             autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
             autoReapply.Tick += AutoReapply_Tick;
@@ -102,9 +112,66 @@ namespace AATUV3
 
         public static bool hidden = true;
 
+
+        void Adaptive_Tick(object sender, EventArgs e)
+        {
+            if (GlobalVariables.AdaptivePerf == true)
+            {
+                int maxPower, minPower, maxTemp, maxCO;
+
+                maxCO = 10;
+                maxPower = 65;
+                minPower = 5;
+                maxTemp = 95;
+
+                if (Families.FAMID == 3 || Families.FAMID == 7)
+                {
+                    maxTemp = 100;
+
+                    if (Settings.Default.CPUName.Contains("GE")) { maxPower = 75; maxCO = 20; minPower = 8; maxTemp = 95; }
+                    else if (Settings.Default.CPUName.Contains("G")) { maxPower = 100; maxCO = 22; minPower = 8; maxTemp = 95; }
+                    else if (Settings.Default.CPUName.Contains("HX")) { maxPower = 105; maxCO = 22; }
+                    else if (Settings.Default.CPUName.Contains("HS")) { maxPower = 65; maxCO = 18; }
+                    else if (Settings.Default.CPUName.Contains("H")) { maxPower = 80; maxCO = 16; }
+                    else if (Settings.Default.CPUName.Contains("U")) { maxPower = 40; maxCO = 14; }
+                    else maxPower = 65;
+
+                    int cpuTemp = (int)GetSensor.getSensorValve("THM_VALUE_CORE");
+
+                    CpuPowerLimiter.GetCurrentPowerLimit(maxPower, minPower, maxTemp);
+                    CpuPowerLimiter.UpdatePowerLimit(cpuTemp, cpuLoad, maxPower, minPower, maxTemp);
+                    CpuPowerLimiter.CurveOptimiserLimit(cpuLoad);
+                }
+                else if (Families.FAMID == 4 || Families.FAMID == 6)
+                {
+                    minPower = 35;
+
+                    if (Settings.Default.CPUName.Contains("Ryzen 9") && Settings.Default.CPUName.Contains("X")) { maxPower = 235; maxCO = 15; }
+                    else if (Settings.Default.CPUName.Contains("Ryzen 9") && Settings.Default.CPUName.Contains("X3D")) { maxPower = 235; maxCO = 28; }
+                    else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("5800X3D")) { maxPower = 140; maxCO = 35; }
+                    else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("X3D")) { maxPower = 230; maxCO = 35; }
+                    else if (Settings.Default.CPUName.Contains("Ryzen 7") && Settings.Default.CPUName.Contains("X")) { maxPower = 160; maxCO = 15; }
+                    else if (Settings.Default.CPUName.Contains("Ryzen 5") && Settings.Default.CPUName.Contains("X")) { maxPower = 140; maxCO = 15; }
+                    else
+                    {
+                        maxPower = 95; maxCO = 15;
+                    }
+
+                    int cpuTemp = (int)GetSensor.getSensorValve("THM_VALUE");
+
+                    CpuPowerLimiter.GetCurrentPowerLimit(maxPower, minPower, maxTemp);
+                    CpuPowerLimiter.UpdatePowerLimit(cpuTemp, cpuLoad, maxPower, minPower, maxTemp);
+                    CpuPowerLimiter.CurveOptimiserLimit(cpuLoad);
+                }
+            }
+
+        }
+
+        public int cpuLoad = 0;
+
         void AutoReapply_Tick(object sender, EventArgs e)
         {
-            if ((bool)Settings.Default.AutoReapply == true)
+            if ((bool)Settings.Default.AutoReapply == true && GlobalVariables.AdaptivePerf == false)
             {
                 string commands = (string)Settings.Default.RyzenAdjArguments;
                 //Check if RyzenAdjArguments is populated
@@ -202,10 +269,10 @@ namespace AATUV3
 
         void SensorUpdate_Tick(object sender, EventArgs e)
         {
-            if (hidden == false)
+            if (hidden == false || GlobalVariables.AdaptivePerf == true)
             {
                 Sensors.updateSensors();
-                updateSensorsInfo();
+                if (hidden == false) updateSensorsInfo();
                 getCPUInfo();
             }
 
@@ -300,15 +367,20 @@ namespace AATUV3
                             if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
                             {
 
-                                    lblTemp.Content = (int)sensor.Value.GetValueOrDefault() + "°C";
-                                
+                                lblTemp.Content = (int)sensor.Value.GetValueOrDefault() + "°C";
+
                             }
 
                             if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("Package"))
                             {
-                                
-                                    lblPower.Content = (int)sensor.Value.GetValueOrDefault() + "w";
-                                
+
+                                lblPower.Content = (int)sensor.Value.GetValueOrDefault() + "w";
+
+                            }
+
+                            if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Total"))
+                            {
+                                cpuLoad = (int)sensor.Value.GetValueOrDefault();
                             }
                         }
                     }

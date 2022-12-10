@@ -141,58 +141,7 @@ namespace AATUV3
 
                 Families.SetFam();
 
-                //Remove everything before Ryzen/Althon
-                if (CPUName.Contains("R"))
-                {
-                    CPUName = CPUName.Substring(CPUName.IndexOf("R"));
-                }
-                else
-                {
-                    CPUName = CPUName.Substring(CPUName.IndexOf("A"));
-                }
-
-                //Remove everything after the model identifier
-                if (CPUName.Contains("HX"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("X") + 1);
-                }
-                else if (CPUName.Contains("HS"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("S") + 1);
-                }
-                else if (CPUName.Contains("H"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("H") + 1);
-                }
-                else if (CPUName.Contains("U"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("U") + 1);
-                }
-                else if (CPUName.Contains("X3D"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("X3D") + 1);
-                }
-                else if (CPUName.Contains("X"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("X") + 1);
-                }
-                else if (CPUName.Contains("V"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("V") + 1);
-                }
-                else if (CPUName.Contains("Z"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("Z") + 1);
-
-                }
-                else if (CPUName.Contains("E"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("E") + 1);
-                }
-                else if (CPUName.Contains("e"))
-                {
-                    CPUName = CPUName.Substring(0, CPUName.IndexOf("e") + 1);
-                }
+                CPUName.Replace(" with Radeon Graphics", "");
 
                 Settings.Default.CPUName = CPUName;
                 Settings.Default.Save();

@@ -11,6 +11,9 @@ namespace UXTU.Scripts
     {
         public static System.Diagnostics.Process magpieProcess = new System.Diagnostics.Process();
         public static System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+
+        public static bool AdaptivePerf = true;
+
         public static void UpdateMagpie()
         {
             string path = (string)Settings.Default["Path"] + "\\bin\\magpie\\Magpie.exe";
