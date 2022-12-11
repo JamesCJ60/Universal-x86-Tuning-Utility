@@ -66,7 +66,7 @@
     </UserControl.Resources>
     <Grid>
         <Border CornerRadius="5" Background="{DynamicResource PrimaryBackgroundColor}">
-            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0" CanContentScroll="False" Name="rightView" >
+            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0" CanContentScroll="False" Name="rightView" ScrollViewer.PanningMode="VerticalOnly">
                 <StackPanel Margin="35,35,35,10">
                     <Border BorderBrush="White" BorderThickness="2" Padding="10" CornerRadius="8">
                         <StackPanel>

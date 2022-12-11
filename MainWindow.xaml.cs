@@ -141,23 +141,23 @@ namespace AATUV3
 
                 Families.SetFam();
 
-                CPUName.Replace(" with Radeon Graphics", "");
+                CPUName = CPUName.Replace("with Radeon Graphics         ", null);
 
                 Settings.Default.CPUName = CPUName;
                 Settings.Default.Save();
 
-                var startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#f10046");
-                var endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#be0037");
+                var startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#be0037");
+                var endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff6748");
 
                 Application.Current.Resources["PrimaryBlueColor"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 1), new Point(1, 0));
 
-                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#eb0045");
-                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#b80036");
+                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#98002c");
+                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#cc5239");
 
                 Application.Current.Resources["PrimaryBlueColorHover"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 0), new Point(1, 1));
 
-                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#a80132");
-                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#750123");
+                startColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#790023");
+                endColour = (SolidColorBrush)new BrushConverter().ConvertFrom("#a3412d");
                 Application.Current.Resources["PrimaryBlueColorDown"] = new LinearGradientBrush(startColour.Color, endColour.Color, new Point(0, 0), new Point(1, 1));
 
                 //RAVEN - 0

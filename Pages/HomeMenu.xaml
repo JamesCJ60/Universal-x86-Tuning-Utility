@@ -69,11 +69,11 @@
 
         <Label Content="Welcome To" Foreground="White" FontSize="50" Margin="0,56,0,0" Height="79" VerticalAlignment="Top" HorizontalAlignment="Center"/>
         <Label Name="lblAppName" Content="AMD APU Tuning Utility" Foreground="White" FontSize="82" Margin="0,104,0,0" Height="126" VerticalAlignment="Top" HorizontalAlignment="Center"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="35,313,565,117" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Join Our Discord" Height="70" Width="250" Click="Discord_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="300,313,300,117" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Join Our Reddit" Height="70" Width="250" Click="Reddit_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="565,313,35,117" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Support Us" Height="70" Width="250" Click="SupportUs_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="175,397,425,33" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Help" Height="70" Width="250" Click="Help_Click"/>
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="440,397,160,33" Background="{DynamicResource PrimaryBlueColor}"  FontSize="20" Foreground="White" Content="Latest Releases" Height="70" Width="250" Click="Releases_Click"/>
+        <RadioButton Style="{DynamicResource ButtonWithIcon}" Tag="{DynamicResource Discord}" Margin="35,313,565,117"  FontSize="20" Foreground="White" Content="Join Our Discord" Height="70" Width="245" Click="Discord_Click"/>
+        <RadioButton Style="{DynamicResource ButtonWithIcon}" Tag="{DynamicResource Reddit}" Margin="300,313,300,117"  FontSize="20" Foreground="White" Content="Join Our Reddit" Height="70" Width="250" Click="Reddit_Click"/>
+        <RadioButton Style="{DynamicResource ButtonWithIcon}" Tag="{DynamicResource Patreon}" Margin="565,313,35,117"  FontSize="20" Foreground="White" Content="Support Us" Height="70" Width="250" Click="SupportUs_Click"/>
+        <RadioButton Style="{DynamicResource ButtonWithIcon}" Tag="{DynamicResource Help}" Margin="175,397,425,33" FontSize="20" Foreground="White" Content="Help" Height="70" Width="250" Click="Help_Click"/>
+        <RadioButton Style="{DynamicResource ButtonWithIcon}" Tag="{DynamicResource GitHub}" Margin="440,397,160,33" FontSize="20" Foreground="White" Content="Latest Releases" Height="70" Width="250" Click="Releases_Click"/>
         <TextBlock  Foreground="White" FontSize="16" Margin="1,0,0,-1.5" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             
             <Run Text="Universal x86 Tuning Utility - V1.0.0 Beta 9"/>

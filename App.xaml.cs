@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using UXTU.Scripts;
 
 namespace AATUV3
@@ -14,14 +15,9 @@ namespace AATUV3
 
     public partial class App : Application
     {
-        private void Application_Exit(object sender, ExitEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
-
-        }
-
-        private void Application_SessionEnding(object sender, SessionEndingCancelEventArgs e)
-        {
-
+            _ = Tablet.TabletDevices;
         }
     }
 }

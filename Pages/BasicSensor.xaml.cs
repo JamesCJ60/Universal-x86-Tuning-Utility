@@ -40,6 +40,8 @@ namespace AATUV3.Pages
         {
             InitializeComponent();
 
+            _ = Tablet.TabletDevices;
+
             updateSensor();
 
             //set up timer for sensor update

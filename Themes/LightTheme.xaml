@@ -3,7 +3,7 @@
 
     <!-- Background Colors -->
     <SolidColorBrush x:Key="PrimaryBackgroundColor" Color="#141414"/>
-    <SolidColorBrush x:Key="SecundaryBackgroundColor" Color="#1e1e22"/> 
+    <SolidColorBrush x:Key="SecundaryBackgroundColor" Color="#222226"/> 
 
     <!-- Primary Colors -->
     <LinearGradientBrush x:Key="PrimaryBlueColor" EndPoint="0,0" StartPoint="1,1"/>

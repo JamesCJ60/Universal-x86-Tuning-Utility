@@ -24,7 +24,7 @@ namespace AATUV3.Pages
     public partial class ProjectSnowdrop : UserControl
     {
         string path = Settings.Default["Path"].ToString();
-        string apuname = (string)Settings.Default["APUName"];
+        string apuname = (string)Settings.Default["CPUName"];
         string APUPresetToLoad = "";
         string preset1 = "";
         string preset2 = "";
@@ -114,6 +114,16 @@ namespace AATUV3.Pages
                     if (apuname.Contains("H") || apuname.Contains("Z"))
                     {
                         APUPresetToLoad = "H-HS";
+                    }
+                    if (apuname.Contains("GE"))
+                    {
+                        APUPresetToLoad = "GE";
+                        imgDevice.Source = new BitmapImage(new Uri(apuPreset + "\\config-DT-AM4.png"));
+                    }
+                    else if (apuname.Contains("G"))
+                    {
+                        APUPresetToLoad = "G";
+                        imgDevice.Source = new BitmapImage(new Uri(apuPreset + "\\config-DT-AM4.png"));
                     }
 
                     var lines = File.ReadAllLines(apuPreset + $"\\{APUPresetToLoad}\\config.txt");
