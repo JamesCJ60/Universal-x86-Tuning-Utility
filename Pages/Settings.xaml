@@ -1,11 +1,10 @@
-﻿<UserControl
+﻿<UserControl x:Class="AATUV3.Pages.SettingsMenu"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AATUV3.Pages"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:Controls="clr-namespace:Stopbyte.Controls" x:Class="AATUV3.Pages.SettingsMenu"
              mc:Ignorable="d" 
              d:DesignHeight="550" d:DesignWidth="900">
     <UserControl.Resources>
@@ -70,7 +69,7 @@
         <Label Content="General Settings:" FontSize="18" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6,8,0,0" Width="310"/>
 
         <!--Temp Limit-->
-        <CheckBox x:Name="cbStartOnBoot" Content="Start on System Boot" HorizontalAlignment="Left" Margin="33,47,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18" ToolTipService.ToolTip="Controls the APU's soft throttle temperature limit in °C"/>
+        <CheckBox Name="cbStartOnBoot" Content="Start on System Boot" HorizontalAlignment="Left" Margin="33,47,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18" ToolTipService.ToolTip="Controls the APU's soft throttle temperature limit in °C"/>
 
         <!--Skin Temp Limit-->
         <CheckBox x:Name="cbStartMinimised" Content="Start Minimised" HorizontalAlignment="Left" Margin="33,71,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
@@ -80,7 +79,7 @@
         <xctk:IntegerUpDown x:Name="nudAutoReapply" Watermark="Enter Integer" Width="95" Height="20" Margin="314,94,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="0" Value="0"/>
         <Label Content="Overlay Settings:" FontSize="18" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,230,0,0" Width="310" Height="34"/>
         <CheckBox x:Name="cbSensorOverlay" Content="(Alpha) Enable Sensor Overlay (UXTU Restart Required)" HorizontalAlignment="Left" Margin="33,268,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="411" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
-        <TextBlock Margin="33,294,456,209" Foreground="White" TextWrapping="Wrap" FontSize="11.5"><Run Text="Enables sensor overlay that can be toggled with Left-Alt + O or Dpad-Up + Left Shoulder Button for controllers. Includes FPS counter that currently only works in DirectX games. Use fullscreen borderless for the best game compatibility."/></TextBlock>
+        <TextBlock Margin="33,294,456,209" Foreground="White" TextWrapping="Wrap" FontSize="11.5">Enables sensor overlay that can be toggled with Left-Alt + O or Dpad-Up + Left Shoulder Button for controllers. Includes FPS counter that currently only works in DirectX games. Use fullscreen borderless for the best game compatibility.</TextBlock>
         <CheckBox x:Name="cbApplyOC" Content="Apply OC menu options on start" HorizontalAlignment="Left" Margin="33,117,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
         <CheckBox x:Name="cbMagpie" Content="Enable Magpie FSR" HorizontalAlignment="Left" Margin="33,139,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
         <TextBlock Margin="33,157,456,361" Foreground="White" TextWrapping="Wrap" FontSize="11.5"><Run Text="After being enabled, use ALT + F or Dpad-Down + A + Right Shoulder Button to toggle Magpie window capture. Ensure no intences of Magpie are open."/></TextBlock>
