@@ -69,8 +69,8 @@
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,4,0">
                     <TextBlock Width="425" TextWrapping="Wrap" Margin="0,0,60,0" FontSize="13" Foreground="{DynamicResource PrimaryBlueColor}" >Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages.</TextBlock>
-                    <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,4,3" Background="{DynamicResource PrimaryBlueColor}"  FontSize="16" Foreground="White" Content="Disable CPU OC" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="Disable_Click"/>
-                    <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,3,3" Background="{DynamicResource PrimaryBlueColor}"  FontSize="16" Foreground="White" Content="Apply Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="Apply_Click"/>
+                    <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Disable}" Margin="0,0,5,3" Foreground="White" Content="Undo CPU OC" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Disable_Click"/>
+                    <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Apply}" Margin="0,0,3,3" Foreground="White" Content="Apply Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Apply_Click"/>
                 </StackPanel>
                 <DockPanel LastChildFill="True" Margin="6,0,0,0">
                     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0" CanContentScroll="False" Name="rightView" >
@@ -117,7 +117,7 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <StackPanel Margin="0,6,0,0">
+                                <StackPanel Margin="0,12,0,0">
                                     <CheckBox Name="cbdGPUCore" Content="NVIDIA dGPU Offset Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
                                     <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
                                         <Label Content="Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150" />

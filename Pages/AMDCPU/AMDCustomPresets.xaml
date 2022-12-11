@@ -68,7 +68,7 @@
         <Border CornerRadius="5" Background="{DynamicResource PrimaryBackgroundColor}">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,4,0">
-                    <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,3,3" Background="{DynamicResource PrimaryBlueColor}"  FontSize="16" Foreground="White" Content="Apply Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="Apply_Click"/>
+                    <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Apply}" Margin="0,0,3,3" Foreground="White" Content="Apply Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Apply_Click"/>
                 </StackPanel>
                 <DockPanel LastChildFill="True" Margin="6,0,0,0">
                     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0" CanContentScroll="False" Name="rightView" >

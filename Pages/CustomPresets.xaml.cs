@@ -110,7 +110,7 @@ namespace AATUV3.Pages
         {
             try
             {
-                if (cmbPresets.SelectedItem.ToString() != null || cmbPresets.SelectedItem.ToString() != "")
+                if (cmbPresets.SelectedItem.ToString() != null && cmbPresets.SelectedItem.ToString() != "" && cmbPresets.SelectedItem != null)
                 {
                     string path = Settings.Default["Path"].ToString() + "\\presets";
                     var lines = File.ReadAllLines(path + "\\AMD APU\\" + cmbPresets.SelectedItem.ToString() + ".txt");
@@ -195,24 +195,28 @@ namespace AATUV3.Pages
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.ToString());
+                
             }
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if (cmbPresets.SelectedItem.ToString() != null || cmbPresets.SelectedItem.ToString() != "")
+            try
             {
-                string path = Settings.Default["Path"].ToString() + "\\presets";
-                path = path + "\\" + cmbPresets.SelectedItem.ToString() + ".txt";
-
-                if (File.Exists(path))
+                if (cmbPresets.SelectedItem.ToString() != null || cmbPresets.SelectedItem.ToString() != "")
                 {
-                    File.Delete(path);
-                }
+                    string path = Settings.Default["Path"].ToString() + "\\presets\\AMD APU";
+                    path = path + "\\" + cmbPresets.SelectedItem.ToString() + ".txt";
 
-                UpdatePresetList();
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+
+                    UpdatePresetList();
+                }
             }
+            catch { }
         }
 
         private void Apply_Click(object sender, RoutedEventArgs e)

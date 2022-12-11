@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="Themes/scrollbar.xaml"/>
 
                 <ResourceDictionary Source="Themes/Slider.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

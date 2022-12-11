@@ -63,9 +63,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        
     </UserControl.Resources>
     <Grid Loaded="Grid_Loaded">
-        <Button Style="{DynamicResource RoundedButtonStyle}" Margin="0,0,7,3" Background="{DynamicResource PrimaryBlueColor}"  FontSize="16" Foreground="White" Content="Save Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="170" Click="btnSave_Click"/>
+        <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Save}" Margin="0,0,7,3" Foreground="White" Content="Save Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="btnSave_Click"/>
         <Label Content="General Settings:" FontSize="18" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6,8,0,0" Width="310"/>
 
         <!--Temp Limit-->
@@ -77,11 +79,11 @@
         <!--STAPM Limit-->
         <CheckBox x:Name="cbAutoReapply" Content="Auto Reapply (s):" HorizontalAlignment="Left" Margin="33,95,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
         <xctk:IntegerUpDown x:Name="nudAutoReapply" Watermark="Enter Integer" Width="95" Height="20" Margin="314,94,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Minimum="0" Value="0"/>
-        <Label Content="Overlay Settings:" FontSize="18" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,230,0,0" Width="310" Height="34"/>
-        <CheckBox x:Name="cbSensorOverlay" Content="(Alpha) Enable Sensor Overlay (UXTU Restart Required)" HorizontalAlignment="Left" Margin="33,268,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="411" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
-        <TextBlock Margin="33,294,456,209" Foreground="White" TextWrapping="Wrap" FontSize="11.5">Enables sensor overlay that can be toggled with Left-Alt + O or Dpad-Up + Left Shoulder Button for controllers. Includes FPS counter that currently only works in DirectX games. Use fullscreen borderless for the best game compatibility.</TextBlock>
+        <Label Visibility="Collapsed" Content="Overlay Settings:" FontSize="18" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,230,0,0" Width="310" Height="34"/>
+        <CheckBox Visibility="Collapsed" x:Name="cbSensorOverlay" Content="(Alpha) Enable Sensor Overlay (UXTU Restart Required)" HorizontalAlignment="Left" Margin="33,268,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="411" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
+        <TextBlock Visibility="Collapsed" Margin="33,294,456,209" Foreground="White" TextWrapping="Wrap" FontSize="11.5">Enables sensor overlay that can be toggled with Left-Alt + O or Dpad-Up + Left Shoulder Button for controllers. Includes FPS counter that currently only works in DirectX games. Use fullscreen borderless for the best game compatibility.</TextBlock>
         <CheckBox x:Name="cbApplyOC" Content="Apply OC menu options on start" HorizontalAlignment="Left" Margin="33,117,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
         <CheckBox x:Name="cbMagpie" Content="Enable Magpie FSR" HorizontalAlignment="Left" Margin="33,139,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
-        <TextBlock Margin="33,157,456,361" Foreground="White" TextWrapping="Wrap" FontSize="11.5"><Run Text="After being enabled, use ALT + F or Dpad-Down + A + Right Shoulder Button to toggle Magpie window capture. Ensure no intences of Magpie are open."/></TextBlock>
+        <TextBlock Margin="33,163,456,355" Foreground="White" TextWrapping="Wrap" FontSize="11.5"><Run Text="After being enabled, use ALT + F to toggle Magpie window capture. Ensure no intences of Magpie are open."/></TextBlock>
     </Grid>
 </UserControl>

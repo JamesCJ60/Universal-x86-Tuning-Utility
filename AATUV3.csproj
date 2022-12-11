@@ -82,6 +82,7 @@
       <HintPath>bin\x64\Debug\LibreHardwareMonitorLib.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
