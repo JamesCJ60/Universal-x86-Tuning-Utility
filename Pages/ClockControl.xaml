@@ -68,7 +68,7 @@
         <Border CornerRadius="5" Background="{DynamicResource PrimaryBackgroundColor}">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,4,0">
-                    <TextBlock Width="425" TextWrapping="Wrap" Margin="0,0,60,0" FontSize="13" Foreground="{DynamicResource PrimaryBlueColor}" >Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages.</TextBlock>
+                    <TextBlock Width="425" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="0,0,20,0" FontSize="13" Foreground="{DynamicResource PrimaryBlueColor}" >Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages.</TextBlock>
                     <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Disable}" Margin="0,0,5,3" Foreground="White" Content="Undo CPU OC" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Disable_Click"/>
                     <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Apply}" Margin="0,0,3,3" Foreground="White" Content="Apply Settings" Height="45" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Apply_Click"/>
                 </StackPanel>
@@ -107,18 +107,8 @@
                                         <xctk:IntegerUpDown Name="nudCOIGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-999" Value="0" Maximum="30" Increment="1"/>
                                     </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                            <StackPanel DockPanel.Dock="Right" Margin="0,6,0,0">
-                                <StackPanel Margin="0,6,0,0">
-                                    <Label Content="Radeon iGPU Settings:" FontSize="18" Foreground="White"/>
-                                    <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
-                                        <CheckBox Name="cbiGPU" Content="iGPU Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudiGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1500" Increment="25"/>
-                                    </StackPanel>
-                                </StackPanel>
-
-                                <StackPanel Margin="0,12,0,0">
-                                    <CheckBox Name="cbdGPUCore" Content="NVIDIA dGPU Offset Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
+                                <StackPanel Margin="0,16,0,0">
+                                    <CheckBox Name="cbdGPUCore" Content="NVIDIA dGPU Offset Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="3,0,0,0" />
                                     <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
                                         <Label Content="Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150" />
                                         <xctk:IntegerUpDown Name="nuddGPUCore" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="25"/>
@@ -128,6 +118,54 @@
                                         <xctk:IntegerUpDown Name="nuddGPUMem" Watermark="Enter Integer" Width="95" Height="20" Minimum="-700" Value="0" Increment="25"/>
                                     </StackPanel>
                                 </StackPanel>
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Right" Margin="0,6,0,0" Width="275">
+                                <StackPanel Margin="0,6,0,0">
+                                    <Label Content="Radeon iGPU Settings:" FontSize="18" Foreground="White"/>
+                                    <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
+                                        <CheckBox Name="cbiGPU" Content="iGPU Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
+                                        <xctk:IntegerUpDown Name="nudiGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1500" Increment="25"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,16,0,0">
+                                    <CheckBox Name="cbRaddGPUCore" Content="Radeon dGPU Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="3,0,0,0" />
+                                    <StackPanel Margin="20,5,0,0">
+                                        <RadioButton IsChecked="True" Name="rbFactory" Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16">Default</RadioButton>
+                                        <RadioButton Name="rbUVGPU"  Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16">Undervolt GPU</RadioButton>
+                                        <RadioButton Name="rbOCGPU"  Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16">Overclock GPU</RadioButton>
+                                        <RadioButton Name="rbOCVRAM" Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16">Overclock VRAM</RadioButton>
+                                        <RadioButton Name="rbMan" Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16" Unchecked="rbMan_Unchecked" Checked="rbMan_Checked">Manual</RadioButton>
+                                    </StackPanel>
+                                    <StackPanel Name="spManual" Visibility="Collapsed">
+                                        <StackPanel Orientation="Horizontal" Margin="30,2,0,0">
+                                            <Label Content="Min Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150" />
+                                            <xctk:IntegerUpDown Name="nudMinClockCore" Watermark="Enter Integer" Width="95" Height="20" Minimum="500" Value="500" Increment="25"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="30,-5,0,0">
+                                            <Label Content="Max Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
+                                            <xctk:IntegerUpDown Name="nudMaxClockMem" Watermark="Enter Integer" Width="95" Height="20" Minimum="500" Value="1800" Increment="25"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="30,-5,0,0">
+                                            <Label Content="Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
+                                            <xctk:IntegerUpDown Name="nudVoltage" Watermark="Enter Integer" Width="95" Height="20" Minimum="725" Maximum="1250" Value="1025" Increment="2"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="30,-5,0,0">
+                                            <Label Content="Power Limit:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
+                                            <xctk:IntegerUpDown Name="nudPower" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="2"/>
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Margin="30,5,0,0">
+                                            <RadioButton Name="rbDefault" IsChecked="True" Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16">Default Timing</RadioButton>
+                                            <RadioButton Name="rbFast" Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16" Margin="12,0,0,0">Fast Timing</RadioButton>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="30,2,0,0">
+                                            <Label Content="VRAM Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
+                                            <xctk:IntegerUpDown Name="nudVRAMClockMem" Watermark="Enter Integer" Width="95" Height="20" Minimum="1000" Value="2000" Increment="2"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                                
                             </StackPanel>
                         </DockPanel>
                     </ScrollViewer>

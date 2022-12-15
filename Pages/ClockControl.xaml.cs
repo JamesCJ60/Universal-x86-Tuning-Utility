@@ -17,6 +17,7 @@ using AATUV3.Scripts.SMU_Backend_Scripts;
 using AATUV3.Scripts;
 using UXTU.Properties;
 using UXTU.Scripts.Adpative_Modes.Performance;
+using System.Threading;
 
 namespace AATUV3.Pages
 {
@@ -51,7 +52,8 @@ namespace AATUV3.Pages
             SendCommand.set_disable_oc();
         }
 
-        private void Apply_Click(object sender, RoutedEventArgs e)
+        public static int power, minClock, maxClock, Volt, VRAMClock, VRAMMode;
+        private async void Apply_Click(object sender, RoutedEventArgs e)
         {
             int i = 0;
             Settings.Default.AllCoreClk = (int)nudCoreClock.Value;
@@ -75,7 +77,7 @@ namespace AATUV3.Pages
                 i++;
             }
 
-            if(cbCoreVolt.IsChecked == true)
+            if (cbCoreVolt.IsChecked == true)
             {
                 double vid = Math.Round((double)nudCoreVolt.Value / 1000, 2);
                 SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
@@ -84,19 +86,20 @@ namespace AATUV3.Pages
                 i++;
             }
 
-            if(cbBus.IsChecked == true)
+            if (cbBus.IsChecked == true)
             {
                 RwMmioAmd MMIO = new RwMmioAmd();
                 MMIO.SetBclk(Convert.ToDouble(nudBus.Value));
                 i++;
             }
 
-            if(cbCOCPU.IsChecked == true)
+            if (cbCOCPU.IsChecked == true)
             {
-                if(nudCOCPU.Value >= 0)
+                if (nudCOCPU.Value >= 0)
                 {
                     SendCommand.set_coall((uint)nudCOCPU.Value);
-                }else
+                }
+                else
                 {
                     SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
                 }
@@ -116,13 +119,13 @@ namespace AATUV3.Pages
                 i++;
             }
 
-            if(cbiGPU.IsChecked == true)
+            if (cbiGPU.IsChecked == true)
             {
                 SendCommand.set_gfx_clk((uint)nudiGPU.Value);
                 i++;
             }
 
-            if(cbdGPUCore.IsChecked == true)
+            if (cbdGPUCore.IsChecked == true)
             {
                 //Get RyzenAdj path
                 string path = "\\bin\\oc.exe";
@@ -133,7 +136,47 @@ namespace AATUV3.Pages
                 i++;
             }
 
-            if(i == 0)
+            if (cbRaddGPUCore.IsChecked == true)
+            {
+                // Get path
+                string path = "\\bin\\vramoc.exe";
+                string path2 = "\\bin\\coreoc.exe";
+                string path3 = "\\bin\\auto.exe";
+                string path4 = "\\bin\\power.exe";
+
+                // Pass settings on to be applied
+                if (rbFactory.IsChecked == true) BasicExeBackend.ApplySettings(path3, "0", true);
+                else if (rbUVGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 0", true);
+                else if (rbOCGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 1", true);
+                else if (rbOCVRAM.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 2", true);
+                else
+                {
+                    power = (int)nudPower.Value;
+                    minClock = (int)nudMinClockCore.Value;
+                    maxClock = (int)nudMaxClockMem.Value;
+                    Volt = (int)nudVoltage.Value;
+                    VRAMClock = (int)nudVRAMClockMem.Value;
+                    VRAMMode = 1;
+
+                    await Task.Run(() =>
+                    {
+                        BasicExeBackend.ApplySettings(path3, "0", true);
+                        Thread.Sleep(250);
+                        BasicExeBackend.ApplySettings(path2, "3 " + minClock + " " + maxClock + " " + Volt, true);
+                        Thread.Sleep(100);
+                        BasicExeBackend.ApplySettings(path4, "1 " + power, true);
+                        Thread.Sleep(100);
+                        BasicExeBackend.ApplySettings(path, "4 " + VRAMClock, true);
+                        Thread.Sleep(250);
+                        BasicExeBackend.ApplySettings(path, "3 " + VRAMMode, true);
+                        Thread.Sleep(100);
+                    });
+
+                }
+                i++;
+            }
+
+            if (i == 0)
             {
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
             }
@@ -150,6 +193,17 @@ namespace AATUV3.Pages
             Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
             Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
             Settings.Default.Save();
+        }
+
+
+        private void rbMan_Unchecked(object sender, RoutedEventArgs e)
+        {
+            spManual.Visibility = Visibility.Collapsed;
+        }
+
+        private void rbMan_Checked(object sender, RoutedEventArgs e)
+        {
+            spManual.Visibility = Visibility.Visible;
         }
     }
 }

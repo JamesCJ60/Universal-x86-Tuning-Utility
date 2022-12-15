@@ -728,11 +728,11 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Border x:Name="radioButtonBorder" Background="{DynamicResource SecundaryBackgroundColor}" BorderBrush="LightGray" BorderThickness="2" CornerRadius="100" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1,1,2,1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                            <Grid x:Name="markGrid" Margin="3">
-                                <Ellipse x:Name="optionMark" Fill="{DynamicResource PrimaryBlueColor}" MinWidth="9" MinHeight="9" Opacity="0"/>
+                            <Grid x:Name="markGrid" Margin="0">
+                                <Ellipse x:Name="optionMark" Fill="{DynamicResource PrimaryBlueColor}" MinWidth="13" MinHeight="13" Opacity="0"/>
                             </Grid>
                         </Border>
-                        <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="4,-2,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="true">

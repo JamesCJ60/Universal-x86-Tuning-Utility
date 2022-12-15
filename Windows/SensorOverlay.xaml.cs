@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using RyzenSMUBackend;
 using RyzenSmu;
+using UXTU.Properties;
 
 namespace AATUV3
 {
@@ -234,7 +235,7 @@ namespace AATUV3
                 //else hide window
                 else
                 {
-                    Sensors.i = 0;
+                    //Sensors.i = 0;
                     i = 0;
                     hidden = false;
                     this.Show();

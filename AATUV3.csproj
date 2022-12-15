@@ -162,7 +162,6 @@
       <DependentUpon>CustomPresets.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scripts\BasicExeBackend.cs" />
-    <Compile Include="Scripts\Sensors.cs" />
     <Page Include="Assets\Icons\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

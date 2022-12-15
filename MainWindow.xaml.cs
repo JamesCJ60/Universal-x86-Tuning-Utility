@@ -265,6 +265,7 @@ namespace AATUV3
                 _trayIcon.Visible = true;
                 this.Hide();
             }
+            BasicExeBackend.Garbage_Collect();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)

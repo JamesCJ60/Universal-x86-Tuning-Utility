@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="UXTU.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="AATUVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">V3.0.0</Value>
+    <Setting Name="UXTUVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)">V1.0.0</Value>
     </Setting>
     <Setting Name="Path" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

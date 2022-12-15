@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using UXTU.Scripts;
 
 namespace AATUV3
@@ -18,6 +19,7 @@ namespace AATUV3
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             _ = Tablet.TabletDevices;
+            new HwndSource(new HwndSourceParameters());
         }
     }
 }
