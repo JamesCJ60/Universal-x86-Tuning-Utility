@@ -18,6 +18,9 @@ using AATUV3.Scripts;
 using UXTU.Properties;
 using UXTU.Scripts.Adpative_Modes.Performance;
 using System.Threading;
+using System.IO;
+using System.Diagnostics;
+using LibreHardwareMonitor.Hardware;
 
 namespace AATUV3.Pages
 {
@@ -45,6 +48,19 @@ namespace AATUV3.Pages
             cbCOIGPU.IsChecked = Settings.Default.isGPUCO;
             cbdGPUCore.IsChecked = Settings.Default.isNV;
             cbiGPU.IsChecked = Settings.Default.isiGPUClk;
+
+            cbRaddGPUCore.IsChecked = Settings.Default.isRadOC;
+
+            if (Settings.Default.RadOption == 0) rbFactory.IsChecked = true;
+            else if (Settings.Default.RadOption == 1) rbUVGPU.IsChecked = true;
+            else if (Settings.Default.RadOption == 2) rbOCGPU.IsChecked = true;
+            else if (Settings.Default.RadOption == 3) rbOCVRAM.IsChecked = true;
+            else if (Settings.Default.RadOption == 4) rbMan.IsChecked = true;
+
+            GetPowerInfo();
+            getGPURange();
+            getVRAMInfo();
+            getGPUClocks();
         }
 
         private void Disable_Click(object sender, RoutedEventArgs e)
@@ -153,7 +169,7 @@ namespace AATUV3.Pages
                 {
                     power = (int)nudPower.Value;
                     minClock = (int)nudMinClockCore.Value;
-                    maxClock = (int)nudMaxClockMem.Value;
+                    maxClock = (int)nudMaxClockCore.Value;
                     Volt = (int)nudVoltage.Value;
                     VRAMClock = (int)nudVRAMClockMem.Value;
                     VRAMMode = 1;
@@ -192,6 +208,14 @@ namespace AATUV3.Pages
             Settings.Default.isGPUCO = (bool)cbCOIGPU.IsChecked;
             Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
             Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
+            Settings.Default.isRadOC = (bool)cbRaddGPUCore.IsChecked;
+
+            if (rbFactory.IsChecked == true) Settings.Default.RadOption = 0;
+            else if (rbUVGPU.IsChecked == true) Settings.Default.RadOption = 1;
+            else if (rbOCGPU.IsChecked == true) Settings.Default.RadOption = 2;
+            else if (rbOCVRAM.IsChecked == true) Settings.Default.RadOption = 3;
+            else if (rbMan.IsChecked == true) Settings.Default.RadOption = 4;
+
             Settings.Default.Save();
         }
 
@@ -204,6 +228,157 @@ namespace AATUV3.Pages
         private void rbMan_Checked(object sender, RoutedEventArgs e)
         {
             spManual.Visibility = Visibility.Visible;
+        }
+
+        private void getGPURange()
+        {
+            using (Process process = new Process())
+            {
+                string path = Settings.Default.Path + "\\bin\\coreoc.exe";
+                process.StartInfo.FileName = path;
+                process.StartInfo.Arguments = "1";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+
+                // Synchronously read the standard output of the spawned process.
+                StreamReader reader = process.StandardOutput;
+                string output = reader.ReadToEnd();
+
+                string[] lines = output.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+                lines[0] = lines[0].Substring(lines[0].IndexOf(',') + 1);
+                lines[0] = lines[0].Replace(" ", null);
+                int index = lines[0].LastIndexOf(")");
+                lines[0] = lines[0].Substring(0, index);
+
+                nudMinClockCore.Maximum = Convert.ToInt32(lines[0]);
+                nudMaxClockCore.Maximum = Convert.ToInt32(lines[0]);
+
+                lines[2] = lines[2].Substring(lines[2].IndexOf('(') + 1);
+                lines[2] = lines[2].Replace(" ", null);
+
+                index = lines[2].LastIndexOf(")");
+                lines[2] = lines[2].Substring(0, index);
+
+                string[] Range = lines[2].Split(new string[] { "," }, StringSplitOptions.None);
+
+                nudVoltage.Minimum = Convert.ToInt32(Range[0]);
+                nudVoltage.Maximum = Convert.ToInt32(Range[1]);
+
+                process.WaitForExit();
+            }
+        }
+
+        private void GetPowerInfo()
+        {
+            using (Process process = new Process())
+            {
+                string path = Settings.Default.Path + "\\bin\\power.exe";
+                process.StartInfo.FileName = path;
+                process.StartInfo.Arguments = "0";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+
+                // Synchronously read the standard output of the spawned process.
+                StreamReader reader = process.StandardOutput;
+                string output = reader.ReadToEnd();
+
+                string[] lines = output.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+                lines[0] = lines[0].Substring(lines[0].IndexOf(':') + 1);
+                lines[0] = lines[0].Replace(" ", null);
+                nudPower.Maximum = Convert.ToInt32(lines[0]);
+
+                lines[1] = lines[1].Substring(lines[1].IndexOf(':') + 1);
+                lines[1] = lines[1].Replace(" ", null);
+                nudPower.Value = Convert.ToInt32(lines[1]);
+
+                process.WaitForExit();
+            }
+        }
+
+        private void getGPUClocks()
+        {
+            using (Process process = new Process())
+            {
+                string path = Settings.Default.Path + "\\bin\\coreoc.exe";
+                process.StartInfo.FileName = path;
+                process.StartInfo.Arguments = "2";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+
+                // Synchronously read the standard output of the spawned process.
+                StreamReader reader = process.StandardOutput;
+                string output = reader.ReadToEnd();
+
+                string[] lines = output.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+                lines[0] = lines[0].Substring(lines[0].IndexOf(':') + 1);
+                lines[0] = lines[0].Replace(" ", null);
+                nudMinClockCore.Value = Convert.ToInt32(lines[0]);
+
+                lines[1] = lines[1].Substring(lines[1].IndexOf(':') + 1);
+                lines[1] = lines[1].Replace(" ", null);
+                nudMaxClockCore.Value = Convert.ToInt32(lines[1]);
+
+                lines[2] = lines[2].Substring(lines[2].IndexOf(':') + 1);
+                lines[2] = lines[2].Replace(" ", null);
+                nudVoltage.Value = Convert.ToInt32(lines[2]);
+
+                process.WaitForExit();
+            }
+        }
+        private void getVRAMInfo()
+        {
+            using (Process process = new Process())
+            {
+                string path = Settings.Default.Path + "\\bin\\vramoc.exe";
+                process.StartInfo.FileName = path;
+                process.StartInfo.Arguments = "2";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+
+                // Synchronously read the standard output of the spawned process.
+                StreamReader reader = process.StandardOutput;
+                string output = reader.ReadToEnd();
+
+                string[] lines = output.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+                lines[0] = lines[0].Substring(lines[0].IndexOf(':') + 1);
+                lines[0] = lines[0].Replace(" ", null);
+                nudVRAMClockMem.Value = Convert.ToInt32(lines[0]);
+
+                lines[1] = lines[1].Substring(lines[1].IndexOf('[') + 1);
+                lines[1] = lines[1].Replace(" ", null);
+
+                int index = lines[1].LastIndexOf("]");
+                lines[1] = lines[1].Substring(0, index);
+
+                string[] Range = lines[1].Split(new string[] { "," }, StringSplitOptions.None);
+
+                nudVRAMClockMem.Minimum = Convert.ToInt32(Range[0]);
+                nudVRAMClockMem.Maximum = Convert.ToInt32(Range[1]);
+
+                lines[2] = lines[2].Substring(lines[2].IndexOf(':') + 1);
+                lines[2] = lines[2].Replace(" ", null);
+
+                if (lines[2].Contains("Default")) rbDefault.IsChecked = true;
+                else rbFast.IsChecked = true;
+
+                process.WaitForExit();
+            }
         }
     }
 }

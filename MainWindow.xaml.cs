@@ -28,6 +28,7 @@ using System.IO;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using Forms = System.Windows.Forms;
 using UXTU.Scripts;
+using Microsoft.Win32;
 
 namespace AATUV3
 {
@@ -132,12 +133,12 @@ namespace AATUV3
 
             if (CPUName.Contains("AMD") || CPUName.Contains("Ryzen") || CPUName.Contains("Athlon") || CPUName.Contains("Radeon") || CPUName.Contains("AMD Custom APU 0405"))
             {
-                if ((bool)Settings.Default["firstBoot"] == true)
-                {
-                    BasicExeBackend.ApplySettings("\\InstallDriver.exe", "", false);
-                    Settings.Default["firstBoot"] = false;
-                    Settings.Default.Save();
-                }
+                //if ((bool)Settings.Default["firstBoot"] == true)
+                //{
+                //    BasicExeBackend.ApplySettings("\\InstallDriver.exe", "", false);
+                //    Settings.Default["firstBoot"] = false;
+                //    Settings.Default.Save();
+                //}
 
                 Families.SetFam();
 
@@ -259,13 +260,36 @@ namespace AATUV3
             Settings.Default.Save();
             Tray();
 
-            if (Convert.ToBoolean(Settings.Default["StartMinimised"]) == true)
+            if (Convert.ToBoolean(Settings.Default["StartMinimised"]) == true || Settings.Default.wasMini == true) 
             {
+                Settings.Default.wasMini = false;
+                Settings.Default.Save();
                 this.WindowState = WindowState.Minimized;
                 _trayIcon.Visible = true;
                 this.Hide();
             }
             BasicExeBackend.Garbage_Collect();
+            SystemEvents.PowerModeChanged += OnPowerChange;
+        }
+
+        private void OnPowerChange(object s, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Resume:
+                    if (this.WindowState == WindowState.Minimized) Settings.Default.wasMini = true;
+                    Settings.Default.Save();
+                    // Restart and run as admin
+                    var exeName = Process.GetCurrentProcess().MainModule.FileName;
+                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
+                    startInfo.Verb = "runas";
+                    startInfo.Arguments = "restart";
+                    Process.Start(startInfo);
+                    System.Windows.Application.Current.Shutdown();
+                    break;
+                case PowerModes.Suspend:
+                    break;
+            }
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -315,6 +339,7 @@ namespace AATUV3
 
         private void rdHome_Click(object sender, RoutedEventArgs e)
         {
+            PagesNavigation.Navigate(null);
             if (AppName.Contains("AMD APU"))
             {
                 //Load menu
@@ -348,7 +373,7 @@ namespace AATUV3
 
         private void rdAC_Click(object sender, RoutedEventArgs e)
         {
-
+            PagesNavigation.Navigate(null);
             //Load menu
             PagesNavigation.Navigate(new System.Uri("Pages/ASUSAC.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
@@ -362,6 +387,7 @@ namespace AATUV3
 
         private void rdSnow_Click(object sender, RoutedEventArgs e)
         {
+            PagesNavigation.Navigate(null);
             if (AppName.Contains("AMD APU"))
             {
                 //Load menu
@@ -395,6 +421,7 @@ namespace AATUV3
 
         private void rdCustom_Click(object sender, RoutedEventArgs e)
         {
+            PagesNavigation.Navigate(null);
             if (AppName.Contains("AMD APU"))
             {
                 //Load menu
@@ -428,6 +455,7 @@ namespace AATUV3
 
         private void rdAdaptive_Click(object sender, RoutedEventArgs e)
         {
+            PagesNavigation.Navigate(null);
             if (AppName.Contains("AMD APU"))
             {
                 //Load menu
@@ -461,6 +489,7 @@ namespace AATUV3
 
         private void rdClock_Click(object sender, RoutedEventArgs e)
         {
+            PagesNavigation.Navigate(null);
             if (AppName.Contains("AMD APU") || AppName.Contains("AMD CPU"))
             {
                 //Load menu
@@ -497,6 +526,7 @@ namespace AATUV3
 
         private void rdInfo_Click(object sender, RoutedEventArgs e)
         {
+            PagesNavigation.Navigate(null);
             if (AppName.Contains("AMD"))
             {
                 if (pmtables.PMT_Sensors.Length == 0 || pmtables.PMT_Sensors == null)
@@ -536,6 +566,7 @@ namespace AATUV3
             if (AppName.Contains("AMD APU"))
             {
                 //Load menu
+                PagesNavigation.Navigate(null);
                 PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdSettings.Content;
@@ -545,6 +576,7 @@ namespace AATUV3
             if (AppName.Contains("AMD CPU"))
             {
                 //Load menu
+                PagesNavigation.Navigate(null);
                 PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdSettings.Content;
@@ -554,6 +586,7 @@ namespace AATUV3
             if (AppName.Contains("Intel CPU"))
             {
                 //Load menu
+                PagesNavigation.Navigate(null);
                 PagesNavigation.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdSettings.Content;
@@ -587,6 +620,7 @@ namespace AATUV3
         private void rdFSR_Click(object sender, RoutedEventArgs e)
         {
             //Load menu
+            PagesNavigation.Navigate(null);
             PagesNavigation.Navigate(new System.Uri("Pages/FSR.xaml", UriKind.RelativeOrAbsolute));
             //Set menu lable to menu name
             menu = (string)rdFSR.Content;

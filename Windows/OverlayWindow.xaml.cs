@@ -130,27 +130,8 @@ namespace AATUV3
                         CpuPowerLimiter.CurveOptimiserLimit(cpuLoad, maxCO);
                     }
                 }
-                SystemEvents.PowerModeChanged += OnPowerChange;
             }
             catch { }
-        }
-
-        private void OnPowerChange(object s, PowerModeChangedEventArgs e)
-        {
-            switch (e.Mode)
-            {
-                case PowerModes.Resume:
-                    // Restart and run as admin
-                    var exeName = Process.GetCurrentProcess().MainModule.FileName;
-                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                    startInfo.Verb = "runas";
-                    startInfo.Arguments = "restart";
-                    Process.Start(startInfo);
-                    this.Close();
-                    break;
-                case PowerModes.Suspend:
-                    break;
-            }
         }
 
         public int cpuLoad = 0;

@@ -144,7 +144,7 @@
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="30,-5,0,0">
                                             <Label Content="Max Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
-                                            <xctk:IntegerUpDown Name="nudMaxClockMem" Watermark="Enter Integer" Width="95" Height="20" Minimum="500" Value="1800" Increment="25"/>
+                                            <xctk:IntegerUpDown Name="nudMaxClockCore" Watermark="Enter Integer" Width="95" Height="20" Minimum="500" Value="1800" Increment="25"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Margin="30,-5,0,0">
                                             <Label Content="Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>

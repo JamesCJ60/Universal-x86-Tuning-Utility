@@ -382,5 +382,41 @@ namespace UXTU.Properties {
                 this["CPUName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool wasMini {
+            get {
+                return ((bool)(this["wasMini"]));
+            }
+            set {
+                this["wasMini"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isRadOC {
+            get {
+                return ((bool)(this["isRadOC"]));
+            }
+            set {
+                this["isRadOC"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RadOption {
+            get {
+                return ((int)(this["RadOption"]));
+            }
+            set {
+                this["RadOption"] = value;
+            }
+        }
     }
 }
