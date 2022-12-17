@@ -74,7 +74,7 @@
         <Controls:NumericSpinner x:Name="nudVRMCVIP" Width="95" Height="22" Margin="314,471,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinValue="0" Value="0"/>
 
         <CheckBox x:Name="cbRampTime" Content="Prochot Deassertion Ramp (s):" HorizontalAlignment="Left" Margin="33,266,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
-        <Controls:NumericSpinner x:Name="nudRampTime" Width="95" Height="22" Margin="314,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" MinValue="0" Value="0"/>
+        <Controls:NumericSpinner x:Name="nudRampTime" Width="95" Height="22" Margin="314,265,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinValue="0" Value="0"/>
 
         <Label Content="Fabric Settings (200-3000 Series Only):" FontSize="18" Foreground="White" VerticalAlignment="Top" Margin="0,60,122,0" HorizontalAlignment="Right" Width="324"/>
 
