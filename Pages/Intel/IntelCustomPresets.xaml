@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:AATUV3.Pages"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="850">
+             d:DesignHeight="500" d:DesignWidth="850" 
+             xmlns:Controls="clr-namespace:Stopbyte.Controls">
     <UserControl.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -78,11 +79,11 @@
                                     <CheckBox Name="cbPower" Content="CPU Power Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
                                     <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
                                         <Label Content="Power Limit 1:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
-                                        <xctk:IntegerUpDown Name="nudPL1" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudPL1" Width="95" Height="22" MinValue="0" Value="0" Step="5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
                                         <Label Content="Power Limit 2:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
-                                        <xctk:IntegerUpDown Name="nudPL2" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="0" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudPL2" Width="95" Height="22" MinValue="0" Value="0" Step="5"/>
                                     </StackPanel>
                                 </StackPanel>
                                 
@@ -90,23 +91,23 @@
                                     <CheckBox Name="cbVoltage" Content="FIVR Voltage Offset Control:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
                                     <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
                                         <Label Content="Core Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
-                                        <xctk:IntegerUpDown Name="nudCore" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudCore" Width="95" Height="22" MinValue="-500" Value="0" Step="5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
                                         <Label Content="Cache Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
-                                        <xctk:IntegerUpDown Name="nudCache" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudCache" Width="95" Height="22" MinValue="-500" Value="0" Step="5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
                                         <Label Content="iGPU Compute Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180"/>
-                                        <xctk:IntegerUpDown Name="nudGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudGPU" Width="95" Height="22" MinValue="-500" Value="0" Step="5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
                                         <Label Content="iGPU Unslice Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180"/>
-                                        <xctk:IntegerUpDown Name="nudGPUSlice" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudGPUSlice" Width="95" Height="22" MinValue="-500" Value="0" Step="5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
                                         <Label Content="Agent Voltage:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
-                                        <xctk:IntegerUpDown Name="nudAgent" Watermark="Enter Integer" Width="95" Height="20" Minimum="-500" Value="0" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudAgent" Width="95" Height="22" MinValue="-500" Value="0" Step="5"/>
                                     </StackPanel>
 
 
@@ -122,7 +123,7 @@
                                     <Label Content="Radeon iGPU Settings:" FontSize="18" Foreground="White"/>
                                     <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
                                         <CheckBox Name="cbiGPU" Content="iGPU Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudiGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1500" Increment="25"/>
+                                        <!--<xctk:IntegerUpDown Name="nudiGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1500" Increment="25"/>-->
                                     </StackPanel>
                                 </StackPanel>
 

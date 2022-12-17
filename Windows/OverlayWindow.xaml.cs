@@ -50,6 +50,12 @@ namespace AATUV3
             Adaptive.Tick += Adaptive_Tick;
             Adaptive.Start();
 
+            //set up timer for sensor update
+            DispatcherTimer Sensor = new DispatcherTimer();
+            Sensor.Interval = TimeSpan.FromSeconds(1);
+            Sensor.Tick += Sensor_Tick;
+            Sensor.Start();
+
             autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
             autoReapply.Tick += AutoReapply_Tick;
             autoReapply.Start();
@@ -68,19 +74,20 @@ namespace AATUV3
         public static Computer thisPC;
 
         public static bool hidden = true;
+        void Sensor_Tick(object sender, EventArgs e)
+        {
+            getCPUInfo();
 
+            if (MainWindow.AppName.Contains("AMD"))
+            {
+                Addresses.UpdateTable();
+            }
+        }
 
         void Adaptive_Tick(object sender, EventArgs e)
         {
             try
             {
-                getCPUInfo();
-
-                if (MainWindow.AppName.Contains("AMD"))
-                {
-                    Addresses.UpdateTable();
-                }
-
                 if (GlobalVariables.AdaptivePerf == true)
                 {
                     int maxPower, minPower, maxTemp, maxCO;
@@ -154,11 +161,11 @@ namespace AATUV3
                     }
                 }
                 if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))
-            {
-                autoReapply.Stop();
-                autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
-                autoReapply.Start();
-            }
+                {
+                    autoReapply.Stop();
+                    autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
+                    autoReapply.Start();
+                }
             }
         }
 

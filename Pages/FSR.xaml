@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:AATUV3.Pages"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="850">
+             d:DesignHeight="500" d:DesignWidth="850"
+             xmlns:Controls="clr-namespace:Stopbyte.Controls">
     <Grid>
         <Border CornerRadius="5" Background="{DynamicResource PrimaryBackgroundColor}">
             <DockPanel LastChildFill="True">
@@ -43,7 +44,7 @@
                                     <TextBlock Text="Extras:" FontSize="17.2" Foreground="White" Margin="6,0,0,0" />
                                     <StackPanel Orientation="Horizontal" Margin="20,-4,0,0">
                                         <Label Content="Sharpness:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="180" />
-                                        <xctk:IntegerUpDown Name="nudSharpness" Watermark="Enter Integer" Width="95" Height="20" Minimum="0" Value="87" Maximum="100" Increment="5"/>
+                                        <Controls:NumericSpinner x:Name="nudSharpness" Width="95" Height="22" MinValue="0" Value="87" MaxValue="100" Step="1"/>
                                     </StackPanel>
                                 </StackPanel>
 
@@ -53,7 +54,7 @@
                                     <Label Content="Radeon iGPU Settings:" FontSize="18" Foreground="White"/>
                                     <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
                                         <CheckBox Name="cbiGPU" Content="iGPU Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
-                                        <xctk:IntegerUpDown Name="nudiGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1500" Increment="25"/>
+                                        <!--<xctk:IntegerUpDown Name="nudiGPU" Watermark="Enter Integer" Width="95" Height="20" Minimum="200" Value="1500" Increment="25"/>-->
                                     </StackPanel>
                                 </StackPanel>
 

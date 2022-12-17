@@ -16,7 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Xceed.Wpf.Toolkit;
 using System.Diagnostics;
 using UXTU.Scripts;
 
@@ -66,12 +65,14 @@ namespace AATUV3.Pages
 
                 if(i <=0) GlobalVariables.UpdateMagpie();
             }
+
+            BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Saved! Settings-have-been-saved-successfully.", false);
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             cbAutoReapply.IsChecked = Convert.ToBoolean(Settings.Default["AutoReapply"]);
-            nudAutoReapply.Value = Convert.ToInt32(Settings.Default["AutoReapplyTime"]);
+            nudAutoReapply.Value = Convert.ToDecimal(Settings.Default["AutoReapplyTime"]);
             cbStartMinimised.IsChecked = Convert.ToBoolean(Settings.Default["StartMinimised"]);
             cbStartOnBoot.IsChecked = Convert.ToBoolean(Settings.Default["StartOnBoot"]);
             cbSensorOverlay.IsChecked = Convert.ToBoolean(Settings.Default["SensorOverlay"]);

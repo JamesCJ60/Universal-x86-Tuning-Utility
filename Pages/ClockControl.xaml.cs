@@ -34,7 +34,7 @@ namespace AATUV3.Pages
             InitializeComponent();
             nudCoreClock.Value = Settings.Default.AllCoreClk;
             nudCoreVolt.Value = Settings.Default.CPUVID;
-            nudBus.Value = (double)Settings.Default.BusCLK;
+            nudBus.Value = (decimal)Settings.Default.BusCLK;
             nudCOCPU.Value = Settings.Default.COCPU;
             nudCOIGPU.Value = Settings.Default.COiGPU;
             nudiGPU.Value = Settings.Default.iGPUClk;
@@ -254,8 +254,8 @@ namespace AATUV3.Pages
                 int index = lines[0].LastIndexOf(")");
                 lines[0] = lines[0].Substring(0, index);
 
-                nudMinClockCore.Maximum = Convert.ToInt32(lines[0]);
-                nudMaxClockCore.Maximum = Convert.ToInt32(lines[0]);
+                nudMinClockCore.MaxValue = Convert.ToInt32(lines[0]);
+                nudMaxClockCore.MaxValue = Convert.ToInt32(lines[0]);
 
                 lines[2] = lines[2].Substring(lines[2].IndexOf('(') + 1);
                 lines[2] = lines[2].Replace(" ", null);
@@ -265,8 +265,8 @@ namespace AATUV3.Pages
 
                 string[] Range = lines[2].Split(new string[] { "," }, StringSplitOptions.None);
 
-                nudVoltage.Minimum = Convert.ToInt32(Range[0]);
-                nudVoltage.Maximum = Convert.ToInt32(Range[1]);
+                nudVoltage.MinValue = Convert.ToInt32(Range[0]);
+                nudVoltage.MaxValue = Convert.ToInt32(Range[1]);
 
                 process.WaitForExit();
             }
@@ -293,7 +293,7 @@ namespace AATUV3.Pages
 
                 lines[0] = lines[0].Substring(lines[0].IndexOf(':') + 1);
                 lines[0] = lines[0].Replace(" ", null);
-                nudPower.Maximum = Convert.ToInt32(lines[0]);
+                nudPower.Value = Convert.ToInt32(lines[0]);
 
                 lines[1] = lines[1].Substring(lines[1].IndexOf(':') + 1);
                 lines[1] = lines[1].Replace(" ", null);
@@ -368,8 +368,8 @@ namespace AATUV3.Pages
 
                 string[] Range = lines[1].Split(new string[] { "," }, StringSplitOptions.None);
 
-                nudVRAMClockMem.Minimum = Convert.ToInt32(Range[0]);
-                nudVRAMClockMem.Maximum = Convert.ToInt32(Range[1]);
+                nudVRAMClockMem.MinValue = Convert.ToInt32(Range[0]);
+                nudVRAMClockMem.MaxValue = Convert.ToInt32(Range[1]);
 
                 lines[2] = lines[2].Substring(lines[2].IndexOf(':') + 1);
                 lines[2] = lines[2].Replace(" ", null);
