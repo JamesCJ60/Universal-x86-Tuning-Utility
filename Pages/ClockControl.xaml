@@ -129,7 +129,7 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <StackPanel Margin="0,16,0,0">
+                                <StackPanel Margin="0,16,0,0" Visibility="Collapsed">
                                     <CheckBox Name="cbRaddGPUCore" Content="Radeon dGPU Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="3,0,0,0" />
                                     <StackPanel Margin="20,5,0,0">
                                         <RadioButton IsChecked="True" Name="rbFactory" Style="{DynamicResource RadioButtonStyleNormal}" Foreground="White" FontSize="16">Default</RadioButton>

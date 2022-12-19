@@ -21,6 +21,7 @@ using System.Threading;
 using System.IO;
 using System.Diagnostics;
 using LibreHardwareMonitor.Hardware;
+using System.Security.Cryptography;
 
 namespace AATUV3.Pages
 {
@@ -57,10 +58,10 @@ namespace AATUV3.Pages
             else if (Settings.Default.RadOption == 3) rbOCVRAM.IsChecked = true;
             else if (Settings.Default.RadOption == 4) rbMan.IsChecked = true;
 
-            GetPowerInfo();
-            getGPURange();
-            getVRAMInfo();
-            getGPUClocks();
+            //GetPowerInfo();
+            //getGPURange();
+            //getVRAMInfo();
+            //getGPUClocks();
         }
 
         private void Disable_Click(object sender, RoutedEventArgs e)
@@ -95,10 +96,20 @@ namespace AATUV3.Pages
 
             if (cbCoreVolt.IsChecked == true)
             {
-                double vid = Math.Round((double)nudCoreVolt.Value / 1000, 2);
-                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
-                SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
-                SendCommand.set_enable_oc();
+                if(Families.FAMID == 10)
+                {
+                    double vid = ((double)nudCoreVolt.Value - 1125) / 5 + 1200;
+                    SendCommand.set_oc_volt(Convert.ToUInt32(vid));
+                    SendCommand.set_oc_volt(Convert.ToUInt32(vid));
+                    SendCommand.set_enable_oc();
+                }
+                else
+                {
+                    double vid = Math.Round((double)nudCoreVolt.Value / 1000, 2);
+                    SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                    SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                    SendCommand.set_enable_oc();
+                }
                 i++;
             }
 
@@ -152,45 +163,45 @@ namespace AATUV3.Pages
                 i++;
             }
 
-            if (cbRaddGPUCore.IsChecked == true)
-            {
-                // Get path
-                string path = "\\bin\\vramoc.exe";
-                string path2 = "\\bin\\coreoc.exe";
-                string path3 = "\\bin\\auto.exe";
-                string path4 = "\\bin\\power.exe";
+            //if (cbRaddGPUCore.IsChecked == true)
+            //{
+            //    // Get path
+            //    string path = "\\bin\\vramoc.exe";
+            //    string path2 = "\\bin\\coreoc.exe";
+            //    string path3 = "\\bin\\auto.exe";
+            //    string path4 = "\\bin\\power.exe";
 
-                // Pass settings on to be applied
-                if (rbFactory.IsChecked == true) BasicExeBackend.ApplySettings(path3, "0", true);
-                else if (rbUVGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 0", true);
-                else if (rbOCGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 1", true);
-                else if (rbOCVRAM.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 2", true);
-                else
-                {
-                    power = (int)nudPower.Value;
-                    minClock = (int)nudMinClockCore.Value;
-                    maxClock = (int)nudMaxClockCore.Value;
-                    Volt = (int)nudVoltage.Value;
-                    VRAMClock = (int)nudVRAMClockMem.Value;
-                    VRAMMode = 1;
+            //    // Pass settings on to be applied
+            //    if (rbFactory.IsChecked == true) BasicExeBackend.ApplySettings(path3, "0", true);
+            //    else if (rbUVGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 0", true);
+            //    else if (rbOCGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 1", true);
+            //    else if (rbOCVRAM.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 2", true);
+            //    else
+            //    {
+            //        power = (int)nudPower.Value;
+            //        minClock = (int)nudMinClockCore.Value;
+            //        maxClock = (int)nudMaxClockCore.Value;
+            //        Volt = (int)nudVoltage.Value;
+            //        VRAMClock = (int)nudVRAMClockMem.Value;
+            //        VRAMMode = 1;
 
-                    await Task.Run(() =>
-                    {
-                        BasicExeBackend.ApplySettings(path3, "0", true);
-                        Thread.Sleep(250);
-                        BasicExeBackend.ApplySettings(path2, "3 " + minClock + " " + maxClock + " " + Volt, true);
-                        Thread.Sleep(100);
-                        BasicExeBackend.ApplySettings(path4, "1 " + power, true);
-                        Thread.Sleep(100);
-                        BasicExeBackend.ApplySettings(path, "4 " + VRAMClock, true);
-                        Thread.Sleep(250);
-                        BasicExeBackend.ApplySettings(path, "3 " + VRAMMode, true);
-                        Thread.Sleep(100);
-                    });
+            //        await Task.Run(() =>
+            //        {
+            //            BasicExeBackend.ApplySettings(path3, "0", true);
+            //            Thread.Sleep(250);
+            //            BasicExeBackend.ApplySettings(path2, "3 " + minClock + " " + maxClock + " " + Volt, true);
+            //            Thread.Sleep(100);
+            //            BasicExeBackend.ApplySettings(path4, "1 " + power, true);
+            //            Thread.Sleep(100);
+            //            BasicExeBackend.ApplySettings(path, "4 " + VRAMClock, true);
+            //            Thread.Sleep(250);
+            //            BasicExeBackend.ApplySettings(path, "3 " + VRAMMode, true);
+            //            Thread.Sleep(100);
+            //        });
 
-                }
-                i++;
-            }
+            //    }
+            //    i++;
+            //}
 
             if (i == 0)
             {
