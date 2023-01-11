@@ -22,6 +22,7 @@ using System.IO;
 using System.Diagnostics;
 using LibreHardwareMonitor.Hardware;
 using System.Security.Cryptography;
+using Stopbyte.Controls;
 
 namespace AATUV3.Pages
 {
@@ -49,6 +50,7 @@ namespace AATUV3.Pages
             cbCOIGPU.IsChecked = Settings.Default.isGPUCO;
             cbdGPUCore.IsChecked = Settings.Default.isNV;
             cbiGPU.IsChecked = Settings.Default.isiGPUClk;
+            cbCOPerCPU.IsChecked = Settings.Default.isPerCO;
 
             cbRaddGPUCore.IsChecked = Settings.Default.isRadOC;
 
@@ -57,6 +59,35 @@ namespace AATUV3.Pages
             else if (Settings.Default.RadOption == 2) rbOCGPU.IsChecked = true;
             else if (Settings.Default.RadOption == 3) rbOCVRAM.IsChecked = true;
             else if (Settings.Default.RadOption == 4) rbMan.IsChecked = true;
+
+            string CCD1 = Settings.Default.PerCOCCD1;
+            string[] CCD1Array = CCD1.Split(',');
+            NumericSpinner[] nudCCD1 = { nudCCD1C1, nudCCD1C2, nudCCD1C3, nudCCD1C4, nudCCD1C5, nudCCD1C6, nudCCD1C7, nudCCD1C8 };
+            int x = 0;
+            do
+            {
+                nudCCD1[x].Value = Convert.ToInt32(CCD1Array[x]);
+
+                x++;
+            } while (x < 8);
+
+            if(Families.FAMID > 6 && Families.FAMID < 9)
+            {
+                cbCOPerCPU.Visibility= Visibility.Visible;
+            }
+            else
+            {
+                cbCOPerCPU.Visibility = Visibility.Collapsed;
+            }
+
+            if(cbCOPerCPU.IsChecked == true)
+            {
+                COCCD1.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                COCCD1.Visibility = Visibility.Collapsed;
+            }
 
             //GetPowerInfo();
             //getGPURange();
@@ -132,6 +163,39 @@ namespace AATUV3.Pages
                 }
                 i++;
             }
+
+            NumericSpinner[] CCD1 = { nudCCD1C1, nudCCD1C2, nudCCD1C3, nudCCD1C4, nudCCD1C5, nudCCD1C6, nudCCD1C7, nudCCD1C8 };
+
+            if (cbCOPerCPU.IsChecked == true)
+            {
+                int x = 0;
+                do
+                {
+                    int CCD, CCX, CORE, magnitude;
+
+                    CCD = 0;
+                    CCX = 0;
+                    CORE = x + 1;
+
+                    magnitude = (int)CCD1[x].Value;
+
+                    if (magnitude >= 0)
+                    {
+                        uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                        SendCommand.set_coper(CO);
+                    }
+                    else
+                    {
+                        uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
+                        SendCommand.set_coper(CO);
+                    }
+
+                    
+                    x++;
+                } while (x < 8);
+                i++;
+            }
+
 
             if (cbCOIGPU.IsChecked == true)
             {
@@ -212,14 +276,19 @@ namespace AATUV3.Pages
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
             }
 
+            string CCD1output = $"{CCD1[0].Value},{CCD1[1].Value},{CCD1[2].Value},{CCD1[3].Value},{CCD1[4].Value},{CCD1[5].Value},{CCD1[6].Value},{CCD1[7].Value}";
+
             Settings.Default.isAllCoreCLK = (bool)cbCoreClock.IsChecked;
             Settings.Default.isVID = (bool)cbCoreVolt.IsChecked;
             Settings.Default.isBUS = (bool)cbBus.IsChecked;
             Settings.Default.isCPUCO = (bool)cbCOCPU.IsChecked;
+            Settings.Default.isPerCO = (bool)cbCOPerCPU.IsChecked;
             Settings.Default.isGPUCO = (bool)cbCOIGPU.IsChecked;
             Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
             Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
             Settings.Default.isRadOC = (bool)cbRaddGPUCore.IsChecked;
+
+            Settings.Default.PerCOCCD1 = CCD1output;
 
             if (rbFactory.IsChecked == true) Settings.Default.RadOption = 0;
             else if (rbUVGPU.IsChecked == true) Settings.Default.RadOption = 1;
@@ -234,6 +303,34 @@ namespace AATUV3.Pages
         private void rbMan_Unchecked(object sender, RoutedEventArgs e)
         {
             spManual.Visibility = Visibility.Collapsed;
+        }
+
+        private void cbCOCPU_Click(object sender, RoutedEventArgs e)
+        {
+            if(cbCOCPU.IsChecked == true) cbCOPerCPU.IsChecked = false;
+
+            if (cbCOPerCPU.IsChecked == true)
+            {
+                COCCD1.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                COCCD1.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void cbCOPer_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbCOPerCPU.IsChecked == true) cbCOCPU.IsChecked = false;
+
+            if (cbCOPerCPU.IsChecked == true)
+            {
+                COCCD1.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                COCCD1.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void rbMan_Checked(object sender, RoutedEventArgs e)

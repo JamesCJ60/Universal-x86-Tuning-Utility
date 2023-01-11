@@ -100,23 +100,91 @@
                                 <StackPanel Margin="0,6,0,0">
                                     <Label Content="Curve Optimiser Settings:" FontSize="18" Foreground="White"/>
                                     <StackPanel Orientation="Horizontal" Margin="20,6,0,0">
-                                        <CheckBox Name="cbCOCPU" Content="CPU:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
+                                        <CheckBox Name="cbCOCPU" Content="All Core:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Click="cbCOCPU_Click"/>
                                         <Controls:NumericSpinner x:Name="nudCOCPU" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="20,3,0,0">
                                         <CheckBox Name="cbCOIGPU" Content="iGPU:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0"/>
                                         <Controls:NumericSpinner x:Name="nudCOIGPU" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
                                     </StackPanel>
-                                </StackPanel>
-                                <StackPanel Margin="0,16,0,0">
-                                    <CheckBox Name="cbdGPUCore" Content="NVIDIA dGPU Offset Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="3,0,0,0" />
-                                    <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
-                                        <Label Content="Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150" />
-                                        <Controls:NumericSpinner x:Name="nuddGPUCore" Width="95" Height="22" MinValue="-500" Value="0" Step="25"/>
+
+                                    <StackPanel Orientation="Horizontal" Margin="20,3,0,0">
+                                        <CheckBox Name="cbCOPerCPU" Content="Per-core:" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="150" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Click="cbCOPer_Click" />
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
-                                        <Label Content="Memory Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
-                                        <Controls:NumericSpinner x:Name="nuddGPUMem" Width="95" Height="22" MinValue="-700" Value="0" Step="25"/>
+
+                                    <StackPanel Name="COCCD1">
+                                        <StackPanel Orientation="Horizontal" Margin="20,8,0,0">
+                                            <TextBlock Foreground="White" FontSize="16">CCD1:</TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
+                                            <TextBlock Text="Core 1:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C1" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 2:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C2" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 3:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C3" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 4:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C4" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 5:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C5" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 6:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C6" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 7:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C7" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 8:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD1C8" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Name="COCCD2" Visibility="Collapsed">
+                                        <StackPanel Orientation="Horizontal" Margin="20,8,0,0">
+                                            <TextBlock Foreground="White" FontSize="16">CCD2:</TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
+                                            <TextBlock Text="Core 1:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C1" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 2:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C2" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 3:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C3" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 4:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C4" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 5:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C5" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 6:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C6" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 7:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C7" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="40,6,0,0">
+                                            <TextBlock Text="Core 8:" Foreground="White" FontSize="16" Height="18" Width="130"/>
+                                            <Controls:NumericSpinner x:Name="nudCCD2C8" Width="95" Height="22" MinValue="-999" Value="0" MaxValue="30" Step="1"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -166,7 +234,17 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
-                                
+                                <StackPanel Margin="0,16,0,0">
+                                    <CheckBox Name="cbdGPUCore" Content="NVIDIA dGPU Offset Settings:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="3,0,0,0" />
+                                    <StackPanel Orientation="Horizontal" Margin="20,2,0,0">
+                                        <Label Content="Core Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150" />
+                                        <Controls:NumericSpinner x:Name="nuddGPUCore" Width="95" Height="22" MinValue="-500" Value="0" Step="25"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="20,-5,0,0">
+                                        <Label Content="Memory Clock:" Foreground="White" BorderBrush="White" FontSize="16" Height="auto" Width="150"/>
+                                        <Controls:NumericSpinner x:Name="nuddGPUMem" Width="95" Height="22" MinValue="-700" Value="0" Step="25"/>
+                                    </StackPanel>
+                                </StackPanel>
                             </StackPanel>
                         </DockPanel>
                     </ScrollViewer>

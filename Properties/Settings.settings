@@ -104,5 +104,11 @@
     <Setting Name="StartUp" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="isPerCO" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="PerCOCCD1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">5,5,5,5,5,5,5,5</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

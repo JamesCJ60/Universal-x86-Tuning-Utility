@@ -16,6 +16,7 @@ using System.Windows.Interop;
 using AATUV3.Scripts;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices.ComTypes;
+using Stopbyte.Controls;
 
 namespace RyzenSMUBackend
 {
@@ -355,6 +356,40 @@ namespace RyzenSMUBackend
             //    SendCommand.set_gfx_clk((uint)nudiGPU.Value);
             //    i++;
             //}
+
+            string CCD1output = Settings.Default.PerCOCCD1;
+            string[] CCD1= CCD1output.Split(',');
+
+            if (Settings.Default.isPerCO == true)
+            {
+                int x = 0;
+                do
+                {
+                    int CCD, CCX, CORE, magnitude;
+
+                    CCD = 0;
+                    CCX = 0;
+                    CORE = x + 1;
+
+                    magnitude = Convert.ToInt32(CCD1[x]);
+
+                    if (magnitude >= 0)
+                    {
+                        uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                        SendCommand.set_coper(CO);
+                    }
+                    else
+                    {
+                        uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
+                        SendCommand.set_coper(CO);
+                    }
+
+
+                    x++;
+                } 
+                while (x < 8);
+                i++;
+            }
 
             if ((bool)Settings.Default.isNV == true)
             {
