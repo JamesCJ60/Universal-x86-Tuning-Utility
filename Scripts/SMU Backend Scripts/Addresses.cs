@@ -360,30 +360,79 @@ namespace RyzenSMUBackend
             string CCD1output = Settings.Default.PerCOCCD1;
             string[] CCD1= CCD1output.Split(',');
 
+            string CCD2output = Settings.Default.PerCOCCD2;
+            string[] CCD2 = CCD2output.Split(',');
+
             if (Settings.Default.isPerCO == true)
             {
                 int x = 0;
                 do
                 {
-                    int CCD, CCX, CORE, magnitude;
+                    int CCD, CCX, CORE, magnitude, magnitude2;
 
                     CCD = 0;
                     CCX = 0;
-                    CORE = x + 1;
+                    CORE = x;
 
                     magnitude = Convert.ToInt32(CCD1[x]);
+                    magnitude2 = Convert.ToInt32(CCD2[x]);
 
-                    if (magnitude >= 0)
+                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
+                    {
+                        int value = (CORE << 20) | (magnitude & 0xFFFF);
+                        SendCommand.set_coper(Convert.ToUInt32(value));
+                    }
+                    else if (magnitude >= 0)
                     {
                         uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                        SendCommand.set_coper(CO);
+
+                        CCX = 1;
+                        CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
                         SendCommand.set_coper(CO);
                     }
                     else
                     {
+                        magnitude = magnitude * -1;
                         uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
+                        SendCommand.set_coper(CO);
+
+                        CCX = 1;
+                        CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
                         SendCommand.set_coper(CO);
                     }
 
+                    if (magnitude2 >= 0)
+                    {
+                        uint CO;
+                        if (Families.FAMID == 6 || Families.FAMID == 10)
+                        {
+                            CCD = 1;
+                            CCX = 0;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        }
+                    }
+                    else
+                    {
+                        magnitude2 = magnitude2 * -1;
+                        uint CO;
+                        if (Families.FAMID == 6 || Families.FAMID == 10)
+                        {
+                            CCX = 0;
+                            CCD = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        }
+                    }
 
                     x++;
                 } 

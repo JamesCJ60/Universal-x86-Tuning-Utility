@@ -23,6 +23,7 @@ using System.Diagnostics;
 using LibreHardwareMonitor.Hardware;
 using System.Security.Cryptography;
 using Stopbyte.Controls;
+using System.Runtime.InteropServices;
 
 namespace AATUV3.Pages
 {
@@ -62,16 +63,22 @@ namespace AATUV3.Pages
 
             string CCD1 = Settings.Default.PerCOCCD1;
             string[] CCD1Array = CCD1.Split(',');
+
+            string CCD2 = Settings.Default.PerCOCCD2;
+            string[] CCD2Array = CCD2.Split(',');
+
             NumericSpinner[] nudCCD1 = { nudCCD1C1, nudCCD1C2, nudCCD1C3, nudCCD1C4, nudCCD1C5, nudCCD1C6, nudCCD1C7, nudCCD1C8 };
+            NumericSpinner[] nudCCD2 = { nudCCD2C1, nudCCD2C2, nudCCD2C3, nudCCD2C4, nudCCD2C5, nudCCD2C6, nudCCD2C7, nudCCD2C8 };
+
             int x = 0;
             do
             {
                 nudCCD1[x].Value = Convert.ToInt32(CCD1Array[x]);
-
+                nudCCD2[x].Value = Convert.ToInt32(CCD2Array[x]);
                 x++;
             } while (x < 8);
 
-            if(Families.FAMID > 6 && Families.FAMID < 9)
+            if(Families.FAMID == 3 ||  Families.FAMID == 7 || Families.FAMID == 8)
             {
                 cbCOPerCPU.Visibility= Visibility.Visible;
             }
@@ -83,6 +90,15 @@ namespace AATUV3.Pages
             if(cbCOPerCPU.IsChecked == true)
             {
                 COCCD1.Visibility = Visibility.Visible;
+
+                if(Families.FAMID == 6 || Families.FAMID == 10)
+                {
+                    COCCD2.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    COCCD2.Visibility = Visibility.Collapsed;
+                }
             }
             else
             {
@@ -101,6 +117,7 @@ namespace AATUV3.Pages
         }
 
         public static int power, minClock, maxClock, Volt, VRAMClock, VRAMMode;
+
         private async void Apply_Click(object sender, RoutedEventArgs e)
         {
             int i = 0;
@@ -165,32 +182,84 @@ namespace AATUV3.Pages
             }
 
             NumericSpinner[] CCD1 = { nudCCD1C1, nudCCD1C2, nudCCD1C3, nudCCD1C4, nudCCD1C5, nudCCD1C6, nudCCD1C7, nudCCD1C8 };
+            NumericSpinner[] CCD2 = { nudCCD2C1, nudCCD2C2, nudCCD2C3, nudCCD2C4, nudCCD2C5, nudCCD2C6, nudCCD2C7, nudCCD2C8 };
 
             if (cbCOPerCPU.IsChecked == true)
             {
                 int x = 0;
                 do
                 {
-                    int CCD, CCX, CORE, magnitude;
+                    int CCD, CCX, CORE, magnitude, magnitude2;
 
                     CCD = 0;
                     CCX = 0;
-                    CORE = x + 1;
+                    CORE = x;
 
                     magnitude = (int)CCD1[x].Value;
+                    magnitude2 = (int)CCD2[x].Value;
 
-                    if (magnitude >= 0)
+                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                     {
+                        int value = (CORE << 20) | (magnitude & 0xFFFF);
+                        SendCommand.set_coper(Convert.ToUInt32(value));
+                    }
+                    else if (magnitude >= 0)
+                    {
+                        
                         uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                        SendCommand.set_coper(CO);
+                       
+                        CCX = 1;
+                        CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
                         SendCommand.set_coper(CO);
                     }
                     else
                     {
-                        uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
-                        SendCommand.set_coper(CO);
+
+                            magnitude = magnitude * -1;
+
+                            uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        
                     }
 
-                    
+                    if (magnitude2 >= 0)
+                    {
+                        uint CO;
+                        if (Families.FAMID == 6 || Families.FAMID == 10)
+                        {
+                            CCD = 1;
+                            CCX = 0;
+
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        }
+                    }
+                    else
+                    {
+                        magnitude2 = magnitude2 * -1;
+                        uint CO;
+
+                        if (Families.FAMID == 6 || Families.FAMID == 10)
+                        {
+                            CCX = 0;
+                            CCD = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        }
+                    }
                     x++;
                 } while (x < 8);
                 i++;
@@ -277,6 +346,7 @@ namespace AATUV3.Pages
             }
 
             string CCD1output = $"{CCD1[0].Value},{CCD1[1].Value},{CCD1[2].Value},{CCD1[3].Value},{CCD1[4].Value},{CCD1[5].Value},{CCD1[6].Value},{CCD1[7].Value}";
+            string CCD2output = $"{CCD2[0].Value},{CCD2[1].Value},{CCD2[2].Value},{CCD2[3].Value},{CCD2[4].Value},{CCD2[5].Value},{CCD2[6].Value},{CCD2[7].Value}";
 
             Settings.Default.isAllCoreCLK = (bool)cbCoreClock.IsChecked;
             Settings.Default.isVID = (bool)cbCoreVolt.IsChecked;
@@ -289,6 +359,7 @@ namespace AATUV3.Pages
             Settings.Default.isRadOC = (bool)cbRaddGPUCore.IsChecked;
 
             Settings.Default.PerCOCCD1 = CCD1output;
+            Settings.Default.PerCOCCD2 = CCD2output;
 
             if (rbFactory.IsChecked == true) Settings.Default.RadOption = 0;
             else if (rbUVGPU.IsChecked == true) Settings.Default.RadOption = 1;

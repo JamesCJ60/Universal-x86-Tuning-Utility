@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Management;
 
 namespace AATUV3.Pages
 {
@@ -29,7 +30,7 @@ namespace AATUV3.Pages
         string preset1 = "";
         string preset2 = "";
         string preset3 = "";
-        string preset4 = "";
+        //string preset4 = "";
 
         public ProjectSnowdrop()
         {
@@ -38,6 +39,10 @@ namespace AATUV3.Pages
             {
                 string apuPreset = path + "\\project-snowdrop\\APU";
                 string devicePath = path + "\\project-snowdrop\\Device";
+
+                if (Settings.Default.SnowPreset == 1) btnPreset1.IsChecked = true;
+                else if (Settings.Default.SnowPreset == 2) btnPreset2.IsChecked = true;
+                else if (Settings.Default.SnowPreset == 3) btnPreset3.IsChecked = true;
 
                 if (File.Exists(devicePath + "\\config.txt"))
                 {
@@ -80,28 +85,96 @@ namespace AATUV3.Pages
                         btnPreset3.Content = lines[19];
                         preset3 = lines[20];
                     }
-                    if (lines[23].Contains("N/A"))
-                    {
-                        btnPreset4.Visibility = Visibility.Collapsed;
-                    }
-                    else 
-                    {
-                        btnPreset4.Content = lines[23];
-                        preset4 = lines[24];
-                    }
+                    //if (lines[23].Contains("N/A"))
+                    //{
+                    //    btnPreset4.Visibility = Visibility.Collapsed;
+                    //}
+                    //else 
+                    //{
+                    //    btnPreset4.Content = lines[23];
+                    //    preset4 = lines[24];
+                    //}
 
                     lblPresetsHeader.Text = "Device Specific Power Presets:";
                 }
                 else
                 {
+                    double capacity = 0;
+                    int speed = 0;
+                    int type = 0;
+                    try
+                    {
+                        ManagementObjectSearcher searcher =
+                    new ManagementObjectSearcher("root\\CIMV2",
+                    "SELECT * FROM Win32_PhysicalMemory");
+
+                        foreach (ManagementObject queryObj in searcher.Get())
+                        {
+                            capacity = capacity + Convert.ToDouble(queryObj["Capacity"]);
+                            speed = Convert.ToInt32(queryObj["Speed"]);
+                            type = Convert.ToInt32(queryObj["SMBIOSMemoryType"]);
+                        }
+
+                        
+
+                        capacity = capacity / 1024 / 1024 / 1024;
+                        
+
+                        string DDRType = "";
+                        if (type == 26) DDRType = "DDR4";
+                        else if (type == 30) DDRType = "LPDDR4";
+                        else if (type == 35) DDRType = "LPDDR5";
+                        else DDRType = $"Unknown ({type})";
+
+                        lblRAM.Text = $"RAM: {capacity}GB {DDRType} {speed}MT/s";
+                        
+                    }
+                    catch (ManagementException e)
+                    {
+                        lblRAM.Text = "RAM: N/A";
+                    }
+
+                    double diskSize = 0;
+
+                    try
+                    {
+
+                        ManagementObjectSearcher searcher =
+                            new ManagementObjectSearcher("root\\CIMV2",
+                            "SELECT * FROM Win32_DiskPartition");
+
+                        foreach (ManagementObject queryObj in searcher.Get())
+                        {
+                            diskSize = diskSize + Convert.ToDouble(queryObj["Size"]);
+                        }
+
+                        diskSize = diskSize / 1024 / 1024 / 1024;
+                        diskSize = Math.Round(diskSize);
+                        lblStore.Text = $"Storage: {diskSize} GB";
+                    }
+                    catch (ManagementException e)
+                    {
+                        lblStore.Text = "Storage: N/A";
+                    }
+
+                    try
+                    {
+                        string screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth.ToString();
+
+                        string screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight.ToString();
+
+                        lblDisplay.Text = $"Display: {screenWidth} x {screenHeight}";
+                    }
+                    catch
+                    {
+                        lblDisplay.Text = "Display: N/A";
+                    }
+
                     imgDevice.Source = new BitmapImage(new Uri(apuPreset + "\\config.png"));
 
                     lblPresetName.Text = "APU Preset: " + apuname;
                     lblCPU.Text = "CPU: " + apuname;
                     lblGPU.Text = "GPU: Radeon™ Graphics";
-                    lblRAM.Text = "RAM: N/A";
-                    lblStore.Text = "Storage: N/A";
-                    lblDisplay.Text = "Display: N/A";
 
                     if (apuname.Contains("U"))
                     {
@@ -156,15 +229,15 @@ namespace AATUV3.Pages
                         btnPreset3.Content = lines[19];
                         preset3 = lines[20];
                     }
-                    if (lines[23].Contains("N/A"))
-                    {
-                        btnPreset4.Content = "Find Device Presets";
-                    }
-                    else 
-                    {
-                        btnPreset4.Content = lines[23];
-                        preset4 = lines[24];
-                    }
+                    //if (lines[23].Contains("N/A"))
+                    //{
+                    //    btnPreset4.Content = "Find Device Presets";
+                    //}
+                    //else 
+                    //{
+                    //    btnPreset4.Content = lines[23];
+                    //    preset4 = lines[24];
+                    //}
 
                     lblPresetsHeader.Text = "APU Specific Power Presets:";
                 }
@@ -190,6 +263,7 @@ namespace AATUV3.Pages
                 BasicExeBackend.ApplySettings(pathRyzenAdj, preset1, true);
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset1;
+                Settings.Default.SnowPreset = 1;
                 Settings.Default.Save();
                 //System.Windows.MessageBox.Show(ryzenadj);
             }
@@ -210,6 +284,7 @@ namespace AATUV3.Pages
                 BasicExeBackend.ApplySettings(pathRyzenAdj, preset2, true);
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset2;
+                Settings.Default.SnowPreset = 2;
                 Settings.Default.Save();
                 //System.Windows.MessageBox.Show(ryzenadj);
             }
@@ -229,34 +304,35 @@ namespace AATUV3.Pages
                 //Pass settings on to be applied
                 BasicExeBackend.ApplySettings(pathRyzenAdj, preset3, true);
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+                Settings.Default.SnowPreset = 3;
                 Settings.Default["RyzenAdjArguments"] = preset3;
                 Settings.Default.Save();
                 //System.Windows.MessageBox.Show(ryzenadj);
             }
         }
 
-        private void btnPreset4_Click(object sender, RoutedEventArgs e)
-        {
-            if (preset4 == null || preset4 == "" && btnPreset4.Content != "Find Device Presets")
-            {
-                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
-            }
-            if (btnPreset4.Content == "Find Device Presets")
-            {
-                System.Diagnostics.Process.Start("https://www.dropbox.com/sh/5yll57epokkcqgs/AABVsb_cjkdmMoss5JsMK4fia?dl=0");
-            }
+        //private void btnPreset4_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (preset4 == null || preset4 == "" && btnPreset4.Content != "Find Device Presets")
+        //    {
+        //        BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
+        //    }
+        //    if (btnPreset4.Content == "Find Device Presets")
+        //    {
+        //        System.Diagnostics.Process.Start("https://www.dropbox.com/sh/5yll57epokkcqgs/AABVsb_cjkdmMoss5JsMK4fia?dl=0");
+        //    }
 
-            else
-            {
-                //Get RyzenAdj path
-                string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
-                //Pass settings on to be applied
-                BasicExeBackend.ApplySettings(pathRyzenAdj, preset4, true);
-                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
-                Settings.Default["RyzenAdjArguments"] = preset4;
-                Settings.Default.Save();
-                //System.Windows.MessageBox.Show(ryzenadj);
-            }
-        }
+        //    else
+        //    {
+        //        //Get RyzenAdj path
+        //        string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
+        //        //Pass settings on to be applied
+        //        BasicExeBackend.ApplySettings(pathRyzenAdj, preset4, true);
+        //        BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
+        //        Settings.Default["RyzenAdjArguments"] = preset4;
+        //        Settings.Default.Save();
+        //        //System.Windows.MessageBox.Show(ryzenadj);
+        //    }
+        //}
     }
 }
