@@ -358,6 +358,51 @@
                             </StackPanel>
                         </StackPanel>
                     </Border>
+
+                    <Border Name="CCD1CO" BorderBrush="White" BorderThickness="2" Padding="10" CornerRadius="8" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Foreground="White" FontSize="28">CCD1 Curve Optimiser Offsets:</TextBlock>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350" FontWeight="Bold" >Sensor</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" FontWeight="Bold" MinWidth="116.47" TextAlignment="Center">Value</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 1 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore1CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 2 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore2CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 3 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore3CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">80w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 4 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore4CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 5 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore5CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 6 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore6CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 7 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore7CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="50,0,50,0">
+                                <TextBlock Foreground="White" FontSize="22" MinWidth="350">Core 8 Offset:</TextBlock>
+                                <TextBlock Foreground="White" FontSize="22" Name="lblCore8CO" MinWidth="116.47" HorizontalAlignment="Stretch" TextAlignment="Center">105w/105w</TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
         </Border>

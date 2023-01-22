@@ -29,23 +29,19 @@ using AATUV3.Scripts.SMU_Backend_Scripts;
 using Forms = System.Windows.Forms;
 using UXTU.Scripts;
 using Microsoft.Win32;
+using System.Windows.Forms;
+using MessageBox = System.Windows.MessageBox;
+using Application = System.Windows.Application;
 
 namespace AATUV3
 {
     public partial class MainWindow : Window
     {
-        //check if program has admin rights
-        public static bool IsAdministrator()
-        {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
 
         public static string menu = "";
         public static string AppName = "";
         public static string mbo = "";
-        public static Timer reApply;
+        public static System.Threading.Timer reApply;
 
         [DllImport("inpoutx64.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -61,17 +57,6 @@ namespace AATUV3
 
         public MainWindow()
         {
-            if (!MainWindow.IsAdministrator())
-            {
-                // Restart and run as admin
-                var exeName = Process.GetCurrentProcess().MainModule.FileName;
-                ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                startInfo.Verb = "runas";
-                startInfo.Arguments = "restart";
-                Process.Start(startInfo);
-                this.Close();
-            }
-
             InitializeComponent();
             //load main menu on load
             PagesNavigation.Navigate(new System.Uri("Pages/HomeMenu.xaml", UriKind.RelativeOrAbsolute));
@@ -274,6 +259,7 @@ namespace AATUV3
 
         private void OnPowerChange(object s, PowerModeChangedEventArgs e)
         {
+            int i = 0;
             switch (e.Mode)
             {
                 case PowerModes.Resume:
@@ -289,6 +275,124 @@ namespace AATUV3
                     break;
                 case PowerModes.Suspend:
                     break;
+            }
+
+            if (e.Mode == Microsoft.Win32.PowerModes.StatusChange)
+            {
+                if ((bool)Settings.Default.isCPUCO == true)
+                {
+                    if ((int)Settings.Default.COCPU >= 0)
+                    {
+                        SendCommand.set_coall((uint)Settings.Default.COCPU);
+                    }
+                    else
+                    {
+                        SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COCPU)));
+                    }
+                    i++;
+                }
+
+                if ((bool)Settings.Default.isGPUCO == true)
+                {
+                    if ((int)Settings.Default.COiGPU >= 0)
+                    {
+                        SendCommand.set_cogfx((uint)Settings.Default.COiGPU);
+                    }
+                    else
+                    {
+                        SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COiGPU)));
+                    }
+                    i++;
+                }
+
+                //if (cbiGPU.IsChecked == true)
+                //{
+                //    SendCommand.set_gfx_clk((uint)nudiGPU.Value);
+                //    i++;
+                //}
+
+                string CCD1output = Settings.Default.PerCOCCD1;
+                string[] CCD1 = CCD1output.Split(',');
+
+                string CCD2output = Settings.Default.PerCOCCD2;
+                string[] CCD2 = CCD2output.Split(',');
+
+                if (Settings.Default.isPerCO == true)
+                {
+                    int x = 0;
+                    do
+                    {
+                        int CCD, CCX, CORE, magnitude, magnitude2;
+
+                        CCD = 0;
+                        CCX = 0;
+                        CORE = x;
+
+                        magnitude = Convert.ToInt32(CCD1[x]);
+                        magnitude2 = Convert.ToInt32(CCD2[x]);
+
+                        if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
+                        {
+                            int value = (CORE << 20) | (magnitude & 0xFFFF);
+                            SendCommand.set_coper(Convert.ToUInt32(value));
+                        }
+                        else if (magnitude >= 0)
+                        {
+                            uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        }
+                        else
+                        {
+                            magnitude = magnitude * -1;
+                            uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        }
+
+                        if (magnitude2 >= 0)
+                        {
+                            uint CO;
+                            if (Families.FAMID == 6 || Families.FAMID == 10)
+                            {
+                                CCD = 1;
+                                CCX = 0;
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                                SendCommand.set_coper(CO);
+
+                                CCX = 1;
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                                SendCommand.set_coper(CO);
+                            }
+                        }
+                        else
+                        {
+                            magnitude2 = magnitude2 * -1;
+                            uint CO;
+                            if (Families.FAMID == 6 || Families.FAMID == 10)
+                            {
+                                CCX = 0;
+                                CCD = 1;
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                                SendCommand.set_coper(CO);
+
+                                CCX = 1;
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                                SendCommand.set_coper(CO);
+                            }
+                        }
+
+                        x++;
+                    }
+                    while (x < 8);
+                    i++;
+                }
             }
         }
 
@@ -459,6 +563,7 @@ namespace AATUV3
             if (AppName.Contains("AMD APU"))
             {
                 //Load menu
+                //PagesNavigation.Navigate(new System.Uri("Pages/APM.xaml", UriKind.RelativeOrAbsolute));
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
                 //Set menu lable to menu name
                 menu = (string)rdAdaptive.Content;

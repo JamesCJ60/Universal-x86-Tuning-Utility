@@ -76,7 +76,7 @@
         <RadioButton Style="{DynamicResource ButtonWithIcon}" Tag="{DynamicResource GitHub}" Margin="440,397,160,33" FontSize="20" Foreground="White" Content="Latest Releases" Height="70" Width="250" Click="Releases_Click"/>
         <TextBlock  Foreground="White" FontSize="16" Margin="1,0,0,-1.5" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             
-            <Run Text="Universal x86 Tuning Utility - V1.0.0 Stable"/>
+            <Run Text="Universal x86 Tuning Utility - V1.0.1 Stable"/>
             <LineBreak/>
             <Run Text="Created by JamesCJ, sbski, and ProjectSBC"/>
         </TextBlock>

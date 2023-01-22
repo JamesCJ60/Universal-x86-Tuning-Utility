@@ -397,6 +397,7 @@ namespace AATUV3.Pages
             {
                 ryzenadj = ryzenadj + $"--tctl-temp={nudTempLimit.Value} ";
                 if(apply == true) SendCommand.set_tctl_temp((uint)nudTempLimit.Value);
+                if (apply == true) SendCommand.set_cHTC_temp((uint)nudTempLimit.Value);
             }
 
             if (cbSkinTempLimit.IsChecked == true)
@@ -409,6 +410,7 @@ namespace AATUV3.Pages
             {
                 ryzenadj = ryzenadj + $"--stapm-limit={nudSTAPMLimit.Value * 1000} ";
                 if (apply == true) SendCommand.set_stapm_limit((uint)nudSTAPMLimit.Value * 1000);
+                if (apply == true) SendCommand.set_stapm2_limit((uint)nudSTAPMLimit.Value * 1000);
             }
 
             if (cbPL1.IsChecked == true)

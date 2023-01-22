@@ -81,7 +81,7 @@
                     <TextBlock Name="lblPresetsHeader" Text="Device Specific Power Presets:" Foreground="White" FontSize="21" Margin="17,5,0,0" FontWeight="Bold" />
                 </StackPanel>
 
-                <StackPanel Width="360" DockPanel.Dock="Right" Height="175">
+                <StackPanel Width="425" DockPanel.Dock="Right" Height="175">
                     <TextBlock Foreground="White" FontSize="21" FontWeight="Bold">Intended System Specification:</TextBlock>
                     <TextBlock Name="lblCPU"  Foreground="White" FontSize="18" >CPU: Ryzen 7 5825U 8C/16T @ 4.5GHz</TextBlock>
                     <TextBlock Name="lblGPU" Foreground="White" FontSize="18" >GPU: Radeon RX Vega 8 @ 2GHz</TextBlock>

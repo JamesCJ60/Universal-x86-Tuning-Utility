@@ -28,6 +28,8 @@ using UXTU.Scripts.Adpative_Modes.Performance;
 using AATUV3.Scripts.SMU_Backend_Scripts;
 using MessageBox = System.Windows.MessageBox;
 using Microsoft.Win32;
+using RyzenSmu;
+using System.Windows.Interop;
 
 namespace AATUV3
 {
@@ -38,6 +40,9 @@ namespace AATUV3
     {
         public int NVGPU = 0;
         public DispatcherTimer autoReapply = new DispatcherTimer();
+        private static Smu RyzenAccess;
+        private static bool EnableDebug;
+        private static uint[] Args;
         public OverlayWindow()
         {
             InitializeComponent();
@@ -46,7 +51,7 @@ namespace AATUV3
 
             //set up timer for sensor update
             DispatcherTimer Adaptive = new DispatcherTimer();
-            Adaptive.Interval = TimeSpan.FromSeconds(1);
+            Adaptive.Interval = TimeSpan.FromSeconds(1.125);
             Adaptive.Tick += Adaptive_Tick;
             Adaptive.Start();
 
@@ -69,6 +74,9 @@ namespace AATUV3
             };
             thisPC.Open();
             thisPC.Accept(new UpdateVisitor());
+
+            RyzenAccess = new Smu(EnableDebug);
+            RyzenAccess.Initialize();
         }
 
         public static Computer thisPC;
@@ -84,20 +92,21 @@ namespace AATUV3
             }
         }
 
+        public static int maxPower, minPower, maxTemp, maxCO, powermode, coresInUse, tboiGPUOffset = 0, tboiGPUMaxTemp;
+        public static int maxPowerOverride, maxTempOverride, maxCOOverride;
+        public static bool tboCPU,tboiGPU, tdpOverride, tempOverride, uvOverride, tboiGPUTempOverride;
         void Adaptive_Tick(object sender, EventArgs e)
         {
             try
             {
                 if (GlobalVariables.AdaptivePerf == true)
                 {
-                    int maxPower, minPower, maxTemp, maxCO;
-
                     maxCO = 10;
                     maxPower = 65;
                     minPower = 5;
                     maxTemp = 95;
 
-                    if (Families.FAMID == 3 || Families.FAMID == 7)
+                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                     {
                         maxTemp = 100;
 
@@ -111,9 +120,52 @@ namespace AATUV3
 
                         int cpuTemp = (int)GetSensor.getSensorValve("THM_VALUE_CORE");
 
+                        if (tdpOverride) maxPower = maxPowerOverride;
+                        if (tempOverride) maxTemp = maxTempOverride;
+                        if (uvOverride) maxCO = maxCOOverride;
+
                         CpuPowerLimiter.GetCurrentPowerLimit(maxPower, minPower, maxTemp);
                         CpuPowerLimiter.UpdatePowerLimit(cpuTemp, cpuLoad, maxPower, minPower, maxTemp);
                         CpuPowerLimiter.CurveOptimiserLimit(cpuLoad, maxCO);
+
+                        if (tboiGPUTempOverride != true) tboiGPUMaxTemp = maxTemp;
+                        
+                        if(tboCPU == true)
+                        {
+                            if (System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus != System.Windows.Forms.PowerLineStatus.Offline) CpuPowerLimiter.updateBattery(powermode, cpuLoad, coresInUse);
+                        }
+
+                        if (tboiGPU == true)
+                        {
+                            if (Families.FAMID == 3 || Families.FAMID == 7 )
+                            {
+                                Args = new uint[6];
+                                int minClock, maxClock;
+                                minClock = 400;
+                                RyzenAccess.SendPsmu(0xE, ref Args);
+                                maxClock = (int)Args[0];
+
+                                maxClock = maxClock + tboiGPUOffset;
+
+                                iGPUClockAdjust.UpdateiGPUClock(maxClock, minClock, tboiGPUMaxTemp);
+                            }
+                            else if (Settings.Default.APUName.Contains("6800U"))
+                            {
+                                int minClock, maxClock;
+                                minClock = 400;
+                                maxClock = 2200;
+                                maxClock = maxClock + tboiGPUOffset;
+                                iGPUClockAdjust.UpdateiGPUClock(maxClock, minClock, tboiGPUMaxTemp);
+                            }
+                            else if (Settings.Default.APUName.Contains("6600U"))
+                            {
+                                int minClock, maxClock;
+                                minClock = 400;
+                                maxClock = 1900;
+                                maxClock = maxClock + tboiGPUOffset;
+                                iGPUClockAdjust.UpdateiGPUClock(maxClock, minClock, tboiGPUMaxTemp);
+                            }
+                        }
                     }
                     else if (Families.FAMID == 4 || Families.FAMID == 6)
                     {
@@ -142,6 +194,7 @@ namespace AATUV3
         }
 
         public int cpuLoad = 0;
+        public int gpuLoad = 0;
 
         void AutoReapply_Tick(object sender, EventArgs e)
         {
@@ -193,13 +246,27 @@ namespace AATUV3
                     hardware.Update();
                     if (hardware.HardwareType == HardwareType.Cpu)
                     {
+                        int i = 0;
                         foreach (var sensor in hardware.Sensors)
                         {
+                            int o = 0;
+
                             if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Total"))
                             {
                                 cpuLoad = (int)sensor.Value.GetValueOrDefault();
                             }
+
+                            do
+                            {
+                                if (sensor.SensorType == SensorType.Load && sensor.Name.Contains(o.ToString()))
+                                {
+                                    if ((int)sensor.Value.GetValueOrDefault() > 70) i++;
+                                }
+                                o++;
+                            }
+                            while (o < 32);
                         }
+                        coresInUse = i;
                     }
                 }
             }

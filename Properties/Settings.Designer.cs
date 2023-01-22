@@ -469,13 +469,37 @@ namespace UXTU.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public int SnowPreset {
             get {
                 return ((int)(this["SnowPreset"]));
             }
             set {
                 this["SnowPreset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0,0,0,0,0,0,0")]
+        public string PerOCCCD1 {
+            get {
+                return ((string)(this["PerOCCCD1"]));
+            }
+            set {
+                this["PerOCCCD1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isPerOC {
+            get {
+                return ((bool)(this["isPerOC"]));
+            }
+            set {
+                this["isPerOC"] = value;
             }
         }
     }

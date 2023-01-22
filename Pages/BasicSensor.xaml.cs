@@ -1,8 +1,10 @@
 ﻿using AATUV3.Scripts.SMU_Backend_Scripts;
+using RyzenSmu;
 using RyzenSMUBackend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,6 +37,9 @@ namespace AATUV3.Pages
         //REMBRANDT - 8
         //PHEONIX - 9
         //RAPHAEL/DRAGON RANGE - 10
+        private static Smu RyzenAccess;
+        private static bool EnableDebug;
+        private static uint[] Args;
 
         public BasicSensor()
         {
@@ -49,6 +54,9 @@ namespace AATUV3.Pages
             sensor.Interval = TimeSpan.FromSeconds(1);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
+
+            RyzenAccess = new Smu(EnableDebug);
+            RyzenAccess.Initialize();
         }
 
         void SensorUpdate_Tick(object sender, EventArgs e)
@@ -107,6 +115,7 @@ namespace AATUV3.Pages
                         lblPL0.Text = "PPT:";
                         lblSTAPM.Text = lblSTAPM.Text = $"{(int)GetSensor.getSensorValve("PPT_VALUE")}W/{(int)GetSensor.getSensorValve("PPT_LIMIT")}W";
                     }
+
 
                     lblCPUpw.Text = $"{GetSensor.getSensorValve("VDDCR_CPU_POWER").ToString("0.00")}W";
 
@@ -183,8 +192,31 @@ namespace AATUV3.Pages
                         lblCore8ClkCCD2.Text = $"{(GetSensor.getSensorValve("CORE_FREQ_15")).ToString("0.00")}GHz";
                     }
                 }
+
+                if (Families.FAMID == 7 || Families.FAMID == 3)
+                {
+
+                    TextBlock[] coCCD1 = {lblCore1CO, lblCore2CO, lblCore3CO, lblCore4CO, lblCore5CO, lblCore6CO, lblCore7CO, lblCore8CO };
+                    int i = 0;
+                    do
+                    {
+                        RyzenAccess = new Smu(EnableDebug);
+                        RyzenAccess.Initialize();
+                        Args = new uint[6];
+                        Args[0] = Convert.ToUInt32(i & 0xFFFF);
+                        RyzenAccess.SendMp1(0x62, ref Args);
+                        coCCD1[i].Text = $"{(int)Args[0]}";
+                        RyzenAccess.Deinitialize();
+                        i++;
+                    }
+                    while (i < coCCD1.Length);
+
+                    CCD1CO.Visibility = Visibility.Visible;
+        
+
+                }
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
     }
 }

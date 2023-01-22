@@ -40,10 +40,6 @@ namespace AATUV3.Pages
                 string apuPreset = path + "\\project-snowdrop\\APU";
                 string devicePath = path + "\\project-snowdrop\\Device";
 
-                if (Settings.Default.SnowPreset == 1) btnPreset1.IsChecked = true;
-                else if (Settings.Default.SnowPreset == 2) btnPreset2.IsChecked = true;
-                else if (Settings.Default.SnowPreset == 3) btnPreset3.IsChecked = true;
-
                 if (File.Exists(devicePath + "\\config.txt"))
                 {
                     imgDevice.Source = new BitmapImage(new Uri(devicePath + "\\config.png"));
@@ -242,6 +238,11 @@ namespace AATUV3.Pages
                     lblPresetsHeader.Text = "APU Specific Power Presets:";
                 }
 
+
+                if (Settings.Default.SnowPreset == 1) { btnPreset1.IsChecked = true; applyPreset1(); }
+                else if (Settings.Default.SnowPreset == 2) { btnPreset2.IsChecked = true; applyPreset2(); }
+                else if (Settings.Default.SnowPreset == 3) { btnPreset3.IsChecked = true; applyPreset3(); }
+
             } catch (Exception ex)
             {
                 MessageBox.Show("An error occured loading presets. Error: " + ex.Message);
@@ -249,6 +250,11 @@ namespace AATUV3.Pages
         }
 
         private void btnPreset1_Click(object sender, RoutedEventArgs e)
+        {
+            applyPreset1();
+        }
+
+        public void applyPreset1()
         {
             if (preset1 == null || preset1 == "")
             {
@@ -259,8 +265,8 @@ namespace AATUV3.Pages
             {
                 //Get RyzenAdj path
                 string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
-                //Pass settings on to be applied
-                BasicExeBackend.ApplySettings(pathRyzenAdj, preset1, true);
+    //Pass settings on to be applied
+    BasicExeBackend.ApplySettings(pathRyzenAdj, preset1, true);
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset1;
                 Settings.Default.SnowPreset = 1;
@@ -270,6 +276,11 @@ namespace AATUV3.Pages
         }
 
         private void btnPreset2_Click(object sender, RoutedEventArgs e)
+        {
+            applyPreset2();
+        }
+
+        public void applyPreset2()
         {
             if (preset2 == null || preset2 == "")
             {
@@ -291,6 +302,11 @@ namespace AATUV3.Pages
         }
 
         private void btnPreset3_Click(object sender, RoutedEventArgs e)
+        {
+            applyPreset3();
+        }
+
+        public void applyPreset3()
         {
             if (preset3 == null || preset3 == "")
             {

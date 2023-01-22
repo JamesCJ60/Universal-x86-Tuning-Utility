@@ -54,6 +54,27 @@ namespace RyzenSMUBackend
             RyzenAccess.Deinitialize();
         }
 
+        //STAMP2 Limit
+        public static void set_stapm2_limit(uint value)
+        {
+            RyzenAccess.Initialize();
+            uint[] Args = new uint[6];
+            Args[0] = value;
+
+            switch (FAMID)
+            {
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                    RyzenAccess.SendPsmu(0x31, ref Args);
+                    break;
+                default:
+                    break;
+            }
+            RyzenAccess.Deinitialize();
+        }
+
         //Fast Limit
         public static void set_fast_limit(uint value)
         {
@@ -187,6 +208,32 @@ namespace RyzenSMUBackend
                     break;
                 case 10:
                     RyzenAccess.SendPsmu(0x59, ref Args);
+                    break;
+                default:
+                    break;
+            }
+            RyzenAccess.Deinitialize();
+        }
+
+        //cHTC Temp Limit
+        public static void set_cHTC_temp(uint value)
+        {
+            RyzenAccess.Initialize();
+            uint[] Args = new uint[6];
+            Args[0] = value;
+
+            switch (FAMID)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    RyzenAccess.SendPsmu(0x56, ref Args);
+                    break;
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                    RyzenAccess.SendPsmu(0x37, ref Args);
                     break;
                 default:
                     break;
@@ -615,10 +662,11 @@ namespace RyzenSMUBackend
             switch (FAMID)
             {
                 case 3:
-                case 5:
-                case 7:
                 case 8:
                     RyzenAccess.SendPsmu(0x89, ref Args);
+                    break;
+                case 7:
+                    RyzenAccess.SendPsmu(0x1C, ref Args);
                     break;
                 default:
                     break;

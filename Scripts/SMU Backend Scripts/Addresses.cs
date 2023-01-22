@@ -363,6 +363,22 @@ namespace RyzenSMUBackend
             string CCD2output = Settings.Default.PerCOCCD2;
             string[] CCD2 = CCD2output.Split(',');
 
+            string CCD1OC = Settings.Default.PerOCCCD1;
+            string[] CCD1OCArray = CCD1OC.Split(',');
+
+            if ((bool)Settings.Default.isPerOC == true)
+            {
+                int o = 0;
+                do
+                {
+                    SendCommand.set_per_core_oc_clk(Convert.ToUInt32((o << 20) | (Convert.ToUInt32( CCD1OCArray[o]) & 1048575)));
+                    SendCommand.set_enable_oc();
+                    o++;
+                    i++;
+                }
+                while (o < CCD1OCArray.Length);
+            }
+
             if (Settings.Default.isPerCO == true)
             {
                 int x = 0;

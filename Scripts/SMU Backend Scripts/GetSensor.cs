@@ -9,6 +9,7 @@ using AATUV3.Scripts.SMU_Backend_Scripts;
 using System.Windows.Forms;
 using System.IO;
 using UXTU.Properties;
+using System.Diagnostics;
 
 namespace AATUV3.Scripts.SMU_Backend_Scripts
 {
@@ -43,6 +44,51 @@ namespace AATUV3.Scripts.SMU_Backend_Scripts
                 }
             }
             catch (Exception ex) { }
+            return 0;
+        }
+
+        public static decimal getSensorValueRAdj(string SensorName)
+        {
+            using (Process process = new Process())
+            {
+                int i = 0;
+
+                string path = Settings.Default.Path + "\\bin\\ryzenadj\\ryzenadj.exe";
+                process.StartInfo.FileName = path;
+                process.StartInfo.Arguments = "-i";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+
+                // Synchronously read the standard output of the spawned process.
+                StreamReader reader = process.StandardOutput;
+                string output = reader.ReadToEnd();
+
+                string[] lines = output.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+                if (lines != null || lines.Length != 0)
+                {
+                    do { i++; } while (!lines[i].Contains(SensorName));
+
+                    if (lines[i].Contains(SensorName))
+                    {
+                        lines[i] = lines[i].Substring(25);
+                        lines[i] = lines[i].Remove(lines[i].Length - 21);
+                        lines[i] = lines[i].Replace("|", null);
+                        lines[i] = lines[i].Replace(" ", null);
+
+                        return Convert.ToDecimal(lines[i].ToString());
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                process.WaitForExit();
+            }
+
             return 0;
         }
     }

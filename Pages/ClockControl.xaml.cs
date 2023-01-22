@@ -24,6 +24,7 @@ using LibreHardwareMonitor.Hardware;
 using System.Security.Cryptography;
 using Stopbyte.Controls;
 using System.Runtime.InteropServices;
+using RyzenSmu;
 
 namespace AATUV3.Pages
 {
@@ -52,6 +53,7 @@ namespace AATUV3.Pages
             cbdGPUCore.IsChecked = Settings.Default.isNV;
             cbiGPU.IsChecked = Settings.Default.isiGPUClk;
             cbCOPerCPU.IsChecked = Settings.Default.isPerCO;
+            cbOCPerCPU.IsChecked = Settings.Default.isPerOC;
 
             cbRaddGPUCore.IsChecked = Settings.Default.isRadOC;
 
@@ -64,8 +66,13 @@ namespace AATUV3.Pages
             string CCD1 = Settings.Default.PerCOCCD1;
             string[] CCD1Array = CCD1.Split(',');
 
+            string CCD1OC = Settings.Default.PerOCCCD1;
+            string[] CCD1OCArray = CCD1OC.Split(',');
+
             string CCD2 = Settings.Default.PerCOCCD2;
             string[] CCD2Array = CCD2.Split(',');
+
+            NumericSpinner[] ocCCD1 = { nudCCD1C1OC, nudCCD1C2OC, nudCCD1C3OC, nudCCD1C4OC, nudCCD1C5OC, nudCCD1C6OC, nudCCD1C7OC, nudCCD1C8OC };
 
             NumericSpinner[] nudCCD1 = { nudCCD1C1, nudCCD1C2, nudCCD1C3, nudCCD1C4, nudCCD1C5, nudCCD1C6, nudCCD1C7, nudCCD1C8 };
             NumericSpinner[] nudCCD2 = { nudCCD2C1, nudCCD2C2, nudCCD2C3, nudCCD2C4, nudCCD2C5, nudCCD2C6, nudCCD2C7, nudCCD2C8 };
@@ -78,13 +85,22 @@ namespace AATUV3.Pages
                 x++;
             } while (x < 8);
 
-            if(Families.FAMID == 3 ||  Families.FAMID == 7 || Families.FAMID == 8)
+            x = 0;
+            do
+            {
+                ocCCD1[x].Value = Convert.ToInt32(CCD1OCArray[x]);
+                x++;
+            } while (x < 8);
+
+            if (Families.FAMID == 3 ||  Families.FAMID == 7 || Families.FAMID == 8)
             {
                 cbCOPerCPU.Visibility= Visibility.Visible;
+                cbOCPerCPU.Visibility = Visibility.Visible;
             }
             else
             {
                 cbCOPerCPU.Visibility = Visibility.Collapsed;
+                cbOCPerCPU.Visibility = Visibility.Collapsed;
             }
 
             if(cbCOPerCPU.IsChecked == true)
@@ -105,6 +121,15 @@ namespace AATUV3.Pages
                 COCCD1.Visibility = Visibility.Collapsed;
             }
 
+            if (cbOCPerCPU.IsChecked == true)
+            {
+                OCCCD1.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                COCCD1.Visibility = Visibility.Collapsed;
+            }
+
             //GetPowerInfo();
             //getGPURange();
             //getVRAMInfo();
@@ -114,6 +139,7 @@ namespace AATUV3.Pages
         private void Disable_Click(object sender, RoutedEventArgs e)
         {
             SendCommand.set_disable_oc();
+            BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Overclock-Reverted! Your-settings-have-been-reverted-successfully.", false);
         }
 
         public static int power, minClock, maxClock, Volt, VRAMClock, VRAMMode;
@@ -173,11 +199,29 @@ namespace AATUV3.Pages
                 if (nudCOCPU.Value >= 0)
                 {
                     SendCommand.set_coall((uint)nudCOCPU.Value);
+                    SendCommand.set_coall((uint)nudCOCPU.Value);
                 }
                 else
                 {
                     SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
+                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
                 }
+                i++;
+            }
+
+            NumericSpinner[] ocCCD1 = { nudCCD1C1OC, nudCCD1C2OC, nudCCD1C3OC, nudCCD1C4OC, nudCCD1C5OC, nudCCD1C6OC, nudCCD1C7OC, nudCCD1C8OC };
+
+            if (cbOCPerCPU.IsChecked == true)
+            {
+                int o = 0;
+                do
+                {
+                    SendCommand.set_per_core_oc_clk(Convert.ToUInt32((o << 20) | ((int)ocCCD1[o].Value & 1048575)));
+                    SendCommand.set_enable_oc();
+                    o++;
+                }
+                while (o < ocCCD1.Length);
+
                 i++;
             }
 
@@ -201,6 +245,7 @@ namespace AATUV3.Pages
                     if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
                     {
                         int value = (CORE << 20) | (magnitude & 0xFFFF);
+                        SendCommand.set_coper(Convert.ToUInt32(value));
                         SendCommand.set_coper(Convert.ToUInt32(value));
                     }
                     else if (magnitude >= 0)
@@ -348,6 +393,8 @@ namespace AATUV3.Pages
             string CCD1output = $"{CCD1[0].Value},{CCD1[1].Value},{CCD1[2].Value},{CCD1[3].Value},{CCD1[4].Value},{CCD1[5].Value},{CCD1[6].Value},{CCD1[7].Value}";
             string CCD2output = $"{CCD2[0].Value},{CCD2[1].Value},{CCD2[2].Value},{CCD2[3].Value},{CCD2[4].Value},{CCD2[5].Value},{CCD2[6].Value},{CCD2[7].Value}";
 
+            string CCD1OCoutput = $"{ocCCD1[0].Value},{ocCCD1[1].Value},{ocCCD1[2].Value},{ocCCD1[3].Value},{ocCCD1[4].Value},{ocCCD1[5].Value},{ocCCD1[6].Value},{ocCCD1[7].Value}";
+
             Settings.Default.isAllCoreCLK = (bool)cbCoreClock.IsChecked;
             Settings.Default.isVID = (bool)cbCoreVolt.IsChecked;
             Settings.Default.isBUS = (bool)cbBus.IsChecked;
@@ -357,9 +404,11 @@ namespace AATUV3.Pages
             Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
             Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
             Settings.Default.isRadOC = (bool)cbRaddGPUCore.IsChecked;
+            Settings.Default.isPerOC = (bool)cbOCPerCPU.IsChecked;
 
             Settings.Default.PerCOCCD1 = CCD1output;
             Settings.Default.PerCOCCD2 = CCD2output;
+            Settings.Default.PerOCCCD1 = CCD1OCoutput;
 
             if (rbFactory.IsChecked == true) Settings.Default.RadOption = 0;
             else if (rbUVGPU.IsChecked == true) Settings.Default.RadOption = 1;
@@ -401,6 +450,34 @@ namespace AATUV3.Pages
             else
             {
                 COCCD1.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void cbOCPer_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbOCPerCPU.IsChecked == true) cbCoreClock.IsChecked = false;
+
+            if (cbOCPerCPU.IsChecked == true)
+            {
+                OCCCD1.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                OCCCD1.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void cbOCCPU_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbCoreClock.IsChecked == true) cbOCPerCPU.IsChecked = false;
+
+            if (cbCoreClock.IsChecked == true)
+            {
+                OCCCD1.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                OCCCD1.Visibility = Visibility.Visible;
             }
         }
 

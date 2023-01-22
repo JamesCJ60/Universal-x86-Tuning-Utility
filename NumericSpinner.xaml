@@ -58,7 +58,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="22" />
+                    <ColumnDefinition Width="21" />
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="tb_main" x:FieldModifier="private" FontWeight="Medium" FontSize="12" VerticalContentAlignment="Center" Padding="5,-3" 
                      Grid.Column="0" Grid.RowSpan="2" Text="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Foreground="White">
