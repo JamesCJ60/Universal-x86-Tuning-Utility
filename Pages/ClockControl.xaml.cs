@@ -127,7 +127,7 @@ namespace AATUV3.Pages
             }
             else
             {
-                COCCD1.Visibility = Visibility.Collapsed;
+                OCCCD1.Visibility = Visibility.Collapsed;
             }
 
             //GetPowerInfo();
