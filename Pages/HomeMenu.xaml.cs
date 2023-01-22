@@ -1,5 +1,4 @@
-﻿using AATUV3.Scripts.SMU_Backend_Scripts;
-using RyzenSMUBackend;
+﻿using RyzenSMUBackend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +26,6 @@ namespace AATUV3.Pages
             InitializeComponent();
 
             lblAppName.Content = MainWindow.AppName;
-
-            //SendCommand.set_per_core_oc_clk(Convert.ToUInt32((7 << 20) | (4700 & 1048575)));
 
         }
 

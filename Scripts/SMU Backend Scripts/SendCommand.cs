@@ -665,9 +665,6 @@ namespace RyzenSMUBackend
                 case 8:
                     RyzenAccess.SendPsmu(0x89, ref Args);
                     break;
-                case 7:
-                    RyzenAccess.SendPsmu(0x1C, ref Args);
-                    break;
                 default:
                     break;
             }
