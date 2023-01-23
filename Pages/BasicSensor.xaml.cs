@@ -40,6 +40,7 @@ namespace AATUV3.Pages
         private static Smu RyzenAccess;
         private static bool EnableDebug;
         private static uint[] Args;
+        private static DispatcherTimer sensor = new DispatcherTimer();
 
         public BasicSensor()
         {
@@ -49,8 +50,7 @@ namespace AATUV3.Pages
 
             updateSensor();
 
-            //set up timer for sensor update
-            DispatcherTimer sensor = new DispatcherTimer();
+            //set up timer for sensor 
             sensor.Interval = TimeSpan.FromSeconds(1);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
@@ -68,6 +68,8 @@ namespace AATUV3.Pages
         {
             try
             {
+                if(!MainWindow.menu.ToLower().Contains("info")) sensor.Stop();
+
                 int highestPL = 0;
                 string PMT = string.Format("{0:x}", Addresses.PMTableVersion);
                 CoreLat.Visibility = Visibility.Collapsed;
