@@ -39,20 +39,20 @@
                                         <CheckBox Name="cbCPU" Content="Turbo Boost Overdrive CPU:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
                                         <TextBlock Text="Aggressiveness:" FontSize="17.2" Foreground="White" Margin="25,0,0,0" />
                                         <StackPanel Orientation="Horizontal" Margin="25,5,0,0">
-                                            <RadioButton Style="{DynamicResource RadioButtonStyleNormal}" Name="rbPower" FontSize="16" VerticalContentAlignment="Center" Foreground="White">Power Savings</RadioButton>
-                                            <RadioButton IsChecked="True" Style="{DynamicResource RadioButtonStyleNormal}" Name="rbBal" FontSize="16" VerticalContentAlignment="Center" Foreground="White" Margin="10,0,0,0">Balanced</RadioButton>
-                                            <RadioButton Style="{DynamicResource RadioButtonStyleNormal}" Name="rbMax" FontSize="16" VerticalContentAlignment="Center" Foreground="White" Margin="10,0,0,0">Max Performance</RadioButton>
+                                            <RadioButton Style="{DynamicResource RadioButtonStyleNormal}" Name="rbPower" FontSize="16" VerticalContentAlignment="Center" Foreground="White" ToolTipService.ToolTip="Provides the best power efficiency. Ideal for iGPU only systems.">Power Savings</RadioButton>
+                                            <RadioButton IsChecked="True" Style="{DynamicResource RadioButtonStyleNormal}" Name="rbBal" FontSize="16" VerticalContentAlignment="Center" Foreground="White" Margin="10,0,0,0" ToolTipService.ToolTip="Aims for the best performance and power efficiency. Ideal for thin and light dGPU systems.">Balanced</RadioButton>
+                                            <RadioButton Style="{DynamicResource RadioButtonStyleNormal}" Name="rbMax" FontSize="16" VerticalContentAlignment="Center" Foreground="White" Margin="10,0,0,0" ToolTipService.ToolTip="Aims for the best performance at all cost. Ideal for workstation systems.">Max Performance</RadioButton>
                                         </StackPanel>
 
-                                        <StackPanel Orientation="Horizontal" Margin="25,6,0,0">
+                                        <StackPanel Orientation="Horizontal" Margin="25,6,0,0" Visibility="Collapsed">
                                             <CheckBox Name="cbCPUClockOffset" Content="CPU Clock Offset (MHz):" Foreground="White" BorderBrush="White" FontSize="16" Height="18" Width="225" BorderThickness="0,1,1,1" Padding="8,-4,0,0" IsEnabled="False"/>
                                             <Controls:NumericSpinner x:Name="nudCPUClockOffset" Width="95" Height="22" MinValue="-400" Value="0" MaxValue="400" Step="50"/>
                                         </StackPanel>
 
-                                        <TextBlock Foreground="#FF8C8C8C" Margin="24,5,0,0">TBO CPU offsets only work on unlocked Ryzen systems with max performance.</TextBlock>
+                                        <TextBlock Visibility="Collapsed" Foreground="#FF8C8C8C" Margin="24,5,0,0">TBO CPU offsets only work on unlocked Ryzen systems with max performance.</TextBlock>
                                     </StackPanel>
 
-                                    <StackPanel Margin="0,12,0,0">
+                                    <StackPanel Margin="0,12,0,0" Visibility="Collapsed">
                                         <CheckBox Name="cbiGPU" Content="Turbo Boost Overdrive iGPU:" FontSize="17.2" Foreground="White" BorderThickness="0,1,1,1" Padding="4,-4,0,0" Margin="6,0,0,0" />
                                         <TextBlock Text="Aggressiveness:" FontSize="17.2" Foreground="White" Margin="25,0,0,0" />
                                         <StackPanel Orientation="Horizontal" Margin="25,5,0,0">

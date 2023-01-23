@@ -146,120 +146,136 @@ namespace AATUV3.Pages
 
         private async void Apply_Click(object sender, RoutedEventArgs e)
         {
-            int i = 0;
-            Settings.Default.AllCoreClk = (int)nudCoreClock.Value;
-            Settings.Default.CPUVID = (int)nudCoreVolt.Value;
-            Settings.Default.BusCLK = (double)nudBus.Value;
-            Settings.Default.COCPU = (int)nudCOCPU.Value;
-            Settings.Default.COiGPU = (int)nudCOIGPU.Value;
-            Settings.Default.iGPUClk = (int)nudiGPU.Value;
-            Settings.Default.dGPUCLK = (int)nuddGPUCore.Value;
-            Settings.Default.dGPUMem = (int)nuddGPUMem.Value;
-            Settings.Default.Save();
+                int i = 0;
+                Settings.Default.AllCoreClk = (int)nudCoreClock.Value;
+                Settings.Default.CPUVID = (int)nudCoreVolt.Value;
+                Settings.Default.BusCLK = (double)nudBus.Value;
+                Settings.Default.COCPU = (int)nudCOCPU.Value;
+                Settings.Default.COiGPU = (int)nudCOIGPU.Value;
+                Settings.Default.iGPUClk = (int)nudiGPU.Value;
+                Settings.Default.dGPUCLK = (int)nuddGPUCore.Value;
+                Settings.Default.dGPUMem = (int)nuddGPUMem.Value;
+                Settings.Default.Save();
 
-            if (cbCoreClock.IsChecked == true)
-            {
-                SendCommand.set_oc_clk((uint)nudCoreClock.Value);
-                SendCommand.set_enable_oc();
-                SendCommand.set_oc_clk((uint)nudCoreClock.Value);
-                SendCommand.set_enable_oc();
-                SendCommand.set_oc_clk((uint)nudCoreClock.Value);
-                SendCommand.set_enable_oc();
-                i++;
-            }
-
-            if (cbCoreVolt.IsChecked == true)
-            {
-                if(Families.FAMID == 10)
+                if (cbCoreClock.IsChecked == true)
                 {
-                    double vid = ((double)nudCoreVolt.Value - 1125) / 5 + 1200;
-                    SendCommand.set_oc_volt(Convert.ToUInt32(vid));
-                    SendCommand.set_oc_volt(Convert.ToUInt32(vid));
+                    SendCommand.set_oc_clk((uint)nudCoreClock.Value);
                     SendCommand.set_enable_oc();
-                }
-                else
-                {
-                    double vid = Math.Round((double)nudCoreVolt.Value / 1000, 2);
-                    SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
-                    SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                    SendCommand.set_oc_clk((uint)nudCoreClock.Value);
                     SendCommand.set_enable_oc();
-                }
-                i++;
-            }
-
-            if (cbBus.IsChecked == true)
-            {
-                RwMmioAmd MMIO = new RwMmioAmd();
-                MMIO.SetBclk(Convert.ToDouble(nudBus.Value));
-                i++;
-            }
-
-            if (cbCOCPU.IsChecked == true)
-            {
-                if (nudCOCPU.Value >= 0)
-                {
-                    SendCommand.set_coall((uint)nudCOCPU.Value);
-                    SendCommand.set_coall((uint)nudCOCPU.Value);
-                }
-                else
-                {
-                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
-                    SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
-                }
-                i++;
-            }
-
-            NumericSpinner[] ocCCD1 = { nudCCD1C1OC, nudCCD1C2OC, nudCCD1C3OC, nudCCD1C4OC, nudCCD1C5OC, nudCCD1C6OC, nudCCD1C7OC, nudCCD1C8OC };
-
-            if (cbOCPerCPU.IsChecked == true)
-            {
-                int o = 0;
-                do
-                {
-                    SendCommand.set_per_core_oc_clk(Convert.ToUInt32((o << 20) | ((int)ocCCD1[o].Value & 1048575)));
+                    SendCommand.set_oc_clk((uint)nudCoreClock.Value);
                     SendCommand.set_enable_oc();
-                    o++;
+                    i++;
                 }
-                while (o < ocCCD1.Length);
 
-                i++;
-            }
-
-            NumericSpinner[] CCD1 = { nudCCD1C1, nudCCD1C2, nudCCD1C3, nudCCD1C4, nudCCD1C5, nudCCD1C6, nudCCD1C7, nudCCD1C8 };
-            NumericSpinner[] CCD2 = { nudCCD2C1, nudCCD2C2, nudCCD2C3, nudCCD2C4, nudCCD2C5, nudCCD2C6, nudCCD2C7, nudCCD2C8 };
-
-            if (cbCOPerCPU.IsChecked == true)
-            {
-                int x = 0;
-                do
+                if (cbCoreVolt.IsChecked == true)
                 {
-                    int CCD, CCX, CORE, magnitude, magnitude2;
-
-                    CCD = 0;
-                    CCX = 0;
-                    CORE = x;
-
-                    magnitude = (int)CCD1[x].Value;
-                    magnitude2 = (int)CCD2[x].Value;
-
-                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
+                    if (Families.FAMID == 10)
                     {
-                        int value = (CORE << 20) | (magnitude & 0xFFFF);
-                        SendCommand.set_coper(Convert.ToUInt32(value));
-                        SendCommand.set_coper(Convert.ToUInt32(value));
-                    }
-                    else if (magnitude >= 0)
-                    {
-                        
-                        uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
-                        SendCommand.set_coper(CO);
-                       
-                        CCX = 1;
-                        CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
-                        SendCommand.set_coper(CO);
+                        double vid = ((double)nudCoreVolt.Value - 1125) / 5 + 1200;
+                        SendCommand.set_oc_volt(Convert.ToUInt32(vid));
+                        SendCommand.set_oc_volt(Convert.ToUInt32(vid));
+                        SendCommand.set_enable_oc();
                     }
                     else
                     {
+                        double vid = Math.Round((double)nudCoreVolt.Value / 1000, 2);
+                        SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                        SendCommand.set_oc_volt(Convert.ToUInt32((1.55 - vid) / 0.00625));
+                        SendCommand.set_enable_oc();
+                    }
+                    i++;
+                }
+
+                if (cbBus.IsChecked == true)
+                {
+                    RwMmioAmd MMIO = new RwMmioAmd();
+                    MMIO.SetBclk(Convert.ToDouble(nudBus.Value));
+                    i++;
+                }
+
+                if (cbCOCPU.IsChecked == true)
+                {
+                    if (nudCOCPU.Value >= 0)
+                    {
+                        SendCommand.set_coall((uint)nudCOCPU.Value);
+                        SendCommand.set_coall((uint)nudCOCPU.Value);
+                    }
+                    else
+                    {
+                        SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
+                        SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOCPU.Value)));
+                    }
+                    i++;
+                }
+
+            if (cbCOIGPU.IsChecked == true)
+            {
+                if (nudCOIGPU.Value >= 0)
+                {
+                    SendCommand.set_cogfx((uint)nudCOIGPU.Value);
+                    SendCommand.set_cogfx((uint)nudCOIGPU.Value);
+                }
+                else
+                {
+                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOIGPU.Value)));
+                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOIGPU.Value)));
+                }
+                i++;
+            }
+
+
+            NumericSpinner[] ocCCD1 = { nudCCD1C1OC, nudCCD1C2OC, nudCCD1C3OC, nudCCD1C4OC, nudCCD1C5OC, nudCCD1C6OC, nudCCD1C7OC, nudCCD1C8OC };
+
+                if (cbOCPerCPU.IsChecked == true)
+                {
+                    int o = 0;
+                    do
+                    {
+                        SendCommand.set_per_core_oc_clk(Convert.ToUInt32((o << 20) | ((int)ocCCD1[o].Value & 1048575)));
+                        SendCommand.set_enable_oc();
+                        o++;
+                    }
+                    while (o < ocCCD1.Length);
+
+                    i++;
+                }
+
+                NumericSpinner[] CCD1 = { nudCCD1C1, nudCCD1C2, nudCCD1C3, nudCCD1C4, nudCCD1C5, nudCCD1C6, nudCCD1C7, nudCCD1C8 };
+                NumericSpinner[] CCD2 = { nudCCD2C1, nudCCD2C2, nudCCD2C3, nudCCD2C4, nudCCD2C5, nudCCD2C6, nudCCD2C7, nudCCD2C8 };
+
+                if (cbCOPerCPU.IsChecked == true)
+                {
+                    int x = 0;
+                    do
+                    {
+                        int CCD, CCX, CORE, magnitude, magnitude2;
+
+                        CCD = 0;
+                        CCX = 0;
+                        CORE = x;
+
+                        magnitude = (int)CCD1[x].Value;
+                        magnitude2 = (int)CCD2[x].Value;
+
+                        if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
+                        {
+                            int value = (CORE << 20) | (magnitude & 0xFFFF);
+                            SendCommand.set_coper(Convert.ToUInt32(value));
+                            SendCommand.set_coper(Convert.ToUInt32(value));
+                        }
+                        else if (magnitude >= 0)
+                        {
+
+                            uint CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+
+                            CCX = 1;
+                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                            SendCommand.set_coper(CO);
+                        }
+                        else
+                        {
 
                             magnitude = magnitude * -1;
 
@@ -269,154 +285,100 @@ namespace AATUV3.Pages
                             CCX = 1;
                             CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude) & 0xFFFFF);
                             SendCommand.set_coper(CO);
-                        
-                    }
 
-                    if (magnitude2 >= 0)
-                    {
-                        uint CO;
-                        if (Families.FAMID == 6 || Families.FAMID == 10)
-                        {
-                            CCD = 1;
-                            CCX = 0;
-
-                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
-                            SendCommand.set_coper(CO);
-
-                            CCX = 1;
-                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
-                            SendCommand.set_coper(CO);
                         }
-                    }
-                    else
-                    {
-                        magnitude2 = magnitude2 * -1;
-                        uint CO;
 
-                        if (Families.FAMID == 6 || Families.FAMID == 10)
+                        if (magnitude2 >= 0)
                         {
-                            CCX = 0;
-                            CCD = 1;
-                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
-                            SendCommand.set_coper(CO);
+                            uint CO;
+                            if (Families.FAMID == 6 || Families.FAMID == 10)
+                            {
+                                CCD = 1;
+                                CCX = 0;
 
-                            CCX = 1;
-                            CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
-                            SendCommand.set_coper(CO);
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                                SendCommand.set_coper(CO);
+
+                                CCX = 1;
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | magnitude & 0xFFFFF);
+                                SendCommand.set_coper(CO);
+                            }
                         }
-                    }
-                    x++;
-                } while (x < 8);
-                i++;
-            }
+                        else
+                        {
+                            magnitude2 = magnitude2 * -1;
+                            uint CO;
 
+                            if (Families.FAMID == 6 || Families.FAMID == 10)
+                            {
+                                CCX = 0;
+                                CCD = 1;
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                                SendCommand.set_coper(CO);
 
-            if (cbCOIGPU.IsChecked == true)
-            {
-                if (nudCOCPU.Value >= 0)
+                                CCX = 1;
+                                CO = Convert.ToUInt32(((CCD << 4 | CCX % 1 & 15) << 4 | CORE % 8 & 15) << 20 | (0x100000 - magnitude2) & 0xFFFFF);
+                                SendCommand.set_coper(CO);
+                            }
+                        }
+                        x++;
+                    } while (x < 8);
+                    i++;
+                }
+
+                if (cbiGPU.IsChecked == true)
                 {
-                    SendCommand.set_cogfx((uint)nudCOIGPU.Value);
+                    SendCommand.set_gfx_clk((uint)nudiGPU.Value);
+                    i++;
+                }
+
+                if (cbdGPUCore.IsChecked == true)
+                {
+                    //Get RyzenAdj path
+                    string path = "\\bin\\oc.exe";
+                    //Pass settings on to be applied
+                    BasicExeBackend.ApplySettings(path, "0 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
+                    BasicExeBackend.ApplySettings(path, "1 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
+                    BasicExeBackend.ApplySettings(path, "2 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
+                    i++;
+                }
+
+                if (i == 0)
+                {
+                    BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
                 }
                 else
                 {
-                    SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudCOIGPU.Value)));
+                    BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 }
-                i++;
-            }
 
-            if (cbiGPU.IsChecked == true)
-            {
-                SendCommand.set_gfx_clk((uint)nudiGPU.Value);
-                i++;
-            }
+                string CCD1output = $"{CCD1[0].Value},{CCD1[1].Value},{CCD1[2].Value},{CCD1[3].Value},{CCD1[4].Value},{CCD1[5].Value},{CCD1[6].Value},{CCD1[7].Value}";
+                string CCD2output = $"{CCD2[0].Value},{CCD2[1].Value},{CCD2[2].Value},{CCD2[3].Value},{CCD2[4].Value},{CCD2[5].Value},{CCD2[6].Value},{CCD2[7].Value}";
 
-            if (cbdGPUCore.IsChecked == true)
-            {
-                //Get RyzenAdj path
-                string path = "\\bin\\oc.exe";
-                //Pass settings on to be applied
-                BasicExeBackend.ApplySettings(path, "0 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
-                BasicExeBackend.ApplySettings(path, "1 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
-                BasicExeBackend.ApplySettings(path, "2 " + nuddGPUCore.Value + " " + nuddGPUMem.Value, true);
-                i++;
-            }
+                string CCD1OCoutput = $"{ocCCD1[0].Value},{ocCCD1[1].Value},{ocCCD1[2].Value},{ocCCD1[3].Value},{ocCCD1[4].Value},{ocCCD1[5].Value},{ocCCD1[6].Value},{ocCCD1[7].Value}";
 
-            //if (cbRaddGPUCore.IsChecked == true)
-            //{
-            //    // Get path
-            //    string path = "\\bin\\vramoc.exe";
-            //    string path2 = "\\bin\\coreoc.exe";
-            //    string path3 = "\\bin\\auto.exe";
-            //    string path4 = "\\bin\\power.exe";
+                Settings.Default.isAllCoreCLK = (bool)cbCoreClock.IsChecked;
+                Settings.Default.isVID = (bool)cbCoreVolt.IsChecked;
+                Settings.Default.isBUS = (bool)cbBus.IsChecked;
+                Settings.Default.isCPUCO = (bool)cbCOCPU.IsChecked;
+                Settings.Default.isPerCO = (bool)cbCOPerCPU.IsChecked;
+                Settings.Default.isGPUCO = (bool)cbCOIGPU.IsChecked;
+                Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
+                Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
+                Settings.Default.isRadOC = (bool)cbRaddGPUCore.IsChecked;
+                Settings.Default.isPerOC = (bool)cbOCPerCPU.IsChecked;
 
-            //    // Pass settings on to be applied
-            //    if (rbFactory.IsChecked == true) BasicExeBackend.ApplySettings(path3, "0", true);
-            //    else if (rbUVGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 0", true);
-            //    else if (rbOCGPU.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 1", true);
-            //    else if (rbOCVRAM.IsChecked == true) BasicExeBackend.ApplySettings(path3, "1 2", true);
-            //    else
-            //    {
-            //        power = (int)nudPower.Value;
-            //        minClock = (int)nudMinClockCore.Value;
-            //        maxClock = (int)nudMaxClockCore.Value;
-            //        Volt = (int)nudVoltage.Value;
-            //        VRAMClock = (int)nudVRAMClockMem.Value;
-            //        VRAMMode = 1;
+                Settings.Default.PerCOCCD1 = CCD1output;
+                Settings.Default.PerCOCCD2 = CCD2output;
+                Settings.Default.PerOCCCD1 = CCD1OCoutput;
 
-            //        await Task.Run(() =>
-            //        {
-            //            BasicExeBackend.ApplySettings(path3, "0", true);
-            //            Thread.Sleep(250);
-            //            BasicExeBackend.ApplySettings(path2, "3 " + minClock + " " + maxClock + " " + Volt, true);
-            //            Thread.Sleep(100);
-            //            BasicExeBackend.ApplySettings(path4, "1 " + power, true);
-            //            Thread.Sleep(100);
-            //            BasicExeBackend.ApplySettings(path, "4 " + VRAMClock, true);
-            //            Thread.Sleep(250);
-            //            BasicExeBackend.ApplySettings(path, "3 " + VRAMMode, true);
-            //            Thread.Sleep(100);
-            //        });
+                if (rbFactory.IsChecked == true) Settings.Default.RadOption = 0;
+                else if (rbUVGPU.IsChecked == true) Settings.Default.RadOption = 1;
+                else if (rbOCGPU.IsChecked == true) Settings.Default.RadOption = 2;
+                else if (rbOCVRAM.IsChecked == true) Settings.Default.RadOption = 3;
+                else if (rbMan.IsChecked == true) Settings.Default.RadOption = 4;
 
-            //    }
-            //    i++;
-            //}
-
-            if (i == 0)
-            {
-                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
-            }
-            else
-            {
-                BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
-            }
-
-            string CCD1output = $"{CCD1[0].Value},{CCD1[1].Value},{CCD1[2].Value},{CCD1[3].Value},{CCD1[4].Value},{CCD1[5].Value},{CCD1[6].Value},{CCD1[7].Value}";
-            string CCD2output = $"{CCD2[0].Value},{CCD2[1].Value},{CCD2[2].Value},{CCD2[3].Value},{CCD2[4].Value},{CCD2[5].Value},{CCD2[6].Value},{CCD2[7].Value}";
-
-            string CCD1OCoutput = $"{ocCCD1[0].Value},{ocCCD1[1].Value},{ocCCD1[2].Value},{ocCCD1[3].Value},{ocCCD1[4].Value},{ocCCD1[5].Value},{ocCCD1[6].Value},{ocCCD1[7].Value}";
-
-            Settings.Default.isAllCoreCLK = (bool)cbCoreClock.IsChecked;
-            Settings.Default.isVID = (bool)cbCoreVolt.IsChecked;
-            Settings.Default.isBUS = (bool)cbBus.IsChecked;
-            Settings.Default.isCPUCO = (bool)cbCOCPU.IsChecked;
-            Settings.Default.isPerCO = (bool)cbCOPerCPU.IsChecked;
-            Settings.Default.isGPUCO = (bool)cbCOIGPU.IsChecked;
-            Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
-            Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
-            Settings.Default.isRadOC = (bool)cbRaddGPUCore.IsChecked;
-            Settings.Default.isPerOC = (bool)cbOCPerCPU.IsChecked;
-
-            Settings.Default.PerCOCCD1 = CCD1output;
-            Settings.Default.PerCOCCD2 = CCD2output;
-            Settings.Default.PerOCCCD1 = CCD1OCoutput;
-
-            if (rbFactory.IsChecked == true) Settings.Default.RadOption = 0;
-            else if (rbUVGPU.IsChecked == true) Settings.Default.RadOption = 1;
-            else if (rbOCGPU.IsChecked == true) Settings.Default.RadOption = 2;
-            else if (rbOCVRAM.IsChecked == true) Settings.Default.RadOption = 3;
-            else if (rbMan.IsChecked == true) Settings.Default.RadOption = 4;
-
-            Settings.Default.Save();
+                Settings.Default.Save();
         }
 
 

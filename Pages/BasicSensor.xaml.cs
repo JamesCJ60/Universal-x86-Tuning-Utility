@@ -216,7 +216,7 @@ namespace AATUV3.Pages
 
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { }
         }
     }
 }
