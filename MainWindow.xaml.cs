@@ -643,7 +643,7 @@ namespace AATUV3
 
             if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt"))
             {
-                PagesNavigation.Navigate(new System.Uri("Pages/BasicSensor.xaml", UriKind.RelativeOrAbsolute));
+                PagesNavigation.Navigate(new System.Uri("Pages/Info.xaml", UriKind.RelativeOrAbsolute));
             }
             else
             {

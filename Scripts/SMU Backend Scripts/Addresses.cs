@@ -490,20 +490,24 @@ namespace RyzenSMUBackend
                     //{
                     //    msg3 = 0x3d;
                     //}
-                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
+                    if (Families.FAMID == 3 || Families.FAMID == 7 /*|| Families.FAMID == 8*/)
                     {
                         msg3 = 0x65;
                     }
 
-                    if (Families.FAMID == 5)
-                    {
-                        msg3 = 0x65;
-                    }
-
-                    if (Families.FAMID == 10)
+                    if (Families.FAMID == 4 || Families.FAMID == 6)
                     {
                         msg3 = 0x5;
                     }
+                    //if (Families.FAMID == 5)
+                    //{
+                    //    msg3 = 0x65;
+                    //}
+
+                    //if (Families.FAMID == 10)
+                    //{
+                    //    msg3 = 0x5;
+                    //}
 
                     Args = new uint[6];
                     RyzenAccess = new Smu(EnableDebug);

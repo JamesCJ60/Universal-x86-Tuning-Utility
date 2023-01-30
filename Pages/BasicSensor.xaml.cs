@@ -54,9 +54,6 @@ namespace AATUV3.Pages
             sensor.Interval = TimeSpan.FromSeconds(1);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
-
-            RyzenAccess = new Smu(EnableDebug);
-            RyzenAccess.Initialize();
         }
 
         void SensorUpdate_Tick(object sender, EventArgs e)
@@ -132,7 +129,7 @@ namespace AATUV3.Pages
                     lblSoCClk.Text = $"{(int)GetSensor.getSensorValve("SOCCLK_FREQ")}MHz";
                     lblMemClk.Text = $"{(int)GetSensor.getSensorValve("MEMCLK_FREQ")}MHz";
                     lblMemClk2.Text = $"{(int)GetSensor.getSensorValve("MEMCLK_FREQ") * 2}MT/s";
-                    lblMemBW.Text = $"{Math.Round(GetSensor.getSensorValve("MaxDramBW"), 1)}GB/s";
+                    lblMemBW.Text = $"{Math.Round(GetSensor.getSensorValve("MaxDramBW"), 2)}GB/s";
                     lblFabricClk.Text = $"{(int)GetSensor.getSensorValve("FCLK_FREQ")}MHz";
                     lblUncoreClk.Text = $"{(int)GetSensor.getSensorValve("UCLK_FREQ")}MHz";
 
