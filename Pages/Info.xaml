@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AATUV3.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="520" d:DesignWidth="945" MaxHeight="520" MaxWidth="955">
+             d:DesignHeight="520" d:DesignWidth="945" MaxHeight="520" MaxWidth="917">
     <UserControl.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -71,35 +71,37 @@
                     <DockPanel LastChildFill="True">
                         <Border DockPanel.Dock="Bottom" Height="35" BorderBrush="White" BorderThickness="2" Margin="5,0,5,5" Padding="5,5,5,5" CornerRadius="4">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Name="SocketPower" Foreground="White" FontSize="16" Margin="0,-1.5,12,0" MinWidth="140">Socket Power: 100w</TextBlock>
-                                <TextBlock Name="MemBandwidth" Foreground="White" FontSize="16" Margin="0,-1.5,12,0">Max Bandwidth: 100GB/s</TextBlock>
+                                <TextBlock Name="SocketPower" Foreground="White" FontSize="16" Margin="0,-1.5,12,0" MinWidth="145">Socket Power: 100w</TextBlock>
+                                <TextBlock Name="MemBandwidth" Foreground="White" FontSize="16" Margin="0,-1.5,12,0" >Max Bandwidth: 100.07GB/s</TextBlock>
+                                <TextBlock Name="EDC" Foreground="White" FontSize="16" Margin="0,-1.5,12,0" >EDC: 100A/100A</TextBlock>
+                                <TextBlock Name="TDC" Foreground="White" FontSize="16" Margin="0,-1.5,12,0" >TDC: 100A/100A</TextBlock>
                             </StackPanel>
                         </Border>
-                        <DockPanel DockPanel.Dock="Right" Width="200" VerticalAlignment="Stretch" LastChildFill="False">
+                        <DockPanel DockPanel.Dock="Right" Width="192" VerticalAlignment="Stretch" LastChildFill="False">
                             <Border BorderBrush="White" BorderThickness="2" Margin="0,5,5,0" Padding="5,5,5,5" DockPanel.Dock="Top" CornerRadius="4">
                                 <StackPanel>
-                                    <TextBlock Name="iGPUName" Foreground="White" FontSize="22" Margin="0,0,0,5">iGPU: </TextBlock>
+                                    <TextBlock Name="iGPUName" Foreground="White" FontSize="22" Margin="0,0,0,2">iGPU: </TextBlock>
                                     <TextBlock Name="iGPUTemp" Foreground="White" FontSize="16">iGPU Temp: 90°C</TextBlock>
                                     <TextBlock Name="iGPUClock" Foreground="White" FontSize="16">iGPU Clock: 2100MHz</TextBlock>
                                     <TextBlock Name="iGPUVoltage" Foreground="White" FontSize="16">iGPU Voltage: 1200mV</TextBlock>
-                                    <TextBlock Name="iGPUUsage" Foreground="White" FontSize="16">iGPU Usage: 90%</TextBlock>
+                                    <TextBlock Name="iGPUUsage" Foreground="White" FontSize="16" Margin="0,0,0,0.5">iGPU Usage: 90%</TextBlock>
                                 </StackPanel>
                             </Border>
 
                             <Border BorderBrush="White" BorderThickness="2" Margin="0,0,5,5" Padding="5,5,5,5" DockPanel.Dock="Bottom" CornerRadius="4">
                                 <StackPanel>
-                                    <TextBlock Name="SoC" Foreground="White" FontSize="22" Margin="0,0,0,5">SoC:</TextBlock>
+                                    <TextBlock Name="SoC" Foreground="White" FontSize="22" Margin="0,0,0,2">SoC:</TextBlock>
                                     <TextBlock Name="MemClock" Foreground="White" FontSize="16" Margin="0,0,12,0">RAM Clock: 1600MHz</TextBlock>
                                     <TextBlock Name="FabricClock" Foreground="White" FontSize="16">Fabric Clock: 1600MHz</TextBlock>
-                                    <TextBlock Name="Uncore" Foreground="White" FontSize="16">Uncore Clock: 1600MHz</TextBlock>
+                                    <TextBlock Name="Uncore" Foreground="White" FontSize="16" Width="173">Uncore Clock: 1600MHz</TextBlock>
                                     <TextBlock Name="SoCVoltage" Foreground="White" FontSize="16">SoC Voltage: 1200mV</TextBlock>
-                                    <TextBlock Name="SoCPower" Foreground="White" FontSize="16">SoC Power: 20w</TextBlock>
+                                    <TextBlock Name="SoCPower" Foreground="White" FontSize="16" Margin="0,0,0,0.5">SoC Power: 20w</TextBlock>
                                 </StackPanel>
                             </Border>
 
-                            <Border BorderBrush="White" BorderThickness="2" Margin="0,5,5,5" Padding="5,5,5,5" Width="195" CornerRadius="4">
+                            <Border BorderBrush="White" BorderThickness="2" Margin="0,5,5,5" Padding="5,5,5,5" Width="187" CornerRadius="4">
                                 <StackPanel>
-                                    <TextBlock Foreground="White" FontSize="22" Margin="0,0,0,5">Power Limits:</TextBlock>
+                                    <TextBlock Foreground="White" FontSize="22" Margin="0,0,0,2">Power Limits:</TextBlock>
                                     <TextBlock Name="pl0" Foreground="White" FontSize="16">Power Limit 0: 100w</TextBlock>
                                     <TextBlock Name="pl1" Foreground="White" FontSize="16">Power Limit 1: 100w</TextBlock>
                                     <TextBlock Name="pl2" Foreground="White" FontSize="16">Power Limit 2: 100w</TextBlock>
@@ -116,7 +118,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core1" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 1:</TextBlock>
                                                 <TextBlock Name="Core1Temp" Foreground="White" FontSize="16">Core 1 Temp: 50°C</TextBlock>
-                                                    <TextBlock Name="Core1Clock" Foreground="White" FontSize="16" Width="158">Core 1 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core1Clock" Foreground="White" FontSize="16" Width="153">Core 1 Clock: 4.65GHz</TextBlock>
                                                 <TextBlock Name="Core1Power" Foreground="White" FontSize="16">Core 1 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core1Voltage" Foreground="White" FontSize="16">Core 1 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core1CO" Foreground="White" FontSize="16">Core 1 CO: -20</TextBlock>
@@ -126,7 +128,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core2" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 2:</TextBlock>
                                                 <TextBlock Name="Core2Temp" Foreground="White" FontSize="16">Core 2 Temp: 50°C</TextBlock>
-                                                    <TextBlock Name="Core2Clock" Foreground="White" FontSize="16" Width="158">Core 2 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core2Clock" Foreground="White" FontSize="16" Width="153">Core 2 Clock: 4.65GHz</TextBlock>
                                                 <TextBlock Name="Core2Power" Foreground="White" FontSize="16">Core 2 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core2Voltage" Foreground="White" FontSize="16">Core 2 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core2CO" Foreground="White" FontSize="16">Core 2 CO: -20</TextBlock>
@@ -139,7 +141,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core3" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 3:</TextBlock>
                                                 <TextBlock Name="Core3Temp" Foreground="White" FontSize="16">Core 3 Temp: 50°C</TextBlock>
-                                                    <TextBlock Name="Core3Clock" Foreground="White" FontSize="16" Width="158">Core 3 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core3Clock" Foreground="White" FontSize="16" Width="153">Core 3 Clock: 4.65GHz</TextBlock>
                                                 <TextBlock Name="Core3Power" Foreground="White" FontSize="16">Core 3 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core3Voltage" Foreground="White" FontSize="16">Core 3 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core3CO" Foreground="White" FontSize="16">Core 3 CO: -20</TextBlock>
@@ -149,7 +151,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core4" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 4:</TextBlock>
                                                 <TextBlock Name="Core4Temp" Foreground="White" FontSize="16">Core 4 Temp: 50°C</TextBlock>
-                                                    <TextBlock Name="Core4Clock" Foreground="White" FontSize="16" Width="158">Core 4 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core4Clock" Foreground="White" FontSize="16" Width="153">Frequency: 4600MHz</TextBlock>
                                                 <TextBlock Name="Core4Power" Foreground="White" FontSize="16">Core 4 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core4Voltage" Foreground="White" FontSize="16">Core 4 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core4CO" Foreground="White" FontSize="16">Core 4 CO: -20</TextBlock>
@@ -173,7 +175,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core5" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 5:</TextBlock>
                                                 <TextBlock Name="Core5Temp" Foreground="White" FontSize="16">Core 5 Temp: 50°C</TextBlock>
-                                                    <TextBlock Name="Core5Clock" Foreground="White" FontSize="16" Width="158">Core 5 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core5Clock" Foreground="White" FontSize="16" Width="153">Core 5 Clock: 4.65GHz</TextBlock>
                                                 <TextBlock Name="Core5Power" Foreground="White" FontSize="16">Core 5 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core5Voltage" Foreground="White" FontSize="16">Core 5 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core5CO" Foreground="White" FontSize="16">Core 5 CO: -20</TextBlock>
@@ -183,7 +185,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core6" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 6:</TextBlock>
                                                 <TextBlock Name="Core6Temp" Foreground="White" FontSize="16">Core 6 Temp: 50°C</TextBlock>
-                                                    <TextBlock Name="Core6Clock" Foreground="White" FontSize="16" Width="158">Core 6 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core6Clock" Foreground="White" FontSize="16" Width="153">Core 6 Clock: 4.65GHz</TextBlock>
                                                 <TextBlock Name="Core6Power" Foreground="White" FontSize="16">Core 6 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core6Voltage" Foreground="White" FontSize="16">Core 6 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core6CO" Foreground="White" FontSize="16">Core 6 CO: -20</TextBlock>
@@ -197,7 +199,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core7" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 7:</TextBlock>
                                                 <TextBlock Name="Core7Temp" Foreground="White" FontSize="16">Core 7 Temp: 50°C</TextBlock>
-                                                    <TextBlock Name="Core7Clock" Foreground="White" FontSize="16" Width="158">Core 7 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core7Clock" Foreground="White" FontSize="16" Width="153">Core 7 Clock: 4.65GHz</TextBlock>
                                                 <TextBlock Name="Core7Power" Foreground="White" FontSize="16">Core 7 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core7Voltage" Foreground="White" FontSize="16">Core 7 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core7CO" Foreground="White" FontSize="16">Core 7 CO: -20</TextBlock>
@@ -207,7 +209,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock Name="Core8" Foreground="White" FontSize="18" Margin="0,0,0,2">Core 8:</TextBlock>
                                                 <TextBlock Name="Core8Temp" Foreground="White" FontSize="16">Core 8 Temp: 50°C</TextBlock>
-                                                <TextBlock Name="Core8Clock" Foreground="White" FontSize="16" Width="158">Core 8 Clock: 4.65GHz</TextBlock>
+                                                    <TextBlock Name="Core8Clock" Foreground="White" FontSize="16" Width="153">Core 8 Clock: 4.65GHz</TextBlock>
                                                 <TextBlock Name="Core8Power" Foreground="White" FontSize="16">Core 8 Power: 10w</TextBlock>
                                                 <TextBlock Name="Core8Voltage" Foreground="White" FontSize="16">Core 8 Voltage: 1.35v</TextBlock>
                                                     <TextBlock Name="Core8CO" Foreground="White" FontSize="16">Core 8 CO: -20</TextBlock>

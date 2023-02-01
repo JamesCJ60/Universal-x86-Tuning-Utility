@@ -118,7 +118,7 @@
                             <EventTrigger RoutedEvent="ToggleButton.Unchecked">
                                 <BeginStoryboard>
                                     <Storyboard x:Name="HideStackPanel">
-                                        <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="220" To="60" Duration="0:0:0.1">
+                                        <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="213" To="60" Duration="0:0:0.1">
                                         </DoubleAnimation>
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -126,7 +126,7 @@
                             <EventTrigger RoutedEvent="ToggleButton.Checked">
                                 <BeginStoryboard>
                                     <Storyboard x:Name="ShowStackPanel">
-                                        <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="60" To="220" Duration="0:0:0.1">
+                                        <DoubleAnimation Storyboard.TargetName="gridMenu" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="60" To="213" Duration="0:0:0.1">
                                         </DoubleAnimation>
                                     </Storyboard>
                                 </BeginStoryboard>

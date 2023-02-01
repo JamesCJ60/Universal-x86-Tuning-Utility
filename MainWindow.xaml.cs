@@ -630,7 +630,7 @@ namespace AATUV3
         private void rdInfo_Click(object sender, RoutedEventArgs e)
         {
             PagesNavigation.Navigate(null);
-            if (AppName.Contains("AMD"))
+            if (AppName.Contains("AMD APU"))
             {
                 if (pmtables.PMT_Sensors.Length == 0 || pmtables.PMT_Sensors == null)
                 {
@@ -651,6 +651,13 @@ namespace AATUV3
             }
 
             if (AppName.Contains("Intel CPU"))
+            {
+                //Load menu
+                PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));
+                //Set menu lable to menu name
+            }
+
+            if (AppName.Contains("AMD CPU"))
             {
                 //Load menu
                 PagesNavigation.Navigate(new System.Uri("Pages/ComingSoon.xaml", UriKind.RelativeOrAbsolute));

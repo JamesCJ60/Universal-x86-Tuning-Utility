@@ -41,7 +41,7 @@ namespace AATUV3.Pages
             if (Families.FAMID == 7) updateInfoCZN();
 
             //set up timer for sensor 
-            sensor.Interval = TimeSpan.FromSeconds(2);
+            sensor.Interval = TimeSpan.FromSeconds(1);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
@@ -55,7 +55,7 @@ namespace AATUV3.Pages
                 CCX2Con.BorderThickness = new Thickness(0, 2, 2, 2);
                 CCX2Con.Padding = new Thickness(0, 5, 5, 5);
                 CCX2Con.CornerRadius = new CornerRadius(0, 4, 4, 0);
-                this.MaxWidth = 931;
+                this.MaxWidth = 903;
             }
         }
         void SensorUpdate_Tick(object sender, EventArgs e)
@@ -104,15 +104,6 @@ namespace AATUV3.Pages
             SoCVoltage.Text = $"Voltage: {(int)(GetSensor.getSensorValve($"SOC_TELEMETRY_VOLTAGE") * 1000)}mV";
             SoCPower.Text = $"Power Draw: {GetSensor.getSensorValve("VDDCR_SOC_POWER").ToString("0.00")}W";
 
-
-
-            L3Logic.Text = $"L3$ Logic Power: {Math.Round(GetSensor.getSensorValve("L3_LOGIC_POWER_0"), 2) + Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER_1"), 2)}W";
-            L3VDDM.Text = $"L3$ VDDM Power: {Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER_0"), 2) + Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER_1"), 2)}W";
-            L3Temp.Text = $"L3$ Temp: {(int)GetSensor.getSensorValve("L3_TEMP_0")}/{(int)GetSensor.getSensorValve("L3_TEMP_1")}°C";
-            L3Clock.Text = $"L3$ Clock: {(int)(GetSensor.getSensorValve("L3_FREQ_0") * 1000)}/{(int)(GetSensor.getSensorValve("L3_FREQ_1") * 1000)}MHz";
-
-
-
             SocketPower.Text = $"Socket Power: {Math.Round(GetSensor.getSensorValve("SOCKET_POWER"), 2)}W";
 
             MemBandwidth.Text = $"Max Bandwidth: {Math.Round(GetSensor.getSensorValve("MaxDramBW"), 2)}GB/s";
@@ -120,7 +111,7 @@ namespace AATUV3.Pages
             int i = 0;
             do
             {
-                CoreTemp[i].Text = $"Core {i + 1} Temp: {(int)GetSensor.getSensorValve($"CORE_TEMP_{i}")}°C";
+                CoreTemp[i].Text = $"Temperature: {(int)GetSensor.getSensorValve($"CORE_TEMP_{i}")}°C";
 
                 if (GetSensor.getSensorValve($"CORE_POWER_{i}") == float.NaN || GetSensor.getSensorValve($"CORE_POWER_{i}") == 0)
                 {
@@ -143,6 +134,17 @@ namespace AATUV3.Pages
                 i++;
             }
             while (i < CoreCO.Length);
+
+
+
+            L3Logic.Text = $"L3$ Logic Power: {Math.Round(GetSensor.getSensorValve("L3_LOGIC_POWER_0"), 2) + Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER_1"), 2)}W";
+            L3VDDM.Text = $"L3$ VDDM Power: {Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER_0"), 2) + Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER_1"), 2)}W";
+            L3Temp.Text = $"L3$ Temp: {(int)GetSensor.getSensorValve("L3_TEMP_0")}/{(int)GetSensor.getSensorValve("L3_TEMP_1")}°C";
+            L3Clock.Text = $"L3$ Clock: {(int)(GetSensor.getSensorValve("L3_FREQ_0") * 1000)}/{(int)(GetSensor.getSensorValve("L3_FREQ_1") * 1000)}MHz";
+
+
+            TDC.Text = $"TDC: {(int)GetSensor.getSensorValve("TDC_VALUE_VDD")}A/{(int)GetSensor.getSensorValve("TDC_LIMIT_VDD")}A";
+            EDC.Text = $"EDC: {(int)GetSensor.getSensorValve("EDC_VALUE_VDD")}A/{(int)GetSensor.getSensorValve("EDC_LIMIT_VDD")}A";
         }
         private void updateInfoCZN()
         {
@@ -178,20 +180,11 @@ namespace AATUV3.Pages
             pl1.Text = $"Power Limit 1: {(int)GetSensor.getSensorValve($"PPT_LIMIT_SLOW")}W";
             pl2.Text = $"Power Limit 2: {(int)GetSensor.getSensorValve($"PPT_LIMIT_FAST")}W";
 
-            MemClock.Text = $"RAM Clock: {(int)GetSensor.getSensorValve("MEMCLK_FREQ")}MHz";
-            FabricClock.Text = $"Fabric Clock: {(int)GetSensor.getSensorValve("FCLK_FREQ")}MHz";
-            Uncore.Text = $"Uncore Clock: {(int)GetSensor.getSensorValve("UCLK_FREQ")}MHz";
+            MemClock.Text = $"RAM Clock: {(int)GetSensor.getSensorValve("MEMCLK_FREQEFF")}MHz";
+            FabricClock.Text = $"Fabric Clock: {(int)GetSensor.getSensorValve("FCLK_FREQEFF")}MHz";
+            Uncore.Text = $"Uncore Clock: {(int)GetSensor.getSensorValve("UCLK_FREQEFF")}MHz";
             SoCVoltage.Text = $"Voltage: {(int)(GetSensor.getSensorValve($"SOC_TELEMETRY_VOLTAGE") * 1000)}mV";
             SoCPower.Text = $"Power Draw: {GetSensor.getSensorValve("VDDCR_SOC_POWER").ToString("0.00")}W";
-
-
-            L3Logic.Text = $"L3$ Logic Power: {Math.Round(GetSensor.getSensorValve("L3_LOGIC_POWER"), 2)}W";
-            L3VDDM.Text = $"L3$ VDDM Power: {Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER"), 2)}W";
-            L3Temp.Text = $"L3$ Temp: {(int)GetSensor.getSensorValve("L3_TEMP")}°C";
-            L3Clock.Text = $"L3$ Clock: {(int)(GetSensor.getSensorValve("L3_FREQ") * 1000)}MHz";
-
-
-
 
             SocketPower.Text = $"Socket Power: {Math.Round(GetSensor.getSensorValve("SOCKET_POWER"), 2)}W";
 
@@ -229,6 +222,14 @@ namespace AATUV3.Pages
                 i++;
             }
             while (i < CoreCO.Length);
+
+            L3Logic.Text = $"L3$ Logic Power: {Math.Round(GetSensor.getSensorValve("L3_LOGIC_POWER"), 2)}W";
+            L3VDDM.Text = $"L3$ VDDM Power: {Math.Round(GetSensor.getSensorValve("L3_VDDM_POWER"), 2)}W";
+            L3Temp.Text = $"L3$ Temp: {(int)GetSensor.getSensorValve("L3_TEMP")}°C";
+            L3Clock.Text = $"L3$ Clock: {(int)(GetSensor.getSensorValve("L3_FREQEFF") * 1000)}MHz";
+
+            TDC.Text = $"TDC: {(int)GetSensor.getSensorValve("TDC_VALUE_VDD")}A/{(int)GetSensor.getSensorValve("TDC_LIMIT_VDD")}A";
+            EDC.Text = $"EDC: {(int)GetSensor.getSensorValve("EDC_VALUE_VDD")}A/{(int)GetSensor.getSensorValve("EDC_LIMIT_VDD")}A";
         }
     }
 }

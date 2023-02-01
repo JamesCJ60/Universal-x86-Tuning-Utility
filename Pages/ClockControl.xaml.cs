@@ -138,6 +138,19 @@ namespace AATUV3.Pages
 
         private void Disable_Click(object sender, RoutedEventArgs e)
         {
+            Settings.Default.isAllCoreCLK = (bool)cbCoreClock.IsChecked;
+            Settings.Default.isVID = (bool)cbCoreVolt.IsChecked;
+            Settings.Default.isBUS = (bool)cbBus.IsChecked;
+            Settings.Default.isCPUCO = (bool)cbCOCPU.IsChecked;
+            Settings.Default.isPerCO = (bool)cbCOPerCPU.IsChecked;
+            Settings.Default.isGPUCO = (bool)cbCOIGPU.IsChecked;
+            Settings.Default.isNV = (bool)cbdGPUCore.IsChecked;
+            Settings.Default.isiGPUClk = (bool)cbiGPU.IsChecked;
+            Settings.Default.isRadOC = (bool)cbRaddGPUCore.IsChecked;
+            Settings.Default.isPerOC = (bool)cbOCPerCPU.IsChecked;
+
+            Settings.Default.Save();
+
             SendCommand.set_disable_oc();
             BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Overclock-Reverted! Your-settings-have-been-reverted-successfully.", false);
         }
@@ -433,13 +446,13 @@ namespace AATUV3.Pages
         {
             if (cbCoreClock.IsChecked == true) cbOCPerCPU.IsChecked = false;
 
-            if (cbCoreClock.IsChecked == true)
+            if (cbOCPerCPU.IsChecked == true)
             {
-                OCCCD1.Visibility = Visibility.Collapsed;
+                OCCCD1.Visibility = Visibility.Visible;
             }
             else
             {
-                OCCCD1.Visibility = Visibility.Visible;
+                OCCCD1.Visibility = Visibility.Collapsed;
             }
         }
 
