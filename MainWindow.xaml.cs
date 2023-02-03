@@ -119,12 +119,12 @@ namespace AATUV3
 
             if (CPUName.Contains("AMD") || CPUName.Contains("Ryzen") || CPUName.Contains("Athlon") || CPUName.Contains("Radeon") || CPUName.Contains("AMD Custom APU 0405"))
             {
-                //if ((bool)Settings.Default["firstBoot"] == true)
-                //{
-                //    BasicExeBackend.ApplySettings("\\InstallDriver.exe", "", false);
-                //    Settings.Default["firstBoot"] = false;
-                //    Settings.Default.Save();
-                //}
+                if ((bool)Settings.Default["firstBoot"] == true)
+                {
+                    BasicExeBackend.ApplySettings("\\InstallDriver.exe", "", false);
+                    Settings.Default["firstBoot"] = false;
+                    Settings.Default.Save();
+                }
 
                 Families.SetFam();
 

@@ -83,6 +83,11 @@ namespace RyzenSMUBackend
                 FAMID = 8; //REMBRANDT
             }
 
+            if (CPUModel.Contains("Model " + Convert.ToString(116)))
+            {
+                FAMID = 9; //PHEONIX 
+            }
+
             if (CPUModel.Contains("Model " + Convert.ToString(97)))
             {
                 FAMID = 10; //RAPHAEL/DRAGON RANGE
