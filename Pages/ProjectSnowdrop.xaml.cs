@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Management;
+using UXTU.Scripts.SMU_Backend_Scripts;
 
 namespace AATUV3.Pages
 {
@@ -265,8 +266,9 @@ namespace AATUV3.Pages
             {
                 //Get RyzenAdj path
                 string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
-    //Pass settings on to be applied
-    BasicExeBackend.ApplySettings(pathRyzenAdj, preset1, true);
+                //Pass settings on to be applied
+                //BasicExeBackend.ApplySettings(pathRyzenAdj, preset1, true);
+                RyzenAdj_To_UXTU.Translate(preset1);
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset1;
                 Settings.Default.SnowPreset = 1;
@@ -292,7 +294,8 @@ namespace AATUV3.Pages
                 //Get RyzenAdj path
                 string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
                 //Pass settings on to be applied
-                BasicExeBackend.ApplySettings(pathRyzenAdj, preset2, true);
+                //BasicExeBackend.ApplySettings(pathRyzenAdj, preset2, true);
+                RyzenAdj_To_UXTU.Translate(preset2);
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default["RyzenAdjArguments"] = preset2;
                 Settings.Default.SnowPreset = 2;
@@ -316,9 +319,10 @@ namespace AATUV3.Pages
             else
             {
                 //Get RyzenAdj path
-                string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
+                //string pathRyzenAdj = "\\bin\\ryzenadj\\ryzenadj.exe";
                 //Pass settings on to be applied
-                BasicExeBackend.ApplySettings(pathRyzenAdj, preset3, true);
+                //BasicExeBackend.ApplySettings(pathRyzenAdj, preset3, true);
+                RyzenAdj_To_UXTU.Translate(preset3);
                 BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Settings-Applied! Your-settings-have-been-applied-successfully.", false);
                 Settings.Default.SnowPreset = 3;
                 Settings.Default["RyzenAdjArguments"] = preset3;

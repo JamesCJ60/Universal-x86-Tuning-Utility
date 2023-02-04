@@ -38,7 +38,6 @@ namespace AATUV3
 {
     public partial class MainWindow : Window
     {
-
         public static string menu = "";
         public static string AppName = "";
         public static string mbo = "";
