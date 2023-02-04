@@ -150,6 +150,7 @@
     <Compile Include="Scripts\SMU Backend Scripts\GetSensor.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\pmtables.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\RwMmioAmd.cs" />
+    <Compile Include="Scripts\SMU Backend Scripts\RyzenAdj_To_UXTU.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\RyzenSmu.cs" />
     <Compile Include="Scripts\SMU Backend Scripts\SendCommand.cs" />
     <Compile Include="Windows\SensorOverlay.xaml.cs">

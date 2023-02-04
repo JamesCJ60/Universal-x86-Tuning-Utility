@@ -30,6 +30,7 @@ using MessageBox = System.Windows.MessageBox;
 using Microsoft.Win32;
 using RyzenSmu;
 using System.Windows.Interop;
+using UXTU.Scripts.SMU_Backend_Scripts;
 
 namespace AATUV3
 {
@@ -208,9 +209,10 @@ namespace AATUV3
                     if (!MainWindow.menu.ToLower().Contains("adaptive"))
                     {
                         //Get RyzenAdj path
-                        string path = "\\bin\\ryzenadj\\ryzenadj.exe";
+                        //string path = "\\bin\\ryzenadj\\ryzenadj.exe";
                         //Pass settings on to be applied
-                        BasicExeBackend.ApplySettings(path, commands, true);
+                        //BasicExeBackend.ApplySettings(path, commands, true);
+                        RyzenAdj_To_UXTU.Translate(commands);
                     }
                 }
                 if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))
