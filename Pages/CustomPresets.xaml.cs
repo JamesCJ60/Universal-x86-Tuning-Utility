@@ -562,6 +562,9 @@ namespace AATUV3.Pages
 
             if (ryzenadj == null || ryzenadj == "") ryzenadj = "None";
 
+            if (ryzenadj == "None") BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Battery-Preset-Saved! On-battery-preset-has-been-disabled-successfully.", false);
+            else BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Battery-Preset-Saved! On-battery-preset-has-been-saved-successfully.", false);
+
             Settings.Default.BatteryPreset = ryzenadj;
             Settings.Default.Save();
         }
@@ -571,6 +574,9 @@ namespace AATUV3.Pages
             UpdateRyzenAdjOutput(false);
 
             if (ryzenadj == null || ryzenadj == "") ryzenadj = "None";
+
+            if(ryzenadj == "None") BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Charge-Preset-Saved! On-charge-preset-has-been-disabled-successfully.", false);
+            else BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Charge-Preset-Saved! On-charge-preset-has-been-saved-successfully.", false);
 
             Settings.Default.ChargingPreset = ryzenadj;
             Settings.Default.Save();
