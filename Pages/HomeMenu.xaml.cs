@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UXTU.Scripts;
 
 namespace AATUV3.Pages
 {
@@ -26,7 +27,6 @@ namespace AATUV3.Pages
             InitializeComponent();
 
             lblAppName.Content = MainWindow.AppName;
-
         }
 
         private void Discord_Click(object sender, RoutedEventArgs e)

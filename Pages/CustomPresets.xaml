@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:AATUV3.Pages"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="550" d:DesignWidth="900" Loaded="UserControl_Loaded"
+             d:DesignHeight="600" d:DesignWidth="1080" Loaded="UserControl_Loaded"
              xmlns:Controls="clr-namespace:Stopbyte.Controls">
     <UserControl.Resources>
 
@@ -16,7 +16,9 @@
         <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Apply}" Margin="0,0,7,3"   Foreground="White" Content="Apply Settings" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Apply_Click" Height="45"/>
         <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Save}" Margin="0,0,202,3"   Foreground="White" Content="Save Preset" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="btnSavePreset_Click" Height="45"/>
         <RadioButton Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Delete}" Margin="0,0,397,3"   Foreground="White" Content="Delete Preset" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Delete_Click" Height="45"/>
-
+        <RadioButton x:Name="btnBat" Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Battery}" Margin="0,0,592,3"   Foreground="White" Content="Set on Battery" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="SetOnBat_Click" Height="45"/>
+        <RadioButton x:Name="btnCharge" Style="{DynamicResource RadioButtonStyle2}" Tag="{DynamicResource Battery-Charge}" Margin="0,0,787,3"   Foreground="White" Content="Set on Charge" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="SetOnChar_Click" Height="45"/>
+        
         <ComboBox Style="{DynamicResource theComboBox}" ItemContainerStyle="{DynamicResource theComboBoxItem}" Name="cmbPresets" HorizontalAlignment="Left" Margin="91,18,0,0" VerticalAlignment="Top" Width="175" FontSize="14" Height="24" SelectionChanged="cmbPresets_SelectionChanged"></ComboBox>
         <Label Content="New Preset Name:" FontSize="20" Foreground="White" VerticalAlignment="Top" Margin="0,10,196,0" HorizontalAlignment="Right" Width="172"/>
         <TextBox Style="{DynamicResource TextBoxStyle}" Name="tbxPreset" Margin="0,18,14,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="14" Height="24" HorizontalAlignment="Right" Width="174" />

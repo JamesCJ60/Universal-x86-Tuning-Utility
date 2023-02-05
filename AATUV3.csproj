@@ -138,6 +138,7 @@
     <Compile Include="Scripts\ADLX\ADLXBackend.cs" />
     <Compile Include="Scripts\Adpative Modes\Performance\CpuPowerLimiter.cs" />
     <Compile Include="Scripts\Adpative Modes\Performance\iGPUClockAdjust.cs" />
+    <Compile Include="Scripts\BatteryInfo.cs" />
     <Compile Include="Scripts\GlobalVariables.cs" />
     <Compile Include="Scripts\Intel\BindableBase.cs" />
     <Compile Include="Scripts\Intel\ChangeTDP.cs" />

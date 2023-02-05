@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UXTU.Scripts;
 
 namespace AATUV3.Pages
 {
@@ -30,6 +31,14 @@ namespace AATUV3.Pages
             UpdatePresetList();
 
             tbxPreset.Text = null;
+
+            BatteryInfo.getBattery();
+
+            if (System.Windows.Forms.SystemInformation.PowerStatus.BatteryChargeStatus == System.Windows.Forms.BatteryChargeStatus.NoSystemBattery || BatteryInfo.statuscode == 9999)
+            { 
+                btnCharge.Visibility = Visibility.Collapsed;
+                btnBat.Visibility = Visibility.Collapsed; 
+            }
         }
 
         string presetVersion = "101";
@@ -38,7 +47,7 @@ namespace AATUV3.Pages
         {
             UpdateRyzenAdjOutput(false);
 
-            if (tbxPreset.Text != null || tbxPreset.Text != "")
+            if (tbxPreset.Text != null || tbxPreset.Text != "" || ryzenadj != "None")
             {
                 string path = Settings.Default["Path"].ToString() + "\\presets\\AMD APU\\" + tbxPreset.Text + ".txt";
                 string cpuSettings = "";
@@ -225,11 +234,10 @@ namespace AATUV3.Pages
             try
             {
 
-                if (ryzenadj == null || ryzenadj == "")
+                if (ryzenadj == null || ryzenadj == "" ||  ryzenadj == "None")
                 {
                     BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Error! There-are-no-settings-to-apply!", false);
                 }
-
                 else
                 {
                     //Get RyzenAdj path
@@ -546,6 +554,26 @@ namespace AATUV3.Pages
                 ryzenadj = ryzenadj + $"--gfx-clk={nudiGPUClock.Value} ";
                 if (apply == true) SendCommand.set_gfx_clk((uint)nudiGPUClock.Value);
             }
-        } 
+        }
+
+        private void SetOnBat_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateRyzenAdjOutput(false);
+
+            if (ryzenadj == null || ryzenadj == "") ryzenadj = "None";
+
+            Settings.Default.BatteryPreset = ryzenadj;
+            Settings.Default.Save();
+        }
+
+        private void SetOnChar_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateRyzenAdjOutput(false);
+
+            if (ryzenadj == null || ryzenadj == "") ryzenadj = "None";
+
+            Settings.Default.ChargingPreset = ryzenadj;
+            Settings.Default.Save();
+        }
     }
 }

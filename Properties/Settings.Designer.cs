@@ -502,5 +502,29 @@ namespace UXTU.Properties {
                 this["isPerOC"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public string BatteryPreset {
+            get {
+                return ((string)(this["BatteryPreset"]));
+            }
+            set {
+                this["BatteryPreset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public string ChargingPreset {
+            get {
+                return ((string)(this["ChargingPreset"]));
+            }
+            set {
+                this["ChargingPreset"] = value;
+            }
+        }
     }
 }

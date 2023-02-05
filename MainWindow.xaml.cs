@@ -33,6 +33,7 @@ using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using System.Linq.Expressions;
+using UXTU.Scripts.SMU_Backend_Scripts;
 
 namespace AATUV3
 {
@@ -269,58 +270,83 @@ namespace AATUV3
 
         private void OnPowerChange(object s, PowerModeChangedEventArgs e)
         {
-            try { 
-            int i = 0;
-            switch (e.Mode)
+            try
             {
-                case PowerModes.Resume:
-                    if (this.WindowState == WindowState.Minimized) Settings.Default.wasMini = true;
-                    Settings.Default.Save();
-                    // Restart and run as admin
-                    var exeName = Process.GetCurrentProcess().MainModule.FileName;
-                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                    startInfo.Verb = "runas";
-                    startInfo.Arguments = "restart";
-                    Process.Start(startInfo);
-                    System.Windows.Application.Current.Shutdown();
-                    break;
-                case PowerModes.Suspend:
-                    break;
-            }
-
-            if (e.Mode == Microsoft.Win32.PowerModes.StatusChange)
-            {
-                if ((bool)Settings.Default.isCPUCO == true)
+                int i = 0;
+                switch (e.Mode)
                 {
-                    if ((int)Settings.Default.COCPU >= 0)
-                    {
-                        SendCommand.set_coall((uint)Settings.Default.COCPU);
-                    }
-                    else
-                    {
-                        SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COCPU)));
-                    }
-                    i++;
+                    case PowerModes.Resume:
+                        if (this.WindowState == WindowState.Minimized) Settings.Default.wasMini = true;
+                        Settings.Default.Save();
+                        // Restart and run as admin
+                        var exeName = Process.GetCurrentProcess().MainModule.FileName;
+                        ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
+                        startInfo.Verb = "runas";
+                        startInfo.Arguments = "restart";
+                        Process.Start(startInfo);
+                        System.Windows.Application.Current.Shutdown();
+                        break;
+                    case PowerModes.Suspend:
+                        break;
                 }
 
-                if ((bool)Settings.Default.isGPUCO == true)
+                if (e.Mode == Microsoft.Win32.PowerModes.StatusChange)
                 {
-                    if ((int)Settings.Default.COiGPU >= 0)
-                    {
-                        SendCommand.set_cogfx((uint)Settings.Default.COiGPU);
-                    }
-                    else
-                    {
-                        SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COiGPU)));
-                    }
-                    i++;
-                }
+                    BatteryInfo.getBattery();
 
-                string CCD1output = Settings.Default.PerCOCCD1;
-                string[] CCD1 = CCD1output.Split(',');
+                    if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery || BatteryInfo.statuscode != 9999)
+                    {
+                        if (SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.Charging || BatteryInfo.statuscode == 2 || BatteryInfo.statuscode == 6 || BatteryInfo.statuscode == 7 || BatteryInfo.statuscode == 8)
+                        {
+                            if (Settings.Default.ChargingPreset != "None")
+                            {
+                                RyzenAdj_To_UXTU.Translate(Settings.Default.ChargingPreset);
+                                Settings.Default.RyzenAdjArguments = Settings.Default.ChargingPreset;
+                                Settings.Default.Save();
+                            }
+                        }
+                        else
+                        {
+                            if (Settings.Default.BatteryPreset != "None")
+                            {
+                                RyzenAdj_To_UXTU.Translate(Settings.Default.BatteryPreset);
+                                Settings.Default.RyzenAdjArguments = Settings.Default.BatteryPreset;
+                                Settings.Default.Save();
+                            }
+                        }
+                    }
 
-                string CCD2output = Settings.Default.PerCOCCD2;
-                string[] CCD2 = CCD2output.Split(',');
+                    if ((bool)Settings.Default.isCPUCO == true)
+                    {
+                        if ((int)Settings.Default.COCPU >= 0)
+                        {
+                            SendCommand.set_coall((uint)Settings.Default.COCPU);
+                        }
+                        else
+                        {
+                            SendCommand.set_coall(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COCPU)));
+                        }
+                        i++;
+                    }
+
+                    if ((bool)Settings.Default.isGPUCO == true)
+                    {
+                        if ((int)Settings.Default.COiGPU >= 0)
+                        {
+                            SendCommand.set_cogfx((uint)Settings.Default.COiGPU);
+                        }
+                        else
+                        {
+                            SendCommand.set_cogfx(Convert.ToUInt32(0x100000 - (uint)(-1 * (int)Settings.Default.COiGPU)));
+                        }
+                        i++;
+                    }
+
+                    string CCD1output = Settings.Default.PerCOCCD1;
+                    string[] CCD1 = CCD1output.Split(',');
+
+                    string CCD2output = Settings.Default.PerCOCCD2;
+                    string[] CCD2 = CCD2output.Split(',');
 
                     if (Settings.Default.isPerCO == true)
                     {
