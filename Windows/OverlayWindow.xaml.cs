@@ -203,7 +203,7 @@ namespace AATUV3
         {
             BatteryInfo.getBattery();
             int i = 0;
-            if (lastStatus != BatteryInfo.statuscode)
+            if (lastStatus != BatteryInfo.statuscode && GlobalVariables.AdaptivePerf == false)
             {
                 lastStatus = BatteryInfo.statuscode;
                 if (System.Windows.Forms.SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery || BatteryInfo.statuscode != 9999)
