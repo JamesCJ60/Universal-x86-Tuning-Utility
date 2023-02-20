@@ -26,6 +26,7 @@ namespace RyzenSMUBackend
         //REMBRANDT - 8
         //PHEONIX - 9
         //RAPHAEL/DRAGON RANGE - 10
+        //MENDOCINO - 11
 
         public static void SetFam()
         {
@@ -93,6 +94,10 @@ namespace RyzenSMUBackend
                 FAMID = 10; //RAPHAEL/DRAGON RANGE
             }
 
+            if (CPUModel.Contains("Model " + Convert.ToString(160)))
+            {
+                FAMID = 11; //PHEONIX 
+            }
 
             Addresses.SetAddresses();
         }

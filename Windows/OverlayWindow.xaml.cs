@@ -215,6 +215,7 @@ namespace AATUV3
                             RyzenAdj_To_UXTU.Translate(Settings.Default.ChargingPreset);
                             Settings.Default.RyzenAdjArguments = Settings.Default.ChargingPreset;
                             Settings.Default.Save();
+                            BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Charging-Preset-Applied! Your-settings-have-been-applied-successfully.", false);
                         }
                     }
                     else
@@ -224,6 +225,7 @@ namespace AATUV3
                             RyzenAdj_To_UXTU.Translate(Settings.Default.BatteryPreset);
                             Settings.Default.RyzenAdjArguments = Settings.Default.BatteryPreset;
                             Settings.Default.Save();
+                            BasicExeBackend.ApplySettings("\\bin\\Notification.exe", "1 Battery-Preset-Applied! Your-settings-have-been-applied-successfully.", false);
                         }
                     }
                 }

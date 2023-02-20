@@ -72,8 +72,8 @@
         <CheckBox x:Name="cbVRMGFXMax" Content="VRM GFX Current Max (EDC A):" HorizontalAlignment="Left" Margin="33,449,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="284" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
         <Controls:NumericSpinner Step="1" x:Name="nudVRMGFXMax" Width="95" Height="22" Margin="314,447,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinValue="0" Value="0"/>
 
-        <CheckBox x:Name="cbVRMCVIP" Content="VRM CVIP Current (TDC A):" HorizontalAlignment="Left" Margin="33,473,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="284" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
-        <Controls:NumericSpinner Step="1" x:Name="nudVRMCVIP" Width="95" Height="22" Margin="314,471,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinValue="0" Value="0"/>
+        <CheckBox x:Name="cbVRMCVIP" Content="VRM CVIP Current (TDC A):" HorizontalAlignment="Left" Margin="33,473,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="284" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18" Visibility="Collapsed"/>
+        <Controls:NumericSpinner Step="1" x:Name="nudVRMCVIP" Width="95" Height="22" Margin="314,471,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinValue="0" Value="0" Visibility="Collapsed"/>
 
         <CheckBox x:Name="cbRampTime" Content="Prochot Deassertion Ramp (s):" HorizontalAlignment="Left" Margin="33,266,0,0" VerticalAlignment="Top" Foreground="White" BorderBrush="White" FontSize="16" Width="283" BorderThickness="0,1,1,1" Padding="8,-4,0,0" Height="18"/>
         <Controls:NumericSpinner Step="1" x:Name="nudRampTime" Width="95" Height="22" Margin="314,265,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" MinValue="0" Value="0"/>
