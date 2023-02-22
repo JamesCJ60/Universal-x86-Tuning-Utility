@@ -96,7 +96,7 @@ namespace RyzenSMUBackend
 
             if (CPUModel.Contains("Model " + Convert.ToString(160)))
             {
-                FAMID = 11; //PHEONIX 
+                FAMID = 11; //MENDOCINO 
             }
 
             Addresses.SetAddresses();

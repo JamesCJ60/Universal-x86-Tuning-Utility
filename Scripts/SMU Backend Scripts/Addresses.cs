@@ -234,7 +234,7 @@ namespace RyzenSMUBackend
             uint msg3 = 0x0;
 
             //set SMU message address
-            if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
+            if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8 || Families.FAMID == 9 || Families.FAMID == 11)
             {
                 msg1 = 0x6;
                 msg2 = 0x66;
@@ -278,7 +278,7 @@ namespace RyzenSMUBackend
                 Args = new uint[6];
 
                 Args[0] = Address;
-                if (Families.FAMID == 8)
+                if (Families.FAMID == 8 || Families.FAMID == 9 || Families.FAMID == 11)
                 {
                     //Set Address and reset Args[]
                     RyzenAccess.SendMp1(0xE, ref Args);
@@ -537,7 +537,7 @@ namespace RyzenSMUBackend
                     //{
                     //    msg3 = 0x3d;
                     //}
-                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8)
+                    if (Families.FAMID == 3 || Families.FAMID == 7 || Families.FAMID == 8 || Families.FAMID == 9 || Families.FAMID == 11)
                     {
                         msg3 = 0x65;
                     }

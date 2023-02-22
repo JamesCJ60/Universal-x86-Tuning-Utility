@@ -92,20 +92,28 @@ namespace UXTU.Windows
             lblAPUName.Text = $"APU: {Settings.Default.APUName.Replace("AMD ", "")}with Radeon Graphics";
             lblSMU.Text = $"SMU Version: {Addresses.SMUVersion}";
             lblPMTable.Text = $"PMTable Version: 0x00{string.Format("{0:x}", Addresses.PMTableVersion)}";
-            lblNumSensors.Text = $"Total Sensors: {pmtables.PMT_Offset.Length}";
+
             // add some test data to the collection
             for (int i = 0; i < pmtables.PMT_Offset.Length; i++)
             {
-                string sensorName = pmtables.PMT_Sensors[i];
-                if (Families.FAMID == 8) sensorName = "Uknown";
-
-                MyDataCollection.Add(new MyData
+                if (i < pmtables.PMT_Sensors.Length)
                 {
-                    Index = i + 1,
-                    SensorName = sensorName,
-                    Address = pmtables.PMT_Offset[i],
-                    Value = Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i])
-            });
+                    string sensorName = pmtables.PMT_Sensors[i];
+                    if (Families.FAMID == 8) sensorName = "Uknown";
+
+                    MyDataCollection.Add(new MyData
+                    {
+                        Index = i + 1,
+                        SensorName = sensorName,
+                        Address = pmtables.PMT_Offset[i],
+                        Value = Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i])
+                    });
+                    lblNumSensors.Text = $"Total Sensors: {i + 1}";
+                }
+                else
+                {
+                    lblNumSensors.Text = $"Total Sensors: {i + 1}";
+                }
             }
 
             DataContext = this;
@@ -119,12 +127,15 @@ namespace UXTU.Windows
         private void Timer_Tick(object sender, EventArgs e)
         {
 
-                for (int i = 0; i < pmtables.PMT_Offset.Length; i++)
+            for (int i = 0; i < pmtables.PMT_Offset.Length; i++)
+            {
+                if (i < pmtables.PMT_Sensors.Length)
                 {
                     MyDataCollection[i].Value = (float)Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]);
                 }
+            }
 
-                DataContext = this;
+            DataContext = this;
 
             if (_timer.Interval != TimeSpan.FromSeconds(Convert.ToDouble(nudSampleRate.Value)))
             {

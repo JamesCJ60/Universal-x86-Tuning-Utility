@@ -17,7 +17,7 @@
                 <TextBlock VerticalAlignment="Center" Margin="8,0,8,0" FontSize="14">Sample Rate (s): </TextBlock>
                 <Controls:NumericSpinner x:Name="nudSampleRate"  VerticalAlignment="Center" Width="65" Step="0.25" Height="22" MinValue="0.5" MaxValue="10" Value="1" ValueChanged="nudSampleRate_ValueChanged"/>
             </StackPanel>
-            <DataGrid Margin="0,5,0,0" AutoGenerateColumns="False" ItemsSource="{Binding MyDataCollection}" Background="Transparent" Foreground="White" HeadersVisibility="Column" HorizontalGridLinesBrush="white" VerticalGridLinesBrush="White" BorderBrush="white">
+            <DataGrid Margin="0,5,0,0" AutoGenerateColumns="False" ItemsSource="{Binding MyDataCollection}" Background="Transparent" Foreground="White" HeadersVisibility="Column" HorizontalGridLinesBrush="white" VerticalGridLinesBrush="White" BorderBrush="white" IsReadOnly="True">
                 <DataGrid.Resources>
                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Background" Value="#222226" />
