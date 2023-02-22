@@ -34,6 +34,7 @@ using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using System.Linq.Expressions;
 using UXTU.Scripts.SMU_Backend_Scripts;
+using UXTU.Windows;
 
 namespace AATUV3
 {
@@ -183,6 +184,7 @@ namespace AATUV3
                         case 7:
                         case 8:
                         case 9:
+                        case 11:
                             AppName = "AMD APU Tuning Utility";
                             break;
                         default:
@@ -536,6 +538,8 @@ namespace AATUV3
                     if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt"))
                     {
                         pmtables.PMT_Sensors = File.ReadAllLines(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt");
+                        SensorsDisplay sdWindow = new SensorsDisplay();
+                        sdWindow.Show();
                     }
                 }
             }

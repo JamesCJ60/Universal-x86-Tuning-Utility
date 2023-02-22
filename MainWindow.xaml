@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AATUV3"
         mc:Ignorable="d" Name="home"
-        Title="AMD APU Tuning Utility" Height="668" Width="1144"
+        Title="AMD APU Tuning Utility" Height="680" Width="1150"
         WindowStartupLocation="CenterScreen" WindowStyle="None"
         Background="Transparent" AllowsTransparency="True"
         ResizeMode="NoResize" WindowState="Normal" Closing="home_Closing" >

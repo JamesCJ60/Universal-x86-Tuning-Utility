@@ -11,78 +11,18 @@ using OpenLibSys;
 using System.Reflection;
 using RyzenSMUBackend;
 using UXTU.Properties;
+using System.Windows.Forms;
 
 [assembly: CLSCompliant(false)]
 
 
 namespace RyzenSmu
 {
-
-
-    public class PerfomanceCounter
-    {
-        public String Description { get; protected set; }
-        public String Units { get; protected set; }
-
-        public uint Index { get; protected set; }
-        public uint Offset { get; protected set; }
-
-        public float Value { get; protected set; }
-
-        public PerfomanceCounter(String CounterDescription, String CounterUnits, uint PMTableOffset)
-        {
-            Description = CounterDescription;
-            Units = CounterUnits;
-            Index = PMTableOffset / 4;
-            Offset = PMTableOffset;
-
-        }
-        public float Update(uint MemoryBaseAddress)
-        {
-            Value = Smu.ReadFloat(MemoryBaseAddress, Offset);
-            return Value;
-        }
-    }
-    public class PowerMonitoringTable
-    {
-        public uint MemoryBaseAddress { get; protected set; }
-        public uint TableSize { get; protected set; }
-        
-
-        public PerfomanceCounter[] PerfomanceCounter { get; protected set; }
-
-
-        PowerMonitoringTable()
-        {
-            TableSize = 1000;
-            MemoryBaseAddress = 0;
-        }
-
-        bool UpdateTable()
-        {
-            if (MemoryBaseAddress == 0)
-                return false;
-
-            //Updates the value of each counter
-            for(int i = 0; i < PerfomanceCounter.Length; i++)
-            {
-                PerfomanceCounter[i].Update(MemoryBaseAddress);
-            }
-
-            return true;
-        }
-
-        public void SetBaseAddress(uint MemoryAddress)
-        {
-            MemoryBaseAddress = MemoryAddress;
-        }
-    }
     class Smu
     {
         [DllImport("inpoutx64.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetPhysLong(UIntPtr memAddress, out uint Data);
-
         public static float ReadFloat(uint Address, uint Offset)
         {
             uint Data = 0;
@@ -104,6 +44,26 @@ namespace RyzenSmu
             return PmData;
         }
 
+        public static float ReadFloat64(ulong Address, uint Offset)
+        {
+            uint Data = 0;
+            try
+            {
+                GetPhysLong((UIntPtr)(Address + Offset * 4), out Data);
+            }
+            catch (Exception e)
+            {
+                String ExeptionMSG = $"Error Reading Address 0x{Address:X8} + 0x{Offset:X4} \n{e}";
+                MessageBox.Show(ExeptionMSG);
+            }
+
+            byte[] bytes = new byte[4];
+            bytes = BitConverter.GetBytes(Data);
+
+            float PmData = BitConverter.ToSingle(bytes, 0);
+            Console.WriteLine($"0x{Address + Offset * 4,8:X8} | {PmData:F}");
+            return PmData;
+        }
 
         public enum Status : int
         {
@@ -200,8 +160,6 @@ namespace RyzenSmu
                     break;
                 default:
                     break;
-
-
             }
         }
         public uint GetCpuId()
@@ -218,8 +176,6 @@ namespace RyzenSmu
         {
             RyzenNbAccesss.DeinitializeOls();
         }
-
-
 
         public static uint SMU_PCI_ADDR { get; set; }
         public static uint SMU_OFFSET_ADDR { get; set; }
@@ -247,6 +203,16 @@ namespace RyzenSmu
         public Status SendPsmu(uint message, ref uint[] arguments)
         {
             return SendMsg(PSMU_ADDR_MSG, PSMU_ADDR_RSP, PSMU_ADDR_ARG, message, ref arguments);
+        }
+
+        public Status SendMp164(uint message, ref ulong[] arguments)
+        {
+            return SendMsg64(MP1_ADDR_MSG, MP1_ADDR_RSP, MP1_ADDR_ARG, message, ref arguments);
+        }
+
+        public Status SendPsmu64(uint message, ref ulong[] arguments)
+        {
+            return SendMsg64(PSMU_ADDR_MSG, PSMU_ADDR_RSP, PSMU_ADDR_ARG, message, ref arguments);
         }
 
         public bool SendSmuCommand(uint SMU_ADDR_MSG, uint SMU_ADDR_RSP, uint SMU_ADDR_ARG, uint msg, ref uint[] args)
@@ -308,6 +274,60 @@ namespace RyzenSmu
             return (Status)status;
         }
 
+        public Status SendMsg64(uint SMU_ADDR_MSG, uint SMU_ADDR_RSP, uint SMU_ADDR_ARG, uint msg, ref ulong[] args)
+        {
+            ushort timeout = SMU_TIMEOUT;
+            ulong[] cmdArgs = new ulong[6];
+            int argsLength = args.Length;
+            uint status = 0;
+
+            if (argsLength > cmdArgs.Length)
+                argsLength = cmdArgs.Length;
+
+            for (int i = 0; i < argsLength; ++i)
+                cmdArgs[i] = args[i];
+
+            if (amdSmuMutex.WaitOne(5000))
+            {
+                // Clear response register
+                bool temp;
+                do
+                    temp = SmuWriteReg(SMU_ADDR_RSP, 0);
+                while ((!temp) && --timeout > 0);
+
+                if (timeout == 0)
+                {
+                    amdSmuMutex.ReleaseMutex();
+                    SmuReadReg(SMU_ADDR_RSP, ref status);
+                    return (Status)status;
+                }
+
+                // Write data
+                for (int i = 0; i < cmdArgs.Length; ++i)
+                    SmuWriteReg64(SMU_ADDR_ARG + (uint)(i * 4), cmdArgs[i]);
+
+                // Send message
+                SmuWriteReg64(SMU_ADDR_MSG, msg);
+
+                // Wait done
+                if (!SmuWaitDone(SMU_ADDR_RSP))
+                {
+                    amdSmuMutex.ReleaseMutex();
+                    SmuReadReg(SMU_ADDR_RSP, ref status);
+                    return (Status)status;
+                }
+
+                // Read back args
+                for (int i = 0; i < args.Length; ++i)
+                    SmuReadReg64(SMU_ADDR_ARG + (uint)(i * 4), ref args[i]);
+            }
+
+            amdSmuMutex.ReleaseMutex();
+            SmuReadReg(SMU_ADDR_RSP, ref status);
+
+            return (Status)status;
+        }
+
         public bool SmuWaitDone(uint SMU_ADDR_RSP)
         {
             bool res;
@@ -342,6 +362,23 @@ namespace RyzenSmu
             return false;
         }
 
+        private bool SmuWriteReg64(uint addr, ulong data)
+        {
+            if (RyzenNbAccesss.WritePciConfigDwordEx(SMU_PCI_ADDR, SMU_OFFSET_ADDR, addr) == 1)
+            {
+                return RyzenNbAccesss.WritePciConfigDwordEx64(SMU_PCI_ADDR, SMU_OFFSET_DATA, data) == 1;
+            }
+            return false;
+        }
+
+        private bool SmuReadReg64(uint addr, ref ulong data)
+        {
+            if (RyzenNbAccesss.WritePciConfigDwordEx(SMU_PCI_ADDR, SMU_OFFSET_ADDR, addr) == 1)
+            {
+                return RyzenNbAccesss.ReadPciConfigDwordEx64(SMU_PCI_ADDR, SMU_OFFSET_DATA, ref data) == 1;
+            }
+            return false;
+        }
         private uint ReadDword(uint value)
         {
             RyzenNbAccesss.WritePciConfigDword(SMU_PCI_ADDR, (byte)SMU_OFFSET_ADDR, value);

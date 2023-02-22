@@ -39,13 +39,14 @@ namespace AATUV3.Pages
             apuName.Text = $"APU: {Settings.Default.APUName.Replace("AMD ", "")}with Radeon Graphics";
             if (Families.FAMID == 3) updateInfoRNR();
             if (Families.FAMID == 7) updateInfoCZN();
+            if (Families.FAMID == 8) updateInfoCZN();
 
             //set up timer for sensor 
             sensor.Interval = TimeSpan.FromSeconds(1);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
-            if (Families.FAMID == 7)
+            if (Families.FAMID == 7 || Families.FAMID == 8)
             {
                 CCX2.Visibility = Visibility.Hidden;
                 CCX1Con.Margin = new Thickness(0, 5, 0, 5);
@@ -62,6 +63,7 @@ namespace AATUV3.Pages
         {
             if (Families.FAMID == 3) updateInfoRNR();
             if (Families.FAMID == 7) updateInfoCZN();
+            if (Families.FAMID == 8) updateInfoCZN();
         }
 
         private void updateInfoRNR()

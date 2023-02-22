@@ -168,12 +168,14 @@ namespace OpenLibSys
                 ReadPciConfigByteEx = (_ReadPciConfigByteEx)GetDelegate("ReadPciConfigByteEx", typeof(_ReadPciConfigByteEx));
                 ReadPciConfigWordEx = (_ReadPciConfigWordEx)GetDelegate("ReadPciConfigWordEx", typeof(_ReadPciConfigWordEx));
                 ReadPciConfigDwordEx = (_ReadPciConfigDwordEx)GetDelegate("ReadPciConfigDwordEx", typeof(_ReadPciConfigDwordEx));
+                ReadPciConfigDwordEx64 = (_ReadPciConfigDwordEx64)GetDelegate("ReadPciConfigDwordEx", typeof(_ReadPciConfigDwordEx64));
                 WritePciConfigByte = (_WritePciConfigByte)GetDelegate("WritePciConfigByte", typeof(_WritePciConfigByte));
                 WritePciConfigWord = (_WritePciConfigWord)GetDelegate("WritePciConfigWord", typeof(_WritePciConfigWord));
                 WritePciConfigDword = (_WritePciConfigDword)GetDelegate("WritePciConfigDword", typeof(_WritePciConfigDword));
                 WritePciConfigByteEx = (_WritePciConfigByteEx)GetDelegate("WritePciConfigByteEx", typeof(_WritePciConfigByteEx));
                 WritePciConfigWordEx = (_WritePciConfigWordEx)GetDelegate("WritePciConfigWordEx", typeof(_WritePciConfigWordEx));
                 WritePciConfigDwordEx = (_WritePciConfigDwordEx)GetDelegate("WritePciConfigDwordEx", typeof(_WritePciConfigDwordEx));
+                WritePciConfigDwordEx64 = (_WritePciConfigDwordEx64)GetDelegate("WritePciConfigDwordEx", typeof(_WritePciConfigDwordEx64));
                 FindPciDeviceById = (_FindPciDeviceById)GetDelegate("FindPciDeviceById", typeof(_FindPciDeviceById));
                 FindPciDeviceByClass = (_FindPciDeviceByClass)GetDelegate("FindPciDeviceByClass", typeof(_FindPciDeviceByClass));
 
@@ -230,12 +232,14 @@ namespace OpenLibSys
                 && ReadPciConfigByteEx != null
                 && ReadPciConfigWordEx != null
                 && ReadPciConfigDwordEx != null
+                && ReadPciConfigDwordEx64 != null
                 && WritePciConfigByte != null
                 && WritePciConfigWord != null
                 && WritePciConfigDword != null
                 && WritePciConfigByteEx != null
                 && WritePciConfigWordEx != null
                 && WritePciConfigDwordEx != null
+                && WritePciConfigDwordEx64 != null
                 && FindPciDeviceById != null
                 && FindPciDeviceByClass != null
                 /*&& ReadDmiMemory != null
@@ -399,6 +403,10 @@ namespace OpenLibSys
         public _ReadPciConfigWordEx ReadPciConfigWordEx;
         public _ReadPciConfigDwordEx ReadPciConfigDwordEx;
 
+
+        public delegate int _ReadPciConfigDwordEx64(uint pciAddress, uint regAddress, ref ulong value);
+        public _ReadPciConfigDwordEx64 ReadPciConfigDwordEx64;
+
         public delegate void _WritePciConfigByte(uint pciAddress, byte regAddress, byte value);
         public delegate void _WritePciConfigWord(uint pciAddress, byte regAddress, ushort value);
         public delegate void _WritePciConfigDword(uint pciAddress, byte regAddress, uint value);
@@ -412,6 +420,9 @@ namespace OpenLibSys
         public _WritePciConfigByteEx WritePciConfigByteEx;
         public _WritePciConfigWordEx WritePciConfigWordEx;
         public _WritePciConfigDwordEx WritePciConfigDwordEx;
+
+        public delegate int _WritePciConfigDwordEx64(uint pciAddress, uint regAddress, ulong value);
+        public _WritePciConfigDwordEx64 WritePciConfigDwordEx64;
 
         public delegate uint _FindPciDeviceById(ushort vendorId, ushort deviceId, byte index);
         public delegate uint _FindPciDeviceByClass(byte baseClass, byte subClass, byte programIf, byte index);

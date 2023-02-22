@@ -170,6 +170,9 @@
       <DependentUpon>CustomPresets.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scripts\BasicExeBackend.cs" />
+    <Compile Include="Windows\SensorsDisplay.xaml.cs">
+      <DependentUpon>SensorsDisplay.xaml</DependentUpon>
+    </Compile>
     <Page Include="Assets\Icons\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -267,6 +270,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\LightTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SensorsDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
