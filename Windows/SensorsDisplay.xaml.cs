@@ -126,23 +126,26 @@ namespace UXTU.Windows
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-
-            for (int i = 0; i < pmtables.PMT_Offset.Length; i++)
+            try
             {
-                if (i < pmtables.PMT_Sensors.Length)
+                for (int i = 0; i < pmtables.PMT_Offset.Length; i++)
                 {
-                    MyDataCollection[i].Value = (float)Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]);
+                    if (i < pmtables.PMT_Sensors.Length)
+                    {
+                        MyDataCollection[i].Value = (float)Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]);
+                    }
+                }
+
+                DataContext = this;
+
+                if (_timer.Interval != TimeSpan.FromSeconds(Convert.ToDouble(nudSampleRate.Value)))
+                {
+                    _timer.Stop();
+                    _timer.Interval = TimeSpan.FromSeconds(Convert.ToDouble(nudSampleRate.Value));
+                    _timer.Start();
                 }
             }
-
-            DataContext = this;
-
-            if (_timer.Interval != TimeSpan.FromSeconds(Convert.ToDouble(nudSampleRate.Value)))
-            {
-                _timer.Stop();
-                _timer.Interval = TimeSpan.FromSeconds(Convert.ToDouble(nudSampleRate.Value));
-                _timer.Start();
-            }
+            catch { }
         }
 
         private void nudSampleRate_ValueChanged(object sender, EventArgs e)
