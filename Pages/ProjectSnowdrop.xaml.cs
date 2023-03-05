@@ -17,13 +17,16 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Management;
 using UXTU.Scripts.SMU_Backend_Scripts;
+using System.Windows.Forms;
+using MessageBox = System.Windows.Forms.MessageBox;
+using System.Runtime.InteropServices;
 
 namespace AATUV3.Pages
 {
     /// <summary>
     /// Interaction logic for HomeMenu.xaml
     /// </summary>
-    public partial class ProjectSnowdrop : UserControl
+    public partial class ProjectSnowdrop : System.Windows.Controls.UserControl
     {
         string path = Settings.Default["Path"].ToString();
         string apuname = (string)Settings.Default["CPUName"];
@@ -32,6 +35,49 @@ namespace AATUV3.Pages
         string preset2 = "";
         string preset3 = "";
         //string preset4 = "";
+
+        [DllImport("user32.dll")]
+        public static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DEVMODE
+        {
+            private const int CCHDEVICENAME = 0x20;
+            private const int CCHFORMNAME = 0x20;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
+            public string dmDeviceName;
+            public short dmSpecVersion;
+            public short dmDriverVersion;
+            public short dmSize;
+            public short dmDriverExtra;
+            public int dmFields;
+            public int dmPositionX;
+            public int dmPositionY;
+            public ScreenOrientation dmDisplayOrientation;
+            public int dmDisplayFixedOutput;
+            public short dmColor;
+            public short dmDuplex;
+            public short dmYResolution;
+            public short dmTTOption;
+            public short dmCollate;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
+            public string dmFormName;
+            public short dmLogPixels;
+            public int dmBitsPerPel;
+            public int dmPelsWidth;
+            public int dmPelsHeight;
+            public int dmDisplayFlags;
+            public int dmDisplayFrequency;
+            public int dmICMMethod;
+            public int dmICMIntent;
+            public int dmMediaType;
+            public int dmDitherType;
+            public int dmReserved1;
+            public int dmReserved2;
+            public int dmPanningWidth;
+            public int dmPanningHeight;
+        }
+
+        const int ENUM_CURRENT_SETTINGS = -1;
 
         public ProjectSnowdrop()
         {
@@ -162,11 +208,14 @@ namespace AATUV3.Pages
 
                     try
                     {
-                        string screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth.ToString();
-
-                        string screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight.ToString();
-
-                        lblDisplay.Text = $"Display: {screenWidth} x {screenHeight}";
+                        foreach (Screen screen in Screen.AllScreens)
+                        {
+                            DEVMODE dm = new DEVMODE();
+                            dm.dmSize = (short)Marshal.SizeOf(typeof(DEVMODE));
+                            EnumDisplaySettings(screen.DeviceName, ENUM_CURRENT_SETTINGS, ref dm);
+                            Console.WriteLine($"Device: {screen.DeviceName}");
+                            if(screen.DeviceName.Contains("1")) lblDisplay.Text = $"Display: {dm.dmPelsWidth} x {dm.dmPelsHeight}";
+                        } 
                     }
                     catch
                     {
