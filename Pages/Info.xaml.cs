@@ -42,7 +42,7 @@ namespace AATUV3.Pages
             if (Families.FAMID == 8) updateInfoCZN();
 
             //set up timer for sensor 
-            sensor.Interval = TimeSpan.FromSeconds(1);
+            sensor.Interval = TimeSpan.FromSeconds(1.75);
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 

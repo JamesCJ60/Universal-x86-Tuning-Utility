@@ -77,10 +77,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibreHardwareMonitorLib, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\x64\Debug\LibreHardwareMonitorLib.dll</HintPath>
-    </Reference>
     <Reference Include="netstandard" />
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="ReachFramework" />

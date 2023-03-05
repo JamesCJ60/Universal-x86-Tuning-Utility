@@ -147,7 +147,13 @@ namespace AATUV3.Pages
 
                         diskSize = diskSize / 1024 / 1024 / 1024;
                         diskSize = Math.Round(diskSize);
-                        lblStore.Text = $"Storage: {diskSize} GB";
+
+                        if (diskSize > 1000)
+                        {
+                            diskSize = diskSize / 1024;
+                            lblStore.Text = $"Storage: {Math.Round(diskSize, 2)} TB";
+                        }
+                        else lblStore.Text = $"Storage: {diskSize} GB";
                     }
                     catch (ManagementException e)
                     {

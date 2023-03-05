@@ -20,7 +20,6 @@ using UXTU.Scripts.Adpative_Modes.Performance;
 using System.Threading;
 using System.IO;
 using System.Diagnostics;
-using LibreHardwareMonitor.Hardware;
 using System.Security.Cryptography;
 using Stopbyte.Controls;
 using System.Runtime.InteropServices;

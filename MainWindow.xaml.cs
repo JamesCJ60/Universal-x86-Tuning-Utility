@@ -223,7 +223,7 @@ namespace AATUV3
 
                 //Garbage collection
                 DispatcherTimer Garbage = new DispatcherTimer();
-                Garbage.Interval = TimeSpan.FromSeconds(8);
+                Garbage.Interval = TimeSpan.FromSeconds(12);
                 Garbage.Tick += GarbageCollect_Tick;
                 Garbage.Start();
 
@@ -535,18 +535,19 @@ namespace AATUV3
             {
                 if (pmtables.PMT_Sensors.Length == 0 || pmtables.PMT_Sensors == null)
                 {
-                    if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt"))
+                    if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion).ToUpper()}-sensors.txt"))
                     {
-                        pmtables.PMT_Sensors = File.ReadAllLines(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt");
-                        SensorsDisplay sdWindow = new SensorsDisplay();
-                        sdWindow.Show();
+                        pmtables.PMT_Sensors = File.ReadAllLines(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion).ToUpper()}-sensors.txt");
                     }
                 }
             }
 
-            if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion)}-sensors.txt"))
+            if (File.Exists(Settings.Default["Path"].ToString() + $"\\bin\\pmtables\\0x00{string.Format("{0:x}", Addresses.PMTableVersion).ToUpper()}-sensors.txt"))
             {
-                PagesNavigation.Navigate(new System.Uri("Pages/Info.xaml", UriKind.RelativeOrAbsolute));
+                if(Families.FAMID == 3 || Families.FAMID == 7) PagesNavigation.Navigate(new System.Uri("Pages/Info.xaml", UriKind.RelativeOrAbsolute));
+
+                SensorsDisplay sdWindow = new SensorsDisplay();
+                sdWindow.Show();
             }
             else
             {

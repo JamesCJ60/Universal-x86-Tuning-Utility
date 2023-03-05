@@ -1,5 +1,4 @@
 ﻿using AATUV3.Scripts.SMU_Backend_Scripts;
-using LibreHardwareMonitor.Hardware;
 using RyzenSmu;
 using RyzenSMUBackend;
 using System;

@@ -61,14 +61,47 @@ namespace UXTU.Windows
             }
         }
 
-        private float _value;
-        public float Value
+        private double _value;
+        public double Value
         {
             get { return _value; }
             set
             {
                 _value = value;
                 OnPropertyChanged(nameof(Value));
+            }
+        }
+
+        private double _valueMin;
+        public double ValueMin
+        {
+            get { return _valueMin; }
+            set
+            {
+                _valueMin = value;
+                OnPropertyChanged(nameof(ValueMin));
+            }
+        }
+
+        private double _valueMax;
+        public double ValueMax
+        {
+            get { return _valueMax; }
+            set
+            {
+                _valueMax = value;
+                OnPropertyChanged(nameof(ValueMax));
+            }
+        }
+
+        private double _valueAvg;
+        public double ValueAvg
+        {
+            get { return _valueAvg; }
+            set
+            {
+                _valueAvg = value;
+                OnPropertyChanged(nameof(ValueAvg));
             }
         }
 
@@ -84,6 +117,7 @@ namespace UXTU.Windows
     {
         private DispatcherTimer _timer;
         public ObservableCollection<MyData> MyDataCollection { get; set; }
+        private int sensors = 0;
         public SensorsDisplay()
         {
             InitializeComponent();
@@ -91,7 +125,7 @@ namespace UXTU.Windows
 
             lblAPUName.Text = $"APU: {Settings.Default.APUName.Replace("AMD ", "")}with Radeon Graphics";
             lblSMU.Text = $"SMU Version: {Addresses.SMUVersion}";
-            lblPMTable.Text = $"PMTable Version: 0x00{string.Format("{0:x}", Addresses.PMTableVersion)}";
+            lblPMTable.Text = $"PMTable Version: 0x00{string.Format("{0:x}", Addresses.PMTableVersion).ToUpper()}";
 
             // add some test data to the collection
             for (int i = 0; i < pmtables.PMT_Offset.Length; i++)
@@ -99,44 +133,73 @@ namespace UXTU.Windows
                 if (i < pmtables.PMT_Sensors.Length)
                 {
                     string sensorName = pmtables.PMT_Sensors[i];
-                    if (Families.FAMID == 8) sensorName = "Uknown";
+                    if (Families.FAMID == 8 && i > 21) sensorName = "Unknown";
 
                     MyDataCollection.Add(new MyData
                     {
                         Index = i + 1,
                         SensorName = sensorName,
                         Address = pmtables.PMT_Offset[i],
-                        Value = Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i])
+                        Value = Math.Round(Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]), 2),
+                        ValueMin = Math.Round(Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]), 2),
+                        ValueMax = Math.Round( Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]), 2),
+                        ValueAvg = 0
                     });
                     lblNumSensors.Text = $"Total Sensors: {i + 1}";
+                    sensors = i + 1;
                 }
                 else
                 {
                     lblNumSensors.Text = $"Total Sensors: {i + 1}";
+                    sensors = i + 1;
                 }
             }
 
             DataContext = this;
 
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Interval = TimeSpan.FromSeconds(1.75);
             _timer.Tick += Timer_Tick;
             _timer.Start();
         }
 
+        private double[] avgValue;
+        private int x = -1;
         private void Timer_Tick(object sender, EventArgs e)
         {
             try
             {
+                if (x == -1)
+                {
+                    avgValue = new double[sensors];
+                    x = 1;
+                }
+
                 for (int i = 0; i < pmtables.PMT_Offset.Length; i++)
                 {
                     if (i < pmtables.PMT_Sensors.Length)
                     {
-                        MyDataCollection[i].Value = (float)Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]);
+                        MyDataCollection[i].Value = Math.Round(Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]), 2);
+
+                        if ((float)Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]) > MyDataCollection[i].ValueMax) MyDataCollection[i].ValueMax = Math.Round(Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]), 2);
+                        if ((float)Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]) < MyDataCollection[i].ValueMin) MyDataCollection[i].ValueMin = Math.Round(Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]), 2);
+                        if(x >= 1)
+                        {
+                            avgValue[i] = avgValue[i] + Math.Round(Smu.ReadFloat(Addresses.Address, pmtables.PMT_Offset[i]), 2);
+                            MyDataCollection[i].ValueAvg = Math.Round(avgValue[i] / x, 2);
+                        }
                     }
                 }
 
                 DataContext = this;
+
+                x++;
+
+                if (x > 10)
+                {
+                    x = 0;
+                    avgValue = new double[sensors];
+                }
 
                 if (_timer.Interval != TimeSpan.FromSeconds(Convert.ToDouble(nudSampleRate.Value)))
                 {

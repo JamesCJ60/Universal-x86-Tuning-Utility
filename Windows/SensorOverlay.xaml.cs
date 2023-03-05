@@ -18,7 +18,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
-using LibreHardwareMonitor.Hardware;
 using Microsoft.Diagnostics.Tracing.Session;
 using System.Windows.Forms;
 using AATUV3.Scripts.SMU_Backend_Scripts;
@@ -104,18 +103,18 @@ namespace AATUV3
             sensor.Tick += SensorUpdate_Tick;
             sensor.Start();
 
-            thisPC = new Computer()
-            {
-                IsCpuEnabled = true,
-                IsGpuEnabled = true,
-                IsMemoryEnabled = true,
-                IsBatteryEnabled = true,
-                IsPsuEnabled = true,
-                IsControllerEnabled = true,
-                IsMotherboardEnabled = true
-            };
-            thisPC.Open();
-            thisPC.Accept(new UpdateVisitor());
+            //thisPC = new Computer()
+            //{
+            //    IsCpuEnabled = true,
+            //    IsGpuEnabled = true,
+            //    IsMemoryEnabled = true,
+            //    IsBatteryEnabled = true,
+            //    IsPsuEnabled = true,
+            //    IsControllerEnabled = true,
+            //    IsMotherboardEnabled = true
+            //};
+            //thisPC.Open();
+            //thisPC.Accept(new UpdateVisitor());
 
             updateSensorsInfo();
         }
@@ -186,7 +185,7 @@ namespace AATUV3
             }
         }
 
-        public static Computer thisPC;
+        //public static Computer thisPC;
 
         private static Controller controller;
         private static CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
@@ -380,261 +379,261 @@ namespace AATUV3
             time = TimeSpan.FromSeconds(batTime);
         }
 
-        public class UpdateVisitor : IVisitor
-        {
-            public void VisitComputer(IComputer computer)
-            {
-                computer.Traverse(this);
-            }
-            public void VisitHardware(IHardware hardware)
-            {
-                hardware.Update();
-                foreach (IHardware subHardware in hardware.SubHardware) subHardware.Accept(this);
-            }
-            public void VisitSensor(ISensor sensor) { }
-            public void VisitParameter(IParameter parameter) { }
-        }
+        //public class UpdateVisitor : IVisitor
+        //{
+        //    public void VisitComputer(IComputer computer)
+        //    {
+        //        computer.Traverse(this);
+        //    }
+        //    public void VisitHardware(IHardware hardware)
+        //    {
+        //        hardware.Update();
+        //        foreach (IHardware subHardware in hardware.SubHardware) subHardware.Accept(this);
+        //    }
+        //    public void VisitSensor(ISensor sensor) { }
+        //    public void VisitParameter(IParameter parameter) { }
+        //}
 
         public void getCPUInfo()
         {
-            try
-            {
-                foreach (var hardware in thisPC.Hardware)
-                {
-                    hardware.Update();
-                    if (hardware.HardwareType == HardwareType.Cpu)
-                    {
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
-                            {
-                                cpuTemp = (int)sensor.Value.GetValueOrDefault();
-                            }
+            //try
+            //{
+            //    foreach (var hardware in thisPC.Hardware)
+            //    {
+            //        hardware.Update();
+            //        if (hardware.HardwareType == HardwareType.Cpu)
+            //        {
+            //            foreach (var sensor in hardware.Sensors)
+            //            {
+            //                if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
+            //                {
+            //                    cpuTemp = (int)sensor.Value.GetValueOrDefault();
+            //                }
 
-                            if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("Package"))
-                            {
-                                cpuPower = (int)sensor.Value.GetValueOrDefault();
-                            }
+            //                if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("Package"))
+            //                {
+            //                    cpuPower = (int)sensor.Value.GetValueOrDefault();
+            //                }
 
-                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("1"))
-                            {
-                                cpuClock = (int)sensor.Value.GetValueOrDefault();
-                            }
+            //                if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("1"))
+            //                {
+            //                    cpuClock = (int)sensor.Value.GetValueOrDefault();
+            //                }
 
-                            if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Total"))
-                            {
-                                cpuLoad = (int)sensor.Value.GetValueOrDefault();
-                            }
+            //                if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Total"))
+            //                {
+            //                    cpuLoad = (int)sensor.Value.GetValueOrDefault();
+            //                }
 
-                            if (sensor.SensorType == SensorType.Voltage && sensor.Name.Contains("Core"))
-                            {
-                                cpuVolt = sensor.Value.GetValueOrDefault();
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+            //                if (sensor.SensorType == SensorType.Voltage && sensor.Name.Contains("Core"))
+            //                {
+            //                    cpuVolt = sensor.Value.GetValueOrDefault();
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
         }
 
         public static void getGPUInfo()
         {
-            try
-            {
-                foreach (var hardware in thisPC.Hardware)
-                {
-                    hardware.Update();
-                    if (hardware.HardwareType == HardwareType.GpuAmd)
-                    {
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Core"))
-                            {
-                                if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
-                                {
-                                    if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
-                                    {
-                                        iGPUClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //try
+            //{
+            //    foreach (var hardware in thisPC.Hardware)
+            //    {
+            //        hardware.Update();
+            //        if (hardware.HardwareType == HardwareType.GpuAmd)
+            //        {
+            //            foreach (var sensor in hardware.Sensors)
+            //            {
+            //                if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Core"))
+            //                {
+            //                    if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
+            //                    {
+            //                        if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
+            //                        {
+            //                            iGPUClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
 
-                                    }
-                                }
-                            }
+            //                        }
+            //                    }
+            //                }
 
-                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("SoC"))
-                            {
-                                if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
-                                {
-                                    if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
-                                    {
-                                        iGPUSoCClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("SoC"))
+            //                {
+            //                    if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
+            //                    {
+            //                        if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
+            //                        {
+            //                            iGPUSoCClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
 
-                                    }
-                                }
-                            }
+            //                        }
+            //                    }
+            //                }
 
-                            if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
-                            {
-                                if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
-                                {
-                                    if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
-                                    {
-                                        iGPUTemp = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
+            //                {
+            //                    if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
+            //                    {
+            //                        if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
+            //                        {
+            //                            iGPUTemp = Convert.ToInt32(sensor.Value.GetValueOrDefault());
 
-                                    }
-                                }
-                            }
+            //                        }
+            //                    }
+            //                }
 
-                            if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("Core"))
-                            {
-                                if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
-                                {
-                                    if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
-                                    {
-                                        iGPUPower = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                    }
-                                }
-                            }
+            //                if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("Core"))
+            //                {
+            //                    if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
+            //                    {
+            //                        if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
+            //                        {
+            //                            iGPUPower = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                        }
+            //                    }
+            //                }
 
-                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Mem"))
-                            {
-                                if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
-                                {
-                                    if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
-                                    {
-                                        iGPUMemClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                    }
-                                }
-                            }
+            //                if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Mem"))
+            //                {
+            //                    if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
+            //                    {
+            //                        if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
+            //                        {
+            //                            iGPUMemClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                        }
+            //                    }
+            //                }
 
-                            if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Core"))
-                            {
-                                if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
-                                {
-                                    if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
-                                    {
-                                        iGPULoad = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                    }
-                                }
-                            }
-                        }
-                    }
+            //                if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Core"))
+            //                {
+            //                    if (!hardware.Name.Contains("56") || !hardware.Name.Contains("64"))
+            //                    {
+            //                        if (hardware.Name.Contains("Vega") && hardware.Name.Contains("3") || hardware.Name.Contains("Vega") && hardware.Name.Contains("6") || hardware.Name.Contains("Vega") && hardware.Name.Contains("8") || hardware.Name.Contains("Vega") && hardware.Name.Contains("9") || hardware.Name.Contains("Vega") && hardware.Name.Contains("10") || hardware.Name.Contains("Vega") && hardware.Name.Contains("11") || hardware.Name == "AMD Radeon Graphics" || hardware.Name == "AMD Radeon(TM) Graphics" || hardware.Name == "AMD Radeon RX Vega Graphics")
+            //                        {
+            //                            iGPULoad = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
 
-                    if (hardware.HardwareType == HardwareType.GpuNvidia)
-                    {
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Core"))
-                            {
-                                dGPUNVClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                            }
+            //        if (hardware.HardwareType == HardwareType.GpuNvidia)
+            //        {
+            //            foreach (var sensor in hardware.Sensors)
+            //            {
+            //                if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Core"))
+            //                {
+            //                    dGPUNVClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                }
 
-                            if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Mem"))
-                            {
-                                dGPUNVMemClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                            }
+            //                if (sensor.SensorType == SensorType.Clock && sensor.Name.Contains("Mem"))
+            //                {
+            //                    dGPUNVMemClock = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                }
 
-                            if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
-                            {
-                                dGPUNVTemp = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                            }
+            //                if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Core"))
+            //                {
+            //                    dGPUNVTemp = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                }
 
-                            if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Hot"))
-                            {
-                                dGPUNVTempHot = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                            }
+            //                if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("Hot"))
+            //                {
+            //                    dGPUNVTempHot = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                }
 
-                            if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Core"))
-                            {
-                                dGPUNVLoad = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                            }
+            //                if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Core"))
+            //                {
+            //                    dGPUNVLoad = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                }
 
-                            if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("GPU"))
-                            {
-                                dGPUNVPower = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                            }
+            //                if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("GPU"))
+            //                {
+            //                    dGPUNVPower = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+            //                }
 
-                            if (sensor.SensorType == SensorType.Data && sensor.Name.Contains("Used"))
-                            {
-                                dGPUNVMemUsed = Convert.ToInt32(sensor.Value.GetValueOrDefault() * 1000);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    getGPUInfo();
-                }
-                catch (Exception ex2)
-                {
+            //                if (sensor.SensorType == SensorType.Data && sensor.Name.Contains("Used"))
+            //                {
+            //                    dGPUNVMemUsed = Convert.ToInt32(sensor.Value.GetValueOrDefault() * 1000);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    try
+            //    {
+            //        getGPUInfo();
+            //    }
+            //    catch (Exception ex2)
+            //    {
 
-                }
+            //    }
 
-            }
+            //}
         }
 
         public void getRAMInfo()
         {
-            try
-            {
-                foreach (var hardware in thisPC.Hardware)
-                {
-                    hardware.Update();
-                    if (hardware.HardwareType == HardwareType.Memory)
-                    {
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == SensorType.Load && !sensor.Name.Contains("Virtual"))
-                            {
-                                RAMLoad = (int)sensor.Value.GetValueOrDefault();
-                            }
+            //try
+            //{
+            //    foreach (var hardware in thisPC.Hardware)
+            //    {
+            //        hardware.Update();
+            //        if (hardware.HardwareType == HardwareType.Memory)
+            //        {
+            //            foreach (var sensor in hardware.Sensors)
+            //            {
+            //                if (sensor.SensorType == SensorType.Load && !sensor.Name.Contains("Virtual"))
+            //                {
+            //                    RAMLoad = (int)sensor.Value.GetValueOrDefault();
+            //                }
 
-                            if (sensor.SensorType == SensorType.Data && sensor.Name.Contains("Memory Used") && !sensor.Name.Contains("Virtual Memory Used"))
-                            {
-                                RAMUsed = Convert.ToInt32(sensor.Value.GetValueOrDefault() * 1000);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+            //                if (sensor.SensorType == SensorType.Data && sensor.Name.Contains("Memory Used") && !sensor.Name.Contains("Virtual Memory Used"))
+            //                {
+            //                    RAMUsed = Convert.ToInt32(sensor.Value.GetValueOrDefault() * 1000);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
         }
 
         public static void OutputThreadProc()
         {
-            try
-            {
-                long t1, t2;
-                long dt = 2000;
+            //try
+            //{
+            //    long t1, t2;
+            //    long dt = 2000;
 
-                lock (sync)
-                {
-                    t2 = watch.ElapsedMilliseconds;
-                    t1 = t2 - dt;
+            //    lock (sync)
+            //    {
+            //        t2 = watch.ElapsedMilliseconds;
+            //        t1 = t2 - dt;
 
-                    foreach (var x in frames.Values)
-                    {
+            //        foreach (var x in frames.Values)
+            //        {
 
-                        //get the number of frames
-                        int count = x.QueryCount(t1, t2);
+            //            //get the number of frames
+            //            int count = x.QueryCount(t1, t2);
 
-                        //calculate FPS
-                        Framerate = Convert.ToInt32((double)count / dt * 1000.0);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+            //            //calculate FPS
+            //            Framerate = Convert.ToInt32((double)count / dt * 1000.0);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
 
         }
 

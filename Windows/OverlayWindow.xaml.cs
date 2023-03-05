@@ -19,7 +19,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
 using UXTU.Scripts.Intel;
-using LibreHardwareMonitor.Hardware;
 using UXTU.Properties;
 using RyzenSMUBackend;
 using System.Windows.Forms;
@@ -67,20 +66,20 @@ namespace AATUV3
             autoReapply.Start();
 
 
-            thisPC = new Computer()
-            {
-                IsCpuEnabled = true,
-                IsGpuEnabled = true,
-                IsMemoryEnabled = true
-            };
-            thisPC.Open();
-            thisPC.Accept(new UpdateVisitor());
+            //thisPC = new Computer()
+            //{
+            //    IsCpuEnabled = true,
+            //    IsGpuEnabled = true,
+            //    IsMemoryEnabled = true
+            //};
+            //thisPC.Open();
+            //thisPC.Accept(new UpdateVisitor());
 
             RyzenAccess = new Smu(EnableDebug);
             RyzenAccess.Initialize();
         }
 
-        public static Computer thisPC;
+        //public static Computer thisPC;
 
         public static bool hidden = true;
         void Sensor_Tick(object sender, EventArgs e)
@@ -365,58 +364,58 @@ namespace AATUV3
             }
         }
 
-        public class UpdateVisitor : IVisitor
-        {
-            public void VisitComputer(IComputer computer)
-            {
-                computer.Traverse(this);
-            }
-            public void VisitHardware(IHardware hardware)
-            {
-                hardware.Update();
-                foreach (IHardware subHardware in hardware.SubHardware) subHardware.Accept(this);
-            }
-            public void VisitSensor(ISensor sensor) { }
-            public void VisitParameter(IParameter parameter) { }
-        }
+        //public class UpdateVisitor : IVisitor
+        //{
+        //    public void VisitComputer(IComputer computer)
+        //    {
+        //        computer.Traverse(this);
+        //    }
+        //    public void VisitHardware(IHardware hardware)
+        //    {
+        //        hardware.Update();
+        //        foreach (IHardware subHardware in hardware.SubHardware) subHardware.Accept(this);
+        //    }
+        //    public void VisitSensor(ISensor sensor) { }
+        //    public void VisitParameter(IParameter parameter) { }
+        //}
 
         public void getCPUInfo()
         {
-            try
-            {
-                foreach (var hardware in thisPC.Hardware)
-                {
-                    hardware.Update();
-                    if (hardware.HardwareType == HardwareType.Cpu)
-                    {
-                        int i = 0;
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            int o = 0;
+            //try
+            //{
+            //    foreach (var hardware in thisPC.Hardware)
+            //    {
+            //        hardware.Update();
+            //        if (hardware.HardwareType == HardwareType.Cpu)
+            //        {
+            //            int i = 0;
+            //            foreach (var sensor in hardware.Sensors)
+            //            {
+            //                int o = 0;
 
-                            if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Total"))
-                            {
-                                cpuLoad = (int)sensor.Value.GetValueOrDefault();
-                            }
+            //                if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Total"))
+            //                {
+            //                    cpuLoad = (int)sensor.Value.GetValueOrDefault();
+            //                }
 
-                            do
-                            {
-                                if (sensor.SensorType == SensorType.Load && sensor.Name.Contains(o.ToString()))
-                                {
-                                    if ((int)sensor.Value.GetValueOrDefault() > 70) i++;
-                                }
-                                o++;
-                            }
-                            while (o < 32);
-                        }
-                        coresInUse = i;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
+            //                do
+            //                {
+            //                    if (sensor.SensorType == SensorType.Load && sensor.Name.Contains(o.ToString()))
+            //                    {
+            //                        if ((int)sensor.Value.GetValueOrDefault() > 70) i++;
+            //                    }
+            //                    o++;
+            //                }
+            //                while (o < 32);
+            //            }
+            //            coresInUse = i;
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
         }
     }
 }
