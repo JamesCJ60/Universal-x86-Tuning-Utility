@@ -44,27 +44,6 @@ namespace RyzenSmu
             return PmData;
         }
 
-        public static float ReadFloat64(ulong Address, uint Offset)
-        {
-            uint Data = 0;
-            try
-            {
-                GetPhysLong((UIntPtr)(Address + Offset * 4), out Data);
-            }
-            catch (Exception e)
-            {
-                String ExeptionMSG = $"Error Reading Address 0x{Address:X8} + 0x{Offset:X4} \n{e}";
-                MessageBox.Show(ExeptionMSG);
-            }
-
-            byte[] bytes = new byte[4];
-            bytes = BitConverter.GetBytes(Data);
-
-            float PmData = BitConverter.ToSingle(bytes, 0);
-            Console.WriteLine($"0x{Address + Offset * 4,8:X8} | {PmData:F}");
-            return PmData;
-        }
-
         public enum Status : int
         {
             BAD = 0x0,

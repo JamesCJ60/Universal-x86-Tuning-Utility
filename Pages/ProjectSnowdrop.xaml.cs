@@ -232,15 +232,15 @@ namespace AATUV3.Pages
                     {
                         APUPresetToLoad = "U";
                     }
-                    if (apuname.Contains("HX"))
+                    else if (apuname.Contains("HX"))
                     {
                         APUPresetToLoad = "HX";
                     }
-                    if (apuname.Contains("H") || apuname.Contains("Z"))
+                    else if (apuname.Contains("H") || apuname.Contains("Z"))
                     {
                         APUPresetToLoad = "H-HS";
                     }
-                    if (apuname.Contains("GE"))
+                    else if (apuname.Contains("GE"))
                     {
                         APUPresetToLoad = "GE";
                         imgDevice.Source = new BitmapImage(new Uri(apuPreset + "\\config-DT-AM4.png"));

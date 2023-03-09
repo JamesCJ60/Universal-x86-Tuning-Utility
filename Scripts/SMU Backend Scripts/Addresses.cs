@@ -125,20 +125,17 @@ namespace RyzenSMUBackend
         //PHEONIX - 9
         //RAPHAEL/DRAGON RANGE - 10
 
-        public async static void GetPMTableVersion()
+        public static void GetPMTableVersion()
         {
-            await Task.Run(() =>
-            {
+           
                 DumpPMTableWithSensors();
-            });
+
         }
 
         public static void DumpPMTableWithSensors()
         {
             try
             {
-
-
                 uint msg1 = 0x0;
                 uint msg2 = 0x0;
                 uint msg3 = 0x0;
@@ -241,7 +238,7 @@ namespace RyzenSMUBackend
                         }
                         Thread.Sleep(100);
                     }
-                    else { Args[0] = 0;}
+                    else { Args[0] = 0; }
                     TableDump.Initialize();
                     TableDump[0] = ($"APU/CPU Name: {Settings.Default.APUName}");
                     if (Families.FAMID != 10 && Families.FAMID != 0 && Families.FAMID != 2 & Families.FAMID != 3)
@@ -275,9 +272,10 @@ namespace RyzenSMUBackend
                     }
                     catch (Exception ex) { }
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
-                MessageBox.Show(e.ToString());
+
             }
         }
 
@@ -470,6 +468,15 @@ namespace RyzenSMUBackend
             {
                 try
                 {
+                    if (Families.FAMID == 8 || Families.FAMID == 9 || Families.FAMID == 11)
+                    {
+                        Args = new uint[6];
+
+                        Args[0] = Address;
+                        //Set Address and reset Args[]
+                        RyzenAccess.SendMp1(0xE, ref Args);
+                    }
+
                     uint msg3 = 0x0;
 
                     //set SMU message address
