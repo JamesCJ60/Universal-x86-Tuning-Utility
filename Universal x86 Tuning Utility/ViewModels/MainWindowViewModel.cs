@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows.Input;
 using Wpf.Ui.Common;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Controls.Interfaces;
@@ -115,6 +118,23 @@ namespace Universal_x86_Tuning_Utility.ViewModels
             };
 
             _isInitialized = true;
+        }
+        private ICommand _navigateCommand;
+        public ICommand NavigateCommand => _navigateCommand ??= new RelayCommand<string>(OnNavigate);
+
+        private void OnNavigate(string parameter)
+        {
+            switch (parameter)
+            {
+                case "discord":
+                    Process.Start(new ProcessStartInfo("http://www.discord.gg/3EkYMZGJwq") { UseShellExecute = true });
+                    return;
+
+                case "support":
+                    Process.Start(new ProcessStartInfo("https://www.paypal.com/paypalme/JamesCJ60") { UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo("https://patreon.com/uxtusoftware") { UseShellExecute = true });
+                    return;
+            }
         }
     }
 }

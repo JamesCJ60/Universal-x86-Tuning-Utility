@@ -30,7 +30,7 @@ namespace RyzenSmu
             if (Family.FAM == Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Lucienne || Family.FAM == Family.RyzenFamily.Cezanne_Barcelo) Socket_FP6_AM4();
             if (Family.FAM == Family.RyzenFamily.VanGogh) Socket_FF3();
             if (Family.FAM == Family.RyzenFamily.Mendocino || Family.FAM == Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.PhoenixPoint) Socket_FT6_FP7_FP8();
-            if (Family.FAM == Family.RyzenFamily.DragonRange) Socket_AM5_V1();
+            if (Family.FAM == Family.RyzenFamily.Raphael) Socket_AM5_V1();
         }
 
         private static void Socket_FT5_FP5_AM4()

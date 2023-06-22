@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -71,7 +72,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (Family.FAM != Family.RyzenFamily.PhoenixPoint && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Collapsed;
                 if (Family.CPUName.Contains("U") && Family.FAM > Family.RyzenFamily.Renoir) sdAmdPBO.Visibility = Visibility.Collapsed;
                 if(!Family.CPUName.Replace("with Radeon Graphics", null).Contains("G") && Family.CPUName != "AMD Custom APU 0405") if(Family.FAM != Family.RyzenFamily.Renoir && !Family.CPUName.Contains("Ryzen 9") && cbAllCO.Visibility == Visibility) sdAmdCO.Visibility = Visibility.Collapsed;
+
+                if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Visible;
                 
+
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
 
@@ -250,7 +254,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void cbxPowerPreset_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            updateValues((sender as ComboBox).SelectedItem as string);
+            updateValues((sender as System.Windows.Controls.ComboBox).SelectedItem as string);
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)

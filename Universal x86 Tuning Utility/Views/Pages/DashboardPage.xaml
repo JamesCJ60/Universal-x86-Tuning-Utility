@@ -60,7 +60,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="V2.0.0 Beta Build 6.1" />
+                            Text="V2.0.0 Beta Build 6.2" />
                             <ui:Button
                             Height="36"
                             Margin="0,12,0,0"

@@ -57,9 +57,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private string cpuName = "";
         public Premade()
         {
-            InitializeComponent();
-            _ = Tablet.TabletDevices;
-            update();
+            try
+            {
+                InitializeComponent();
+                _ = Tablet.TabletDevices;
+                update();
+            }
+            catch { }
         }
 
         private void update()

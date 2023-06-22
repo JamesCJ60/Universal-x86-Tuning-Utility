@@ -91,7 +91,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "1.0.6.1";
+        public static string version = "1.0.6.2";
 
         /// <summary>
         /// Occurs when the application is loading.

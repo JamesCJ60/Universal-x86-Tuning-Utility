@@ -71,14 +71,6 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             autoReapply.Tick += AutoReapply_Tick;
             autoReapply.Start();
 
-            Loaded += (sender, args) =>
-            {
-                Wpf.Ui.Appearance.Watcher.Watch(
-                    this,                                  // Window class
-                    Wpf.Ui.Appearance.BackgroundType.Mica, // Background type
-                    true                                   // Whether to change accents automatically
-                );
-            };
 
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
 
@@ -98,6 +90,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString);
                         ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
                     }
+
+            Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
         }
 
         private async void getBatTempData()
@@ -120,6 +114,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         private async void Misc_Tick(object sender, EventArgs e)
         {
             getBatTempData();
+
+            Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
         }
 
         private async void AutoReapply_Tick(object sender, EventArgs e)

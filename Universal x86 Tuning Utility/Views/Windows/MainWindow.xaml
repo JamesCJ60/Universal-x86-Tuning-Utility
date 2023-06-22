@@ -92,6 +92,12 @@
                     </ui:NotifyIcon.Menu>
                 </ui:NotifyIcon>
             </ui:TitleBar.Tray>
+            <ui:TitleBar.Header>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                    <ui:Button Appearance="Transparent" Margin="0,0,9,0" Command="{Binding ViewModel.NavigateCommand}" CommandParameter="support">Buy us a beer! &#9829;</ui:Button>
+                    <ui:Button Appearance="Transparent" Margin="0,0,18,0" Command="{Binding ViewModel.NavigateCommand}" CommandParameter="discord">Join our Discord!</ui:Button>
+                </StackPanel>
+            </ui:TitleBar.Header>
         </ui:TitleBar>
     </Grid>
 </ui:UiWindow>
