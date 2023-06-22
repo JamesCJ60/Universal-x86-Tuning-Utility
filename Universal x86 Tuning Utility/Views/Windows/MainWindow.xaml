@@ -8,7 +8,7 @@
     xmlns:pages="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
-    MinWidth="860"
+    MinWidth="980"
     MinHeight="420"
     Width="1080"
     Height="640"
@@ -21,8 +21,19 @@
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen"
     Name="mainWindow"
-    mc:Ignorable="d" StateChanged="UiWindow_StateChanged" Closing="UiWindow_Closing">
+    mc:Ignorable="d" StateChanged="UiWindow_StateChanged" Closing="UiWindow_Closing" Loaded="mainWindow_Loaded">
+
+    <ui:UiWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </ui:UiWindow.Resources>
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="448*"/>
+            <ColumnDefinition Width="39*"/>
+            <ColumnDefinition Width="13*"/>
+            <ColumnDefinition Width="40*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -30,8 +41,7 @@
 
         <Grid
             x:Name="RootMainGrid"
-            Grid.Row="1"
-            Margin="0">
+            Grid.Row="1" Grid.ColumnSpan="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -74,9 +84,8 @@
         <ui:TitleBar
             Name="tbMain"
             Title="Universal x86 Tuning Utility"
-            Grid.Row="0"
             Icon="pack://application:,,,/Assets/applicationIcon-256.png"
-            UseSnapLayout="True">
+            UseSnapLayout="True" Grid.ColumnSpan="4" VerticalAlignment="Center">
             <ui:TitleBar.Tray>
                 <ui:NotifyIcon
                     LeftClick="NotifyIcon_LeftClick"
@@ -94,6 +103,7 @@
             </ui:TitleBar.Tray>
             <ui:TitleBar.Header>
                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                    <ui:Button Appearance="Transparent" Margin="0,0,9,0" Command="{Binding ViewModel.NavigateCommand}" CommandParameter="download" Content="{Binding ViewModel.Downloads}" Visibility="{Binding ViewModel.IsDownloads, Converter={StaticResource BooleanToVisibilityConverter}}"></ui:Button>
                     <ui:Button Appearance="Transparent" Margin="0,0,9,0" Command="{Binding ViewModel.NavigateCommand}" CommandParameter="support">Buy us a beer! &#9829;</ui:Button>
                     <ui:Button Appearance="Transparent" Margin="0,0,18,0" Command="{Binding ViewModel.NavigateCommand}" CommandParameter="discord">Join our Discord!</ui:Button>
                 </StackPanel>

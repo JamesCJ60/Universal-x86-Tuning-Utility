@@ -177,7 +177,7 @@ namespace Universal_x86_Tuning_Utility
             }
         }
 
-        private static bool IsInternetAvailable()
+        public static bool IsInternetAvailable()
         {
             try
             {

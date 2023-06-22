@@ -27,6 +27,12 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         [ObservableProperty]
         private ObservableCollection<MenuItem> _trayMenuItems = new();
 
+        [ObservableProperty]
+        private string _downloads = "Downloads: ";
+
+        [ObservableProperty]
+        private bool _isDownloads = false;
+
         public MainWindowViewModel(INavigationService navigationService)
         {
             if (!_isInitialized)
@@ -126,6 +132,10 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         {
             switch (parameter)
             {
+                case "download":
+                    Process.Start(new ProcessStartInfo("https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases") { UseShellExecute = true });
+                    return;
+
                 case "discord":
                     Process.Start(new ProcessStartInfo("http://www.discord.gg/3EkYMZGJwq") { UseShellExecute = true });
                     return;

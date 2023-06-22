@@ -3,6 +3,9 @@ using RyzenSmu;
 using System;
 using System.Globalization;
 using System.Management;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,7 +31,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
     {
         public ViewModels.MainWindowViewModel ViewModel
         {
-            get;
+            get; set;
         }
 
         DispatcherTimer GC = new DispatcherTimer();
@@ -78,7 +81,6 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
             tbMain.Title = $"Universal x86 Tuning Utility - {Family.CPUName}";
 
-
             //PowerPlans.HideAttribute("SUB_PROCESSOR", "PERFEPP");
             //PowerPlans.HideAttribute("SUB_PROCESSOR", "PERFEPP1");
             //PowerPlans.HideAttribute("SUB_PROCESSOR", "PERFAUTONOMOUS");
@@ -116,6 +118,27 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             getBatTempData();
 
             Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
+        }
+
+        private async void updateDownloads()
+        {
+            try
+            {
+                if (App.IsInternetAvailable())
+                {
+                    string owner = "JamesCJ60";
+                    string repo = "Universal-x86-Tuning-Utility";
+
+                    int downloadCount = await GetGitHubDownloadCount(owner, repo); 
+                    if (downloadCount > 100000000) ViewModel.Downloads = $"Downloads: {((downloadCount / 1000) / 1000).ToString("#.#")}m";
+                    else if (downloadCount > 1000) ViewModel.Downloads = $"Downloads: {(downloadCount / 1000).ToString("#.#")}k";
+                    else ViewModel.Downloads = $"Downloads: {downloadCount}";
+
+                    ViewModel.IsDownloads = true;
+                }
+                else ViewModel.IsDownloads = false;
+            }
+            catch (Exception ex) { ViewModel.IsDownloads = false; }
         }
 
         private async void AutoReapply_Tick(object sender, EventArgs e)
@@ -204,6 +227,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             else
             {
                 this.ShowInTaskbar = true;
+                updateDownloads();
             }
         }
 
@@ -303,5 +327,42 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             Settings.Default.Save();
             Fan_Control.disableFanControl();
         }
+
+        static async Task<int> GetGitHubDownloadCount(string owner, string repo)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("AppName", "1.0"));
+
+                string apiUrl = $"https://api.github.com/repos/{owner}/{repo}";
+                string releasesUrl = $"{apiUrl}/releases";
+
+                // Retrieve releases
+                var response = await client.GetAsync(releasesUrl);
+                response.EnsureSuccessStatusCode();
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                var releases = JsonDocument.Parse(responseContent).RootElement;
+
+                int downloadCount = 0;
+
+                // Calculate total download count
+                foreach (var release in releases.EnumerateArray())
+                {
+                    foreach (var asset in release.GetProperty("assets").EnumerateArray())
+                    {
+                        downloadCount += asset.GetProperty("download_count").GetInt32();
+                    }
+                }
+
+                return downloadCount;
+            }
+        }
+
+        private void mainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            updateDownloads();
+        }
     }
 }
+
