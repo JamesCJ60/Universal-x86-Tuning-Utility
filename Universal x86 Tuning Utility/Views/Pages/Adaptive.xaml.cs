@@ -35,6 +35,7 @@ using GameLib.Plugin.Steam.Model;
 using Windows.ApplicationModel.Search;
 using Windows.Gaming.Preview.GamesEnumeration;
 using System.Management;
+using RyzenSmu;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {

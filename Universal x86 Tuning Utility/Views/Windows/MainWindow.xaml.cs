@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RyzenSmu;
 using System;
 using System.Globalization;
 using System.Management;
