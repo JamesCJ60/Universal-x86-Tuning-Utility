@@ -1,0 +1,97 @@
+﻿<ui:UiWindow
+    x:Class="Universal_x86_Tuning_Utility.Views.Windows.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
+    MinWidth="860"
+    MinHeight="420"
+    Width="1080"
+    Height="640"
+    d:DataContext="{d:DesignInstance local:MainWindow,
+                                     IsDesignTimeCreatable=True}"
+    d:Background="{DynamicResource ApplicationBackgroundBrush}"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    ExtendsContentIntoTitleBar="True"
+    WindowBackdropType="Mica"
+    WindowCornerPreference="Round"
+    WindowStartupLocation="CenterScreen"
+    Name="mainWindow"
+    mc:Ignorable="d" StateChanged="UiWindow_StateChanged" Closing="UiWindow_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid
+            x:Name="RootMainGrid"
+            Grid.Row="1"
+            Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  This is the main navigation of the application.  -->
+            <ui:NavigationStore
+                x:Name="RootNavigation"
+                Grid.Column="0"
+                Margin="6,0,6,1.5"
+                Footer="{Binding ViewModel.NavigationFooter, Mode=TwoWay}"
+                Frame="{Binding ElementName=RootFrame, Mode=OneWay}"
+                Items="{Binding ViewModel.NavigationItems, Mode=TwoWay}" />
+
+            <!--  We display our pages inside this element.  -->
+            <Border
+                Grid.Column="1"
+                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                CornerRadius="8,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Frame x:Name="RootFrame" Grid.Row="1" />
+                    <!--<ui:Breadcrumb
+                        Grid.Row="0"
+                        Margin="56,36"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontSize="28"
+                        Navigation="{Binding ElementName=RootNavigation, Mode=OneWay}" />-->
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!--  The title bar contains window navigation elements and some Tray related extras.  -->
+        <!--  You can put additional controls in the header, such as a search bar.  -->
+        <!--  <ui:TitleBar.Header />  -->
+        <ui:TitleBar
+            Name="tbMain"
+            Title="Universal x86 Tuning Utility"
+            Grid.Row="0"
+            Icon="pack://application:,,,/Assets/applicationIcon-256.png"
+            UseSnapLayout="True">
+            <ui:TitleBar.Tray>
+                <ui:NotifyIcon
+                    LeftClick="NotifyIcon_LeftClick"
+                    FocusOnLeftClick="False"
+                    Icon="pack://application:,,,/Assets/applicationIcon-256.png"
+                    MenuOnRightClick="True"
+                    TooltipText="Universal x86 Tuning Utility">
+                    <ui:NotifyIcon.Menu>
+                        <ContextMenu>
+                            <MenuItem Name="miCharge" Header="Charge Rate: -15W" Tag="charge" IsEnabled="False" />
+                            <MenuItem Name="miClose" Header="Close Application" Tag="close" Click="miClose_Click"/>
+                        </ContextMenu>
+                    </ui:NotifyIcon.Menu>
+                </ui:NotifyIcon>
+            </ui:TitleBar.Tray>
+        </ui:TitleBar>
+    </Grid>
+</ui:UiWindow>

@@ -1,0 +1,11 @@
+﻿{
+  "MinFanSpeed": 1,
+  "MaxFanSpeed": 127,
+  "MinFanSpeedPercentage": 0,
+  "FanControlAddress": "0xC311",
+  "FanSetAddress": "0xC311",
+  "EnableToggleAddress": "0x1",
+  "DisableToggleAddress": "0x0",
+  "RegAddress": "0x4E",
+  "RegData": "0x4F"
+}
