@@ -26,8 +26,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
     public partial class Automations : Page
     {
         private PresetManager apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
-        private PresetManager amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
-
+        private PresetManager amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json"); 
+        private PresetManager intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
         bool setup = false;
         public Automations()
         {
@@ -50,6 +50,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
+
+                // Populate a combo box with the preset names
+                foreach (string presetName in presetNames)
+                {
+                    cbxCharge.Items.Add(presetName);
+                    cbxDischarge.Items.Add(presetName);
+                    cbxResume.Items.Add(presetName);
+                }
+            }
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                // Get the names of all the stored presets
+                IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -157,6 +170,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
             }
 
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+
+                // Get the names of all the stored presets
+                IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
+
+                cbxCharge.Items.Clear();
+                cbxCharge.Items.Add("None");
+
+                // Populate a combo box with the preset names
+                foreach (string presetName in presetNames)
+                {
+                    cbxCharge.Items.Add(presetName);
+                }
+            }
+
 
             getAcPreset(oldPreset);
         }
@@ -199,6 +229,22 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
             }
 
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+
+                // Get the names of all the stored presets
+                IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
+
+                cbxDischarge.Items.Clear();
+                cbxDischarge.Items.Add("None");
+
+                // Populate a combo box with the preset names
+                foreach (string presetName in presetNames)
+                {
+                    cbxDischarge.Items.Add(presetName);
+                }
+            }
 
             getDcPreset(oldPreset);
         }
@@ -230,6 +276,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
+
+                cbxResume.Items.Clear();
+                cbxResume.Items.Add("None");
+
+                // Populate a combo box with the preset names
+                foreach (string presetName in presetNames)
+                {
+                    cbxResume.Items.Add(presetName);
+                }
+            }
+
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+
+                // Get the names of all the stored presets
+                IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
 
                 cbxResume.Items.Clear();
                 cbxResume.Items.Add("None");
@@ -283,6 +346,22 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         }
                     }
 
+                    if (Family.TYPE == Family.ProcessorType.Intel)
+                    {
+                        intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+                        if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
+                        {
+                            Preset myPreset = intelPresetManager.GetPreset(presetName);
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = myPreset.commandValue;
+                        }
+                        else
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = "";
+                        }
+                    }
+
                     Settings.Default.Save();
                 }        
             } catch (Exception ex) { MessageBox.Show(ex.ToString()); }
@@ -296,6 +375,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (Family.TYPE == Family.ProcessorType.Amd_Apu)
                 {
+                    apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
                     if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                     {
                         Preset myPreset = apuPresetManager.GetPreset(presetName);
@@ -310,9 +390,25 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
                 if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
                 {
+                    amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
                     if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                     {
                         Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
+                        Settings.Default.dcPreset = presetName;
+                        Settings.Default.dcCommandString = myPreset.commandValue;
+                    }
+                    else
+                    {
+                        Settings.Default.dcPreset = presetName;
+                        Settings.Default.dcCommandString = "";
+                    }
+                }
+                if (Family.TYPE == Family.ProcessorType.Intel)
+                {
+                    intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+                    if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
+                    {
+                        Preset myPreset = intelPresetManager.GetPreset(presetName);
                         Settings.Default.dcPreset = presetName;
                         Settings.Default.dcCommandString = myPreset.commandValue;
                     }
@@ -356,6 +452,22 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                         {
                             Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
+                            Settings.Default.resumePreset = presetName;
+                            Settings.Default.resumeCommandString = myPreset.commandValue;
+                        }
+                        else
+                        {
+                            Settings.Default.resumePreset = presetName;
+                            Settings.Default.resumeCommandString = "";
+                        }
+                    }
+
+                    if (Family.TYPE == Family.ProcessorType.Intel)
+                    {
+                        intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+                        if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
+                        {
+                            Preset myPreset = intelPresetManager.GetPreset(presetName);
                             Settings.Default.resumePreset = presetName;
                             Settings.Default.resumeCommandString = myPreset.commandValue;
                         }

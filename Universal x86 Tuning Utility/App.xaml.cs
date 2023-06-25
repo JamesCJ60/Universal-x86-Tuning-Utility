@@ -91,7 +91,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "1.0.6.2";
+        public static string version = "1.0.7";
 
         /// <summary>
         /// Occurs when the application is loading.
@@ -114,6 +114,9 @@ namespace Universal_x86_Tuning_Utility
 
                 _ = Tablet.TabletDevices;
                 bool firstBoot = false;
+
+                string currentDirectory = Environment.CurrentDirectory;
+                UnblockFilesInDirectory(currentDirectory);
 
                 Family.setCpuFamily();
                 Family.setCpuFamily();
@@ -209,6 +212,27 @@ namespace Universal_x86_Tuning_Utility
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+        }
+
+        static void UnblockFilesInDirectory(string directoryPath)
+        {
+            ProcessStartInfo processInfo = new ProcessStartInfo();
+            processInfo.FileName = "powershell.exe";
+            processInfo.Arguments = $"Get-ChildItem -Path \"{directoryPath}\" -Recurse | Unblock-File";
+            processInfo.UseShellExecute = false;
+            processInfo.CreateNoWindow = true;
+            processInfo.RedirectStandardOutput = true;
+
+            using (Process process = new Process())
+            {
+                process.StartInfo = processInfo;
+                process.Start();
+
+                // Read the output of PowerShell command execution
+                string output = process.StandardOutput.ReadToEnd();
+
+                process.WaitForExit();
+            }
         }
     }
 }

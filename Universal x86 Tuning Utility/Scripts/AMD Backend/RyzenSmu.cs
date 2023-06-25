@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using OpenLibSys;
 using System.Reflection;
 using Universal_x86_Tuning_Utility.Scripts;
+using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 
 [assembly: CLSCompliant(false)]
 
@@ -331,8 +332,10 @@ namespace RyzenSmu
                                 //Convert value of select cli argument to int
                                 string ryzenAdjCommandValueString = ryzenAdjCommand.Substring(ryzenAdjCommand.IndexOf('=') + 1);
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
-
-                                SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
+                                if(ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
+                                
+                                else SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
                                 await Task.Delay(2);
                             }
                             catch (Exception ex) { }

@@ -97,10 +97,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Scripts\Intel Backend\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="RTSSSharedMemoryNET">
       <HintPath>RTSSSharedMemoryNET.dll</HintPath>
     </Reference>

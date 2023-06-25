@@ -35,6 +35,9 @@ namespace Universal_x86_Tuning_Utility.Services
 
         public int boostProfile { get; set; }
 
+        public int intelPL1 { get; set; }
+        public int IntelPL2 { get; set; }
+
         public string commandValue { get; set; }
 
         public bool isApuTemp { get; set; }
@@ -59,6 +62,8 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isDtCpuTDC { get; set; }
         public bool isDtCpuEDC { get; set; }
 
+        public bool isIntelPL1 { get; set; }
+        public bool isIntelPL2 { get; set; }
     }
 
     public class PresetManager

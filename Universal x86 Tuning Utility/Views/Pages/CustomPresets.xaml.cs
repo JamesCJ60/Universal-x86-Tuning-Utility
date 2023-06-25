@@ -36,6 +36,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private PresetManager apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
         private PresetManager amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+        private PresetManager intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
         public CustomPresets()
         {
             InitializeComponent();
@@ -59,9 +60,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudPPT.Value = 140;
             nudEDC.Value = 160;
             nudTDC.Value = 160;
+            nudIntelPL1.Value = 35;
+            nudIntelPL2.Value = 65;
 
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+            intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
@@ -92,6 +96,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdApuThermal.Visibility = Visibility.Collapsed;
                 sdAmdApuVRM.Visibility = Visibility.Collapsed;
                 sdIntelCPU.Visibility = Visibility.Collapsed;
+                sdAmdPowerProfile.Visibility = Visibility.Collapsed;
 
                 if (Family.FAM < Family.RyzenFamily.Vermeer) sdAmdCO.Visibility = Visibility.Collapsed;
 
@@ -103,6 +108,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     cbxPowerPreset.Items.Add(presetName);
                 }
+            }
+
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                sdAmdCPU.Visibility = Visibility.Collapsed;
+                sdAmdCpuThermal.Visibility = Visibility.Collapsed;
+                sdAmdApuCPU.Visibility = Visibility.Collapsed;
+                sdAmdApuThermal.Visibility = Visibility.Collapsed;
+                sdAmdApuVRM.Visibility = Visibility.Collapsed;
+                sdAmdPowerProfile.Visibility = Visibility.Collapsed;
             }
 
             if (IsScrollBarVisible(mainScroll)) mainCon.Margin = new Thickness(15, 0, 0, 0);
@@ -119,10 +134,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             string commandValues = "";
 
-            if (Family.TYPE != Family.ProcessorType.Intel)
-            {
-                commandValues = getCommandValues();
-            }
+            commandValues = getCommandValues();
 
             if (commandValues != "" && commandValues != null)
             {
@@ -206,7 +218,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
             }
 
-            if (Family.TYPE == Family.ProcessorType.Amd_Apu)
+            if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
             {
                 if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
                 {
@@ -231,6 +243,40 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         isDtCpuEDC = (bool)cbEDC.IsChecked,
                         isPboScalar = (bool)cbPBOScaler.IsChecked,
                         isCoAllCore = (bool)cbAllCO.IsChecked
+                    };
+                    amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
+
+                    amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+
+                    // Get the names of all the stored presets
+                    IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
+
+                    cbxPowerPreset.Items.Clear();
+
+                    // Populate a combo box with the preset names
+                    foreach (string presetName in presetNames)
+                    {
+                        cbxPowerPreset.Items.Add(presetName);
+                    }
+
+                    ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
+                }
+            }
+
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
+                {
+                    // Save a preset
+                    Preset preset = new Preset
+                    {
+                        intelPL1 = (int)nudIntelPL1.Value,
+                        IntelPL2 = (int)nudIntelPL2.Value,
+
+                        commandValue = getCommandValues(),
+
+                        isIntelPL1 = (bool)cbIntelPL1.IsChecked,
+                        isIntelPL2 = (bool)cbIntelPL1.IsChecked,
                     };
                     amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -290,12 +336,36 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (cbxPowerPreset.Text != "" && cbxPowerPreset.Text != null)
                     {
                         string deletePresetName = cbxPowerPreset.Text;
-                        apuPresetManager.DeletePreset(deletePresetName);
+                        amdDtCpuPresetManager.DeletePreset(deletePresetName);
 
                         amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
 
                         // Get the names of all the stored presets
                         IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
+
+                        cbxPowerPreset.Items.Clear();
+
+                        // Populate a combo box with the preset names
+                        foreach (string presetName in presetNames)
+                        {
+                            cbxPowerPreset.Items.Add(presetName);
+                        }
+
+                        ToastNotification.ShowToastNotification("Preset Deleted", $"Your preset {deletePresetName} has been deleted successfully!");
+                    }
+                }
+
+                if (Family.TYPE == Family.ProcessorType.Intel)
+                {
+                    if (cbxPowerPreset.Text != "" && cbxPowerPreset.Text != null)
+                    {
+                        string deletePresetName = cbxPowerPreset.Text;
+                        intelPresetManager.DeletePreset(deletePresetName);
+
+                        intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+
+                        // Get the names of all the stored presets
+                        IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
 
                         cbxPowerPreset.Items.Clear();
 
@@ -316,6 +386,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+            intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
             if(cbxPowerPreset.Text != null && cbxPowerPreset.Text != "") updateValues(cbxPowerPreset.SelectedItem.ToString());
         }
 
@@ -400,6 +471,21 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbAllCO.IsChecked = myPreset.isCoAllCore;
                     }
                 }
+                if (Family.TYPE == Family.ProcessorType.Intel)
+                {
+                    // Get the "myPreset" preset
+                    Preset myPreset = intelPresetManager.GetPreset(preset);
+
+                    if (myPreset != null)
+                    {
+                        // Read the values from the preset
+                        nudIntelPL1.Value = myPreset.IntelPL2;
+                        nudIntelPL2.Value = myPreset.IntelPL2;
+
+                        cbIntelPL1.IsChecked = myPreset.isIntelPL1;
+                        cbIntelPL2.IsChecked = myPreset.isIntelPL2;
+                    }
+                }
             }
             catch (Exception ex) { }
         }
@@ -449,6 +535,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (nudAllCO.Value >= 0) commandValues = commandValues + $"--set-coall={nudAllCO.Value} ";
                     if (nudAllCO.Value < 0) commandValues = commandValues + $"--set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudAllCO.Value))} ";
                 }
+            }
+
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-1={nudIntelPL2.Value} ";
+                if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-2={nudIntelPL2.Value} ";
             }
 
             return commandValues;

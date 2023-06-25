@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using Universal_x86_Tuning_Utility.Scripts;
 using Wpf.Ui.Common;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Controls.Interfaces;
@@ -42,9 +43,92 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private void InitializeViewModel()
         {
             ApplicationTitle = "Universal x86 Tuning Utility";
-
-            NavigationItems = new ObservableCollection<INavigationControl>
+            if (Family.TYPE == Family.ProcessorType.Intel)
             {
+                NavigationItems = new ObservableCollection<INavigationControl>
+                {
+                new NavigationItem()
+                {
+                    Content = "Home",
+                    PageTag = "dashboard",
+                    Icon = SymbolRegular.Home20,
+                    PageType = typeof(Views.Pages.DashboardPage)
+                },
+                //new NavigationItem()
+                //{
+                //    Content = "Premade",
+                //    PageTag = "premade",
+                //    Icon = SymbolRegular.Predictions20,
+                //    PageType = typeof(Views.Pages.Premade)
+                //},
+                new NavigationItem()
+                {
+                    Content = "Custom",
+                    PageTag = "custom",
+                    Icon = SymbolRegular.Book20,
+                    PageType = typeof(Views.Pages.CustomPresets)
+                },
+                //new NavigationItem()
+                //{
+                //    Content = "Adaptive",
+                //    PageTag = "adaptive",
+                //    Icon = SymbolRegular.Radar20,
+                //    PageType = typeof(Views.Pages.Adaptive)
+                //},
+                new NavigationItem()
+                {
+                    Content = "Auto",
+                    PageTag = "auto",
+                    Icon = SymbolRegular.Transmission20,
+                    PageType = typeof(Views.Pages.Automations)
+                },
+                new NavigationItem()
+                {
+                    Content = "Fan",
+                    PageTag = "fan",
+                    Icon = SymbolRegular.WeatherDuststorm20,
+                    PageType = typeof(Views.Pages.FanControl)
+                },
+                // new NavigationItem()
+                //{
+                //    Content = "Magpie",
+                //    PageTag = "magpie",
+                //    Icon = SymbolRegular.FullScreenMaximize20,
+                //    PageType = typeof(Views.Pages.DataPage)
+                //},
+                //new NavigationItem()
+                //{
+                //    Content = "Info",
+                //    PageTag = "info",
+                //    Icon = SymbolRegular.Info20,
+                //    PageType = typeof(Views.Pages.DataPage)
+                //}
+            };
+
+                NavigationFooter = new ObservableCollection<INavigationControl>
+            {
+                new NavigationItem()
+                {
+                    Content = "Settings",
+                    PageTag = "settings",
+                    Icon = SymbolRegular.Settings20,
+                    PageType = typeof(Views.Pages.SettingsPage)
+                }
+            };
+
+                TrayMenuItems = new ObservableCollection<MenuItem>
+            {
+                new MenuItem
+                {
+                    Header = "Home",
+                    Tag = "tray_home"
+                }
+            };
+            }
+            else
+            {
+                NavigationItems = new ObservableCollection<INavigationControl>
+                {
                 new NavigationItem()
                 {
                     Content = "Home",
@@ -103,7 +187,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 //}
             };
 
-            NavigationFooter = new ObservableCollection<INavigationControl>
+                NavigationFooter = new ObservableCollection<INavigationControl>
             {
                 new NavigationItem()
                 {
@@ -114,7 +198,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 }
             };
 
-            TrayMenuItems = new ObservableCollection<MenuItem>
+                TrayMenuItems = new ObservableCollection<MenuItem>
             {
                 new MenuItem
                 {
@@ -122,6 +206,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     Tag = "tray_home"
                 }
             };
+            }
 
             _isInitialized = true;
         }
