@@ -114,12 +114,14 @@ namespace Universal_x86_Tuning_Utility
 
                 _ = Tablet.TabletDevices;
                 bool firstBoot = false;
+                try
+                {
+                    string currentDirectory = Environment.CurrentDirectory;
+                    UnblockFilesInDirectory(currentDirectory);
+                } catch
+                {
 
-                string currentDirectory = Environment.CurrentDirectory;
-                UnblockFilesInDirectory(currentDirectory);
-
-                Family.setCpuFamily();
-                Family.setCpuFamily();
+                }
 
                 try
                 {
@@ -144,6 +146,9 @@ namespace Universal_x86_Tuning_Utility
                 }
 
                 if (File.Exists("C:\\Universal.x86.Tuning.Utility.V2.msi")) File.Delete("C:\\Universal.x86.Tuning.Utility.V2.msi");
+
+                Family.setCpuFamily();
+                Family.setCpuFamily();
 
                 if (firstBoot)
                 {
