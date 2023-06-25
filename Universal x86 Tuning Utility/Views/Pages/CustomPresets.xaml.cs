@@ -118,6 +118,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdApuThermal.Visibility = Visibility.Collapsed;
                 sdAmdApuVRM.Visibility = Visibility.Collapsed;
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;
+
+                // Get the names of all the stored presets
+                IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
+
+                // Populate a combo box with the preset names
+                foreach (string presetName in presetNames)
+                {
+                    cbxPowerPreset.Items.Add(presetName);
+                }
             }
 
             if (IsScrollBarVisible(mainScroll)) mainCon.Margin = new Thickness(15, 0, 0, 0);
@@ -249,7 +258,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
 
                     // Get the names of all the stored presets
-                    IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
+                    IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
 
                     cbxPowerPreset.Items.Clear();
 
@@ -283,7 +292,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
 
                     // Get the names of all the stored presets
-                    IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
+                    IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
 
                     cbxPowerPreset.Items.Clear();
 
