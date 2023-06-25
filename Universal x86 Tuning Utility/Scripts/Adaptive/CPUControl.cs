@@ -73,6 +73,15 @@ namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
                         _lastPowerLimit = _newPowerLimit;
                         iGPUControl._currentPowerLimit = _newPowerLimit;
                     }
+
+                    else if (Family.TYPE == Family.ProcessorType.Intel)
+                    {
+                        _TDP = _newPowerLimit;
+                        // Apply new power and temp limit
+
+                        cpuCommand = $"--intel-pl={_newPowerLimit}";
+                        _lastPowerLimit = _newPowerLimit;
+                    }
                 } 
             } catch { }
 

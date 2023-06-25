@@ -332,7 +332,8 @@ namespace RyzenSmu
                                 //Convert value of select cli argument to int
                                 string ryzenAdjCommandValueString = ryzenAdjCommand.Substring(ryzenAdjCommand.IndexOf('=') + 1);
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
-                                if(ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
+                                if (ryzenAdjCommandString == "intel-pl") TDP_Management.changeTDPAll(ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
                                 else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
                                 
                                 else SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);

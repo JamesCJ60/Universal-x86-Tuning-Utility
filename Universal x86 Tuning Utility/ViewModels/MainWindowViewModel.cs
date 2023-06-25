@@ -68,13 +68,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     Icon = SymbolRegular.Book20,
                     PageType = typeof(Views.Pages.CustomPresets)
                 },
-                //new NavigationItem()
-                //{
-                //    Content = "Adaptive",
-                //    PageTag = "adaptive",
-                //    Icon = SymbolRegular.Radar20,
-                //    PageType = typeof(Views.Pages.Adaptive)
-                //},
+                new NavigationItem()
+                {
+                    Content = "Adaptive",
+                    PageTag = "adaptive",
+                    Icon = SymbolRegular.Radar20,
+                    PageType = typeof(Views.Pages.Adaptive)
+                },
                 new NavigationItem()
                 {
                     Content = "Auto",

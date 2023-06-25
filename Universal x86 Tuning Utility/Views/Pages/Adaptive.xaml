@@ -106,7 +106,7 @@
                                 <Slider Name="sdPowerLimit" Value="{Binding ElementName=nudPowerLimit, Path=Value}" Maximum="300" Minimum="8" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                             </Grid>
                         </StackPanel>
-                        <StackPanel Margin="0,8,0,0">
+                        <StackPanel Margin="0,8,0,0" Name="spCO">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Max Curve Optimiser Limit (-)</TextBlock>
                                 <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the max negative curve optimiser limit adpative mode is allowed to set" VerticalAlignment="Bottom"/>

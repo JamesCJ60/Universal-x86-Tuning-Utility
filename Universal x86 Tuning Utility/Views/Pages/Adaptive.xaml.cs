@@ -112,6 +112,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         };
                         adaptivePresetManager.SavePreset(app, preset);
                     }
+
+                    if (Family.TYPE == Family.ProcessorType.Intel)
+                    {
+                        spCO.Visibility = Visibility.Collapsed;
+                        sdTBOiGPU.Visibility = Visibility.Collapsed;
+                    }
+
                 }
 
                 foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get()) coreCount += int.Parse(item["NumberOfCores"].ToString());
