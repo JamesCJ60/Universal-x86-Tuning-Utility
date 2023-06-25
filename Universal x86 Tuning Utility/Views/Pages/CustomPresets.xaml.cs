@@ -279,13 +279,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     // Save a preset
                     Preset preset = new Preset
                     {
-                        intelPL1 = (int)nudIntelPL1.Value,
+                        IntelPL1 = (int)nudIntelPL1.Value,
                         IntelPL2 = (int)nudIntelPL2.Value,
 
                         commandValue = getCommandValues(),
 
                         isIntelPL1 = (bool)cbIntelPL1.IsChecked,
-                        isIntelPL2 = (bool)cbIntelPL1.IsChecked,
+                        isIntelPL2 = (bool)cbIntelPL2.IsChecked,
                     };
                     amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -488,7 +488,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (myPreset != null)
                     {
                         // Read the values from the preset
-                        nudIntelPL1.Value = myPreset.IntelPL2;
+                        nudIntelPL1.Value = myPreset.IntelPL1;
                         nudIntelPL2.Value = myPreset.IntelPL2;
 
                         cbIntelPL1.IsChecked = myPreset.isIntelPL1;
@@ -548,7 +548,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (Family.TYPE == Family.ProcessorType.Intel)
             {
-                if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-1={nudIntelPL2.Value} ";
+                if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-1={nudIntelPL1.Value} ";
                 if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-2={nudIntelPL2.Value} ";
             }
 

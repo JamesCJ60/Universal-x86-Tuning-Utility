@@ -35,7 +35,7 @@ namespace Universal_x86_Tuning_Utility.Services
 
         public int boostProfile { get; set; }
 
-        public int intelPL1 { get; set; }
+        public int IntelPL1 { get; set; }
         public int IntelPL2 { get; set; }
 
         public string commandValue { get; set; }
