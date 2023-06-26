@@ -85,15 +85,52 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             //PowerPlans.HideAttribute("SUB_PROCESSOR", "PERFEPP1");
             //PowerPlans.HideAttribute("SUB_PROCESSOR", "PERFAUTONOMOUS");
 
-            if (Settings.Default.ApplyOnStart) 
-                if (Settings.Default.CommandString != null && Settings.Default.CommandString != "") 
-                    if (Family.TYPE != Family.ProcessorType.Intel)
-                    {
-                        RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString);
-                        ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
-                    }
+            ApplyOnStart();
+                    
 
             Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
+        }
+
+        private async void ApplyOnStart()
+        {
+            if (Settings.Default.ApplyOnStart)
+                if (Settings.Default.CommandString != null && Settings.Default.CommandString != "")
+                {
+
+                    await Task.Run(() => getBattery());
+                    await Task.Run(() => getBattery());
+
+                    if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
+                    {
+                        if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "")
+                        {
+                            Settings.Default.CommandString = Settings.Default.acCommandString;
+                            Settings.Default.Save();
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.acCommandString));
+                            ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
+                        }
+                        else
+                        {
+                            RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString);
+                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
+                        }
+                    }
+                    else
+                    {
+                        if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "")
+                        {
+                            Settings.Default.CommandString = Settings.Default.dcCommandString;
+                            Settings.Default.Save();
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.dcCommandString));
+                            ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
+                        }
+                        else
+                        {
+                            RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString);
+                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
+                        }
+                    }
+                }
         }
 
         private async void getBatTempData()

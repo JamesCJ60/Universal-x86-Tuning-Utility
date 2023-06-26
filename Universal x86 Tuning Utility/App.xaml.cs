@@ -21,6 +21,9 @@ using Universal_x86_Tuning_Utility.Scripts;
 using System.Threading.Tasks;
 using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using System.Threading;
+using System.Diagnostics.Metrics;
+using System.Windows.Interop;
+using Universal_x86_Tuning_Utility.Views.Windows;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -95,7 +98,8 @@ namespace Universal_x86_Tuning_Utility
         }
 
         public static string version = "1.0.7.1";
-
+        private Mutex mutex;
+        private const string MutexName = "UniversalX86TuningUtility";
         /// <summary>
         /// Occurs when the application is loading.
         /// </summary>
@@ -137,6 +141,17 @@ namespace Universal_x86_Tuning_Utility
                     string filename = ((ConfigurationErrorsException)ex.InnerException).Filename;
                     File.Delete(filename);
                     Settings.Default.Reload();
+                }
+
+                bool createdNew;
+                mutex = new Mutex(true, MutexName, out createdNew);
+
+                if (!createdNew)
+                {
+                    MessageBox.Show("An instance of Universal x86 Tuning Utility is already open!", "Error starting Universal x86 Tuning Utility");
+                    // Close the new instance
+                    Shutdown();
+                    return;
                 }
 
                 if (File.Exists("C:\\Universal.x86.Tuning.Utility.V2.msi")) File.Delete("C:\\Universal.x86.Tuning.Utility.V2.msi");
@@ -253,3 +268,4 @@ namespace Universal_x86_Tuning_Utility
         }
     }
 }
+
