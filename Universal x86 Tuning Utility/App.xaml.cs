@@ -117,16 +117,6 @@ namespace Universal_x86_Tuning_Utility
                 bool firstBoot = false;
                 try
                 {
-                    string path = System.Reflection.Assembly.GetEntryAssembly().Location;
-                    path = path.Replace("Universal x86 Tuning Utility.dll", null);
-                    UnblockFilesInDirectory(path);
-                } catch
-                {
-
-                }
-
-                try
-                {
                     if (Settings.Default.SettingsUpgradeRequired)
                     {
                         try
@@ -167,6 +157,15 @@ namespace Universal_x86_Tuning_Utility
                     PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, false);
                     PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, true);
                     PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, false);
+
+                    try
+                    {
+                        await Task.Run(() => UnblockFilesInDirectory(path));
+                    }
+                    catch
+                    {
+
+                    }
                 }
 
                 if (IsInternetAvailable()) if (Settings.Default.UpdateCheck) CheckForUpdate();
@@ -227,12 +226,6 @@ namespace Universal_x86_Tuning_Utility
             Parallel.ForEach(Directory.GetFiles(directoryPath), filePath =>
             {
                 UnblockFile(filePath);
-            });
-
-            // Recursively unblock files in subdirectories
-            Parallel.ForEach(Directory.GetDirectories(directoryPath), subdirectory =>
-            {
-                UnblockFilesInDirectory(subdirectory);
             });
         }
 
