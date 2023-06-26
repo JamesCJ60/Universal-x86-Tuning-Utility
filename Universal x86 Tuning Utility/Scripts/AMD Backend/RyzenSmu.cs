@@ -11,6 +11,8 @@ using OpenLibSys;
 using System.Reflection;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
+using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
+using System.Windows;
 
 [assembly: CLSCompliant(false)]
 
@@ -306,8 +308,9 @@ namespace RyzenSmu
 
     internal class RyzenAdj_To_UXTU
     {
+        static int i = 0;
         //Translate RyzenAdj like cli arguments to UXTU
-        public static void Translate(string _ryzenAdjString)
+        public static async void Translate(string _ryzenAdjString, bool isAutoReapply = false)
         {
             try
             {
@@ -315,41 +318,63 @@ namespace RyzenSmu
                 _ryzenAdjString = _ryzenAdjString.Substring(0, _ryzenAdjString.Length - 1);
                 //Split cli arguments into array
                 string[] ryzenAdjCommands = _ryzenAdjString.Split(' ');
-                List<Task> tasks = new List<Task>();
-                int i = 0;
-                do
-                {
-                    //Run through array
-                    foreach (string ryzenAdjCommand in ryzenAdjCommands)
-                    {
-                        tasks.Add(Task.Run(async () =>
-                        {
-                            try
-                            {
-                                // Extract the command string before the "=" sign
-                                string ryzenAdjCommandString = ryzenAdjCommand.Split('=')[0].Replace("=", null).Replace("--", null);
+                ryzenAdjCommands = ryzenAdjCommands.Distinct().ToArray();
 
+                //Run through array
+                foreach (string ryzenAdjCommand in ryzenAdjCommands)
+                {
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            // Extract the command string before the "=" sign
+                            string ryzenAdjCommandString = ryzenAdjCommand.Split('=')[0].Replace("=", null).Replace("--", null);
+                            // Extract the command string after the "=" sign
+                            string ryzenAdjCommandValueString = ryzenAdjCommand.Substring(ryzenAdjCommand.IndexOf('=') + 1);
+
+                            if (ryzenAdjCommandString.Contains("ADLX"))
+                            {
+                                ADLX(ryzenAdjCommandString, ryzenAdjCommandValueString);
+
+                                Task.Delay(50);
+                            }
+                            else
+                            {
                                 //Convert value of select cli argument to int
-                                string ryzenAdjCommandValueString = ryzenAdjCommand.Substring(ryzenAdjCommand.IndexOf('=') + 1);
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
+
                                 if (ryzenAdjCommandString == "intel-pl") TDP_Management.changeTDPAll(ryzenAdjCommandValue);
                                 else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
                                 else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
-                                
+
                                 else SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
-                                await Task.Delay(2);
+                                Task.Delay(2);
                             }
-                            catch (Exception ex) { }
-                        }));
-
-                        Task.WaitAll(tasks.ToArray());
-
-                        i++;
-                    }
-                } while (i < 2);
-
+                        }
+                        catch (Exception ex) { }
+                    });
+                }
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+        private static void ADLX(string command, string value)
+        {
+            try
+            {
+                string[] variables = value.Split('-');
+
+                if (command == "ADLX-Lag") ADLXBackend.SetAntiLag(int.Parse(variables[0]), bool.Parse(variables[1]));
+                if (command == "ADLX-Boost") ADLXBackend.SetBoost(int.Parse(variables[0]), bool.Parse(variables[1]), int.Parse(variables[2]));
+                if (command == "ADLX-RSR")
+                {
+                    ADLXBackend.SetRSR(bool.Parse(variables[0]));
+                    ADLXBackend.SetRSRSharpness(int.Parse(variables[1]));
+                }
+                if (command == "ADLX-Chill") ADLXBackend.SetChill(int.Parse(variables[0]), bool.Parse(variables[1]), int.Parse(variables[2]), int.Parse(variables[3]));
+                if (command == "ADLX-Sync") ADLXBackend.SetEnhancedSync(int.Parse(variables[0]), bool.Parse(variables[1]));
+                if (command == "ADLX-ImageSharp") ADLXBackend.SetImageSharpning(int.Parse(variables[0]), bool.Parse(variables[1]), int.Parse(variables[2]));
+            }
+            catch { }
         }
     }
 

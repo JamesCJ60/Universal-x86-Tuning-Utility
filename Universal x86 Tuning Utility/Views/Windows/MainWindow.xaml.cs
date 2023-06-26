@@ -149,11 +149,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 //Check if RyzenAdjArguments is populated
                 if (commands != null && commands != "")
                 {
-                    await Task.Run(() =>
-                    {
-                        RyzenAdj_To_UXTU.Translate(commands);
-                        Thread.Sleep(10);
-                    });
+                    await Task.Run(() => RyzenAdj_To_UXTU.Translate(commands));
                 }
 
                 if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))

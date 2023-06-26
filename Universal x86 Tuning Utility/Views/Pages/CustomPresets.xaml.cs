@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,6 +22,7 @@ using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Controls;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
@@ -66,6 +68,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
             intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+
+            if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
@@ -186,6 +190,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         boostProfile = (int)cbxBoost.SelectedIndex,
 
+                        rsr = (int)nudRSR.Value,
+                        boost = (int)nudBoost.Value,
+                        imageSharp = (int)nudImageSharp.Value,
+                        isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                        isRSR = (bool)cbRSR.IsChecked,
+                        isBoost = (bool)cbBoost.IsChecked,
+                        isAntiLag = (bool)cbAntiLag.IsChecked,
+                        isImageSharp = (bool)cbImageSharp.IsChecked,
+                        isSync = (bool)cbSync.IsChecked,
+
                         commandValue = getCommandValues(),
 
                         isApuTemp = (bool)cbAPUTemp.IsChecked,
@@ -243,6 +257,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         boostProfile = (int)cbxBoost.SelectedIndex,
 
+                        rsr = (int)nudRSR.Value,
+                        boost = (int)nudBoost.Value,
+                        imageSharp = (int)nudImageSharp.Value,
+                        isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                        isRSR = (bool)cbRSR.IsChecked,
+                        isBoost = (bool)cbBoost.IsChecked,
+                        isAntiLag = (bool)cbAntiLag.IsChecked,
+                        isImageSharp = (bool)cbImageSharp.IsChecked,
+                        isSync = (bool)cbSync.IsChecked,
+
                         commandValue = getCommandValues(),
 
 
@@ -281,6 +305,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         IntelPL1 = (int)nudIntelPL1.Value,
                         IntelPL2 = (int)nudIntelPL2.Value,
+
+                        rsr = (int)nudRSR.Value,
+                        boost = (int)nudBoost.Value,
+                        imageSharp = (int)nudImageSharp.Value,
+                        isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                        isRSR = (bool)cbRSR.IsChecked,
+                        isBoost = (bool)cbBoost.IsChecked,
+                        isAntiLag = (bool)cbAntiLag.IsChecked,
+                        isImageSharp = (bool)cbImageSharp.IsChecked,
+                        isSync = (bool)cbSync.IsChecked,
 
                         commandValue = getCommandValues(),
 
@@ -451,6 +485,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbPBOScaler.IsChecked = myPreset.isPboScalar;
                         cbAllCO.IsChecked = myPreset.isCoAllCore;
 
+                        tsRadeonGraph.IsChecked = myPreset.isRadeonGraphics;
+                        cbAntiLag.IsChecked = myPreset.isAntiLag;
+                        cbRSR.IsChecked = myPreset.isRSR;
+                        cbBoost.IsChecked = myPreset.isBoost;
+                        cbImageSharp.IsChecked = myPreset.isImageSharp;
+                        cbSync.IsChecked = myPreset.isSync;
+                        nudRSR.Value = myPreset.rsr;
+                        nudBoost.Value = myPreset.boost;
+                        nudImageSharp.Value = myPreset.imageSharp;
+
                         cbxBoost.SelectedIndex = myPreset.boostProfile;
                     }
                 }
@@ -478,6 +522,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         cbPBOScaler.IsChecked = myPreset.isPboScalar;
                         cbAllCO.IsChecked = myPreset.isCoAllCore;
+
+                        tsRadeonGraph.IsChecked = myPreset.isRadeonGraphics;
+                        cbAntiLag.IsChecked = myPreset.isAntiLag;
+                        cbRSR.IsChecked = myPreset.isRSR;
+                        cbBoost.IsChecked = myPreset.isBoost;
+                        cbImageSharp.IsChecked = myPreset.isImageSharp;
+                        cbSync.IsChecked = myPreset.isSync;
+                        nudRSR.Value = myPreset.rsr;
+                        nudBoost.Value = myPreset.boost;
+                        nudImageSharp.Value = myPreset.imageSharp;
                     }
                 }
                 if (Family.TYPE == Family.ProcessorType.Intel)
@@ -493,6 +547,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         cbIntelPL1.IsChecked = myPreset.isIntelPL1;
                         cbIntelPL2.IsChecked = myPreset.isIntelPL2;
+
+                        tsRadeonGraph.IsChecked = myPreset.isRadeonGraphics;
+                        cbAntiLag.IsChecked = myPreset.isAntiLag;
+                        cbRSR.IsChecked = myPreset.isRSR;
+                        cbBoost.IsChecked = myPreset.isBoost;
+                        cbImageSharp.IsChecked = myPreset.isImageSharp;
+                        cbSync.IsChecked = myPreset.isSync;
+                        nudRSR.Value = myPreset.rsr;
+                        nudBoost.Value = myPreset.boost;
+                        nudImageSharp.Value = myPreset.imageSharp;
                     }
                 }
             }
@@ -519,6 +583,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (cbGfxVrmEdc.IsChecked == true) commandValues = commandValues + $"--vrmgfxmax-current={nudGfxVrmEdc.Value * 1000} ";
                 if (cbAPUiGPUClk.IsChecked == true) commandValues = commandValues + $"--gfx-clk={nudAPUiGPUClk.Value} ";
                 if (cbPBOScaler.IsChecked == true) commandValues = commandValues + $"--pbo-scalar={nudPBOScaler.Value * 100} ";
+
                 if (cbAllCO.IsChecked == true)
                 {
                     if (nudAllCO.Value >= 0) commandValues = commandValues + $"--set-coall={nudAllCO.Value} ";
@@ -552,6 +617,24 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-2={nudIntelPL2.Value} ";
             }
 
+            if (tsRadeonGraph.IsChecked == true)
+            {
+                if (cbAntiLag.IsChecked == true) commandValues = commandValues + $"--ADLX-Lag=0-true --ADLX-Lag=1-true ";
+                else commandValues = commandValues + $"--ADLX-Lag=0-false --ADLX-Lag=1-false ";
+
+                if (cbRSR.IsChecked == true) commandValues = commandValues + $"--ADLX-RSR=true-{(int)nudRSR.Value} ";
+                else commandValues = commandValues + $"--ADLX-RSR=false-{(int)nudRSR.Value} ";
+
+                if (cbBoost.IsChecked == true) commandValues = commandValues + $"--ADLX-Boost=0-true-{(int)nudBoost.Value} --ADLX-Boost=1-true-{(int)nudBoost.Value} ";
+                else commandValues = commandValues + $"--ADLX-Boost=0-false-{(int)nudBoost.Value} --ADLX-Boost=1-false-{(int)nudBoost.Value} ";
+
+                if (cbImageSharp.IsChecked == true) commandValues = commandValues + $"--ADLX-ImageSharp=0-true-{(int)nudImageSharp.Value} --ADLX-ImageSharp=1-true-{(int)nudImageSharp.Value} ";
+                else commandValues = commandValues + $"--ADLX-ImageSharp=0-false-{(int)nudImageSharp.Value} --ADLX-ImageSharp=1-false-{(int)nudImageSharp.Value} ";
+
+                if (cbSync.IsChecked == true) commandValues = commandValues + $"--ADLX-Sync=0-true --ADLX-Sync=1-true ";
+                else commandValues = commandValues + $"--ADLX-Sync=0-false --ADLX-Sync=1-false ";
+            }
+
             return commandValues;
         }
 
@@ -566,6 +649,46 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             if (IsScrollBarVisible(mainScroll)) mainCon.Margin = new Thickness(15, 0, -12, 0);
             else mainCon.Margin = new Thickness(15, 0, 0, 0);
+        }
+
+        private void cb_Checked(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.CheckBox checkBox = (System.Windows.Controls.CheckBox)sender;
+            if (checkBox == cbBoost)
+            {
+                cbRSR.IsChecked = false;
+                cbAntiLag.IsChecked = false;
+            }
+
+            if (checkBox == cbAntiLag)
+            {
+                cbBoost.IsChecked = false;
+            }
+
+            if (checkBox == cbRSR)
+            {
+                cbBoost.IsChecked = false;
+                cbImageSharp.IsChecked = false;
+            }
+
+            if(checkBox == cbImageSharp) cbRSR.IsChecked = false;
+        }
+
+        public static int GetRadeonGPUCount()
+        {
+            int count = 0;
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
+            {
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    string name = obj["Name"] as string;
+                    if (name != null && name.Contains("Radeon"))
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
         }
     }
 }

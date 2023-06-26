@@ -19,6 +19,8 @@ using System.Net.NetworkInformation;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts;
 using System.Threading.Tasks;
+using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
+using System.Threading;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -92,7 +94,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "1.0.7";
+        public static string version = "1.0.7.1";
 
         /// <summary>
         /// Occurs when the application is loading.

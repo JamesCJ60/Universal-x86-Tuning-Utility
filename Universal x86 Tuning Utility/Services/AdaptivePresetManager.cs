@@ -19,6 +19,17 @@ namespace Universal_x86_Tuning_Utility.Services
         public int minCPU { get; set; }
         public bool isCO { get; set; }
         public bool isGFX { get; set; }
+
+        public int rsr { get; set; }
+        public int boost { get; set; }
+        public int imageSharp { get; set; }
+
+        public bool isRadeonGraphics { get; set; }
+        public bool isAntiLag { get; set; }
+        public bool isRSR { get; set; }
+        public bool isBoost { get; set; }
+        public bool isImageSharp { get; set; }
+        public bool isSync { get; set; }
     }
 
     public class AdaptivePresetManager

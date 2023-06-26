@@ -84,6 +84,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 cbxPowerPreset.ItemsSource = apps;
                 cbxPowerPreset.SelectedIndex = 0;
 
+                bool hasSingleRadeonGPU = CheckForSingleRadeonGPU();
+                if (!hasSingleRadeonGPU)
+                {
+                    sdTBOiGPU.Visibility = Visibility.Collapsed;
+                    sdADLX.Visibility = Visibility.Collapsed;
+                }
+
                 IEnumerable<string> presetNames = adaptivePresetManager.GetPresetNames();
                 foreach (string app in apps)
                 {
@@ -109,6 +116,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             minCPU = (int)nudMinCpuClk.Value,
                             isCO = (bool)cbCurve.IsChecked,
                             isGFX = (bool)tsTBOiGPU.IsChecked,
+                            rsr = (int)nudRSR.Value,
+                            boost = (int)nudBoost.Value,
+                            imageSharp = (int)nudImageSharp.Value,
+                            isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                            isRSR = (bool)cbRSR.IsChecked,
+                            isBoost = (bool)cbBoost.IsChecked,
+                            isAntiLag = (bool)cbAntiLag.IsChecked,
+                            isImageSharp = (bool)cbImageSharp.IsChecked,
+                            isSync = (bool)cbSync.IsChecked,
                         };
                         adaptivePresetManager.SavePreset(app, preset);
                     }
@@ -227,6 +243,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                     cbCurve.IsChecked = myPreset.isCO;
                     tsTBOiGPU.IsChecked = myPreset.isGFX;
+
+                    tsRadeonGraph.IsChecked = myPreset.isRadeonGraphics;
+                    cbAntiLag.IsChecked = myPreset.isAntiLag;
+                    cbRSR.IsChecked = myPreset.isRSR;
+                    cbBoost.IsChecked = myPreset.isBoost;
+                    cbImageSharp.IsChecked = myPreset.isImageSharp;
+                    cbSync.IsChecked = myPreset.isSync;
+                    nudRSR.Value = myPreset.rsr;
+                    nudBoost.Value = myPreset.boost;
+                    nudImageSharp.Value = myPreset.imageSharp;
                 }
             }
             catch { }
@@ -246,6 +272,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     minCPU = (int)nudMinCpuClk.Value,
                     isCO = (bool)cbCurve.IsChecked,
                     isGFX = (bool)tsTBOiGPU.IsChecked,
+                    rsr = (int)nudRSR.Value,
+                    boost = (int)nudBoost.Value,
+                    imageSharp = (int)nudImageSharp.Value,
+                    isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                    isRSR = (bool)cbRSR.IsChecked,
+                    isBoost = (bool)cbBoost.IsChecked,
+                    isAntiLag = (bool)cbAntiLag.IsChecked,
+                    isImageSharp = (bool)cbImageSharp.IsChecked,
+                    isSync = (bool)cbSync.IsChecked,
                 };
                 adaptivePresetManager.SavePreset(presetName, preset);
             }
@@ -409,7 +444,26 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             lastiGPU = iGPUControl.commmand;
                         }
 
-                        if(commandString != null && commandString != "") await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));
+
+                        if (tsRadeonGraph.IsChecked == true)
+                        {
+                            if (cbAntiLag.IsChecked == true) commandString = commandString + $"--ADLX-Lag=0-true --ADLX-Lag=1-true ";
+                            else commandString = commandString + $"--ADLX-Lag=0-false --ADLX-Lag=1-false ";
+
+                            if (cbRSR.IsChecked == true) commandString = commandString + $"--ADLX-RSR=true-{(int)nudRSR.Value} ";
+                            else commandString = commandString + $"--ADLX-RSR=false-{(int)nudRSR.Value} ";
+
+                            if (cbBoost.IsChecked == true) commandString = commandString + $"--ADLX-Boost=0-true-{(int)nudBoost.Value} --ADLX-Boost=1-true-{(int)nudBoost.Value} ";
+                            else commandString = commandString + $"--ADLX-Boost=0-false-{(int)nudBoost.Value} --ADLX-Boost=1-false-{(int)nudBoost.Value} ";
+
+                            if (cbImageSharp.IsChecked == true) commandString = commandString + $"--ADLX-ImageSharp=0-true-{(int)nudImageSharp.Value} --ADLX-ImageSharp=1-true-{(int)nudImageSharp.Value} ";
+                            else commandString = commandString + $"--ADLX-ImageSharp=0-false-{(int)nudImageSharp.Value} --ADLX-ImageSharp=1-false-{(int)nudImageSharp.Value} ";
+
+                            if (cbSync.IsChecked == true) commandString = commandString + $"--ADLX-Sync=0-true --ADLX-Sync=1-true ";
+                            else commandString = commandString + $"--ADLX-Sync=0-false --ADLX-Sync=1-false ";
+                        }
+
+                        if (commandString != null && commandString != "") await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));
                     }
 
                     //if (RTSS.RTSSRunning())
@@ -534,6 +588,29 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     return;
                 }
             }
+        }
+
+        private void cb_Checked(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.CheckBox checkBox = (System.Windows.Controls.CheckBox)sender;
+            if (checkBox == cbBoost)
+            {
+                cbRSR.IsChecked = false;
+                cbAntiLag.IsChecked = false;
+            }
+
+            if (checkBox == cbAntiLag)
+            {
+                cbBoost.IsChecked = false;
+            }
+
+            if (checkBox == cbRSR)
+            {
+                cbBoost.IsChecked = false;
+                cbImageSharp.IsChecked = false;
+            }
+
+            if (checkBox == cbImageSharp) cbRSR.IsChecked = false;
         }
     }
 }
