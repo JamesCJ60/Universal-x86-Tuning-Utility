@@ -761,7 +761,7 @@
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
-                    <ui:CardExpander Name="sdAmdCCD1CO"
+                    <ui:CardExpander Name="sdAmdCCD1CO" Visibility="Collapsed"
             IsEnabled="True"
             IsExpanded="False"
             Icon="TopSpeed20" Margin="0,8,15,0">
@@ -775,7 +775,7 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="CCD1 Per-Core Curve Optimiser" />
+                            Text="AMD Per-Core Curve Optimiser (CCD1)" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
