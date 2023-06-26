@@ -761,7 +761,168 @@
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
+                    <ui:CardExpander Name="sdAmdCCD1CO"
+            IsEnabled="True"
+            IsExpanded="False"
+            Icon="TopSpeed20" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="CCD1 Per-Core Curve Optimiser" />
+                                    <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Provides the ability to customise per-core Curve Optimiser options."/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 1 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 1" VerticalAlignment="Bottom" />
+                                </StackPanel>
 
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core1"/>
+                                    <ui:NumberBox Name="nudCCD1Core1" Text="{Binding ElementName=sdCCD1Core1, Path=Value}" Value="{Binding ElementName=sdCCD1Core1, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core1" Value="{Binding ElementName=nudCCD1Core1, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 2 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 2" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core2"/>
+                                    <ui:NumberBox Name="nudCCD1Core2" Text="{Binding ElementName=sdCCD1Core2, Path=Value}" Value="{Binding ElementName=sdCCD1Core2, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core2" Value="{Binding ElementName=nudCCD1Core2, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 3 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 3" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core3"/>
+                                    <ui:NumberBox Name="nudCCD1Core3" Text="{Binding ElementName=sdCCD1Core3, Path=Value}" Value="{Binding ElementName=sdCCD1Core3, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core3" Value="{Binding ElementName=nudCCD1Core3, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 4 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 4" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core4"/>
+                                    <ui:NumberBox Name="nudCCD1Core4" Text="{Binding ElementName=sdCCD1Core4, Path=Value}" Value="{Binding ElementName=sdCCD1Core4, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core4" Value="{Binding ElementName=nudCCD1Core4, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 5 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 5" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core5"/>
+                                    <ui:NumberBox Name="nudCCD1Core5" Text="{Binding ElementName=sdCCD1Core5, Path=Value}" Value="{Binding ElementName=sdCCD1Core5, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core5" Value="{Binding ElementName=nudCCD1Core5, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 6 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 6" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core6"/>
+                                    <ui:NumberBox Name="nudCCD1Core6" Text="{Binding ElementName=sdCCD1Core6, Path=Value}" Value="{Binding ElementName=sdCCD1Core6, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core6" Value="{Binding ElementName=nudCCD1Core6, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 7 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 7" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core7"/>
+                                    <ui:NumberBox Name="nudCCD1Core7" Text="{Binding ElementName=sdCCD1Core7, Path=Value}" Value="{Binding ElementName=sdCCD1Core7, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core7" Value="{Binding ElementName=nudCCD1Core7, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 8 Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 8" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbCCD1Core8"/>
+                                    <ui:NumberBox Name="nudCCD1Core8" Text="{Binding ElementName=sdCCD1Core8, Path=Value}" Value="{Binding ElementName=sdCCD1Core8, Path=Value}" Max="30" Min="-50" Grid.Column="1" Step="1" IntegersOnly="True"/>
+                                    <Slider Name="sdCCD1Core8" Value="{Binding ElementName=nudCCD1Core8, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
                     <ui:CardControl Name="sdAmdPowerProfile"
             IsEnabled="True"
             Icon="FastAcceleration20" Margin="0,8,15,0">

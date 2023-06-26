@@ -83,6 +83,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Visible;
                 
+                sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
@@ -200,6 +201,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         isImageSharp = (bool)cbImageSharp.IsChecked,
                         isSync = (bool)cbSync.IsChecked,
 
+                        ccd1Core1 = (int)nudCCD1Core1.Value,
+                        ccd1Core2 = (int)nudCCD1Core2.Value,
+                        ccd1Core3 = (int)nudCCD1Core3.Value,
+                        ccd1Core4 = (int)nudCCD1Core4.Value,
+                        ccd1Core5 = (int)nudCCD1Core5.Value,
+                        ccd1Core6 = (int)nudCCD1Core6.Value,
+                        ccd1Core7 = (int)nudCCD1Core7.Value,
+                        ccd1Core8 = (int)nudCCD1Core8.Value,
+
                         commandValue = getCommandValues(),
 
                         isApuTemp = (bool)cbAPUTemp.IsChecked,
@@ -220,7 +230,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         isApuGfxClk = (bool)cbAPUiGPUClk.IsChecked,
 
                         isPboScalar = (bool)cbPBOScaler.IsChecked,
-                        isCoAllCore = (bool)cbAllCO.IsChecked
+                        isCoAllCore = (bool)cbAllCO.IsChecked,
+
+                        IsCCD1Core1 = (bool)cbCCD1Core1.IsChecked,
+                        IsCCD1Core2 = (bool)cbCCD1Core2.IsChecked,
+                        IsCCD1Core3 = (bool)cbCCD1Core3.IsChecked,
+                        IsCCD1Core4 = (bool)cbCCD1Core4.IsChecked,
+                        IsCCD1Core5 = (bool)cbCCD1Core5.IsChecked,
+                        IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
+                        IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
+                        IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
                     };
                     apuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -495,6 +514,24 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         nudBoost.Value = myPreset.boost;
                         nudImageSharp.Value = myPreset.imageSharp;
 
+                        nudCCD1Core1.Value = myPreset.ccd1Core1;
+                        nudCCD1Core2.Value = myPreset.ccd1Core2;
+                        nudCCD1Core3.Value = myPreset.ccd1Core3;
+                        nudCCD1Core4.Value = myPreset.ccd1Core4;
+                        nudCCD1Core5.Value = myPreset.ccd1Core5;
+                        nudCCD1Core6.Value = myPreset.ccd1Core6;
+                        nudCCD1Core7.Value = myPreset.ccd1Core7;
+                        nudCCD1Core8.Value = myPreset.ccd1Core8;
+
+                        cbCCD1Core1.IsChecked = myPreset.IsCCD1Core1;
+                        cbCCD1Core2.IsChecked = myPreset.IsCCD1Core2;
+                        cbCCD1Core3.IsChecked = myPreset.IsCCD1Core3;
+                        cbCCD1Core4.IsChecked = myPreset.IsCCD1Core4;
+                        cbCCD1Core5.IsChecked = myPreset.IsCCD1Core5;
+                        cbCCD1Core6.IsChecked = myPreset.IsCCD1Core6;
+                        cbCCD1Core7.IsChecked = myPreset.IsCCD1Core7;
+                        cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
+
                         cbxBoost.SelectedIndex = myPreset.boostProfile;
                     }
                 }
@@ -532,6 +569,24 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         nudRSR.Value = myPreset.rsr;
                         nudBoost.Value = myPreset.boost;
                         nudImageSharp.Value = myPreset.imageSharp;
+
+                        nudCCD1Core1.Value = myPreset.ccd1Core1;
+                        nudCCD1Core2.Value = myPreset.ccd1Core2;
+                        nudCCD1Core3.Value = myPreset.ccd1Core3;
+                        nudCCD1Core4.Value = myPreset.ccd1Core4;
+                        nudCCD1Core5.Value = myPreset.ccd1Core5;
+                        nudCCD1Core6.Value = myPreset.ccd1Core6;
+                        nudCCD1Core7.Value = myPreset.ccd1Core7;
+                        nudCCD1Core8.Value = myPreset.ccd1Core8;
+
+                        cbCCD1Core1.IsChecked = myPreset.IsCCD1Core1;
+                        cbCCD1Core2.IsChecked = myPreset.IsCCD1Core2;
+                        cbCCD1Core3.IsChecked = myPreset.IsCCD1Core3;
+                        cbCCD1Core4.IsChecked = myPreset.IsCCD1Core4;
+                        cbCCD1Core5.IsChecked = myPreset.IsCCD1Core5;
+                        cbCCD1Core6.IsChecked = myPreset.IsCCD1Core6;
+                        cbCCD1Core7.IsChecked = myPreset.IsCCD1Core7;
+                        cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
                     }
                 }
                 if (Family.TYPE == Family.ProcessorType.Intel)
@@ -595,6 +650,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (cbxBoost.SelectedIndex == 1) commandValues = commandValues + $"--power-saving ";
                     if (cbxBoost.SelectedIndex == 2) commandValues = commandValues + $"--max-performance ";
                 }
+
+                if(cbCCD1Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={(0 << 20) | ((int)nudCCD1Core1.Value & 0xFFFF)} ";
+                if (cbCCD1Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={(1 << 20) | ((int)nudCCD1Core2.Value & 0xFFFF)} ";
+                if (cbCCD1Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={(2 << 20) | ((int)nudCCD1Core3.Value & 0xFFFF)} ";
+                if (cbCCD1Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={(3 << 20) | ((int)nudCCD1Core4.Value & 0xFFFF)} ";
+                if (cbCCD1Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={(4 << 20) | ((int)nudCCD1Core5.Value & 0xFFFF)} ";
+                if (cbCCD1Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={(5 << 20) | ((int)nudCCD1Core6.Value & 0xFFFF)} ";
+                if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={(6 << 20) | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
+                if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)

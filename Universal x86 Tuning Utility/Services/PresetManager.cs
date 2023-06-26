@@ -40,6 +40,16 @@ namespace Universal_x86_Tuning_Utility.Services
         public int rsr { get; set; }
         public int boost { get; set; }
         public int imageSharp { get; set; }
+
+        public int ccd1Core1 { get; set; }
+        public int ccd1Core2 { get; set; }
+        public int ccd1Core3 { get; set; }
+        public int ccd1Core4 { get; set; }
+        public int ccd1Core5 { get; set; }
+        public int ccd1Core6 { get; set; }
+        public int ccd1Core7 { get; set; }
+        public int ccd1Core8 { get; set; }
+
         public string commandValue { get; set; }
 
         public bool isApuTemp { get; set; }
@@ -73,6 +83,15 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isBoost { get; set; }
         public bool isImageSharp { get; set; }
         public bool isSync { get; set; }
+
+        public bool IsCCD1Core1 { get; set; }
+        public bool IsCCD1Core2 { get; set; }
+        public bool IsCCD1Core3 { get; set; }
+        public bool IsCCD1Core4 { get; set; }
+        public bool IsCCD1Core5 { get; set; }
+        public bool IsCCD1Core6 { get; set; }
+        public bool IsCCD1Core7 { get; set; }
+        public bool IsCCD1Core8 { get; set; }
     }
 
     public class PresetManager
