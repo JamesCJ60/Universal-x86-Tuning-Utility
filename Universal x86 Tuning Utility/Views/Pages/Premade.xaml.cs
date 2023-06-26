@@ -279,86 +279,104 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private async void perfPreset()
         {
-            tbPerf.IsChecked = false;
-            tbBal.IsChecked = false;
-            tbEco.IsChecked = false;
-            tbEx.IsChecked = false;
-            tbPerf.IsChecked = true;
+            try
+            {
+                tbPerf.IsChecked = false;
+                tbBal.IsChecked = false;
+                tbEco.IsChecked = false;
+                tbEx.IsChecked = false;
+                tbPerf.IsChecked = true;
 
-            tbPresetName.Text = "Performance Preset";
-            tbPresetDesc.Text = "This preset is optimized for maximum performance by increasing the power limits of the APU/CPU, which allows it to run at higher clock speeds for longer periods of time. This can result in improved system responsiveness and faster load times in applications that require high levels of processing power.";
-            tbUXTUPreset.Text = PerformancePreset;
+                tbPresetName.Text = "Performance Preset";
+                tbPresetDesc.Text = "This preset is optimized for maximum performance by increasing the power limits of the APU/CPU, which allows it to run at higher clock speeds for longer periods of time. This can result in improved system responsiveness and faster load times in applications that require high levels of processing power.";
+                tbUXTUPreset.Text = PerformancePreset;
 
-            Task.Run(() => RyzenAdj_To_UXTU.Translate(PerformancePreset));
+                RyzenAdj_To_UXTU.Translate(PerformancePreset);
 
-            ToastNotification.ShowToastNotification("Performance Preset Applied!", $"The performance premade power preset has been applied!");
+                ToastNotification.ShowToastNotification("Performance Preset Applied!", $"The performance premade power preset has been applied!");
 
-            Settings.Default.CommandString = PerformancePreset;
-            Settings.Default.premadePreset = 2;
-            Settings.Default.Save();
+                Settings.Default.CommandString = PerformancePreset;
+                Settings.Default.premadePreset = 2;
+                Settings.Default.Save();
+            } catch
+            {
+
+            }
         }
 
         private async void exPreset()
         {
-            tbPerf.IsChecked = false;
-            tbBal.IsChecked = false;
-            tbEco.IsChecked = false;
-            tbEx.IsChecked = false;
-            tbEx.IsChecked = true;
+            try
+            {
+                tbPerf.IsChecked = false;
+                tbBal.IsChecked = false;
+                tbEco.IsChecked = false;
+                tbEx.IsChecked = false;
+                tbEx.IsChecked = true;
 
-            tbPresetName.Text = "Extreme Preset";
-            tbPresetDesc.Text = "This preset aims to push the power limits of the system to their maximum, allowing for the highest possible performance. This preset is designed for users who demand the most from their hardware and are willing to tolerate higher power consumption and potentially increased noise levels.";
-            tbUXTUPreset.Text = ExtremePreset;
-            Settings.Default.CommandString = ExtremePreset;
+                tbPresetName.Text = "Extreme Preset";
+                tbPresetDesc.Text = "This preset aims to push the power limits of the system to their maximum, allowing for the highest possible performance. This preset is designed for users who demand the most from their hardware and are willing to tolerate higher power consumption and potentially increased noise levels.";
+                tbUXTUPreset.Text = ExtremePreset;
+                Settings.Default.CommandString = ExtremePreset;
 
-            Task.Run(() => RyzenAdj_To_UXTU.Translate(ExtremePreset));
+                RyzenAdj_To_UXTU.Translate(ExtremePreset);
 
-            ToastNotification.ShowToastNotification("Extreme Preset Applied!", $"The extreme premade power preset has been applied!");
+                ToastNotification.ShowToastNotification("Extreme Preset Applied!", $"The extreme premade power preset has been applied!");
 
-            Settings.Default.premadePreset = 3;
-            Settings.Default.Save();
+                Settings.Default.premadePreset = 3;
+                Settings.Default.Save();
+            } catch { }
         }
 
         private async void ecoPreset()
         {
-            tbPerf.IsChecked = false;
-            tbBal.IsChecked = false;
-            tbEco.IsChecked = false;
-            tbEx.IsChecked = false;
-            tbEco.IsChecked = true;
+            try
+            {
+                tbPerf.IsChecked = false;
+                tbBal.IsChecked = false;
+                tbEco.IsChecked = false;
+                tbEx.IsChecked = false;
+                tbEco.IsChecked = true;
 
-            tbPresetName.Text = "Eco Preset";
-            tbPresetDesc.Text = "This preset is designed to prioritize energy efficiency over performance. It sets power limits to conservative levels to reduce power consumption and heat generation, making it ideal for prolonged use in situations where maximizing battery life or minimizing energy usage is critical.";
-            tbUXTUPreset.Text = EcoPreset;
+                tbPresetName.Text = "Eco Preset";
+                tbPresetDesc.Text = "This preset is designed to prioritize energy efficiency over performance. It sets power limits to conservative levels to reduce power consumption and heat generation, making it ideal for prolonged use in situations where maximizing battery life or minimizing energy usage is critical.";
+                tbUXTUPreset.Text = EcoPreset;
 
-            Task.Run(() => RyzenAdj_To_UXTU.Translate(EcoPreset));
+                RyzenAdj_To_UXTU.Translate(EcoPreset);
 
-            ToastNotification.ShowToastNotification("Eco Preset Applied!", $"The eco premade power preset has been applied!");
+                ToastNotification.ShowToastNotification("Eco Preset Applied!", $"The eco premade power preset has been applied!");
 
-            Settings.Default.CommandString = EcoPreset;
-            Settings.Default.premadePreset = 0;
-            Settings.Default.Save();
+                Settings.Default.CommandString = EcoPreset;
+                Settings.Default.premadePreset = 0;
+                Settings.Default.Save();
+            } catch { }
         }
 
         private async void balPreset()
         {
-            tbPerf.IsChecked = false;
-            tbBal.IsChecked = false;
-            tbEco.IsChecked = false;
-            tbEx.IsChecked = false;
-            tbBal.IsChecked = true;
+            try
+            {
+                tbPerf.IsChecked = false;
+                tbBal.IsChecked = false;
+                tbEco.IsChecked = false;
+                tbEx.IsChecked = false;
+                tbBal.IsChecked = true;
 
-            tbPresetName.Text = "Balanced Preset";
-            tbPresetDesc.Text = "This preset aims to find a balance between performance and power consumption, providing a stable and efficient experience. This preset sets the power limits to a level that balances performance and power usage, without sacrificing too much of either.";
-            tbUXTUPreset.Text = BalPreset;
+                tbPresetName.Text = "Balanced Preset";
+                tbPresetDesc.Text = "This preset aims to find a balance between performance and power consumption, providing a stable and efficient experience. This preset sets the power limits to a level that balances performance and power usage, without sacrificing too much of either.";
+                tbUXTUPreset.Text = BalPreset;
 
-            Task.Run(() => RyzenAdj_To_UXTU.Translate(BalPreset));
+                RyzenAdj_To_UXTU.Translate(BalPreset);
 
-            ToastNotification.ShowToastNotification("Balanced Preset Applied!", $"The balanced premade power preset has been applied!");
+                ToastNotification.ShowToastNotification("Balanced Preset Applied!", $"The balanced premade power preset has been applied!");
 
-            Settings.Default.CommandString = BalPreset;
-            Settings.Default.premadePreset = 1;
-            Settings.Default.Save();
+                Settings.Default.CommandString = BalPreset;
+                Settings.Default.premadePreset = 1;
+                Settings.Default.Save();
+            } catch
+            {
+
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ using System.Configuration;
 using System.Net.NetworkInformation;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts;
+using System.Threading.Tasks;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -116,8 +117,9 @@ namespace Universal_x86_Tuning_Utility
                 bool firstBoot = false;
                 try
                 {
-                    string currentDirectory = Environment.CurrentDirectory;
-                    UnblockFilesInDirectory(currentDirectory);
+                    string path = System.Reflection.Assembly.GetEntryAssembly().Location;
+                    path = path.Replace("Universal x86 Tuning Utility.dll", null);
+                    UnblockFilesInDirectory(path);
                 } catch
                 {
 
@@ -221,9 +223,24 @@ namespace Universal_x86_Tuning_Utility
 
         static void UnblockFilesInDirectory(string directoryPath)
         {
+            // Unblock files in the current directory
+            Parallel.ForEach(Directory.GetFiles(directoryPath), filePath =>
+            {
+                UnblockFile(filePath);
+            });
+
+            // Recursively unblock files in subdirectories
+            Parallel.ForEach(Directory.GetDirectories(directoryPath), subdirectory =>
+            {
+                UnblockFilesInDirectory(subdirectory);
+            });
+        }
+
+        static void UnblockFile(string filePath)
+        {
             ProcessStartInfo processInfo = new ProcessStartInfo();
             processInfo.FileName = "powershell.exe";
-            processInfo.Arguments = $"Get-ChildItem -Path \"{directoryPath}\" -Recurse | Unblock-File";
+            processInfo.Arguments = $"Unblock-File -Path \"{filePath}\"";
             processInfo.UseShellExecute = false;
             processInfo.CreateNoWindow = true;
             processInfo.RedirectStandardOutput = true;

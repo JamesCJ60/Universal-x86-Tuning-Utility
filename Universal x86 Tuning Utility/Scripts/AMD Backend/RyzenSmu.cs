@@ -390,30 +390,6 @@ namespace RyzenSmu
 
     class Smu
     {
-        [DllImport("inpoutx64.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetPhysLong(UIntPtr memAddress, out uint Data);
-        public static float ReadFloat(uint Address, uint Offset)
-        {
-            uint Data = 0;
-            try
-            {
-                GetPhysLong((UIntPtr)(Address + Offset * 4), out Data);
-            }
-            catch (Exception e)
-            {
-                String ExeptionMSG = $"Error Reading Address 0x{Address:X8} + 0x{Offset:X4}";
-                //MessageBox.Show(ExeptionMSG);
-            }
-
-            byte[] bytes = new byte[4];
-            bytes = BitConverter.GetBytes(Data);
-
-            float PmData = BitConverter.ToSingle(bytes, 0);
-            //Console.WriteLine($"0x{Address + Offset * 4,8:X8} | {PmData:F}");
-            return PmData;
-        }
-
         public enum Status : int
         {
             BAD = 0x0,
@@ -434,10 +410,7 @@ namespace RyzenSmu
             { Smu.Status.CMD_REJECTED_BUSY, "CMD Rejected Busy" }
         };
 
-
-
         Ols RyzenNbAccesss;
-
 
         public Smu(bool EnableDebug)
         {
@@ -510,15 +483,6 @@ namespace RyzenSmu
                 default:
                     break;
             }
-        }
-        public uint GetCpuId()
-        {
-            uint eax = 0, ebx = 0, ecx = 0, edx = 0;
-            if (RyzenNbAccesss.Cpuid(0x00000001, ref eax, ref ebx, ref ecx, ref edx) == 1)
-            {
-                return eax;
-            }
-            return 0;
         }
 
         public void Deinitialize()
@@ -646,68 +610,6 @@ namespace RyzenSmu
                 return RyzenNbAccesss.ReadPciConfigDwordEx(SMU_PCI_ADDR, SMU_OFFSET_DATA, ref data) == 1;
             }
             return false;
-        }
-
-        private uint ReadDword(uint value)
-        {
-            RyzenNbAccesss.WritePciConfigDword(SMU_PCI_ADDR, (byte)SMU_OFFSET_ADDR, value);
-            return RyzenNbAccesss.ReadPciConfigDword(SMU_PCI_ADDR, (byte)SMU_OFFSET_DATA);
-        }
-
-
-        private bool Wait4Rsp(uint SMU_ADDR_RSP)
-        {
-            bool res = false;
-            ushort timeout = 1000;
-            uint data = 0;
-            while ((!res || data == 0) && --timeout > 0)
-            {
-                res = SmuReadReg(SMU_ADDR_RSP, ref data);
-                Thread.Sleep(1);
-            }
-
-            //Console.WriteLine($"Time{(timeout):D}: 0x{data,8:X8}");
-
-
-            if (timeout == 0 || data != 1) res = false;
-            //Console.WriteLine($"Res{(res):D}");
-
-
-            return res;
-        }
-
-
-        //Code by I.nfraR.ed to get the CpuID
-        private string GetStringPart(uint val)
-        {
-            return val != 0 ? Convert.ToChar(val).ToString() : "";
-        }
-
-        private string IntToStr(uint val)
-        {
-            uint part1 = val & 0xff;
-            uint part2 = val >> 8 & 0xff;
-            uint part3 = val >> 16 & 0xff;
-            uint part4 = val >> 24 & 0xff;
-
-            return string.Format("{0}{1}{2}{3}", GetStringPart(part1), GetStringPart(part2), GetStringPart(part3), GetStringPart(part4));
-        }
-
-        public string GetCpuName()
-        {
-            string model = "";
-            uint eax = 0, ebx = 0, ecx = 0, edx = 0;
-
-            if (RyzenNbAccesss.Cpuid(0x80000002, ref eax, ref ebx, ref ecx, ref edx) == 1)
-                model = model + IntToStr(eax) + IntToStr(ebx) + IntToStr(ecx) + IntToStr(edx);
-
-            if (RyzenNbAccesss.Cpuid(0x80000003, ref eax, ref ebx, ref ecx, ref edx) == 1)
-                model = model + IntToStr(eax) + IntToStr(ebx) + IntToStr(ecx) + IntToStr(edx);
-
-            if (RyzenNbAccesss.Cpuid(0x80000004, ref eax, ref ebx, ref ecx, ref edx) == 1)
-                model = model + IntToStr(eax) + IntToStr(ebx) + IntToStr(ecx) + IntToStr(edx);
-
-            return model.Trim();
         }
     }
 }
