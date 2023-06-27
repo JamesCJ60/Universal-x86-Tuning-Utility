@@ -158,11 +158,11 @@ namespace Universal_x86_Tuning_Utility
 
                 Family.setCpuFamily();
                 Family.setCpuFamily();
+                string path = System.Reflection.Assembly.GetEntryAssembly().Location;
+                path = path.Replace("Universal x86 Tuning Utility.dll", null);
 
-                if (firstBoot)
+                if (firstBoot || Settings.Default.Path != path)
                 {
-                    string path = System.Reflection.Assembly.GetEntryAssembly().Location;
-                    path = path.Replace("Universal x86 Tuning Utility.dll", null);
                     Settings.Default.Path = path;
                     Settings.Default.FirstBoot = false;
                     if (Family.FAM > Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.Mendocino) Settings.Default.polling = 3;

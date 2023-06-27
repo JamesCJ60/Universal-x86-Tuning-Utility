@@ -99,7 +99,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                     if (CPUModel == 8) FAM = RyzenFamily.PinnacleRidge;
 
-                    if (CPUModel == 18) FAM = RyzenFamily.RavenRidge;
+                    if (CPUModel == 17 || CPUModel == 18) FAM = RyzenFamily.RavenRidge;
 
                     if (CPUModel == 24) FAM = RyzenFamily.Picasso;
 

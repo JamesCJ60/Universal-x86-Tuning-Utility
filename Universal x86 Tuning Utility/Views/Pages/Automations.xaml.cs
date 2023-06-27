@@ -45,6 +45,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxDischarge.Items.Add(presetName);
                     cbxResume.Items.Add(presetName);
                 }
+
+                getAcPreset(Settings.Default.acPreset);
+                getDcPreset(Settings.Default.dcPreset);
+                getResumePreset(Settings.Default.resumePreset);
             }
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
             {
@@ -58,6 +62,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxDischarge.Items.Add(presetName);
                     cbxResume.Items.Add(presetName);
                 }
+
+                getAcPreset(Settings.Default.acPreset);
+                getDcPreset(Settings.Default.dcPreset);
+                getResumePreset(Settings.Default.resumePreset);
             }
             if (Family.TYPE == Family.ProcessorType.Intel)
             {
@@ -71,11 +79,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxDischarge.Items.Add(presetName);
                     cbxResume.Items.Add(presetName);
                 }
-            }
 
-            getAcPreset(Settings.Default.acPreset);
-            getDcPreset(Settings.Default.dcPreset);
-            getResumePreset(Settings.Default.resumePreset);
+                getAcPreset(Settings.Default.acPreset);
+                getDcPreset(Settings.Default.dcPreset);
+                getResumePreset(Settings.Default.resumePreset);
+            }
         }
 
         private void getAcPreset(string searchName)
@@ -482,6 +490,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
