@@ -84,7 +84,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if(!Family.CPUName.Replace("with Radeon Graphics", null).Contains("G") && Family.CPUName != "AMD Custom APU 0405") if(Family.FAM != Family.RyzenFamily.Renoir && !Family.CPUName.Contains("Ryzen 9") && cbAllCO.Visibility == Visibility) sdAmdCO.Visibility = Visibility.Collapsed;
 
                 if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Visible;
-                if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCPU.Visibility = Visibility.Collapsed;
+                if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
+
                 sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
