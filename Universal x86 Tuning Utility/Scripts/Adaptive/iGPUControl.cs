@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Universal_x86_Tuning_Utility.Properties;
-using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 
 namespace Universal_x86_Tuning_Utility.Scripts.Adaptive

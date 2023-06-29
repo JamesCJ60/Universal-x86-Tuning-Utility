@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 
 namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
 {

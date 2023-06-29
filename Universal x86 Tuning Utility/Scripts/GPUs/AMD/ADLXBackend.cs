@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Universal_x86_Tuning_Utility.Scripts.AMD_Backend
+namespace Universal_x86_Tuning_Utility.Scripts.GPUs.AMD
 {
     internal class ADLXBackend
     {

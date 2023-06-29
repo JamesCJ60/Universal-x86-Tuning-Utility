@@ -7,7 +7,6 @@ using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 
 namespace Universal_x86_Tuning_Utility.Scripts
 {
@@ -35,12 +34,12 @@ namespace Universal_x86_Tuning_Utility.Scripts
             DragonRange,
             PhoenixPoint,
             PhoenixPoint2,
+            HawkPoint,
             SonomaValley,
             GraniteRidge,
             FireRange,
-            HawkPoint,
             StrixPoint,
-            StrixPoint2,
+            Sarlak,
         }
 
         public static RyzenFamily FAM = RyzenFamily.Unknown;

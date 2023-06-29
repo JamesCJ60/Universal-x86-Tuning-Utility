@@ -50,6 +50,21 @@ namespace Universal_x86_Tuning_Utility.Services
         public int ccd1Core7 { get; set; }
         public int ccd1Core8 { get; set; }
 
+        public int ccd2Core1 { get; set; }
+        public int ccd2Core2 { get; set; }
+        public int ccd2Core3 { get; set; }
+        public int ccd2Core4 { get; set; }
+        public int ccd2Core5 { get; set; }
+        public int ccd2Core6 { get; set; }
+        public int ccd2Core7 { get; set; }
+        public int ccd2Core8 { get; set; }
+
+        public int nvCoreClk { get; set; }
+        public int nvMemClk { get; set; }
+
+        public int amdClock { get; set; }
+        public int amdVID { get; set; }
+
         public string commandValue { get; set; }
 
         public bool isApuTemp { get; set; }
@@ -83,7 +98,7 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isBoost { get; set; }
         public bool isImageSharp { get; set; }
         public bool isSync { get; set; }
-
+        public bool isNVIDIA { get; set; }
         public bool IsCCD1Core1 { get; set; }
         public bool IsCCD1Core2 { get; set; }
         public bool IsCCD1Core3 { get; set; }
@@ -92,6 +107,17 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool IsCCD1Core6 { get; set; }
         public bool IsCCD1Core7 { get; set; }
         public bool IsCCD1Core8 { get; set; }
+
+        public bool IsCCD2Core1 { get; set; }
+        public bool IsCCD2Core2 { get; set; }
+        public bool IsCCD2Core3 { get; set; }
+        public bool IsCCD2Core4 { get; set; }
+        public bool IsCCD2Core5 { get; set; }
+        public bool IsCCD2Core6 { get; set; }
+        public bool IsCCD2Core7 { get; set; }
+        public bool IsCCD2Core8 { get; set; }
+
+        public bool IsAmdOC { get; set; }
     }
 
     public class PresetManager

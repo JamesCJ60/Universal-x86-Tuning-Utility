@@ -19,7 +19,6 @@ using System.Net.NetworkInformation;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts;
 using System.Threading.Tasks;
-using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using System.Threading;
 using System.Diagnostics.Metrics;
 using System.Windows.Interop;

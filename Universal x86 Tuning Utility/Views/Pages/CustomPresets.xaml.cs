@@ -17,7 +17,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
-using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui.Common.Interfaces;
@@ -64,12 +63,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudTDC.Value = 160;
             nudIntelPL1.Value = 35;
             nudIntelPL2.Value = 65;
+            nudAmdVID.Value = 1200;
+            nudAmdCpuClk.Value = 3200;
 
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
             intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
 
             if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
+            if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
@@ -82,7 +84,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if(!Family.CPUName.Replace("with Radeon Graphics", null).Contains("G") && Family.CPUName != "AMD Custom APU 0405") if(Family.FAM != Family.RyzenFamily.Renoir && !Family.CPUName.Contains("Ryzen 9") && cbAllCO.Visibility == Visibility) sdAmdCO.Visibility = Visibility.Collapsed;
 
                 if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Visible;
-                
+                if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCPU.Visibility = Visibility.Collapsed;
                 sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
@@ -104,6 +106,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;
 
                 if (Family.FAM < Family.RyzenFamily.Vermeer) sdAmdCO.Visibility = Visibility.Collapsed;
+                sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
+                if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
@@ -240,6 +244,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
                         IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
                         IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
+
+                        isNVIDIA = (bool)tsNV.IsChecked,
+                        nvCoreClk = (int)nudNVCore.Value,
+                        nvMemClk = (int)nudNVMem.Value,
+
+                        IsAmdOC = (bool)tsAmdOC.IsChecked,
+                        amdClock = (int)nudAmdCpuClk.Value,
+                        amdVID = (int)nudAmdVID.Value,
                     };
                     apuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -294,7 +306,51 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         isDtCpuTDC = (bool)cbTDC.IsChecked,
                         isDtCpuEDC = (bool)cbEDC.IsChecked,
                         isPboScalar = (bool)cbPBOScaler.IsChecked,
-                        isCoAllCore = (bool)cbAllCO.IsChecked
+                        isCoAllCore = (bool)cbAllCO.IsChecked,
+
+                        isNVIDIA = (bool)tsNV.IsChecked,
+                        nvCoreClk = (int)nudNVCore.Value,
+                        nvMemClk = (int)nudNVMem.Value,
+
+                        ccd1Core1 = (int)nudCCD1Core1.Value,
+                        ccd1Core2 = (int)nudCCD1Core2.Value,
+                        ccd1Core3 = (int)nudCCD1Core3.Value,
+                        ccd1Core4 = (int)nudCCD1Core4.Value,
+                        ccd1Core5 = (int)nudCCD1Core5.Value,
+                        ccd1Core6 = (int)nudCCD1Core6.Value,
+                        ccd1Core7 = (int)nudCCD1Core7.Value,
+                        ccd1Core8 = (int)nudCCD1Core8.Value,
+
+                        ccd2Core1 = (int)nudCCD2Core1.Value,
+                        ccd2Core2 = (int)nudCCD2Core2.Value,
+                        ccd2Core3 = (int)nudCCD2Core3.Value,
+                        ccd2Core4 = (int)nudCCD2Core4.Value,
+                        ccd2Core5 = (int)nudCCD2Core5.Value,
+                        ccd2Core6 = (int)nudCCD2Core6.Value,
+                        ccd2Core7 = (int)nudCCD2Core7.Value,
+                        ccd2Core8 = (int)nudCCD2Core8.Value,
+
+                        IsCCD1Core1 = (bool)cbCCD1Core1.IsChecked,
+                        IsCCD1Core2 = (bool)cbCCD1Core2.IsChecked,
+                        IsCCD1Core3 = (bool)cbCCD1Core3.IsChecked,
+                        IsCCD1Core4 = (bool)cbCCD1Core4.IsChecked,
+                        IsCCD1Core5 = (bool)cbCCD1Core5.IsChecked,
+                        IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
+                        IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
+                        IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
+
+                        IsCCD2Core1 = (bool)cbCCD2Core1.IsChecked,
+                        IsCCD2Core2 = (bool)cbCCD2Core2.IsChecked,
+                        IsCCD2Core3 = (bool)cbCCD2Core3.IsChecked,
+                        IsCCD2Core4 = (bool)cbCCD2Core4.IsChecked,
+                        IsCCD2Core5 = (bool)cbCCD2Core5.IsChecked,
+                        IsCCD2Core6 = (bool)cbCCD2Core6.IsChecked,
+                        IsCCD2Core7 = (bool)cbCCD2Core7.IsChecked,
+                        IsCCD2Core8 = (bool)cbCCD2Core8.IsChecked,
+
+                        IsAmdOC = (bool)tsAmdOC.IsChecked,
+                        amdClock = (int)nudAmdCpuClk.Value,
+                        amdVID = (int)nudAmdVID.Value,
                     };
                     amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -339,6 +395,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         isIntelPL1 = (bool)cbIntelPL1.IsChecked,
                         isIntelPL2 = (bool)cbIntelPL2.IsChecked,
+
+                        isNVIDIA = (bool)tsNV.IsChecked,
+                        nvCoreClk = (int)nudNVCore.Value,
+                        nvMemClk = (int)nudNVMem.Value,
                     };
                     amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -533,6 +593,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
 
                         cbxBoost.SelectedIndex = myPreset.boostProfile;
+
+                        tsNV.IsChecked = myPreset.isNVIDIA;
+                        nudNVCore.Value = myPreset.nvCoreClk;
+                        nudNVMem.Value = myPreset.nvMemClk;
+
+                        tsAmdOC.IsChecked = myPreset.IsAmdOC;
+                        nudAmdCpuClk.Value = myPreset.amdClock;
+                        nudAmdVID.Value = myPreset.amdVID;
                     }
                 }
 
@@ -587,6 +655,32 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbCCD1Core6.IsChecked = myPreset.IsCCD1Core6;
                         cbCCD1Core7.IsChecked = myPreset.IsCCD1Core7;
                         cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
+
+                        nudCCD2Core1.Value = myPreset.ccd2Core1;
+                        nudCCD2Core2.Value = myPreset.ccd2Core2;
+                        nudCCD2Core3.Value = myPreset.ccd2Core3;
+                        nudCCD2Core4.Value = myPreset.ccd2Core4;
+                        nudCCD2Core5.Value = myPreset.ccd2Core5;
+                        nudCCD2Core6.Value = myPreset.ccd2Core6;
+                        nudCCD2Core7.Value = myPreset.ccd2Core7;
+                        nudCCD2Core8.Value = myPreset.ccd2Core8;
+
+                        cbCCD2Core1.IsChecked = myPreset.IsCCD2Core1;
+                        cbCCD2Core2.IsChecked = myPreset.IsCCD2Core2;
+                        cbCCD2Core3.IsChecked = myPreset.IsCCD2Core3;
+                        cbCCD2Core4.IsChecked = myPreset.IsCCD2Core4;
+                        cbCCD2Core5.IsChecked = myPreset.IsCCD2Core5;
+                        cbCCD2Core6.IsChecked = myPreset.IsCCD2Core6;
+                        cbCCD2Core7.IsChecked = myPreset.IsCCD2Core7;
+                        cbCCD2Core8.IsChecked = myPreset.IsCCD2Core8;
+
+                        tsNV.IsChecked = myPreset.isNVIDIA;
+                        nudNVCore.Value = myPreset.nvCoreClk;
+                        nudNVMem.Value = myPreset.nvMemClk;
+
+                        tsAmdOC.IsChecked = myPreset.IsAmdOC;
+                        nudAmdCpuClk.Value = myPreset.amdClock;
+                        nudAmdVID.Value = myPreset.amdVID;
                     }
                 }
                 if (Family.TYPE == Family.ProcessorType.Intel)
@@ -612,6 +706,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         nudRSR.Value = myPreset.rsr;
                         nudBoost.Value = myPreset.boost;
                         nudImageSharp.Value = myPreset.imageSharp;
+
+                        tsNV.IsChecked = myPreset.isNVIDIA;
+                        nudNVCore.Value = myPreset.nvCoreClk;
+                        nudNVMem.Value = myPreset.nvMemClk;
                     }
                 }
             }
@@ -659,6 +757,27 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (cbCCD1Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={(5 << 20) | ((int)nudCCD1Core6.Value & 0xFFFF)} ";
                 if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={(6 << 20) | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
                 if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
+
+                if (tsAmdOC.IsChecked == true)
+                {
+                    double vid = 0;
+
+                    vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
+                    commandValues = commandValues + $"--oc-clk={(int)nudAmdCpuClk.Value} --oc-clk={(int)nudAmdCpuClk.Value} ";
+
+                    if (Family.FAM >= Family.RyzenFamily.Rembrandt)
+                    {
+                        vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
+                        commandValues = commandValues + $"--oc-volt={vid} --oc-volt={vid} ";
+                    }
+                    else
+                    {
+                        vid = Math.Round((double)nudAmdVID.Value / 1000, 2);
+                        commandValues = commandValues + $"--oc-volt={Convert.ToUInt32((1.55 - vid) / 0.00625)} --oc-volt={Convert.ToUInt32((1.55 - vid) / 0.00625)} ";
+                    }
+
+                    commandValues = commandValues + $"--enable-oc --enable-oc ";
+                }
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
@@ -672,6 +791,45 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     if (nudAllCO.Value >= 0) commandValues = commandValues + $"--set-coall={nudAllCO.Value} ";
                     if (nudAllCO.Value < 0) commandValues = commandValues + $"--set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudAllCO.Value))} ";
+                }
+
+                if (cbCCD1Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 0 % 8 & 15) << 20 | ((int)nudCCD1Core1.Value & 0xFFFF)} ";
+                if (cbCCD1Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 1 % 8 & 15) << 20 | ((int)nudCCD1Core2.Value & 0xFFFF)} ";
+                if (cbCCD1Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 2 % 8 & 15) << 20 | ((int)nudCCD1Core3.Value & 0xFFFF)} ";
+                if (cbCCD1Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 3 % 8 & 15) << 20 | ((int)nudCCD1Core4.Value & 0xFFFF)} ";
+                if (cbCCD1Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 4 % 8 & 15) << 20 | ((int)nudCCD1Core5.Value & 0xFFFF)} ";
+                if (cbCCD1Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 5 % 8 & 15) << 20 | ((int)nudCCD1Core6.Value & 0xFFFF)} ";
+                if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 6 % 8 & 15) << 20 | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
+                if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 7 % 8 & 15) << 20 | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
+
+                if (cbCCD2Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 0 % 8 & 15) << 20 | ((int)nudCCD2Core1.Value & 0xFFFF)} ";
+                if (cbCCD2Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 1 % 8 & 15) << 20 | ((int)nudCCD2Core2.Value & 0xFFFF)} ";
+                if (cbCCD2Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 2 % 8 & 15) << 20 | ((int)nudCCD2Core3.Value & 0xFFFF)} ";
+                if (cbCCD2Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 3 % 8 & 15) << 20 | ((int)nudCCD2Core4.Value & 0xFFFF)} ";
+                if (cbCCD2Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 4 % 8 & 15) << 20 | ((int)nudCCD2Core5.Value & 0xFFFF)} ";
+                if (cbCCD2Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 5 % 8 & 15) << 20 | ((int)nudCCD2Core6.Value & 0xFFFF)} ";
+                if (cbCCD2Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 6 % 8 & 15) << 20 | ((int)nudCCD2Core7.Value & 0xFFFF)} ";
+                if (cbCCD2Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 7 % 8 & 15) << 20 | ((int)nudCCD2Core8.Value & 0xFFFF)} ";
+
+                if (tsAmdOC.IsChecked == true)
+                {
+                    double vid = 0;
+
+                    vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
+                    commandValues = commandValues + $"--oc-clk={(int)nudAmdCpuClk.Value} --oc-clk={(int)nudAmdCpuClk.Value} ";
+
+                    if (Family.FAM >= Family.RyzenFamily.Rembrandt)
+                    {
+                        vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
+                        commandValues = commandValues + $"--oc-volt={vid} --oc-volt={vid} ";
+                    }
+                    else
+                    {
+                        vid = Math.Round((double)nudAmdVID.Value / 1000, 2);
+                        commandValues = commandValues + $"--oc-volt={Convert.ToUInt32((1.55 - vid) / 0.00625)} --oc-volt={Convert.ToUInt32((1.55 - vid) / 0.00625)} ";
+                    }
+
+                    commandValues = commandValues + $"--enable-oc --enable-oc ";
                 }
             }
 
@@ -697,6 +855,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (cbSync.IsChecked == true) commandValues = commandValues + $"--ADLX-Sync=0-true --ADLX-Sync=1-true ";
                 else commandValues = commandValues + $"--ADLX-Sync=0-false --ADLX-Sync=1-false ";
+            }
+
+            if(tsNV.IsChecked == true)
+            {
+                commandValues = commandValues + $"--NVIDIA-Clocks={nudNVCore.Value}-{nudNVMem.Value} ";
             }
 
             return commandValues;
@@ -753,6 +916,44 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
             }
             return count;
+        }
+
+        public static int GetNVIDIAGPUCount()
+        {
+            int count = 0;
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
+            {
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    string name = obj["Name"] as string;
+                    if (name != null && name.Contains("NVIDIA"))
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        private void btnUndo_Click(object sender, RoutedEventArgs e)
+        {
+            tsAmdOC.IsChecked = false;
+            RyzenAdj_To_UXTU.Translate("--disable-oc ");
+            RyzenAdj_To_UXTU.Translate(getCommandValues());
+            Settings.Default.CommandString = getCommandValues();
+            Settings.Default.Save();
+            btnUndo.Visibility = Visibility.Collapsed;
+            RyzenAdj_To_UXTU.Translate("--disable-oc ");
+        }
+
+        private void tsAmdOC_Checked(object sender, RoutedEventArgs e)
+        {
+            btnUndo.Visibility = Visibility.Visible;
+        }
+
+        private void tsAmdOC_Unchecked(object sender, RoutedEventArgs e)
+        {
+            btnUndo.Visibility = Visibility.Collapsed;
         }
     }
 }

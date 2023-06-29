@@ -27,7 +27,6 @@ using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Adaptive;
-using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 using static System.Net.Mime.MediaTypeNames;
@@ -36,6 +35,7 @@ using Windows.ApplicationModel.Search;
 using Windows.Gaming.Preview.GamesEnumeration;
 using System.Management;
 using RyzenSmu;
+using Universal_x86_Tuning_Utility.Scripts.GPUs.AMD;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
