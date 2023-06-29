@@ -735,6 +735,11 @@
                                     <Slider Name="sdNVMem" Value="{Binding ElementName=nudNVMem, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
+
+                            <TextBlock 
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
                         </StackPanel>
                     </ui:CardExpander>
                     <ui:CardExpander Name="sdAmdCpuTune"
@@ -794,6 +799,11 @@
                                     <ui:NumberBox Name="nudAmdVID" Text="{Binding ElementName=sdAmdVID, Path=Value}" Value="{Binding ElementName=sdAmdVID, Path=Value}" Max="1450" Min="512" Grid.Column="0" Step="25" IntegersOnly="True"/>
                                     <Slider Name="sdAmdVID" Value="{Binding ElementName=nudAmdVID, Path=Value}" Maximum="1450" Minimum="512" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
+
+                                <TextBlock 
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
