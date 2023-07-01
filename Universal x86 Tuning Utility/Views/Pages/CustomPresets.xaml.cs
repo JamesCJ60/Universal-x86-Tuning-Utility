@@ -104,6 +104,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdApuThermal.Visibility = Visibility.Collapsed;
                 sdAmdApuVRM.Visibility = Visibility.Collapsed;
                 sdIntelCPU.Visibility = Visibility.Collapsed;
+                sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;
 
                 if (Family.FAM < Family.RyzenFamily.Vermeer) sdAmdCO.Visibility = Visibility.Collapsed;
@@ -128,6 +129,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdApuThermal.Visibility = Visibility.Collapsed;
                 sdAmdApuVRM.Visibility = Visibility.Collapsed;
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;
+                sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
+                sdAmdCpuClk.Visibility = Visibility.Collapsed;
+                sdAmdPBO.Visibility = Visibility.Collapsed;
+                sdAmdCpuTune.Visibility = Visibility.Collapsed;
+                sdAmdCO.Visibility = Visibility.Collapsed;
 
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
