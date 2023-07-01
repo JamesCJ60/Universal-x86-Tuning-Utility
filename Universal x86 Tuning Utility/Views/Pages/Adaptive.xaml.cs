@@ -71,6 +71,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             try
             {
+                if (GetRadeonGPUCount() <= 0)
+                {
+                    sdTBOiGPU.Visibility = Visibility.Collapsed;
+                    sdADLX.Visibility = Visibility.Collapsed;
+                }
+
                 List<string> apps = new List<string>();
                 await Task.Run(() => apps = GetGames());
 
@@ -84,12 +90,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 cbxPowerPreset.ItemsSource = apps;
                 cbxPowerPreset.SelectedIndex = 0;
 
-                bool hasSingleRadeonGPU = CheckForSingleRadeonGPU();
-                if (!hasSingleRadeonGPU)
-                {
-                    sdTBOiGPU.Visibility = Visibility.Collapsed;
-                    sdADLX.Visibility = Visibility.Collapsed;
-                }
 
                 IEnumerable<string> presetNames = adaptivePresetManager.GetPresetNames();
                 foreach (string app in apps)
@@ -340,8 +340,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         //CPUPower = (int)GetSensor.getCPUInfo(SensorType.Power, "Package");
 
-                        bool hasSingleRadeonGPU = CheckForSingleRadeonGPU();
-                        if (hasSingleRadeonGPU)
+                        if (GetRadeonGPUCount() <= 0)
                         {
                             GPULoad = ADLXBackend.GetGPUMetrics(0, 7);
                             GPUClock = ADLXBackend.GetGPUMetrics(0, 0);
@@ -379,27 +378,38 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             catch { }
         }
 
-        static bool CheckForSingleRadeonGPU()
+        public static int GetRadeonGPUCount()
         {
-            // Query WMI to retrieve information about the graphics adapters
+            int count = 0;
             using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
             {
-                int radeonCount = 0;
-
                 foreach (ManagementObject obj in searcher.Get())
                 {
-                    string adapterName = obj["Name"].ToString();
-
-                    // Check if the adapter name contains "Radeon"
-                    if (adapterName.Contains("Radeon"))
+                    string name = obj["Name"] as string;
+                    if (name != null && name.Contains("Radeon"))
                     {
-                        radeonCount++;
+                        count++;
                     }
                 }
-
-                // Return true if only one Radeon GPU is found
-                return radeonCount == 1;
             }
+            return count;
+        }
+
+        public static int GetNVIDIAGPUCount()
+        {
+            int count = 0;
+            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
+            {
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    string name = obj["Name"] as string;
+                    if (name != null && name.Contains("NVIDIA"))
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
         }
         string lastCPU = "";
         string lastCO = "";
