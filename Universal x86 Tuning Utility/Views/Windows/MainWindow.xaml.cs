@@ -254,10 +254,12 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             if (this.WindowState == WindowState.Minimized)
             {
+                this.WindowStyle = WindowStyle.ToolWindow;
                 this.ShowInTaskbar = false;
             }
             else
             {
+                this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.ShowInTaskbar = true;
                 updateDownloads();
             }
