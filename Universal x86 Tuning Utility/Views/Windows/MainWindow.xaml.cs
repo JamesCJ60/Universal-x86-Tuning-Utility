@@ -45,19 +45,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             InitializeComponent();
             _ = Tablet.TabletDevices;
             SetPageService(pageService);
-            if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized; }
-            else
-            {
-                if(GetSystemInfo.Manufacturer.ToUpper().Contains("AYANEO") || GetSystemInfo.Manufacturer.ToUpper().Contains("GPD") || GetSystemInfo.Product.ToUpper().Contains("ONEXPLAYER"))
-                {
-                    int displayCount = Screen.AllScreens.Length;
-                    if(displayCount < 2)
-                    {
-                        this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-                        mainWindow.WindowState = WindowState.Maximized;
-                    }
-                }
-            }
+
             navigationService.SetNavigationControl(RootNavigation);
             _navigationService = navigationService;
 
@@ -396,6 +384,19 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             updateDownloads();
+            if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized; }
+            else
+            {
+                if (GetSystemInfo.Manufacturer.ToUpper().Contains("AYANEO") || GetSystemInfo.Manufacturer.ToUpper().Contains("GPD") || GetSystemInfo.Product.ToUpper().Contains("ONEXPLAYER"))
+                {
+                    int displayCount = Screen.AllScreens.Length;
+                    if (displayCount < 2)
+                    {
+                        this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+                        mainWindow.WindowState = WindowState.Maximized;
+                    }
+                }
+            }
         }
     }
 }
