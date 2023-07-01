@@ -22,7 +22,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA
         {
             if (core < MinCoreOffset || core > MaxCoreOffset || memory < MinMemoryOffset || memory > MaxMemoryOffset) return 0;
 
-            PhysicalGPU internalGpu = PhysicalGPU.GetPhysicalGPUs().FirstOrDefault(gpu => gpu != null);
+            PhysicalGPU internalGpu = PhysicalGPU.GetPhysicalGPUs().First();
 
             if (internalGpu == null) return -1;
 
