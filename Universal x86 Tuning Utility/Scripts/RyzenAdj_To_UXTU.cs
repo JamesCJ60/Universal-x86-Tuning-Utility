@@ -47,7 +47,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 NVIDIA(ryzenAdjCommandString, ryzenAdjCommandValueString);
                                 Task.Delay(50);
                             }
-                            else
+                            else if (ryzenAdjCommandString.Contains("intel"))
                             {
                                 //Convert value of select cli argument to int
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
@@ -55,8 +55,13 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 if (ryzenAdjCommandString == "intel-pl") TDP_Management.changeTDPAll(ryzenAdjCommandValue);
                                 else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
                                 else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
+                            }
+                            else
+                            {
+                                //Convert value of select cli argument to int
+                                int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 
-                                else SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
+                                SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
                                 Task.Delay(2);
                             }
                         }

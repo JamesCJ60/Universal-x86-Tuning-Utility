@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Universal_x86_Tuning_Utility.Properties;
 
 namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
@@ -133,6 +134,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                         processMSR = BaseDir + "Assets\\Intel\\MSR\\msr-cmd.exe";
                         //Log_Writer.writeLog("Change TDP MSR processMSR=" + processMSR + "; Hex PL1 PL2=" + hexPL1 + "," + hexPL2);
                         Run_CLI.RunCommand(commandArguments, false, processMSR);
+
                         //Log_Writer.writeLog("Change TDP MSR complete");
                         Task.Delay(100);
                     }

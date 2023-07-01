@@ -726,6 +726,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         public string getCommandValues()
         {
             string commandValues = "";
+
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
                 if (cbAPUTemp.IsChecked == true) commandValues = commandValues + $"--tctl-temp={nudAPUTemp.Value} --cHTC-temp={nudAPUTemp.Value} ";
@@ -842,7 +843,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (Family.TYPE == Family.ProcessorType.Intel)
             {
-                if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-1={nudIntelPL1.Value} ";
+                if (cbIntelPL1.IsChecked == true) commandValues = commandValues + $"--intel-pl={nudIntelPL1.Value} ";
                 if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-2={nudIntelPL2.Value} ";
             }
 
