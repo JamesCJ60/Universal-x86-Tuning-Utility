@@ -9,7 +9,7 @@
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="FanControl">
+      Title="FanControl" Loaded="Page_Loaded">
 
     <Grid Margin="18,10,0,0">
         <DockPanel LastChildFill="False">

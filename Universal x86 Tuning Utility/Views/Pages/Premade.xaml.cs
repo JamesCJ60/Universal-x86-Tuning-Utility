@@ -303,6 +303,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
         }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Garbage.Garbage_Collect();
+        }
+
         private async void exPreset()
         {
             try

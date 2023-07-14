@@ -53,9 +53,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             GC.Tick += GC_Tick;
             GC.Start();
 
-            Misc.Interval = TimeSpan.FromSeconds(2.5);
-            Misc.Tick += Misc_Tick;
-            Misc.Start();
+            //Misc.Interval = TimeSpan.FromSeconds(2.5);
+            //Misc.Tick += Misc_Tick;
+            //Misc.Start();
 
             autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
             autoReapply.Tick += AutoReapply_Tick;
@@ -64,8 +64,6 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
 
-            getBatTempData();
-
             tbMain.Title = $"Universal x86 Tuning Utility - {Family.CPUName}";
 
             //PowerPlans.HideAttribute("SUB_PROCESSOR", "PERFEPP");
@@ -73,7 +71,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             //PowerPlans.HideAttribute("SUB_PROCESSOR", "PERFAUTONOMOUS");
 
             ApplyOnStart();
-                    
+
 
             Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
         }
@@ -131,7 +129,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 if (bat <= 0 && miCharge.Visibility == Visibility.Visible) miCharge.Visibility = Visibility.Collapsed;
 
                 if (bat > 0 && miCharge.Visibility == Visibility.Visible) miCharge.Header = $"Charge Rate: -{bat.ToString("0.00")}W";
-            } catch
+            }
+            catch
             {
                 miCharge.Visibility = Visibility.Collapsed;
             }
@@ -140,8 +139,6 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         private async void Misc_Tick(object sender, EventArgs e)
         {
             getBatTempData();
-
-            Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
         }
 
         private async void updateDownloads()
@@ -153,7 +150,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                     string owner = "JamesCJ60";
                     string repo = "Universal-x86-Tuning-Utility";
 
-                    int downloadCount = await GetGitHubDownloadCount(owner, repo); 
+                    int downloadCount = await GetGitHubDownloadCount(owner, repo);
                     if (downloadCount > 100000000) ViewModel.Downloads = $"Downloads: {((downloadCount / 1000) / 1000).ToString("#.#")}m";
                     else if (downloadCount > 1000) ViewModel.Downloads = $"Downloads: {(downloadCount / 1000).ToString("#.#")}k";
                     else ViewModel.Downloads = $"Downloads: {downloadCount}";
@@ -184,25 +181,13 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 }
             }
         }
-
-
         int i = 0;
-        bool setup = false;
         async void GC_Tick(object sender, EventArgs e)
         {
             Task.Run(() => Garbage.Garbage_Collect()); // Execute Garbage_Collect on a separate thread
-
-            if (i < 4) i++;
-
-            if (i > 2 && setup == false)
-            {
-                if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
-                GC.Stop();
-                GC.Interval = TimeSpan.FromSeconds(20);
-                GC.Tick += GC_Tick;
-                GC.Start();
-                setup = true;
-            }
+            if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
+            if (i > 2) GC.Stop();
+            i++;
         }
 
         #region INavigationWindow methods
@@ -251,6 +236,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 this.ShowInTaskbar = true;
                 updateDownloads();
             }
+
+            Garbage.Garbage_Collect();
         }
 
         private void NotifyIcon_LeftClick(Wpf.Ui.Controls.NotifyIcon sender, RoutedEventArgs e)
@@ -264,6 +251,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 this.WindowState = WindowState.Normal;
                 this.Activate();
             }
+
+            Garbage.Garbage_Collect();
         }
 
         private async void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
@@ -397,6 +386,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                     }
                 }
             }
+
+            Garbage.Garbage_Collect();
         }
     }
 }

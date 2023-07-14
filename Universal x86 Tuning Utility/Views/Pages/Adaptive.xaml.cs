@@ -511,6 +511,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         }
 
         private static LauncherManager launcherManager = new LauncherManager(new LauncherOptions() { QueryOnlineData = true });
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Garbage.Garbage_Collect();
+        }
+
         private static List<string> gamePaths = new List<string>();
         private List<string> GetGames()
         {

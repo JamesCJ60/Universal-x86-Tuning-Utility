@@ -60,7 +60,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="V2.0.0 Beta Build 9.1" />
+                            Text="V2.0.0 Stable Release Candidate 1" />
                             <ui:Button
                                 Name="btnPremade"
                             Height="36"
@@ -169,7 +169,8 @@
                 Margin="4,8,4,0"
                 Command="{Binding ViewModel.NavigateCommand}"
                 CommandParameter="navigate_to_icons"
-                Icon="Info20">
+                Icon="Info20"
+                IsEnabled="False">
                 <StackPanel>
                     <TextBlock
                         Margin="0"
@@ -184,7 +185,8 @@
                 Margin="0,8,4,0"
                 Command="{Binding ViewModel.NavigateCommand}"
                 CommandParameter="navigate_to_icons"
-                Icon="FullScreenMaximize20">
+                Icon="FullScreenMaximize20" 
+                IsEnabled="False">
                 <StackPanel>
                     <TextBlock
                         Margin="0"

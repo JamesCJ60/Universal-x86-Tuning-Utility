@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
+using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
@@ -84,6 +85,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 getDcPreset(Settings.Default.dcPreset);
                 getResumePreset(Settings.Default.resumePreset);
             }
+
+            Garbage.Garbage_Collect();
         }
 
         private void getAcPreset(string searchName)

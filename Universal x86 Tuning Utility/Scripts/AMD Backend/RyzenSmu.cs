@@ -69,6 +69,18 @@ namespace RyzenSmu
                 ("oc-volt",false , 0x7f),
                 ("enable-oc",false , 0x69),
                 ("disable-oc",false , 0x6a),
+                ("max-cpuclk",true, 0x44),
+                ("min-cpuclk",true, 0x45),
+                ("max-gfxclk",true, 0x46),
+                ("min-gfxclk",true, 0x47),
+                ("max-socclk-frequency",true, 0x48),
+                ("min-socclk-frequency",true, 0x49),
+                ("max-fclk-frequency",true, 0x4a),
+                ("min-fclk-frequency",true, 0x4b),
+                ("max-vcn",true, 0x4c),
+                ("min-vcn",true, 0x4d),
+                ("max-lclk",true, 0x4e),
+                ("min-lclk",true, 0x4f),
             };
         }
 

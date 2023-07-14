@@ -10,7 +10,7 @@
           d:Background="{DynamicResource ApplicationBackgroundBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       d:DesignHeight="1500" d:DesignWidth="800"
-      Title="CustomPresets">
+      Title="CustomPresets" Loaded="Page_Loaded">
 
     <Grid>
         <DockPanel>

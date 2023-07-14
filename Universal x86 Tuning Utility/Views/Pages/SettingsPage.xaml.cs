@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Windows;
 using Universal_x86_Tuning_Utility.Properties;
+using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Wpf.Ui.Common.Interfaces;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
@@ -176,6 +177,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             Settings.Default.UpdateCheck = (bool)cbAutoCheck.IsChecked;
             Settings.Default.Save();
+        }
+
+        private void StackPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UiPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            Garbage.Garbage_Collect();
         }
     }
 }

@@ -147,6 +147,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (IsScrollBarVisible(mainScroll)) mainCon.Margin = new Thickness(15, 0, 0, 0);
             else mainCon.Margin = new Thickness(15, 0, -12, 0);
+
+            Garbage.Garbage_Collect();
         }
 
         private void SizeSlider_TouchDown(object sender, TouchEventArgs e)
@@ -719,6 +721,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         nudNVMem.Value = myPreset.nvMemClk;
                     }
                 }
+                Garbage.Garbage_Collect();
             }
             catch (Exception ex) { }
         }
@@ -786,6 +789,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                     commandValues = commandValues + $"--enable-oc --enable-oc ";
                 }
+
+                Garbage.Garbage_Collect();
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
@@ -907,6 +912,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
 
             if(checkBox == cbImageSharp) cbRSR.IsChecked = false;
+
+            Garbage.Garbage_Collect();
         }
 
         public static int GetRadeonGPUCount()
@@ -922,6 +929,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         count++;
                     }
                 }
+
+                Garbage.Garbage_Collect();
             }
             return count;
         }
@@ -939,6 +948,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         count++;
                     }
                 }
+
+                Garbage.Garbage_Collect();
             }
             return count;
         }
@@ -962,6 +973,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private void tsAmdOC_Unchecked(object sender, RoutedEventArgs e)
         {
             btnUndo.Visibility = Visibility.Collapsed;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Garbage.Garbage_Collect();
         }
     }
 }

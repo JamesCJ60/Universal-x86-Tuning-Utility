@@ -24,8 +24,15 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         CreateNoWindow = true,
                     }
                 };
-                process.Start();
-                process.WaitForExit();
+                try
+                {
+                    process.Start();
+                    process.WaitForExit();
+                }
+                finally
+                {
+                    process.Dispose();
+                }
             });
         }
         public async static void SetPowerValue(string scheme, string subGroup, string powerSetting, uint value, bool isAC)
@@ -43,8 +50,15 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         CreateNoWindow = true,
                     }
                 };
-                process.Start();
-                process.WaitForExit();
+                try
+                {
+                    process.Start();
+                    process.WaitForExit();
+                }
+                finally
+                {
+                    process.Dispose();
+                }
             });
         }
 
@@ -63,8 +77,15 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         CreateNoWindow = true,
                     }
                 };
-                process.Start();
-                process.WaitForExit();
+                try
+                {
+                    process.Start();
+                    process.WaitForExit();
+                }
+                finally
+                {
+                    process.Dispose();
+                }
             });
         }
     }

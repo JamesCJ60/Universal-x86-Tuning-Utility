@@ -174,5 +174,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             string fanConfig = $"{GetSystemInfo.Manufacturer.ToUpper()}_{GetSystemInfo.Product.ToUpper()}.json";
             Clipboard.SetText(fanConfig);
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Garbage.Garbage_Collect();
+        }
     }
 }

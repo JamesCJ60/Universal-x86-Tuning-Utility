@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Universal_x86_Tuning_Utility.Scripts;
+using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Wpf.Ui.Common.Interfaces;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
@@ -20,7 +21,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             InitializeComponent();
             _ = Tablet.TabletDevices;
 
-            if(Family.TYPE == Family.ProcessorType.Intel)
+            Garbage.Garbage_Collect();
+
+            if (Family.TYPE == Family.ProcessorType.Intel)
             {
                 caPremade.IsEnabled = false;
                 btnPremade.IsEnabled = false;
