@@ -96,7 +96,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "1.0.9.1";
+        public static string version = "1.0.9.2";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
         /// <summary>
@@ -256,13 +256,17 @@ namespace Universal_x86_Tuning_Utility
 
             using (Process process = new Process())
             {
-                process.StartInfo = processInfo;
-                process.Start();
-
-                // Read the output of PowerShell command execution
-                string output = process.StandardOutput.ReadToEnd();
-
-                process.WaitForExit();
+                try
+                {
+                    process.StartInfo = processInfo;
+                    process.Start();
+                    string output = process.StandardOutput.ReadToEnd();
+                    process.WaitForExit();
+                }
+                finally
+                {
+                    process.Dispose();
+                }
             }
         }
     }
