@@ -519,23 +519,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         if (presetName.Contains("PM - Eco"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.EcoPreset;
                         }
                         else if (presetName.Contains("PM - Bal"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.BalPreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.BalPreset;
                         }
                         else if (presetName.Contains("PM - Perf"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.PerformancePreset;
                         }
                         else if (presetName.Contains("PM - Ext"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.ExtremePreset;
                         }
                         else
                         {
@@ -557,23 +557,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         if (presetName.Contains("PM - Eco"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.EcoPreset;
                         }
                         else if (presetName.Contains("PM - Bal"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.BalPreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.BalPreset;
                         }
                         else if (presetName.Contains("PM - Perf"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.PerformancePreset;
                         }
                         else if (presetName.Contains("PM - Ext"))
                         {
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = PremadePresets.ExtremePreset;
                         }
                         else
                         {
@@ -622,23 +622,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         {
                             if (presetName.Contains("PM - Eco"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.EcoPreset;
                             }
                             else if (presetName.Contains("PM - Bal"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.BalPreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.BalPreset;
                             }
                             else if (presetName.Contains("PM - Perf"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.PerformancePreset;
                             }
                             else if (presetName.Contains("PM - Ext"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.ExtremePreset;
                             }
                             else
                             {
@@ -661,23 +661,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         {
                             if (presetName.Contains("PM - Eco"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.EcoPreset;
                             }
                             else if (presetName.Contains("PM - Bal"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.BalPreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.BalPreset;
                             }
                             else if (presetName.Contains("PM - Perf"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.PerformancePreset;
                             }
                             else if (presetName.Contains("PM - Ext"))
                             {
-                                Settings.Default.acPreset = presetName;
-                                Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = PremadePresets.ExtremePreset;
                             }
                             else
                             {
