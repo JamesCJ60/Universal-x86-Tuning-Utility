@@ -34,10 +34,27 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             InitializeComponent();
             _ = Tablet.TabletDevices;
+            PremadePresets.SetPremadePresets();
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
+
+                cbxCharge.Items.Add("PM - Eco Preset");
+                cbxDischarge.Items.Add("PM - Eco Preset");
+                cbxResume.Items.Add("PM - Eco Preset");
+
+                cbxCharge.Items.Add("PM - Balanced Preset");
+                cbxDischarge.Items.Add("PM - Balanced Preset");
+                cbxResume.Items.Add("PM - Balanced Preset");
+
+                cbxCharge.Items.Add("PM - Performance Preset");
+                cbxDischarge.Items.Add("PM - Performance Preset");
+                cbxResume.Items.Add("PM - Performance Preset");
+
+                cbxCharge.Items.Add("PM - Extreme Preset");
+                cbxDischarge.Items.Add("PM - Extreme Preset");
+                cbxResume.Items.Add("PM - Extreme Preset");
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -55,6 +72,22 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
+
+                cbxCharge.Items.Add("PM - Eco Preset");
+                cbxDischarge.Items.Add("PM - Eco Preset");
+                cbxResume.Items.Add("PM - Eco Preset");
+
+                cbxCharge.Items.Add("PM - Balanced Preset");
+                cbxDischarge.Items.Add("PM - Balanced Preset");
+                cbxResume.Items.Add("PM - Balanced Preset");
+
+                cbxCharge.Items.Add("PM - Performance Preset");
+                cbxDischarge.Items.Add("PM - Performance Preset");
+                cbxResume.Items.Add("PM - Performance Preset");
+
+                cbxCharge.Items.Add("PM - Extreme Preset");
+                cbxDischarge.Items.Add("PM - Extreme Preset");
+                cbxResume.Items.Add("PM - Extreme Preset");
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -157,6 +190,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 cbxCharge.Items.Clear();
                 cbxCharge.Items.Add("None");
 
+                cbxCharge.Items.Add("PM - Eco Preset");
+
+                cbxCharge.Items.Add("PM - Balanced Preset");
+
+                cbxCharge.Items.Add("PM - Performance Preset");
+
+                cbxCharge.Items.Add("PM - Extreme Preset");
+
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
                 {
@@ -173,6 +214,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 cbxCharge.Items.Clear();
                 cbxCharge.Items.Add("None");
+
+                cbxCharge.Items.Add("PM - Eco Preset");
+
+                cbxCharge.Items.Add("PM - Balanced Preset");
+
+                cbxCharge.Items.Add("PM - Performance Preset");
+
+                cbxCharge.Items.Add("PM - Extreme Preset");
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -216,6 +265,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 cbxDischarge.Items.Clear();
                 cbxDischarge.Items.Add("None");
 
+
+                cbxDischarge.Items.Add("PM - Eco Preset");
+
+                cbxDischarge.Items.Add("PM - Balanced Preset");
+
+                cbxDischarge.Items.Add("PM - Performance Preset");
+
+                cbxDischarge.Items.Add("PM - Extreme Preset");
+
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
                 {
@@ -232,6 +290,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 cbxDischarge.Items.Clear();
                 cbxDischarge.Items.Add("None");
+
+                cbxDischarge.Items.Add("PM - Eco Preset");
+
+                cbxDischarge.Items.Add("PM - Balanced Preset");
+
+                cbxDischarge.Items.Add("PM - Performance Preset");
+
+                cbxDischarge.Items.Add("PM - Extreme Preset");
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -274,6 +340,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 cbxResume.Items.Clear();
                 cbxResume.Items.Add("None");
 
+                cbxResume.Items.Add("PM - Eco Preset");
+
+                cbxResume.Items.Add("PM - Balanced Preset");
+
+                cbxResume.Items.Add("PM - Performance Preset");
+
+                cbxResume.Items.Add("PM - Extreme Preset");
+
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
                 {
@@ -290,6 +364,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 cbxResume.Items.Clear();
                 cbxResume.Items.Add("None");
+
+                cbxResume.Items.Add("PM - Eco Preset");
+
+                cbxResume.Items.Add("PM - Balanced Preset");
+
+                cbxResume.Items.Add("PM - Performance Preset");
+
+                cbxResume.Items.Add("PM - Extreme Preset");
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -330,10 +412,33 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                         {
-                            apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
-                            Preset myPreset = apuPresetManager.GetPreset(presetName);
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = myPreset.commandValue;
+                            if(presetName.Contains("PM - Eco"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                            }
+                            else if (presetName.Contains("PM - Bal"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.BalPreset;
+                            }
+                            else if (presetName.Contains("PM - Perf"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                            }
+                            else if (presetName.Contains("PM - Ext"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                            }
+                            else
+                            {
+                                apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
+                                Preset myPreset = apuPresetManager.GetPreset(presetName);
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = myPreset.commandValue;
+                            }
                         }
                         else
                         {
@@ -346,9 +451,32 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
                         if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                         {
-                            Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
-                            Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = myPreset.commandValue;
+                            if (presetName.Contains("PM - Eco"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                            }
+                            else if (presetName.Contains("PM - Bal"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.BalPreset;
+                            }
+                            else if (presetName.Contains("PM - Perf"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                            }
+                            else if (presetName.Contains("PM - Ext"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                            }
+                            else
+                            {
+                                Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = myPreset.commandValue;
+                            }
                         }
                         else
                         {
@@ -389,9 +517,32 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
                     if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                     {
-                        Preset myPreset = apuPresetManager.GetPreset(presetName);
-                        Settings.Default.dcPreset = presetName;
-                        Settings.Default.dcCommandString = myPreset.commandValue;
+                        if (presetName.Contains("PM - Eco"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                        }
+                        else if (presetName.Contains("PM - Bal"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.BalPreset;
+                        }
+                        else if (presetName.Contains("PM - Perf"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                        }
+                        else if (presetName.Contains("PM - Ext"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                        }
+                        else
+                        {
+                            Preset myPreset = apuPresetManager.GetPreset(presetName);
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = myPreset.commandValue;
+                        }
                     }
                     else
                     {
@@ -404,9 +555,32 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
                     if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                     {
-                        Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
-                        Settings.Default.dcPreset = presetName;
-                        Settings.Default.dcCommandString = myPreset.commandValue;
+                        if (presetName.Contains("PM - Eco"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                        }
+                        else if (presetName.Contains("PM - Bal"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.BalPreset;
+                        }
+                        else if (presetName.Contains("PM - Perf"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                        }
+                        else if (presetName.Contains("PM - Ext"))
+                        {
+                            Settings.Default.acPreset = presetName;
+                            Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                        }
+                        else
+                        {
+                            Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
+                            Settings.Default.dcPreset = presetName;
+                            Settings.Default.dcCommandString = myPreset.commandValue;
+                        }
                     }
                     else
                     {
@@ -446,10 +620,33 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                         {
-                            apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
-                            Preset myPreset = apuPresetManager.GetPreset(presetName);
-                            Settings.Default.resumePreset = presetName;
-                            Settings.Default.resumeCommandString = myPreset.commandValue;
+                            if (presetName.Contains("PM - Eco"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                            }
+                            else if (presetName.Contains("PM - Bal"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.BalPreset;
+                            }
+                            else if (presetName.Contains("PM - Perf"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                            }
+                            else if (presetName.Contains("PM - Ext"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                            }
+                            else
+                            {
+                                apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
+                                Preset myPreset = apuPresetManager.GetPreset(presetName);
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = myPreset.commandValue;
+                            }
                         }
                         else
                         {
@@ -462,9 +659,32 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
                         if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                         {
-                            Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
-                            Settings.Default.resumePreset = presetName;
-                            Settings.Default.resumeCommandString = myPreset.commandValue;
+                            if (presetName.Contains("PM - Eco"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                            }
+                            else if (presetName.Contains("PM - Bal"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.BalPreset;
+                            }
+                            else if (presetName.Contains("PM - Perf"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                            }
+                            else if (presetName.Contains("PM - Ext"))
+                            {
+                                Settings.Default.acPreset = presetName;
+                                Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                            }
+                            else
+                            {
+                                Preset myPreset = amdDtCpuPresetManager.GetPreset(presetName);
+                                Settings.Default.resumePreset = presetName;
+                                Settings.Default.resumeCommandString = myPreset.commandValue;
+                            }
                         }
                         else
                         {

@@ -65,6 +65,18 @@ namespace Universal_x86_Tuning_Utility.Services
         public int amdClock { get; set; }
         public int amdVID { get; set; }
 
+        public int softMiniGPUClk { get; set; }
+        public int softMaxiGPUClk { get; set; }
+        public int softMinCPUClk { get; set; }
+        public int softMaxCPUClk { get; set; }
+        public int softMinDataClk { get; set; }
+        public int softMaxDataClk { get; set; }
+        public int softMinFabClk { get; set; }
+        public int softMaxFabClk { get; set; }
+        public int softMinVCNClk { get; set; }
+        public int softMaxVCNClk { get; set; }
+        public int softMinSoCClk { get; set; }
+        public int softMaxSoCClk { get; set; }
         public string commandValue { get; set; }
 
         public bool isApuTemp { get; set; }
@@ -118,6 +130,19 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool IsCCD2Core8 { get; set; }
 
         public bool IsAmdOC { get; set; }
+
+        public bool isSoftMiniGPUClk { get; set; }
+        public bool isSoftMaxiGPUClk { get; set; }
+        public bool isSoftMinCPUClk { get; set; }
+        public bool isSoftMaxCPUClk { get; set; }
+        public bool isSoftMinDataClk { get; set; }
+        public bool isSoftMaxDataClk { get; set; }
+        public bool isSoftMinFabClk { get; set; }
+        public bool isSoftMaxFabClk { get; set; }
+        public bool isSoftMinVCNClk { get; set; }
+        public bool isSoftMaxVCNClk { get; set; }
+        public bool isSoftMinSoCClk { get; set; }
+        public bool isSoftMaxSoCClk { get; set; }
     }
 
     public class PresetManager

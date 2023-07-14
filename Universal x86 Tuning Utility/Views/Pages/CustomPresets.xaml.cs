@@ -86,6 +86,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Visible;
                 if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
 
+                if(Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
+
                 sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
@@ -175,256 +177,287 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (Family.TYPE == Family.ProcessorType.Amd_Apu)
+            if (!tbxPresetName.Text.Contains("PM -"))
             {
-                if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
+                if (Family.TYPE == Family.ProcessorType.Amd_Apu)
                 {
-                    // Save a preset
-                    Preset preset = new Preset
+                    if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
                     {
-                        apuTemp = (int)nudAPUTemp.Value,
-                        apuSkinTemp = (int)nudAPUSkinTemp.Value,
-                        apuSTAPMPow = (int)nudSTAPMPow.Value,
-                        apuSTAPMTime = (int)nudFastTime.Value,
-                        apuFastPow = (int)nudFastPow.Value,
-                        apuSlowPow = (int)nudSlowPow.Value,
-                        apuSlowTime = (int)nudSlowTime.Value,
+                        // Save a preset
+                        Preset preset = new Preset
+                        {
+                            apuTemp = (int)nudAPUTemp.Value,
+                            apuSkinTemp = (int)nudAPUSkinTemp.Value,
+                            apuSTAPMPow = (int)nudSTAPMPow.Value,
+                            apuSTAPMTime = (int)nudFastTime.Value,
+                            apuFastPow = (int)nudFastPow.Value,
+                            apuSlowPow = (int)nudSlowPow.Value,
+                            apuSlowTime = (int)nudSlowTime.Value,
 
-                        apuCpuTdc = (int)nudCpuVrmTdc.Value,
-                        apuCpuEdc = (int)nudCpuVrmEdc.Value,
-                        apuSocTdc = (int)nudSocVrmTdc.Value,
-                        apuSocEdc = (int)nudSocVrmEdc.Value,
-                        apuGfxTdc = (int)nudGfxVrmTdc.Value,
-                        apuGfxEdc = (int)nudGfxVrmEdc.Value,
+                            apuCpuTdc = (int)nudCpuVrmTdc.Value,
+                            apuCpuEdc = (int)nudCpuVrmEdc.Value,
+                            apuSocTdc = (int)nudSocVrmTdc.Value,
+                            apuSocEdc = (int)nudSocVrmEdc.Value,
+                            apuGfxTdc = (int)nudGfxVrmTdc.Value,
+                            apuGfxEdc = (int)nudGfxVrmEdc.Value,
 
-                        apuGfxClk = (int)nudAPUiGPUClk.Value,
+                            apuGfxClk = (int)nudAPUiGPUClk.Value,
 
-                        pboScalar = (int)nudPBOScaler.Value,
-                        coAllCore = (int)nudAllCO.Value,
+                            pboScalar = (int)nudPBOScaler.Value,
+                            coAllCore = (int)nudAllCO.Value,
 
-                        boostProfile = (int)cbxBoost.SelectedIndex,
+                            boostProfile = (int)cbxBoost.SelectedIndex,
 
-                        rsr = (int)nudRSR.Value,
-                        boost = (int)nudBoost.Value,
-                        imageSharp = (int)nudImageSharp.Value,
-                        isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
-                        isRSR = (bool)cbRSR.IsChecked,
-                        isBoost = (bool)cbBoost.IsChecked,
-                        isAntiLag = (bool)cbAntiLag.IsChecked,
-                        isImageSharp = (bool)cbImageSharp.IsChecked,
-                        isSync = (bool)cbSync.IsChecked,
+                            rsr = (int)nudRSR.Value,
+                            boost = (int)nudBoost.Value,
+                            imageSharp = (int)nudImageSharp.Value,
+                            isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                            isRSR = (bool)cbRSR.IsChecked,
+                            isBoost = (bool)cbBoost.IsChecked,
+                            isAntiLag = (bool)cbAntiLag.IsChecked,
+                            isImageSharp = (bool)cbImageSharp.IsChecked,
+                            isSync = (bool)cbSync.IsChecked,
 
-                        ccd1Core1 = (int)nudCCD1Core1.Value,
-                        ccd1Core2 = (int)nudCCD1Core2.Value,
-                        ccd1Core3 = (int)nudCCD1Core3.Value,
-                        ccd1Core4 = (int)nudCCD1Core4.Value,
-                        ccd1Core5 = (int)nudCCD1Core5.Value,
-                        ccd1Core6 = (int)nudCCD1Core6.Value,
-                        ccd1Core7 = (int)nudCCD1Core7.Value,
-                        ccd1Core8 = (int)nudCCD1Core8.Value,
+                            ccd1Core1 = (int)nudCCD1Core1.Value,
+                            ccd1Core2 = (int)nudCCD1Core2.Value,
+                            ccd1Core3 = (int)nudCCD1Core3.Value,
+                            ccd1Core4 = (int)nudCCD1Core4.Value,
+                            ccd1Core5 = (int)nudCCD1Core5.Value,
+                            ccd1Core6 = (int)nudCCD1Core6.Value,
+                            ccd1Core7 = (int)nudCCD1Core7.Value,
+                            ccd1Core8 = (int)nudCCD1Core8.Value,
 
-                        commandValue = getCommandValues(),
+                            commandValue = getCommandValues(),
 
-                        isApuTemp = (bool)cbAPUTemp.IsChecked,
-                        isApuSkinTemp = (bool)cbAPUSkinTemp.IsChecked,
-                        isApuSTAPMPow = (bool)cbSTAPMPow.IsChecked,
-                        isApuSlowPow = (bool)cbSlowPow.IsChecked,
-                        isApuSlowTime = (bool)cbSlowTime.IsChecked,
-                        isApuFastPow = (bool)cbFastPow.IsChecked,
-                        isApuSTAPMTime = (bool)cbFastTime.IsChecked,
+                            isApuTemp = (bool)cbAPUTemp.IsChecked,
+                            isApuSkinTemp = (bool)cbAPUSkinTemp.IsChecked,
+                            isApuSTAPMPow = (bool)cbSTAPMPow.IsChecked,
+                            isApuSlowPow = (bool)cbSlowPow.IsChecked,
+                            isApuSlowTime = (bool)cbSlowTime.IsChecked,
+                            isApuFastPow = (bool)cbFastPow.IsChecked,
+                            isApuSTAPMTime = (bool)cbFastTime.IsChecked,
 
-                        isApuCpuTdc = (bool)cbCpuVrmTdc.IsChecked,
-                        isApuCpuEdc = (bool)cbCpuVrmEdc.IsChecked,
-                        isApuSocTdc = (bool)cbSocVrmTdc.IsChecked,
-                        isApuSocEdc = (bool)cbSocVrmEdc.IsChecked,
-                        isApuGfxTdc = (bool)cbGfxVrmTdc.IsChecked,
-                        isApuGfxEdc = (bool)cbGfxVrmEdc.IsChecked,
+                            isApuCpuTdc = (bool)cbCpuVrmTdc.IsChecked,
+                            isApuCpuEdc = (bool)cbCpuVrmEdc.IsChecked,
+                            isApuSocTdc = (bool)cbSocVrmTdc.IsChecked,
+                            isApuSocEdc = (bool)cbSocVrmEdc.IsChecked,
+                            isApuGfxTdc = (bool)cbGfxVrmTdc.IsChecked,
+                            isApuGfxEdc = (bool)cbGfxVrmEdc.IsChecked,
 
-                        isApuGfxClk = (bool)cbAPUiGPUClk.IsChecked,
+                            isApuGfxClk = (bool)cbAPUiGPUClk.IsChecked,
 
-                        isPboScalar = (bool)cbPBOScaler.IsChecked,
-                        isCoAllCore = (bool)cbAllCO.IsChecked,
+                            isPboScalar = (bool)cbPBOScaler.IsChecked,
+                            isCoAllCore = (bool)cbAllCO.IsChecked,
 
-                        IsCCD1Core1 = (bool)cbCCD1Core1.IsChecked,
-                        IsCCD1Core2 = (bool)cbCCD1Core2.IsChecked,
-                        IsCCD1Core3 = (bool)cbCCD1Core3.IsChecked,
-                        IsCCD1Core4 = (bool)cbCCD1Core4.IsChecked,
-                        IsCCD1Core5 = (bool)cbCCD1Core5.IsChecked,
-                        IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
-                        IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
-                        IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
+                            IsCCD1Core1 = (bool)cbCCD1Core1.IsChecked,
+                            IsCCD1Core2 = (bool)cbCCD1Core2.IsChecked,
+                            IsCCD1Core3 = (bool)cbCCD1Core3.IsChecked,
+                            IsCCD1Core4 = (bool)cbCCD1Core4.IsChecked,
+                            IsCCD1Core5 = (bool)cbCCD1Core5.IsChecked,
+                            IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
+                            IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
+                            IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
 
-                        isNVIDIA = (bool)tsNV.IsChecked,
-                        nvCoreClk = (int)nudNVCore.Value,
-                        nvMemClk = (int)nudNVMem.Value,
+                            isNVIDIA = (bool)tsNV.IsChecked,
+                            nvCoreClk = (int)nudNVCore.Value,
+                            nvMemClk = (int)nudNVMem.Value,
 
-                        IsAmdOC = (bool)tsAmdOC.IsChecked,
-                        amdClock = (int)nudAmdCpuClk.Value,
-                        amdVID = (int)nudAmdVID.Value,
-                    };
-                    apuPresetManager.SavePreset(tbxPresetName.Text, preset);
+                            IsAmdOC = (bool)tsAmdOC.IsChecked,
+                            amdClock = (int)nudAmdCpuClk.Value,
+                            amdVID = (int)nudAmdVID.Value,
 
-                    apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
+                            softMiniGPUClk = (int)nudSoftMiniGPUClk.Value,
+                            softMinCPUClk = (int)nudSoftMinCPUClk.Value,
+                            softMinFabClk = (int)nudSoftMinFabClk.Value,
+                            softMinDataClk = (int)nudSoftMinDataClk.Value,
+                            softMinSoCClk = (int)nudSoftMinSoCClk.Value,
+                            softMinVCNClk = (int)nudSoftMinVCNClk.Value,
 
-                    // Get the names of all the stored presets
-                    IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
+                            softMaxiGPUClk = (int)nudSoftMaxiGPUClk.Value,
+                            softMaxCPUClk = (int)nudSoftMaxCPUClk.Value,
+                            softMaxFabClk = (int)nudSoftMaxFabClk.Value,
+                            softMaxDataClk = (int)nudSoftMaxDataClk.Value,
+                            softMaxSoCClk = (int)nudSoftMaxSoCClk.Value,
+                            softMaxVCNClk = (int)nudSoftMaxVCNClk.Value,
 
-                    cbxPowerPreset.Items.Clear();
+                            isSoftMiniGPUClk = (bool)cbSoftMiniGPUClk.IsChecked,
+                            isSoftMinCPUClk = (bool)cbSoftMinCPUClk.IsChecked,
+                            isSoftMinFabClk = (bool)cbSoftMinFabClk.IsChecked,
+                            isSoftMinDataClk = (bool)cbSoftMinDataClk.IsChecked,
+                            isSoftMinSoCClk = (bool)cbSoftMinSoCClk.IsChecked,
+                            isSoftMinVCNClk = (bool)cbSoftMinVCNClk.IsChecked,
 
-                    // Populate a combo box with the preset names
-                    foreach (string presetName in presetNames)
-                    {
-                        cbxPowerPreset.Items.Add(presetName);
+                            isSoftMaxiGPUClk = (bool)cbSoftMaxiGPUClk.IsChecked,
+                            isSoftMaxCPUClk = (bool)cbSoftMaxCPUClk.IsChecked,
+                            isSoftMaxFabClk = (bool)cbSoftMaxFabClk.IsChecked,
+                            isSoftMaxDataClk = (bool)cbSoftMaxDataClk.IsChecked,
+                            isSoftMaxSoCClk = (bool)cbSoftMaxSoCClk.IsChecked,
+                            isSoftMaxVCNClk = (bool)cbSoftMaxVCNClk.IsChecked,
+                        };
+                        apuPresetManager.SavePreset(tbxPresetName.Text, preset);
+
+                        apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
+
+                        // Get the names of all the stored presets
+                        IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
+
+                        cbxPowerPreset.Items.Clear();
+
+                        // Populate a combo box with the preset names
+                        foreach (string presetName in presetNames)
+                        {
+                            cbxPowerPreset.Items.Add(presetName);
+                        }
+
+                        ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
                     }
-
-                    ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
                 }
-            }
 
-            if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
-            {
-                if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
+                if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
                 {
-                    // Save a preset
-                    Preset preset = new Preset
+                    if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
                     {
-                        dtCpuTemp = (int)nudCPUTemp.Value,
-                        dtCpuPPT = (int)nudPPT.Value,
-                        dtCpuTDC = (int)nudTDC.Value,
-                        dtCpuEDC = (int)nudEDC.Value,
-                        pboScalar = (int)nudPBOScaler.Value,
-                        coAllCore = (int)nudAllCO.Value,
+                        // Save a preset
+                        Preset preset = new Preset
+                        {
+                            dtCpuTemp = (int)nudCPUTemp.Value,
+                            dtCpuPPT = (int)nudPPT.Value,
+                            dtCpuTDC = (int)nudTDC.Value,
+                            dtCpuEDC = (int)nudEDC.Value,
+                            pboScalar = (int)nudPBOScaler.Value,
+                            coAllCore = (int)nudAllCO.Value,
 
-                        boostProfile = (int)cbxBoost.SelectedIndex,
+                            boostProfile = (int)cbxBoost.SelectedIndex,
 
-                        rsr = (int)nudRSR.Value,
-                        boost = (int)nudBoost.Value,
-                        imageSharp = (int)nudImageSharp.Value,
-                        isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
-                        isRSR = (bool)cbRSR.IsChecked,
-                        isBoost = (bool)cbBoost.IsChecked,
-                        isAntiLag = (bool)cbAntiLag.IsChecked,
-                        isImageSharp = (bool)cbImageSharp.IsChecked,
-                        isSync = (bool)cbSync.IsChecked,
+                            rsr = (int)nudRSR.Value,
+                            boost = (int)nudBoost.Value,
+                            imageSharp = (int)nudImageSharp.Value,
+                            isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                            isRSR = (bool)cbRSR.IsChecked,
+                            isBoost = (bool)cbBoost.IsChecked,
+                            isAntiLag = (bool)cbAntiLag.IsChecked,
+                            isImageSharp = (bool)cbImageSharp.IsChecked,
+                            isSync = (bool)cbSync.IsChecked,
 
-                        commandValue = getCommandValues(),
+                            commandValue = getCommandValues(),
 
 
-                        isDtCpuTemp = (bool)cbCPUTemp.IsChecked,
-                        isDtCpuPPT = (bool)cbPPT.IsChecked,
-                        isDtCpuTDC = (bool)cbTDC.IsChecked,
-                        isDtCpuEDC = (bool)cbEDC.IsChecked,
-                        isPboScalar = (bool)cbPBOScaler.IsChecked,
-                        isCoAllCore = (bool)cbAllCO.IsChecked,
+                            isDtCpuTemp = (bool)cbCPUTemp.IsChecked,
+                            isDtCpuPPT = (bool)cbPPT.IsChecked,
+                            isDtCpuTDC = (bool)cbTDC.IsChecked,
+                            isDtCpuEDC = (bool)cbEDC.IsChecked,
+                            isPboScalar = (bool)cbPBOScaler.IsChecked,
+                            isCoAllCore = (bool)cbAllCO.IsChecked,
 
-                        isNVIDIA = (bool)tsNV.IsChecked,
-                        nvCoreClk = (int)nudNVCore.Value,
-                        nvMemClk = (int)nudNVMem.Value,
+                            isNVIDIA = (bool)tsNV.IsChecked,
+                            nvCoreClk = (int)nudNVCore.Value,
+                            nvMemClk = (int)nudNVMem.Value,
 
-                        ccd1Core1 = (int)nudCCD1Core1.Value,
-                        ccd1Core2 = (int)nudCCD1Core2.Value,
-                        ccd1Core3 = (int)nudCCD1Core3.Value,
-                        ccd1Core4 = (int)nudCCD1Core4.Value,
-                        ccd1Core5 = (int)nudCCD1Core5.Value,
-                        ccd1Core6 = (int)nudCCD1Core6.Value,
-                        ccd1Core7 = (int)nudCCD1Core7.Value,
-                        ccd1Core8 = (int)nudCCD1Core8.Value,
+                            ccd1Core1 = (int)nudCCD1Core1.Value,
+                            ccd1Core2 = (int)nudCCD1Core2.Value,
+                            ccd1Core3 = (int)nudCCD1Core3.Value,
+                            ccd1Core4 = (int)nudCCD1Core4.Value,
+                            ccd1Core5 = (int)nudCCD1Core5.Value,
+                            ccd1Core6 = (int)nudCCD1Core6.Value,
+                            ccd1Core7 = (int)nudCCD1Core7.Value,
+                            ccd1Core8 = (int)nudCCD1Core8.Value,
 
-                        ccd2Core1 = (int)nudCCD2Core1.Value,
-                        ccd2Core2 = (int)nudCCD2Core2.Value,
-                        ccd2Core3 = (int)nudCCD2Core3.Value,
-                        ccd2Core4 = (int)nudCCD2Core4.Value,
-                        ccd2Core5 = (int)nudCCD2Core5.Value,
-                        ccd2Core6 = (int)nudCCD2Core6.Value,
-                        ccd2Core7 = (int)nudCCD2Core7.Value,
-                        ccd2Core8 = (int)nudCCD2Core8.Value,
+                            ccd2Core1 = (int)nudCCD2Core1.Value,
+                            ccd2Core2 = (int)nudCCD2Core2.Value,
+                            ccd2Core3 = (int)nudCCD2Core3.Value,
+                            ccd2Core4 = (int)nudCCD2Core4.Value,
+                            ccd2Core5 = (int)nudCCD2Core5.Value,
+                            ccd2Core6 = (int)nudCCD2Core6.Value,
+                            ccd2Core7 = (int)nudCCD2Core7.Value,
+                            ccd2Core8 = (int)nudCCD2Core8.Value,
 
-                        IsCCD1Core1 = (bool)cbCCD1Core1.IsChecked,
-                        IsCCD1Core2 = (bool)cbCCD1Core2.IsChecked,
-                        IsCCD1Core3 = (bool)cbCCD1Core3.IsChecked,
-                        IsCCD1Core4 = (bool)cbCCD1Core4.IsChecked,
-                        IsCCD1Core5 = (bool)cbCCD1Core5.IsChecked,
-                        IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
-                        IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
-                        IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
+                            IsCCD1Core1 = (bool)cbCCD1Core1.IsChecked,
+                            IsCCD1Core2 = (bool)cbCCD1Core2.IsChecked,
+                            IsCCD1Core3 = (bool)cbCCD1Core3.IsChecked,
+                            IsCCD1Core4 = (bool)cbCCD1Core4.IsChecked,
+                            IsCCD1Core5 = (bool)cbCCD1Core5.IsChecked,
+                            IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
+                            IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
+                            IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
 
-                        IsCCD2Core1 = (bool)cbCCD2Core1.IsChecked,
-                        IsCCD2Core2 = (bool)cbCCD2Core2.IsChecked,
-                        IsCCD2Core3 = (bool)cbCCD2Core3.IsChecked,
-                        IsCCD2Core4 = (bool)cbCCD2Core4.IsChecked,
-                        IsCCD2Core5 = (bool)cbCCD2Core5.IsChecked,
-                        IsCCD2Core6 = (bool)cbCCD2Core6.IsChecked,
-                        IsCCD2Core7 = (bool)cbCCD2Core7.IsChecked,
-                        IsCCD2Core8 = (bool)cbCCD2Core8.IsChecked,
+                            IsCCD2Core1 = (bool)cbCCD2Core1.IsChecked,
+                            IsCCD2Core2 = (bool)cbCCD2Core2.IsChecked,
+                            IsCCD2Core3 = (bool)cbCCD2Core3.IsChecked,
+                            IsCCD2Core4 = (bool)cbCCD2Core4.IsChecked,
+                            IsCCD2Core5 = (bool)cbCCD2Core5.IsChecked,
+                            IsCCD2Core6 = (bool)cbCCD2Core6.IsChecked,
+                            IsCCD2Core7 = (bool)cbCCD2Core7.IsChecked,
+                            IsCCD2Core8 = (bool)cbCCD2Core8.IsChecked,
 
-                        IsAmdOC = (bool)tsAmdOC.IsChecked,
-                        amdClock = (int)nudAmdCpuClk.Value,
-                        amdVID = (int)nudAmdVID.Value,
-                    };
-                    amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
+                            IsAmdOC = (bool)tsAmdOC.IsChecked,
+                            amdClock = (int)nudAmdCpuClk.Value,
+                            amdVID = (int)nudAmdVID.Value,
+                        };
+                        amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
-                    amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+                        amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
 
-                    // Get the names of all the stored presets
-                    IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
+                        // Get the names of all the stored presets
+                        IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
 
-                    cbxPowerPreset.Items.Clear();
+                        cbxPowerPreset.Items.Clear();
 
-                    // Populate a combo box with the preset names
-                    foreach (string presetName in presetNames)
-                    {
-                        cbxPowerPreset.Items.Add(presetName);
+                        // Populate a combo box with the preset names
+                        foreach (string presetName in presetNames)
+                        {
+                            cbxPowerPreset.Items.Add(presetName);
+                        }
+
+                        ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
                     }
-
-                    ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
                 }
-            }
 
-            if (Family.TYPE == Family.ProcessorType.Intel)
-            {
-                if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
+                if (Family.TYPE == Family.ProcessorType.Intel)
                 {
-                    // Save a preset
-                    Preset preset = new Preset
+                    if (tbxPresetName.Text != "" && tbxPresetName.Text != null)
                     {
-                        IntelPL1 = (int)nudIntelPL1.Value,
-                        IntelPL2 = (int)nudIntelPL2.Value,
+                        // Save a preset
+                        Preset preset = new Preset
+                        {
+                            IntelPL1 = (int)nudIntelPL1.Value,
+                            IntelPL2 = (int)nudIntelPL2.Value,
 
-                        rsr = (int)nudRSR.Value,
-                        boost = (int)nudBoost.Value,
-                        imageSharp = (int)nudImageSharp.Value,
-                        isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
-                        isRSR = (bool)cbRSR.IsChecked,
-                        isBoost = (bool)cbBoost.IsChecked,
-                        isAntiLag = (bool)cbAntiLag.IsChecked,
-                        isImageSharp = (bool)cbImageSharp.IsChecked,
-                        isSync = (bool)cbSync.IsChecked,
+                            rsr = (int)nudRSR.Value,
+                            boost = (int)nudBoost.Value,
+                            imageSharp = (int)nudImageSharp.Value,
+                            isRadeonGraphics = (bool)tsRadeonGraph.IsChecked,
+                            isRSR = (bool)cbRSR.IsChecked,
+                            isBoost = (bool)cbBoost.IsChecked,
+                            isAntiLag = (bool)cbAntiLag.IsChecked,
+                            isImageSharp = (bool)cbImageSharp.IsChecked,
+                            isSync = (bool)cbSync.IsChecked,
 
-                        commandValue = getCommandValues(),
+                            commandValue = getCommandValues(),
 
-                        isIntelPL1 = (bool)cbIntelPL1.IsChecked,
-                        isIntelPL2 = (bool)cbIntelPL2.IsChecked,
+                            isIntelPL1 = (bool)cbIntelPL1.IsChecked,
+                            isIntelPL2 = (bool)cbIntelPL2.IsChecked,
 
-                        isNVIDIA = (bool)tsNV.IsChecked,
-                        nvCoreClk = (int)nudNVCore.Value,
-                        nvMemClk = (int)nudNVMem.Value,
-                    };
-                    amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
+                            isNVIDIA = (bool)tsNV.IsChecked,
+                            nvCoreClk = (int)nudNVCore.Value,
+                            nvMemClk = (int)nudNVMem.Value,
+                        };
+                        amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
-                    amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+                        amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
 
-                    // Get the names of all the stored presets
-                    IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
+                        // Get the names of all the stored presets
+                        IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
 
-                    cbxPowerPreset.Items.Clear();
+                        cbxPowerPreset.Items.Clear();
 
-                    // Populate a combo box with the preset names
-                    foreach (string presetName in presetNames)
-                    {
-                        cbxPowerPreset.Items.Add(presetName);
+                        // Populate a combo box with the preset names
+                        foreach (string presetName in presetNames)
+                        {
+                            cbxPowerPreset.Items.Add(presetName);
+                        }
+
+                        ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
                     }
-
-                    ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
                 }
             }
         }
@@ -610,6 +643,30 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         tsAmdOC.IsChecked = myPreset.IsAmdOC;
                         nudAmdCpuClk.Value = myPreset.amdClock;
                         nudAmdVID.Value = myPreset.amdVID;
+
+                        nudSoftMiniGPUClk.Value = myPreset.softMiniGPUClk;
+                        nudSoftMinCPUClk.Value = myPreset.softMinCPUClk;
+                        nudSoftMinFabClk.Value = myPreset.softMinFabClk;
+                        nudSoftMinSoCClk.Value = myPreset.softMinSoCClk;
+                        nudSoftMinDataClk.Value = myPreset.softMinDataClk;
+
+                        nudSoftMaxiGPUClk.Value = myPreset.softMaxiGPUClk;
+                        nudSoftMaxCPUClk.Value = myPreset.softMaxCPUClk;
+                        nudSoftMaxFabClk.Value = myPreset.softMaxFabClk;
+                        nudSoftMaxSoCClk.Value = myPreset.softMaxSoCClk;
+                        nudSoftMaxDataClk.Value = myPreset.softMaxDataClk;
+
+                        cbSoftMiniGPUClk.IsChecked = myPreset.isSoftMiniGPUClk;
+                        cbSoftMinCPUClk.IsChecked = myPreset.isSoftMinCPUClk;
+                        cbSoftMinFabClk.IsChecked = myPreset.isSoftMinFabClk;
+                        cbSoftMinSoCClk.IsChecked = myPreset.isSoftMinSoCClk;
+                        cbSoftMinDataClk.IsChecked = myPreset.isSoftMinDataClk;
+
+                        cbSoftMaxiGPUClk.IsChecked = myPreset.isSoftMaxiGPUClk;
+                        cbSoftMaxCPUClk.IsChecked = myPreset.isSoftMaxCPUClk;
+                        cbSoftMaxFabClk.IsChecked = myPreset.isSoftMaxFabClk;
+                        cbSoftMaxSoCClk.IsChecked = myPreset.isSoftMaxSoCClk;
+                        cbSoftMaxDataClk.IsChecked = myPreset.isSoftMaxDataClk;
                     }
                 }
 
@@ -754,6 +811,24 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (nudAllCO.Value < 0) commandValues = commandValues + $"--set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudAllCO.Value))} ";
                 }
 
+                if (cbSoftMiniGPUClk.IsChecked == true) commandValues = commandValues + $"--min-gfxclk={nudSoftMiniGPUClk.Value} ";
+                if (cbSoftMaxiGPUClk.IsChecked == true) commandValues = commandValues + $"--max-gfxclk={nudSoftMaxiGPUClk.Value} ";
+
+                if (cbSoftMinCPUClk.IsChecked == true) commandValues = commandValues + $"--min-cpuclk={nudSoftMinCPUClk.Value} ";
+                if (cbSoftMaxCPUClk.IsChecked == true) commandValues = commandValues + $"--max-cpuclk={nudSoftMaxCPUClk.Value} ";
+
+                if (cbSoftMinDataClk.IsChecked == true) commandValues = commandValues + $"--min-lclk={nudSoftMinDataClk.Value} ";
+                if (cbSoftMaxDataClk.IsChecked == true) commandValues = commandValues + $"--max-lclk={nudSoftMaxDataClk.Value} ";
+
+                if (cbSoftMinVCNClk.IsChecked == true) commandValues = commandValues + $"--min-vcn={nudSoftMinVCNClk.Value} ";
+                if (cbSoftMaxVCNClk.IsChecked == true) commandValues = commandValues + $"--max-vcn={nudSoftMaxVCNClk.Value} ";
+
+                if (cbSoftMinFabClk.IsChecked == true) commandValues = commandValues + $"--min-fclk-frequency={nudSoftMinFabClk.Value} ";
+                if (cbSoftMaxFabClk.IsChecked == true) commandValues = commandValues + $"--max-fclk-frequency={nudSoftMaxFabClk.Value} ";
+
+                if (cbSoftMinSoCClk.IsChecked == true) commandValues = commandValues + $"--min-socclk-frequency={nudSoftMinSoCClk.Value} ";
+                if (cbSoftMaxSoCClk.IsChecked == true) commandValues = commandValues + $"--max-socclk-frequency={nudSoftMaxSoCClk.Value} ";
+
                 if (cbxBoost.SelectedIndex > 0)
                 {
                     if (cbxBoost.SelectedIndex == 1) commandValues = commandValues + $"--power-saving ";
@@ -815,14 +890,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 6 % 8 & 15) << 20 | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
                 if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 7 % 8 & 15) << 20 | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
 
-                if (cbCCD2Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 0 % 8 & 15) << 20 | ((int)nudCCD2Core1.Value & 0xFFFF)} ";
-                if (cbCCD2Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 1 % 8 & 15) << 20 | ((int)nudCCD2Core2.Value & 0xFFFF)} ";
-                if (cbCCD2Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 2 % 8 & 15) << 20 | ((int)nudCCD2Core3.Value & 0xFFFF)} ";
-                if (cbCCD2Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 3 % 8 & 15) << 20 | ((int)nudCCD2Core4.Value & 0xFFFF)} ";
-                if (cbCCD2Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 4 % 8 & 15) << 20 | ((int)nudCCD2Core5.Value & 0xFFFF)} ";
-                if (cbCCD2Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 5 % 8 & 15) << 20 | ((int)nudCCD2Core6.Value & 0xFFFF)} ";
-                if (cbCCD2Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 6 % 8 & 15) << 20 | ((int)nudCCD2Core7.Value & 0xFFFF)} ";
-                if (cbCCD2Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 7 % 8 & 15) << 20 | ((int)nudCCD2Core8.Value & 0xFFFF)} ";
+                if (cbCCD2Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 0 % 8 & 15) << 20 | ((int)nudCCD2Core1.Value & 0xFFFF)} ";
+                if (cbCCD2Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 1 % 8 & 15) << 20 | ((int)nudCCD2Core2.Value & 0xFFFF)} ";
+                if (cbCCD2Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 2 % 8 & 15) << 20 | ((int)nudCCD2Core3.Value & 0xFFFF)} ";
+                if (cbCCD2Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 3 % 8 & 15) << 20 | ((int)nudCCD2Core4.Value & 0xFFFF)} ";
+                if (cbCCD2Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 4 % 8 & 15) << 20 | ((int)nudCCD2Core5.Value & 0xFFFF)} ";
+                if (cbCCD2Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 5 % 8 & 15) << 20 | ((int)nudCCD2Core6.Value & 0xFFFF)} ";
+                if (cbCCD2Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 6 % 8 & 15) << 20 | ((int)nudCCD2Core7.Value & 0xFFFF)} ";
+                if (cbCCD2Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 7 % 8 & 15) << 20 | ((int)nudCCD2Core8.Value & 0xFFFF)} ";
 
                 if (tsAmdOC.IsChecked == true)
                 {

@@ -33,7 +33,7 @@ namespace RyzenSmu
             if (Family.FAM == Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Lucienne || Family.FAM == Family.RyzenFamily.Cezanne_Barcelo) Socket_FP6_AM4();
             if (Family.FAM == Family.RyzenFamily.VanGogh) Socket_FF3();
             if (Family.FAM == Family.RyzenFamily.Mendocino || Family.FAM == Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.PhoenixPoint) Socket_FT6_FP7_FP8();
-            if (Family.FAM == Family.RyzenFamily.Raphael) Socket_AM5_V1();
+            if (Family.FAM == Family.RyzenFamily.Raphael || Family.FAM == Family.RyzenFamily.DragonRange) Socket_AM5_V1();
         }
 
         private static void Socket_FT5_FP5_AM4()
@@ -50,12 +50,12 @@ namespace RyzenSmu
             {
                 // Store the commands
                 ("stapm-limit",true, 0x1a), // Use MP1 address
-                ("stapm-time",true , 0x1e), // Use RSMU address
+                ("stapm-time",true , 0x1e), 
                 ("fast-limit",true , 0x1b),
                 ("slow-limit",true , 0x1c),
                 ("slow-time",true , 0x1d),
                 ("tctl-temp",true , 0x1f),
-                ("cHTC-temp",false , 0x56),
+                ("cHTC-temp",false , 0x56), // Use RSMU address
                 ("vrm-current",true , 0x20),
                 ("vrmmax-current",true , 0x22),
                 ("vrmsoc-current",true , 0x21),

@@ -568,7 +568,236 @@
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
+                    <ui:CardExpander Name="sdAmdSoftClk" Visibility="Collapsed"
+            IsEnabled="True"
+            IsExpanded="False"
+            Icon="Pulse20" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="APU Soft Clock Limit Tuning" />
+                                    <TextBlock
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                            Text="Provides the ability to set various soft clock speed targets on select APUs."/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum iGPU Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the iGPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
 
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMiniGPUClk"/>
+                                    <ui:NumberBox Name="nudSoftMiniGPUClk" Text="{Binding ElementName=sdSoftMiniGPUClk, Path=Value}" Value="{Binding ElementName=sdSoftMiniGPUClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMiniGPUClk" Value="{Binding ElementName=nudSoftMiniGPUClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum iGPU Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the iGPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMaxiGPUClk"/>
+                                    <ui:NumberBox Name="nudSoftMaxiGPUClk" Text="{Binding ElementName=sdSoftMaxiGPUClk, Path=Value}" Value="{Binding ElementName=sdSoftMaxiGPUClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMaxiGPUClk" Value="{Binding ElementName=nudSoftMaxiGPUClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum CPU Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the CPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMinCPUClk"/>
+                                    <ui:NumberBox Name="nudSoftMinCPUClk" Text="{Binding ElementName=sdSoftMinCPUClk, Path=Value}" Value="{Binding ElementName=sdSoftMinCPUClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMinCPUClk" Value="{Binding ElementName=nudSoftMinCPUClk, Path=Value}" Maximum="4200" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum CPU Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the CPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMaxCPUClk"/>
+                                    <ui:NumberBox Name="nudSoftMaxCPUClk" Text="{Binding ElementName=sdSoftMaxCPUClk, Path=Value}" Value="{Binding ElementName=sdSoftMaxCPUClk, Path=Value}" Max="4200" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMaxCPUClk" Value="{Binding ElementName=nudSoftMaxCPUClk, Path=Value}" Maximum="4200" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum Data Launch Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the Data Launch Clock. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMinDataClk"/>
+                                    <ui:NumberBox Name="nudSoftMinDataClk" Text="{Binding ElementName=sdSoftMinDataClk, Path=Value}" Value="{Binding ElementName=sdSoftMinDataClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMinDataClk" Value="{Binding ElementName=nudSoftMinDataClk, Path=Value}" Maximum="4200" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum Data Launch Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the Data Launch Clock. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMaxDataClk"/>
+                                    <ui:NumberBox Name="nudSoftMaxDataClk" Text="{Binding ElementName=sdSoftMaxDataClk, Path=Value}" Value="{Binding ElementName=sdSoftMaxDataClk, Path=Value}" Max="4200" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMaxDataClk" Value="{Binding ElementName=nudSoftMaxDataClk, Path=Value}" Maximum="4200" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum Infinity Fabric Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the Infinity Fabric. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMinFabClk"/>
+                                    <ui:NumberBox Name="nudSoftMinFabClk" Text="{Binding ElementName=sdSoftMinFabClk, Path=Value}" Value="{Binding ElementName=sdSoftMinFabClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMinFabClk" Value="{Binding ElementName=nudSoftMinFabClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum Infinity Fabric Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the Infinity Fabric. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMaxFabClk"/>
+                                    <ui:NumberBox Name="nudSoftMaxFabClk" Text="{Binding ElementName=sdSoftMaxFabClk, Path=Value}" Value="{Binding ElementName=sdSoftMaxFabClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMaxFabClk" Value="{Binding ElementName=nudSoftMaxFabClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum SoC Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the SoC. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMinSoCClk"/>
+                                    <ui:NumberBox Name="nudSoftMinSoCClk" Text="{Binding ElementName=sdSoftMinSoCClk, Path=Value}" Value="{Binding ElementName=sdSoftMinSoCClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMinSoCClk" Value="{Binding ElementName=nudSoftMinSoCClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum SoC Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the SoC. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMaxSoCClk"/>
+                                    <ui:NumberBox Name="nudSoftMaxSoCClk" Text="{Binding ElementName=sdSoftMaxSoCClk, Path=Value}" Value="{Binding ElementName=sdSoftMaxSoCClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMaxSoCClk" Value="{Binding ElementName=nudSoftMaxSoCClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum VCN Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the Video Core Next. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMinVCNClk"/>
+                                    <ui:NumberBox Name="nudSoftMinVCNClk" Text="{Binding ElementName=sdSoftMinVCNClk, Path=Value}" Value="{Binding ElementName=sdSoftMinVCNClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMinVCNClk" Value="{Binding ElementName=nudSoftMinVCNClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum VCN Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the Video Core Next. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbSoftMaxVCNClk"/>
+                                    <ui:NumberBox Name="nudSoftMaxVCNClk" Text="{Binding ElementName=sdSoftMaxVCNClk, Path=Value}" Value="{Binding ElementName=sdSoftMaxVCNClk, Path=Value}" Max="2000" Min="400" Grid.Column="1" Step="25" IntegersOnly="True"/>
+                                    <Slider Name="sdSoftMaxVCNClk" Value="{Binding ElementName=nudSoftMaxVCNClk, Path=Value}" Maximum="2000" Minimum="400" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
                     <ui:CardExpander Name="sdADLX"
             IsEnabled="True"
             IsExpanded="False"
