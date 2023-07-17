@@ -60,8 +60,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             {
                                 //Convert value of select cli argument to int
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
-
-                                SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
+                                if(ryzenAdjCommandValue == 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
+                                else SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
                                 Task.Delay(2);
                             }
                         }

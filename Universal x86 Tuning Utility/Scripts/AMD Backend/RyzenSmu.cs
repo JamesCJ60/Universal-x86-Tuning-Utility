@@ -128,9 +128,9 @@ namespace RyzenSmu
                 ("set-coper",true , 0x54),
                 ("set-cogfx",true , 0x64),
                 ("set-cogfx",false , 0x57),
-                ("enable-oc",false , 0x1d),
+                ("enable-oc",false , 0x17),
                 ("enable-oc",true , 0x2f),
-                ("disable-oc",false , 0x1d),
+                ("disable-oc",false , 0x18),
                 ("disable-oc",true , 0x30)
             };
         }
