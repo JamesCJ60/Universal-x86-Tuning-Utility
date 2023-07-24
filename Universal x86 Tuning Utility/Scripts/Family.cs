@@ -39,6 +39,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
             GraniteRidge,
             FireRange,
             StrixPoint,
+            StrixPoint2,
             Sarlak,
         }
 
@@ -133,7 +134,14 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     if (CPUModel == 116) FAM = RyzenFamily.PhoenixPoint;
                 }
 
-                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael) TYPE = ProcessorType.Amd_Desktop_Cpu;
+                // Zen5 - Zen6
+                if (CPUFamily == 26)
+                {
+                    if (CPUModel == 32) FAM = RyzenFamily.StrixPoint;
+                    else FAM = RyzenFamily.GraniteRidge;
+                }
+
+                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
                 else if (FAM == RyzenFamily.DragonRange) TYPE = ProcessorType.Amd_Desktop_Cpu;
                 else TYPE = ProcessorType.Amd_Apu;
 

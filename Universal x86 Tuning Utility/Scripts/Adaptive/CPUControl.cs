@@ -65,10 +65,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
 
                     else if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
                     {
-                        _TDP = _newPowerLimit;
                         // Apply new power and temp limit
-
-                        cpuCommand = $"--tctl-temp={MaxTemperature} --ppt-limit={_TDP} --edc-limit={(_TDP * 1.33)} --tdc-limit={(_TDP * 1.33)} ";
+                        cpuCommand = $"--tctl-temp={MaxTemperature} --ppt-limit={_TDP} --edc-limit={(int)(_TDP * 1.33)} --tdc-limit={(int)(_TDP * 1.33)} ";
                         _lastPowerLimit = _newPowerLimit;
                         iGPUControl._currentPowerLimit = _newPowerLimit;
                     }

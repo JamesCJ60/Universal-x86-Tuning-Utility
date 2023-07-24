@@ -135,31 +135,31 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         {
                             if (cpuName.Contains("E"))
                             {
-                                EcoPreset = "--tctl-temp=95 --ppt-limit=45 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                PerformancePreset = "--tctl-temp=95 --ppt-limit=95 --edc-limit=122 --tdc-limit=122 ";
-                                ExtremePreset = "--tctl-temp=95 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
+                                EcoPreset = "--tctl-temp=95 --ppt-limit=45000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                PerformancePreset = "--tctl-temp=95 --ppt-limit=95000 --edc-limit=122000 --tdc-limit=122000 ";
+                                ExtremePreset = "--tctl-temp=95 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
                             }
                             else if (cpuName.Contains("X3D"))
                             {
-                                EcoPreset = "--tctl-temp=85 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=85 --ppt-limit=85 --edc-limit=120 --tdc-limit=120 ";
-                                PerformancePreset = "--tctl-temp=85 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
-                                ExtremePreset = "--tctl-temp=85 --ppt-limit=140 --edc-limit=190 --tdc-limit=190 ";
+                                EcoPreset = "--tctl-temp=85 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=85 --ppt-limit=85000 --edc-limit=120000 --tdc-limit=120000 ";
+                                PerformancePreset = "--tctl-temp=85 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
+                                ExtremePreset = "--tctl-temp=85 --ppt-limit=140000 --edc-limit=190000 --tdc-limit=190000 ";
                             }
                             else if (cpuName.Contains("X") && CpuName[2].Contains("9"))
                             {
-                                EcoPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=95 --ppt-limit=95 --edc-limit=130 --tdc-limit=130 ";
-                                PerformancePreset = "--tctl-temp=95 --ppt-limit=125 --edc-limit=142 --tdc-limit=142 ";
-                                ExtremePreset = "--tctl-temp=95 --ppt-limit=170 --edc-limit=230 --tdc-limit=230 ";
+                                EcoPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=95 --ppt-limit=95000 --edc-limit=130000 --tdc-limit=130000 ";
+                                PerformancePreset = "--tctl-temp=95 --ppt-limit=125000 --edc-limit=142 --tdc-limit=142000 ";
+                                ExtremePreset = "--tctl-temp=95 --ppt-limit=170000 --edc-limit=230000 --tdc-limit=230000 ";
                             }
                             else if (cpuName.Contains("X"))
                             {
-                                EcoPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=95 --ppt-limit=88 --edc-limit=125 --tdc-limit=125 ";
-                                PerformancePreset = "--tctl-temp=95 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
-                                ExtremePreset = "--tctl-temp=95 --ppt-limit=140 --edc-limit=190 --tdc-limit=190 ";
+                                EcoPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=95 --ppt-limit=88000 --edc-limit=125000 --tdc-limit=125000 ";
+                                PerformancePreset = "--tctl-temp=95 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
+                                ExtremePreset = "--tctl-temp=95 --ppt-limit=140000 --edc-limit=190000 --tdc-limit=190000 ";
                             }
                             else
                             {
@@ -175,38 +175,38 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                             if (cpuName.Contains("E"))
                             {
-                                EcoPreset = "--tctl-temp=95 --ppt-limit=45 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                PerformancePreset = "--tctl-temp=95 --ppt-limit=95 --edc-limit=122 --tdc-limit=122 ";
-                                ExtremePreset = "--tctl-temp=95 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
+                                EcoPreset = "--tctl-temp=95 --ppt-limit=45000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                PerformancePreset = "--tctl-temp=95 --ppt-limit=95000 --edc-limit=122000 --tdc-limit=122000 ";
+                                ExtremePreset = "--tctl-temp=95 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
                             }
                             else if (cpuName.Contains("X3D"))
                             {
-                                EcoPreset = "--tctl-temp=85 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=85 --ppt-limit=85 --edc-limit=120 --tdc-limit=120 ";
-                                PerformancePreset = "--tctl-temp=85 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
-                                ExtremePreset = "--tctl-temp=85 --ppt-limit=140 --edc-limit=190 --tdc-limit=190 ";
+                                EcoPreset = "--tctl-temp=85 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=85 --ppt-limit=85000 --edc-limit=120000 --tdc-limit=120000 ";
+                                PerformancePreset = "--tctl-temp=85 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
+                                ExtremePreset = "--tctl-temp=85 --ppt-limit=140000 --edc-limit=190000 --tdc-limit=190000 ";
                             }
                             else if (cpuName.Contains("X") && CpuName[2].Contains("9"))
                             {
-                                EcoPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=95 --ppt-limit=105 --edc-limit=145 --tdc-limit=145 ";
-                                PerformancePreset = "--tctl-temp=95 --ppt-limit=145 --edc-limit=210 --tdc-limit=210 ";
-                                ExtremePreset = "--tctl-temp=95 --ppt-limit=230 --edc-limit=310 --tdc-limit=310 ";
+                                EcoPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=95 --ppt-limit=105000 --edc-limit=145000 --tdc-limit=145000 ";
+                                PerformancePreset = "--tctl-temp=95 --ppt-limit=145000 --edc-limit=210000 --tdc-limit=210000 ";
+                                ExtremePreset = "--tctl-temp=95 --ppt-limit=230000 --edc-limit=310000 --tdc-limit=310000 ";
                             }
                             else if (cpuName.Contains("X"))
                             {
-                                EcoPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=95 --ppt-limit=88 --edc-limit=125 --tdc-limit=125 ";
-                                PerformancePreset = "--tctl-temp=95 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
-                                ExtremePreset = "--tctl-temp=95 --ppt-limit=140 --edc-limit=190 --tdc-limit=190 ";
+                                EcoPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=95 --ppt-limit=88000 --edc-limit=125000 --tdc-limit=125000 ";
+                                PerformancePreset = "--tctl-temp=95 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
+                                ExtremePreset = "--tctl-temp=95 --ppt-limit=140000 --edc-limit=190000 --tdc-limit=190000 ";
                             }
                             else
                             {
-                                EcoPreset = "--tctl-temp=95 --ppt-limit=45 --edc-limit=90 --tdc-limit=90 ";
-                                BalPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                PerformancePreset = "--tctl-temp=95 --ppt-limit=88 --edc-limit=125 --tdc-limit=125 ";
-                                ExtremePreset = "--tctl-temp=95 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
+                                EcoPreset = "--tctl-temp=95 --ppt-limit=45000 --edc-limit=90000 --tdc-limit=90000 ";
+                                BalPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                PerformancePreset = "--tctl-temp=95 --ppt-limit=88000 --edc-limit=125000 --tdc-limit=125000 ";
+                                ExtremePreset = "--tctl-temp=95 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
                             }
                         }
                     }

@@ -870,10 +870,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
             {
-                if (cbCPUTemp.IsChecked == true) commandValues = commandValues + $"--tctl-limit={nudCPUTemp.Value} ";
-                if (cbPPT.IsChecked == true) commandValues = commandValues + $"--ppt-limit={nudPPT.Value} ";
-                if (cbTDC.IsChecked == true) commandValues = commandValues + $"--tdc-limit={nudTDC.Value} ";
-                if (cbEDC.IsChecked == true) commandValues = commandValues + $"--edc-limit={nudEDC.Value} ";
+                if (cbCPUTemp.IsChecked == true) commandValues = commandValues + $"--tctl-limit={nudCPUTemp.Value * 1000} ";
+                if (cbPPT.IsChecked == true) commandValues = commandValues + $"--ppt-limit={nudPPT.Value * 1000} ";
+                if (cbTDC.IsChecked == true) commandValues = commandValues + $"--tdc-limit={nudTDC.Value * 1000} ";
+                if (cbEDC.IsChecked == true) commandValues = commandValues + $"--edc-limit={nudEDC.Value * 1000} ";
                 if (cbPBOScaler.IsChecked == true) commandValues = commandValues + $"--pbo-scalar={nudPBOScaler.Value * 100} ";
                 if (cbAllCO.IsChecked == true)
                 {
