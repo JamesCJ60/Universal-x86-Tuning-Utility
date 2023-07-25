@@ -130,8 +130,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 capacity = capacity / 1024 / 1024 / 1024;
 
                 string DDRType = "";
-                if (type == 26) DDRType = "DDR4";
+                if (type == 20) DDRType = "DDR";
+                else if (type == 21) DDRType = "DDR2";
+                else if (type == 24) DDRType = "DDR3";
+                else if (type == 26) DDRType = "DDR4";
                 else if (type == 30) DDRType = "LPDDR4";
+                else if (type == 34) DDRType = "DDR5";
                 else if (type == 35) DDRType = "LPDDR5";
                 else DDRType = $"Unknown ({type})";
 
