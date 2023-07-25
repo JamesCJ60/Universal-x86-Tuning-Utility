@@ -67,6 +67,10 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     _navigationService.Navigate(typeof(Views.Pages.Automations));
                     return;
 
+                case "info":
+                    _navigationService.Navigate(typeof(Views.Pages.SystemInfo));
+                    return;
+
                 case "help":
                     Process.Start(new ProcessStartInfo("http://www.discord.gg/3EkYMZGJwq") { UseShellExecute = true });
                     return;

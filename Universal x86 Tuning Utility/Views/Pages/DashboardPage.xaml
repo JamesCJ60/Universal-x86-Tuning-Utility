@@ -168,9 +168,8 @@
                 Grid.Column="1"
                 Margin="4,8,4,0"
                 Command="{Binding ViewModel.NavigateCommand}"
-                CommandParameter="navigate_to_icons"
-                Icon="Info20"
-                IsEnabled="False">
+                CommandParameter="info"
+                Icon="Info20">
                 <StackPanel>
                     <TextBlock
                         Margin="0"
