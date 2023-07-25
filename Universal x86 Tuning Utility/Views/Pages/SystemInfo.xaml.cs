@@ -36,8 +36,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             getCPUInfo();
             getRAMInfo();
             getDeviceInfo();
-            if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) getBatteryInfo();
-            else sdBattery.Visibility = Visibility.Collapsed;
+            if (SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) getBatteryInfo();
+            else
+            {
+                sdBattery.Visibility = Visibility.Collapsed;
+                sdRAM.Margin = new Thickness(0, 9, 15, 15);
+            }
         }
 
         private void mainScroll_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -78,8 +82,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         tbCodename.Visibility = Visibility.Collapsed;
                         tbCode.Visibility = Visibility.Collapsed;
-                        sdRAM.Margin = new Thickness(0, 9, 15, 15);
                     }
+
                     tbProducer.Text = manufacturer;
                     tbCores.Text = numberOfCores;
                     tbThreads.Text = numberOfLogicalProcessors;
@@ -137,6 +141,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     width = width + Convert.ToInt32(queryObj["DataWidth"]);
                     slots++;
                 }
+
+                if (width > 128 && Family.FAM < Family.RyzenFamily.Sarlak && Family.TYPE != Family.ProcessorType.Intel) width = 128;
+                if (width > 64 && Family.FAM == Family.RyzenFamily.Mendocino) width = 64;
 
                 capacity = capacity / 1024 / 1024 / 1024;
 
