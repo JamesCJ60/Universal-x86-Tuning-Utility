@@ -595,39 +595,97 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         public static string InstructionSets()
         {
             string list = "";
-            if (Avx.IsSupported) list = list + "AVX";
-            if (Avx2.IsSupported) list = list + ", AVX2";
-            if (CheckAVX512Support()) list = list + ", AVX512";
+            if (IsMMXSupported()) list = list + "MMX";
             if (Sse.IsSupported) list = list + ", SSE";
             if (Sse2.IsSupported) list = list + ", SSE2";
             if (Sse3.IsSupported) list = list + ", SSE3";
+            if (Ssse3.IsSupported) list = list + ", SSSE3";
             if (Sse41.IsSupported) list = list + ", SSE4.1";
             if (Sse42.IsSupported) list = list + ", SSE4.2";
-            if (Ssse3.IsSupported) list = list + ", SSSE3";
+            if (IsEM64TSupported()) list = list + ", EM64T";
+            if(Environment.Is64BitProcess) list = list + ", x86-64";
+            if (IsVirtualizationEnabled() && Family.TYPE == Family.ProcessorType.Intel) list = list + ", VT-x";
+            else if (IsVirtualizationEnabled()) list = list + ", AMD-V";
+            if (Aes.IsSupported) list = list + ", AES";
+            if (Avx.IsSupported) list = list + ", AVX";
+            if (Avx2.IsSupported) list = list + ", AVX2";
+            if (CheckAVX512Support()) list = list + ", AVX512";
             if (Fma.IsSupported) list = list + ", FMA3";
+
+            string result = RemoveCommaSpaceFromStart(list);
+            list = result;
+
             return list;
+        }
+
+        private static string RemoveCommaSpaceFromStart(string input)
+        {
+            string prefixToRemove = ", ";
+            if (input.StartsWith(prefixToRemove))
+            {
+                input = input.Remove(0, prefixToRemove.Length);
+            }
+            return input;
+        }
+
+        private static bool IsVirtualizationEnabled()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
+
+                foreach (ManagementObject queryObj in searcher.Get())
+                {
+                    int? virtualizationFirmwareEnabled = queryObj["VirtualizationFirmwareEnabled"] as int?;
+
+                    // Check if virtualization is enabled
+                    if (virtualizationFirmwareEnabled == 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (ManagementException ex)
+            {
+                
+            }
+
+            return false;
+        }
+
+        public static bool IsEM64TSupported()
+        {
+            ManagementObject mo;
+            mo = new ManagementObject("Win32_Processor.DeviceID='CPU0'");
+            ushort i = (ushort)mo["Architecture"];
+
+            return i == 9;
         }
 
         private static bool CheckAVX512Support()
         {
             try
             {
-                // Check for AVX-512 support using CPUID
-                int eax = 0, ebx = 0, ecx = 0, edx = 0;
-                const int leafNumber = 7;
-                const int subleafNumber = 0;
-                const int featureInfoBit = 16; // AVX-512 Foundation is bit 16
-
-                // Call CPUID with leaf 7 and subleaf 0
-                NativeMethods.Cpuid(leafNumber, subleafNumber, ref eax, ref ebx, ref ecx, ref edx);
-
-                // Check if AVX-512 Foundation feature bit is set
-                return (ecx & (1 << featureInfoBit)) != 0;
+                return NativeMethods.IsProcessorFeaturePresent(NativeMethods.PF_AVX512F_INSTRUCTIONS_AVAILABLE);
             }
             catch
             {
                 // If there's an exception during CPUID call, AVX-512 is not supported
                 return false;
+            }
+        }
+
+        private static bool IsMMXSupported()
+        {
+            if (Environment.Is64BitProcess)
+            {
+                // For 64-bit processes, MMX is always supported on Windows.
+                return true;
+            }
+            else
+            {
+                // For 32-bit processes, check for MMX support on Windows.
+                return NativeMethods.IsProcessorFeaturePresent(NativeMethods.PF_MMX_INSTRUCTIONS_AVAILABLE);
             }
         }
     }
@@ -637,5 +695,41 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         // Import the CPUID intrinsic (Intel x86 instruction)
         [System.Runtime.InteropServices.DllImport("cpuid_x64.dll")]
         public static extern void Cpuid(int leafNumber, int subleafNumber, ref int eax, ref int ebx, ref int ecx, ref int edx);
+
+        public const int PF_MMX_INSTRUCTIONS_AVAILABLE = 3;
+        public const int PF_AVX512F_INSTRUCTIONS_AVAILABLE = 49;
+
+        // Import the GetSystemInfo function (Windows API) to check MMX support.
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        public static extern void GetSystemInfo(out SYSTEM_INFO lpSystemInfo);
+
+        // Helper struct for GetSystemInfo function.
+        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+        public struct SYSTEM_INFO
+        {
+            public ushort wProcessorArchitecture;
+            public ushort wReserved;
+            public uint dwPageSize;
+            public System.IntPtr lpMinimumApplicationAddress;
+            public System.IntPtr lpMaximumApplicationAddress;
+            public System.IntPtr dwActiveProcessorMask;
+            public uint dwNumberOfProcessors;
+            public uint dwProcessorType;
+            public uint dwAllocationGranularity;
+            public ushort wProcessorLevel;
+            public ushort wProcessorRevision;
+        }
+
+        // Helper method to check MMX support on Windows.
+        public static bool IsProcessorFeaturePresent(int processorFeature)
+        {
+            GetSystemInfo(out SYSTEM_INFO sysInfo);
+            return (sysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL ||
+                    sysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) &&
+                   (sysInfo.wProcessorLevel & processorFeature) != 0;
+        }
+
+        private const ushort PROCESSOR_ARCHITECTURE_INTEL = 0;
+        private const ushort PROCESSOR_ARCHITECTURE_AMD64 = 9;
     }
 }
