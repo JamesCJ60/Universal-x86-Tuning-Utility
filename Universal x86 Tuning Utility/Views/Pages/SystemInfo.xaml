@@ -81,6 +81,7 @@
                                 <StackPanel Margin="24,0,12,0" Width="80">
                                     <TextBlock FontWeight="DemiBold">Processor</TextBlock>
                                     <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Producer</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0" Name="tbCode">Codename</TextBlock>
                                     <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Caption</TextBlock>
                                     <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Cores</TextBlock>
                                     <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Threads</TextBlock>
@@ -93,6 +94,7 @@
                                 <StackPanel>
                                     <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbProcessor"></TextBlock>
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbProducer"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbCodename"></TextBlock>
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbCaption"></TextBlock>
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbCores"></TextBlock>
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbThreads"></TextBlock>

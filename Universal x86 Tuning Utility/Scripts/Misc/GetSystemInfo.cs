@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
+using static Universal_x86_Tuning_Utility.Scripts.Family;
 
 namespace Universal_x86_Tuning_Utility.Scripts.Misc
 {
@@ -590,6 +591,89 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             {
                 return key?.GetValue("ProductName")?.ToString();
             }
+        }
+
+        public static string Codename()
+        {
+            string cpuName = GetCPUName();
+            if (Family.TYPE == Family.ProcessorType.Intel)
+            {
+                if (cpuName.Contains("6th")) return "Skylake";
+                if (cpuName.Contains("7th")) return "Kaby Lake";
+                if (cpuName.Contains("8th") && cpuName.Contains("G")) return "Kaby Lake";
+                else if (cpuName.Contains("8121U") || cpuName.Contains("8114Y")) return "Cannon Lake";
+                else if (cpuName.Contains("8th")) return "Coffee Lake";
+                if (cpuName.Contains("9th")) return "Coffee Lake";
+                if (cpuName.Contains("10th") && cpuName.Contains("G")) return "Ice Lake";
+                else if (cpuName.Contains("10th")) return "Comet Lake";
+                if (cpuName.Contains("11th") && cpuName.Contains("G") || cpuName.Contains("11th") && cpuName.Contains("U") || cpuName.Contains("11th") && cpuName.Contains("H") || cpuName.Contains("11th") && cpuName.Contains("KB")) return "Tiger Lake";
+                else if (cpuName.Contains("11th")) return "Rocket Lake";
+                if (cpuName.Contains("12th")) return "Alder Lake";
+                if (cpuName.Contains("13th") || cpuName.Contains("Core") && cpuName.Contains("100") && !cpuName.Contains("th")) return "Raptor Lake";
+                if (cpuName.Contains("Core") && cpuName.Contains("Ultra") && cpuName.Contains("100")) return "Meteor Lake";
+            }
+            else
+            {
+                switch (Family.FAM)
+                {
+                    case RyzenFamily.SummitRidge:
+                        return "Summit Ridge";
+                    case RyzenFamily.PinnacleRidge:
+                        return "Pinnacle Ridge";
+                    case RyzenFamily.RavenRidge:
+                        return "Raven Ridge";
+                    case RyzenFamily.Dali:
+                        return "Dali";
+                    case RyzenFamily.Pollock:
+                        return "Pollock";
+                    case RyzenFamily.Picasso:
+                        return "Picasso";
+                    case RyzenFamily.FireFlight:
+                        return "Fire Flight";
+                    case RyzenFamily.Matisse:
+                        return "Matisse";
+                    case RyzenFamily.Renoir:
+                        return "Renoir";
+                    case RyzenFamily.Lucienne:
+                        return "Lucienne";
+                    case RyzenFamily.VanGogh:
+                        return "Van Gogh";
+                    case RyzenFamily.Mendocino:
+                        return "Mendocino";
+                    case RyzenFamily.Vermeer:
+                        return "Vermeer";
+                    case RyzenFamily.Cezanne_Barcelo:
+                        if(cpuName.Contains("25") || cpuName.Contains("75") || cpuName.Contains("30")) return "Barcelo";
+                        else return "Cezanne";
+                    case RyzenFamily.Rembrandt:
+                        return "Rembrandt";
+                    case RyzenFamily.Raphael:
+                        return "Raphael";
+                    case RyzenFamily.DragonRange:
+                        return "Dragon Range";
+                    case RyzenFamily.PhoenixPoint:
+                        return "Phoenix Point";
+                    case RyzenFamily.PhoenixPoint2:
+                        return "Phoenix Point 2";
+                    case RyzenFamily.HawkPoint:
+                        return "Hawk Point";
+                    case RyzenFamily.SonomaValley:
+                        return "Sonoma Valley";
+                    case RyzenFamily.GraniteRidge:
+                        return "Granite Ridge";
+                    case RyzenFamily.FireRange:
+                        return "Fire Range";
+                    case RyzenFamily.StrixPoint:
+                        return "Strix Point";
+                    case RyzenFamily.StrixPoint2:
+                        return "Strix Point 2";
+                    case RyzenFamily.Sarlak:
+                        return "Sarlak";
+                    default:
+                        return "";
+                }
+            }
+            return "";
         }
 
         public static string InstructionSets()

@@ -72,6 +72,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                     tbProcessor.Text = name;
                     tbCaption.Text = description;
+                    string codeName = GetSystemInfo.Codename();
+                    if(codeName != "") tbCodename.Text = codeName;
+                    else
+                    {
+                        tbCodename.Visibility = Visibility.Collapsed;
+                        tbCode.Visibility = Visibility.Collapsed;
+                    }
                     tbProducer.Text = manufacturer;
                     tbCores.Text = numberOfCores;
                     tbThreads.Text = numberOfLogicalProcessors;
