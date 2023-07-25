@@ -144,26 +144,26 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             getBatTempData();
         }
 
-        private async void updateDownloads()
-        {
-            try
-            {
-                if (App.IsInternetAvailable())
-                {
-                    string owner = "JamesCJ60";
-                    string repo = "Universal-x86-Tuning-Utility";
+        //private async void updateDownloads()
+        //{
+        //    try
+        //    {
+        //        if (App.IsInternetAvailable())
+        //        {
+        //            string owner = "JamesCJ60";
+        //            string repo = "Universal-x86-Tuning-Utility";
 
-                    int downloadCount = await GetGitHubDownloadCount(owner, repo);
-                    if (downloadCount > 100000000) ViewModel.Downloads = $"Downloads: {((downloadCount / 1000) / 1000).ToString("#.#")}m";
-                    else if (downloadCount > 1000) ViewModel.Downloads = $"Downloads: {(downloadCount / 1000).ToString("#.#")}k";
-                    else ViewModel.Downloads = $"Downloads: {downloadCount}";
+        //            int downloadCount = await GetGitHubDownloadCount(owner, repo);
+        //            if (downloadCount > 100000000) ViewModel.Downloads = $"Downloads: {((downloadCount / 1000) / 1000).ToString("#.#")}m";
+        //            else if (downloadCount > 1000) ViewModel.Downloads = $"Downloads: {(downloadCount / 1000).ToString("#.#")}k";
+        //            else ViewModel.Downloads = $"Downloads: {downloadCount}";
 
-                    ViewModel.IsDownloads = true;
-                }
-                else ViewModel.IsDownloads = false;
-            }
-            catch (Exception ex) { ViewModel.IsDownloads = false; }
-        }
+        //            ViewModel.IsDownloads = true;
+        //        }
+        //        else ViewModel.IsDownloads = false;
+        //    }
+        //    catch (Exception ex) { ViewModel.IsDownloads = false; }
+        //}
 
         private async void AutoReapply_Tick(object sender, EventArgs e)
         {
@@ -237,7 +237,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             {
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.ShowInTaskbar = true;
-                updateDownloads();
+                //updateDownloads();
             }
 
             Garbage.Garbage_Collect();
@@ -354,7 +354,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             Fan_Control.disableFanControl();
         }
 
-        static async Task<int> GetGitHubDownloadCount(string owner, string repo)
+       /* static async Task<int> GetGitHubDownloadCount(string owner, string repo)
         {
             using (var client = new HttpClient())
             {
@@ -383,11 +383,11 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
                 return downloadCount;
             }
-        }
+        } */
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            updateDownloads();
+            //updateDownloads();
             if (Settings.Default.StartMini == true) { this.WindowState = WindowState.Minimized; }
             else
             {

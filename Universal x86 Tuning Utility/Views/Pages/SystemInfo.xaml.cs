@@ -152,15 +152,21 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         }
         private void getBatteryInfo()
         {
-            tbHealth.Text = $"{(GetSystemInfo.GetBatteryHealth() * 100).ToString("0.##")}%";
-            tbCycle.Text = $"{GetSystemInfo.GetBatteryCycle()}";
-            tbCapcity.Text = $"Full Charge: {GetSystemInfo.ReadFullChargeCapacity()} mAh | Design: {GetSystemInfo.ReadDesignCapacity()} mAh";
+            try
+            {
+                tbHealth.Text = $"{(GetSystemInfo.GetBatteryHealth() * 100).ToString("0.##")}%";
+                tbCycle.Text = $"{GetSystemInfo.GetBatteryCycle()}";
+                tbCapcity.Text = $"Full Charge: {GetSystemInfo.ReadFullChargeCapacity()} mAh | Design: {GetSystemInfo.ReadDesignCapacity()} mAh";
 
-            tbChargeRate.Text = $"{(GetSystemInfo.GetBatteryRate() / 1000).ToString("0.##")}W";
-            DispatcherTimer bat = new DispatcherTimer();
-            bat.Interval = TimeSpan.FromSeconds(2);
-            bat.Tick += Bat_Tick;
-            bat.Start();
+                tbChargeRate.Text = $"{(GetSystemInfo.GetBatteryRate() / 1000).ToString("0.##")}W";
+                DispatcherTimer bat = new DispatcherTimer();
+                bat.Interval = TimeSpan.FromSeconds(2);
+                bat.Tick += Bat_Tick;
+                bat.Start();
+            } catch
+            {
+                if(sdBattery.Visibility != Visibility.Collapsed) sdBattery.Visibility = Visibility.Collapsed;
+            }
         }
 
         private async void Bat_Tick(object sender, EventArgs e)
@@ -168,10 +174,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             if (Family.TYPE == Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 5 || Family.TYPE != Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 6)
             {
                 decimal batRate = 0;
-                await Task.Run(() =>
-                {
-                    batRate = GetSystemInfo.GetBatteryRate() / 1000;
-                });
+                await Task.Run(() => batRate = GetSystemInfo.GetBatteryRate() / 1000);
 
                 tbChargeRate.Text = $"{batRate.ToString("0.##")}W";
             } 
