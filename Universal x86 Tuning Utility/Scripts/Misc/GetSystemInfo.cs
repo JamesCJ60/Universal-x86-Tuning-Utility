@@ -609,7 +609,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                 if (cpuName.Contains("11th") && cpuName.Contains("G") || cpuName.Contains("11th") && cpuName.Contains("U") || cpuName.Contains("11th") && cpuName.Contains("H") || cpuName.Contains("11th") && cpuName.Contains("KB")) return "Tiger Lake";
                 else if (cpuName.Contains("11th")) return "Rocket Lake";
                 if (cpuName.Contains("12th")) return "Alder Lake";
-                if (cpuName.Contains("13th") || cpuName.Contains("Core") && cpuName.Contains("100") && !cpuName.Contains("th")) return "Raptor Lake";
+                if (cpuName.Contains("13th") || cpuName.Contains("14th") || cpuName.Contains("Core") && cpuName.Contains("100") && !cpuName.Contains("th")) return "Raptor Lake";
                 if (cpuName.Contains("Core") && cpuName.Contains("Ultra") && cpuName.Contains("100")) return "Meteor Lake";
             }
             else
