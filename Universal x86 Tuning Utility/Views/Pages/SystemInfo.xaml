@@ -9,7 +9,7 @@
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1500" d:DesignWidth="800"
       Title="SystemInfo">
 
     <Grid>
@@ -21,10 +21,45 @@
             
             <ScrollViewer Name="mainScroll" Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="False" PanningMode="VerticalFirst" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" IsDeferredScrollingEnabled="False" DockPanel.Dock="Top" ScrollChanged="mainScroll_ScrollChanged">
                 <StackPanel Name="mainCon">
+                    <ui:CardExpander Name="sdWindows"
+            IsEnabled="True"
+            IsExpanded="True"
+            Icon="Desktop20" VerticalAlignment="Top" Margin="0,0,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="Device Information"  />
+
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="24,0,12,0" Width="80">
+                                    <TextBlock FontWeight="DemiBold">Name</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Producer</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Model</TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbDeviceName"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbDeviceProducer"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbDeviceModel"></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
                     <ui:CardExpander Name="sdCPU"
             IsEnabled="True"
             IsExpanded="True"
-            Icon="DeveloperBoard20" VerticalAlignment="Top" Margin="0,0,15,0">
+            Icon="DeveloperBoard20" VerticalAlignment="Top" Margin="0,9,15,0">
                         <ui:CardExpander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -53,6 +88,7 @@
                                     <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">L1 Cache</TextBlock>
                                     <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">L2 Cache</TextBlock>
                                     <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">L3 Cache</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Instructions</TextBlock>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbProcessor"></TextBlock>
@@ -64,6 +100,7 @@
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbL1Cache"></TextBlock>
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbL2Cache"></TextBlock>
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbL3Cache"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbInstructions"></TextBlock>
                                 </StackPanel>
                                 </StackPanel>
                         </StackPanel>

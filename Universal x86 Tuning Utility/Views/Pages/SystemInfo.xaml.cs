@@ -35,6 +35,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             _ = Tablet.TabletDevices;
             getCPUInfo();
             getRAMInfo();
+            getDeviceInfo();
             if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) getBatteryInfo();
             else sdBattery.Visibility = Visibility.Collapsed;
         }
@@ -89,6 +90,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     tbL2Cache.Text = $"{total.ToString("0.##")} MB";
 
                     tbBaseClock.Text = $"{baseClock} MHz";
+
+                    tbInstructions.Text = GetSystemInfo.InstructionSets();
                 }
             }
             catch (ManagementException ex)
@@ -178,6 +181,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 tbChargeRate.Text = $"{batRate.ToString("0.##")}W";
             } 
+        }
+
+        private void getDeviceInfo()
+        {
+            tbDeviceName.Text = GetSystemInfo.SystemName;
+            tbDeviceModel.Text = GetSystemInfo.Product;
+            tbDeviceProducer.Text = GetSystemInfo.Manufacturer;
         }
     }
 }
