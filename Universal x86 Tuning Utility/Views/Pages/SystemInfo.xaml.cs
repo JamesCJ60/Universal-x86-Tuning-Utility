@@ -20,6 +20,7 @@ using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Views.Windows;
+using static Universal_x86_Tuning_Utility.Scripts.Misc.GetSystemInfo;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
@@ -66,13 +67,28 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     string numberOfCores = queryObj["NumberOfCores"].ToString();
                     string numberOfLogicalProcessors = queryObj["NumberOfLogicalProcessors"].ToString();
                     double l3Size = Convert.ToDouble(queryObj["L3CacheSize"]) / 1024;
+                    string baseClock = queryObj["MaxClockSpeed"].ToString();
 
                     tbProcessor.Text = name;
                     tbCaption.Text = description;
                     tbProducer.Text = manufacturer;
                     tbCores.Text = numberOfCores;
                     tbThreads.Text = numberOfLogicalProcessors;
-                    tbL3Cache.Text = $"{l3Size} MB";
+                    tbL3Cache.Text = $"{l3Size.ToString("0.##")} MB";
+
+                    uint sum = 0;
+                    foreach (uint number in GetSystemInfo.GetCacheSizes(CacheLevel.Level1)) sum += number;
+                    decimal total = sum;
+                    total = total / 1024;
+                    tbL1Cache.Text = $"{total.ToString("0.##")} MB";
+
+                    sum = 0;
+                    foreach (uint number in GetSystemInfo.GetCacheSizes(CacheLevel.Level2)) sum += number;
+                    total = sum;
+                    total = total / 1024;
+                    tbL2Cache.Text = $"{total.ToString("0.##")} MB";
+
+                    tbBaseClock.Text = $"{baseClock} MHz";
                 }
             }
             catch (ManagementException ex)
