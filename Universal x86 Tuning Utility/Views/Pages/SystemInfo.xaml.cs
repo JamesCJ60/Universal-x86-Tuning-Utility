@@ -78,6 +78,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         tbCodename.Visibility = Visibility.Collapsed;
                         tbCode.Visibility = Visibility.Collapsed;
+                        sdRAM.Margin = new Thickness(0, 9, 15, 15);
                     }
                     tbProducer.Text = manufacturer;
                     tbCores.Text = numberOfCores;

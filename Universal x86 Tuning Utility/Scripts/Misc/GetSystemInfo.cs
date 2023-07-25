@@ -750,6 +750,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         {
             try
             {
+                if (TYPE != ProcessorType.Intel)
+                    if (FAM < RyzenFamily.Raphael) return false;
                 return NativeMethods.IsProcessorFeaturePresent(NativeMethods.PF_AVX512F_INSTRUCTIONS_AVAILABLE);
             }
             catch
