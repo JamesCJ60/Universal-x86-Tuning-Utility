@@ -96,13 +96,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 //    Icon = SymbolRegular.FullScreenMaximize20,
                 //    PageType = typeof(Views.Pages.DataPage)
                 //},
-                //new NavigationItem()
-                //{
-                //    Content = "Info",
-                //    PageTag = "info",
-                //    Icon = SymbolRegular.Info20,
-                //    PageType = typeof(Views.Pages.DataPage)
-                //}
+                new NavigationItem()
+                {
+                    Content = "Info",
+                    PageTag = "info",
+                    Icon = SymbolRegular.Info20,
+                    PageType = typeof(Views.Pages.SystemInfo)
+                }
             };
 
                 NavigationFooter = new ObservableCollection<INavigationControl>
@@ -178,13 +178,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 //    Icon = SymbolRegular.FullScreenMaximize20,
                 //    PageType = typeof(Views.Pages.DataPage)
                 //},
-                //new NavigationItem()
-                //{
-                //    Content = "Info",
-                //    PageTag = "info",
-                //    Icon = SymbolRegular.Info20,
-                //    PageType = typeof(Views.Pages.DataPage)
-                //}
+                new NavigationItem()
+                {
+                    Content = "Info",
+                    PageTag = "info",
+                    Icon = SymbolRegular.Info20,
+                    PageType = typeof(Views.Pages.SystemInfo)
+                }
             };
 
                 NavigationFooter = new ObservableCollection<INavigationControl>

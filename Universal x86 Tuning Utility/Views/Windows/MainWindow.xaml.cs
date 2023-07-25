@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
+using Wpf.Ui.Controls;
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
 using Application = System.Windows.Application;
@@ -33,6 +34,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             get; set;
         }
 
+        public static NavigationStore _mainWindowNav;
+
         DispatcherTimer GC = new DispatcherTimer();
         DispatcherTimer Misc = new DispatcherTimer();
         INavigationService _navigationService;
@@ -48,7 +51,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
             navigationService.SetNavigationControl(RootNavigation);
             _navigationService = navigationService;
-
+            _mainWindowNav = RootNavigation;
             GC.Interval = TimeSpan.FromSeconds(2);
             GC.Tick += GC_Tick;
             GC.Start();

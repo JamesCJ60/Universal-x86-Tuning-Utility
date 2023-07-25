@@ -68,6 +68,7 @@ namespace Universal_x86_Tuning_Utility
                 services.AddScoped<Views.Pages.Adaptive>();
                 services.AddScoped<Views.Pages.Automations>();
                 services.AddScoped<Views.Pages.FanControl>();
+                services.AddScoped<Views.Pages.SystemInfo>();
                 services.AddScoped<ViewModels.CustomPresetsViewModel>();
                 services.AddScoped<Views.Pages.DataPage>();
                 services.AddScoped<ViewModels.DataViewModel>();

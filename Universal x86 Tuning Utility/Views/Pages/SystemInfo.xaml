@@ -1,0 +1,145 @@
+﻿<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.SystemInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      d:DataContext="{d:DesignInstance local:CustomPresets, IsDesignTimeCreatable=False}"
+      d:Background="{DynamicResource ApplicationBackgroundBrush}"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SystemInfo">
+
+    <Grid>
+        <DockPanel Margin="15,0,0,0">
+            <TextBlock
+            FontSize="26"
+            FontWeight="Medium"
+            Text="System Info" DockPanel.Dock="Top" Margin="3,10,0,0"/>
+            
+            <ScrollViewer Name="mainScroll" Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="False" PanningMode="VerticalFirst" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" IsDeferredScrollingEnabled="False" DockPanel.Dock="Top" ScrollChanged="mainScroll_ScrollChanged">
+                <StackPanel Name="mainCon">
+                    <ui:CardExpander Name="sdCPU"
+            IsEnabled="True"
+            IsExpanded="True"
+            Icon="DeveloperBoard20" VerticalAlignment="Top" Margin="0,0,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="Processor Information" />
+                                   
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="24,0,12,0" Width="80">
+                                    <TextBlock FontWeight="DemiBold">Processor</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Producer</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Caption</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Cores</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Threads</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">L3 Cache</TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbProcessor"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbProducer"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbCaption"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbCores"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbThreads"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbL3Cache"></TextBlock>
+                                </StackPanel>
+                                </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
+                    <ui:CardExpander Name="sdRAM"
+            IsEnabled="True"
+            IsExpanded="True"
+            Icon="Ram20" VerticalAlignment="Top" Margin="0,9,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="Memory Information" />
+
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="24,0,12,0" Width="80">
+                                    <TextBlock FontWeight="DemiBold">Memory</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Producer</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Model</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Width</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Modules</TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbRAM"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbRAMProducer"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbRAMModel"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbWidth"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbSlots"></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
+                    <ui:CardExpander Name="sdBattery"
+            IsEnabled="True"
+            IsExpanded="True"
+            Icon="Battery920" VerticalAlignment="Top" Margin="0,9,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Text="Battery Information"  />
+
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="24,0,12,0" Width="80">
+                                    <TextBlock FontWeight="DemiBold">Health</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Cycles</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Capacity</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Charge Rate</TextBlock>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbHealth"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbCycle"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbCapcity"></TextBlock>
+                                    <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbChargeRate"></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</Page>
