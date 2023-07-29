@@ -33,7 +33,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         try
                         {
                             string command = ryzenAdjCommand;
-                            if (!ryzenAdjCommand.Contains("=")) command = ryzenAdjCommand + "=0";
+                            if (!command.Contains("=")) command = ryzenAdjCommand + "=0";
                             // Extract the command string before the "=" sign
                             string ryzenAdjCommandString = command.Split('=')[0].Replace("=", null).Replace("--", null);
                             // Extract the command string after the "=" sign
