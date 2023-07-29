@@ -462,7 +462,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             }
         }
 
-        public static decimal ReadFullChargeCapacity()    {
+        public static decimal ReadFullChargeCapacity()
+        {
 
             try
             {
@@ -643,7 +644,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                     case RyzenFamily.Vermeer:
                         return "Vermeer";
                     case RyzenFamily.Cezanne_Barcelo:
-                        if(cpuName.Contains("25") || cpuName.Contains("75") || cpuName.Contains("30")) return "Barcelo";
+                        if (cpuName.Contains("25") || cpuName.Contains("75") || cpuName.Contains("30")) return "Barcelo";
                         else return "Cezanne";
                     case RyzenFamily.Rembrandt:
                         return "Rembrandt";
@@ -682,13 +683,21 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             int smallCores = 0;
             if (TYPE == ProcessorType.Intel)
             {
-                if (l2 % 1.25 == 0) bigCores = (int)(l2 / 1.25);
-                else if (l2 % 2 == 0) bigCores = (int)(l2 / 2);
+                if (CPUName.Contains("12th") || CPUName.Contains("13th") || CPUName.Contains("14th") || CPUName.Contains("Core") && CPUName.Contains("1000") && !CPUName.Contains("i"))
+                {
+                    if (l2 % 1.25 == 0) bigCores = (int)(l2 / 1.25);
+                    else if (l2 % 2 == 0) bigCores = (int)(l2 / 2);
 
-                smallCores = cores - bigCores;
+                    smallCores = cores - bigCores;
 
-                if(CPUName.Contains("Ultra") && CPUName.Contains("100")) return $"{cores} ({bigCores} Performance Cores + {smallCores - 2} Efficiency Cores + 2 LP Efficiency Cores)";
-                else return $"{cores} ({bigCores} Performance Cores + {smallCores} Efficiency Cores)";
+                    if (smallCores > 0)
+                    {
+                        if (CPUName.Contains("Ultra") && CPUName.Contains("100")) return $"{cores} ({bigCores} Performance Cores + {smallCores - 2} Efficiency Cores + 2 LP Efficiency Cores)";
+                        else return $"{cores} ({bigCores} Performance Cores + {smallCores} Efficiency Cores)";
+                    }
+                    else return cores.ToString();
+                }
+                else return cores.ToString();
             }
             else
             {
@@ -713,7 +722,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             if (Sse41.IsSupported) list = list + ", SSE4.1";
             if (Sse42.IsSupported) list = list + ", SSE4.2";
             if (IsEM64TSupported()) list = list + ", EM64T";
-            if(Environment.Is64BitProcess) list = list + ", x86-64";
+            if (Environment.Is64BitProcess) list = list + ", x86-64";
             if (IsVirtualizationEnabled() && Family.TYPE == Family.ProcessorType.Intel) list = list + ", VT-x";
             else if (IsVirtualizationEnabled()) list = list + ", AMD-V";
             if (Aes.IsSupported) list = list + ", AES";
@@ -757,7 +766,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             }
             catch (ManagementException ex)
             {
-                
+
             }
 
             return false;
