@@ -595,7 +595,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
 
         public static string Codename()
         {
-            string cpuName = GetCPUName();
+            string cpuName = CPUName;
             if (Family.TYPE == Family.ProcessorType.Intel)
             {
                 if (cpuName.Contains("6th")) return "Skylake";
@@ -674,6 +674,32 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                 }
             }
             return "";
+        }
+
+        public static string getBigLITTLE(int cores, double l2)
+        {
+            int bigCores = 0;
+            int smallCores = 0;
+            if (TYPE == ProcessorType.Intel)
+            {
+                if (l2 % 1.25 == 0) bigCores = (int)(l2 / 1.25);
+                else if (l2 % 2 == 0) bigCores = (int)(l2 / 2);
+
+                smallCores = cores - bigCores;
+
+                if(CPUName.Contains("Ultra") && CPUName.Contains("100")) return $"{cores} ({bigCores} Performance Cores + {smallCores - 2} Efficiency Cores + 2 LP Efficiency Cores)";
+                else return $"{cores} ({bigCores} Performance Cores + {smallCores} Efficiency Cores)";
+            }
+            else
+            {
+                if (CPUName.Contains("7540U") || CPUName.Contains("7440U"))
+                {
+                    bigCores = 2;
+                    smallCores = cores - bigCores;
+                    return $"{cores} ({bigCores} Prime Cores + {smallCores} Compact Cores)";
+                }
+                else return cores.ToString();
+            }
         }
 
         public static string InstructionSets()

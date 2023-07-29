@@ -57,62 +57,79 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             return scrollViewer.ExtentHeight > scrollViewer.ViewportHeight;
         }
 
-        private void getCPUInfo()
+        private async void getCPUInfo()
         {
             try
             {
+                sdCPU.Visibility = Visibility.Collapsed;
                 // CPU information using WMI
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
 
-                foreach (ManagementObject queryObj in searcher.Get())
+                string name = "";
+                string description = "";
+                string manufacturer = "";
+                int numberOfCores = 0;
+                int numberOfLogicalProcessors = 0;
+                double l2Size = 0;
+                double l3Size = 0;
+                string baseClock = "";
+
+                await Task.Run(() =>
                 {
-                    string name = queryObj["Name"].ToString();
-                    string description = queryObj["Description"].ToString();
-                    string manufacturer = queryObj["Manufacturer"].ToString();
-                    string numberOfCores = queryObj["NumberOfCores"].ToString();
-                    string numberOfLogicalProcessors = queryObj["NumberOfLogicalProcessors"].ToString();
-                    double l3Size = Convert.ToDouble(queryObj["L3CacheSize"]) / 1024;
-                    string baseClock = queryObj["MaxClockSpeed"].ToString();
-
-                    tbProcessor.Text = name;
-                    tbCaption.Text = description;
-                    string codeName = GetSystemInfo.Codename();
-                    if(codeName != "") tbCodename.Text = codeName;
-                    else
+                    foreach (ManagementObject queryObj in searcher.Get())
                     {
-                        tbCodename.Visibility = Visibility.Collapsed;
-                        tbCode.Visibility = Visibility.Collapsed;
+                        name = queryObj["Name"].ToString();
+                        description = queryObj["Description"].ToString();
+                        manufacturer = queryObj["Manufacturer"].ToString();
+                        numberOfCores = Convert.ToInt32(queryObj["NumberOfCores"]);
+                        numberOfLogicalProcessors = Convert.ToInt32(queryObj["NumberOfLogicalProcessors"]);
+                        l2Size = Convert.ToDouble(queryObj["L2CacheSize"]);
+                        l3Size = Convert.ToDouble(queryObj["L3CacheSize"]) / 1024;
+                        baseClock = queryObj["MaxClockSpeed"].ToString();
                     }
+                });
 
-                    tbProducer.Text = manufacturer;
-                    tbCores.Text = numberOfCores;
-                    tbThreads.Text = numberOfLogicalProcessors;
-                    tbL3Cache.Text = $"{l3Size.ToString("0.##")} MB";
-
-                    uint sum = 0;
-                    foreach (uint number in GetSystemInfo.GetCacheSizes(CacheLevel.Level1)) sum += number;
-                    decimal total = sum;
-                    total = total / 1024;
-                    tbL1Cache.Text = $"{total.ToString("0.##")} MB";
-
-                    sum = 0;
-                    foreach (uint number in GetSystemInfo.GetCacheSizes(CacheLevel.Level2)) sum += number;
-                    total = sum;
-                    total = total / 1024;
-                    tbL2Cache.Text = $"{total.ToString("0.##")} MB";
-
-                    tbBaseClock.Text = $"{baseClock} MHz";
-
-                    tbInstructions.Text = GetSystemInfo.InstructionSets();
+                tbProcessor.Text = name;
+                tbCaption.Text = description;
+                string codeName = GetSystemInfo.Codename();
+                if (codeName != "") tbCodename.Text = codeName;
+                else
+                {
+                    tbCodename.Visibility = Visibility.Collapsed;
+                    tbCode.Visibility = Visibility.Collapsed;
                 }
+
+                tbProducer.Text = manufacturer;
+                tbCores.Text = GetSystemInfo.getBigLITTLE(numberOfCores, l2Size / 1024);
+                tbThreads.Text = numberOfLogicalProcessors.ToString();
+                tbL3Cache.Text = $"{l3Size.ToString("0.##")} MB";
+
+                uint sum = 0;
+                foreach (uint number in GetSystemInfo.GetCacheSizes(CacheLevel.Level1)) sum += number;
+                decimal total = sum;
+                total = total / 1024;
+                tbL1Cache.Text = $"{total.ToString("0.##")} MB";
+
+                sum = 0;
+                foreach (uint number in GetSystemInfo.GetCacheSizes(CacheLevel.Level2)) sum += number;
+                total = sum;
+                total = total / 1024;
+                tbL2Cache.Text = $"{total.ToString("0.##")} MB";
+
+                tbBaseClock.Text = $"{baseClock} MHz";
+
+                tbInstructions.Text = GetSystemInfo.InstructionSets();
+
+                sdCPU.Visibility = Visibility.Visible;
             }
             catch (ManagementException ex)
             {
                 Console.WriteLine("An error occurred while querying for WMI data: " + ex.Message);
             }
         }
-        private void getRAMInfo()
+        private async void getRAMInfo()
         {
+            sdRAM.Visibility = Visibility.Collapsed;
             double capacity = 0;
             int speed = 0;
             int type = 0;
@@ -126,21 +143,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 ManagementObjectSearcher searcher =
             new ManagementObjectSearcher("root\\CIMV2",
             "SELECT * FROM Win32_PhysicalMemory");
-
-                foreach (ManagementObject queryObj in searcher.Get())
+                await Task.Run(() =>
                 {
-                    if (producer == "") producer = queryObj["Manufacturer"].ToString();
-                    else if (!producer.Contains(queryObj["Manufacturer"].ToString())) producer = $"{producer}/{queryObj["Manufacturer"]}";
+                    foreach (ManagementObject queryObj in searcher.Get())
+                    {
+                        if (producer == "") producer = queryObj["Manufacturer"].ToString();
+                        else if (!producer.Contains(queryObj["Manufacturer"].ToString())) producer = $"{producer}/{queryObj["Manufacturer"]}";
 
-                    if (model == "") model = queryObj["PartNumber"].ToString();
-                    else if (!model.Contains(queryObj["PartNumber"].ToString())) model = $"{model}/{queryObj["PartNumber"]}";
+                        if (model == "") model = queryObj["PartNumber"].ToString();
+                        else if (!model.Contains(queryObj["PartNumber"].ToString())) model = $"{model}/{queryObj["PartNumber"]}";
 
-                    capacity = capacity + Convert.ToDouble(queryObj["Capacity"]);
-                    speed = Convert.ToInt32(queryObj["ConfiguredClockSpeed"]);
-                    type = Convert.ToInt32(queryObj["SMBIOSMemoryType"]);
-                    width = width + Convert.ToInt32(queryObj["DataWidth"]);
-                    slots++;
-                }
+                        capacity = capacity + Convert.ToDouble(queryObj["Capacity"]);
+                        speed = Convert.ToInt32(queryObj["ConfiguredClockSpeed"]);
+                        type = Convert.ToInt32(queryObj["SMBIOSMemoryType"]);
+                        width = width + Convert.ToInt32(queryObj["DataWidth"]);
+                        slots++;
+                    }
+                });
 
                 if (width > 128 && Family.FAM < Family.RyzenFamily.Sarlak && Family.TYPE != Family.ProcessorType.Intel) width = 128;
                 if (width > 64 && Family.FAM == Family.RyzenFamily.Mendocino) width = 64;
@@ -162,6 +181,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 tbRAMModel.Text = model.Replace(" ", null);
                 tbWidth.Text = $"{width} bit";
                 tbSlots.Text = $"{slots} * {width / slots} bit";
+
+                sdRAM.Visibility = Visibility.Visible;
             }
             catch (Exception ex)
             {
