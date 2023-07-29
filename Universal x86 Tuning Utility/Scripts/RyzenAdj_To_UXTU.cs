@@ -32,10 +32,12 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     {
                         try
                         {
+                            string command = ryzenAdjCommand;
+                            if (!ryzenAdjCommand.Contains("=")) command = ryzenAdjCommand + "=0";
                             // Extract the command string before the "=" sign
-                            string ryzenAdjCommandString = ryzenAdjCommand.Split('=')[0].Replace("=", null).Replace("--", null);
+                            string ryzenAdjCommandString = command.Split('=')[0].Replace("=", null).Replace("--", null);
                             // Extract the command string after the "=" sign
-                            string ryzenAdjCommandValueString = ryzenAdjCommand.Substring(ryzenAdjCommand.IndexOf('=') + 1);
+                            string ryzenAdjCommandValueString = command.Substring(ryzenAdjCommand.IndexOf('=') + 1);
 
                             if (ryzenAdjCommandString.Contains("ADLX"))
                             {
@@ -58,10 +60,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             }
                             else
                             {
-                                //Convert value of select cli argument to int
-                                int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
-                                if(ryzenAdjCommandValue == 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
-                                else SMUCommands.applySettings(ryzenAdjCommandString, (uint)ryzenAdjCommandValue);
+                                //Convert value of select cli argument to uint
+                                uint ryzenAdjCommandValue = Convert.ToUInt32(ryzenAdjCommandValueString);
+                                if(ryzenAdjCommandValue <= 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
+                                else SMUCommands.applySettings(ryzenAdjCommandString, ryzenAdjCommandValue);
                                 Task.Delay(2);
                             }
                         }
