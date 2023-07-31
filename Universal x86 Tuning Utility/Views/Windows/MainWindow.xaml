@@ -95,7 +95,7 @@
                     TooltipText="Universal x86 Tuning Utility">
                     <ui:NotifyIcon.Menu>
                         <ContextMenu>
-                            <MenuItem Name="miCharge" Header="Charge Rate: -15W" Tag="charge" IsEnabled="False" />
+                            <!--<MenuItem Name="miCharge" Header="Charge Rate: -15W" Tag="charge" IsEnabled="False" />-->
                             <MenuItem Name="miClose" Header="Close Application" Tag="close" Click="miClose_Click"/>
                         </ContextMenu>
                     </ui:NotifyIcon.Menu>

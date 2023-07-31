@@ -121,27 +121,27 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 }
         }
 
-        private async void getBatTempData()
-        {
-            try
-            {
-                await Task.Run(() => PerfCounters.ReadSensors());
+        //private async void getBatTempData()
+        //{
+        //    try
+        //    {
+        //        await Task.Run(() => PerfCounters.ReadSensors());
 
-                float bat = (float)PerfCounters.BatteryDischarge;
-                if (bat > 0 && miCharge.Visibility == Visibility.Collapsed) miCharge.Visibility = Visibility.Visible;
-                if (bat <= 0 && miCharge.Visibility == Visibility.Visible) miCharge.Visibility = Visibility.Collapsed;
+        //        float bat = (float)PerfCounters.BatteryDischarge;
+        //        if (bat > 0 && miCharge.Visibility == Visibility.Collapsed) miCharge.Visibility = Visibility.Visible;
+        //        if (bat <= 0 && miCharge.Visibility == Visibility.Visible) miCharge.Visibility = Visibility.Collapsed;
 
-                if (bat > 0 && miCharge.Visibility == Visibility.Visible) miCharge.Header = $"Charge Rate: -{bat.ToString("0.00")}W";
-            }
-            catch
-            {
-                miCharge.Visibility = Visibility.Collapsed;
-            }
-        }
+        //        if (bat > 0 && miCharge.Visibility == Visibility.Visible) miCharge.Header = $"Charge Rate: -{bat.ToString("0.00")}W";
+        //    }
+        //    catch
+        //    {
+        //        miCharge.Visibility = Visibility.Collapsed;
+        //    }
+        //}
 
         private async void Misc_Tick(object sender, EventArgs e)
         {
-            getBatTempData();
+            //getBatTempData();
         }
 
         //private async void updateDownloads()
