@@ -164,13 +164,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     Icon = SymbolRegular.Transmission20,
                     PageType = typeof(Views.Pages.Automations)
                 },
-                new NavigationItem()
-                {
-                    Content = "Fan",
-                    PageTag = "fan",
-                    Icon = SymbolRegular.WeatherDuststorm20,
-                    PageType = typeof(Views.Pages.FanControl)
-                },
+                //new NavigationItem()
+                //{
+                //    Content = "Fan",
+                //    PageTag = "fan",
+                //    Icon = SymbolRegular.WeatherDuststorm20,
+                //    PageType = typeof(Views.Pages.FanControl)
+                //},
                 // new NavigationItem()
                 //{
                 //    Content = "Magpie",
