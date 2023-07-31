@@ -11,18 +11,21 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
     {
         public static void ShowToastNotification(string title = "", string body = "")
         {
-            string iconUri = "";
-            iconUri = "pack://application:,,,/Assets/applicationIcon-1024.png";
+            try
+            {
+                string iconUri = "";
+                iconUri = "pack://application:,,,/Assets/applicationIcon-1024.png";
 
-            string path = System.Reflection.Assembly.GetEntryAssembly().Location;
-            path = path.Replace("Universal x86 Tuning Utility.dll", null);
-            iconUri = path + "Assets\\icon.png";
+                string path = System.Reflection.Assembly.GetEntryAssembly().Location;
+                path = path.Replace("Universal x86 Tuning Utility.dll", null);
+                iconUri = path + "Assets\\icon.png";
 
-            new ToastContentBuilder()
-               .AddText(title)
-               .AddText(body)
-               .AddAppLogoOverride(new Uri(iconUri))
-               .Show();
+                new ToastContentBuilder()
+                   .AddText(title)
+                   .AddText(body)
+                   .AddAppLogoOverride(new Uri(iconUri))
+                   .Show();
+            } catch (Exception ex) { }
         }
     }
 }
