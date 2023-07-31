@@ -971,7 +971,7 @@
                             Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
                         </StackPanel>
                     </ui:CardExpander>
-                    <ui:CardExpander Name="sdAmdCpuTune"
+                    <ui:CardExpander Name="sdAmdCpuTune" Visibility="Collapsed"
             IsEnabled="True"
             IsExpanded="False"
             Icon="Pulse20" Margin="0,8,15,0">

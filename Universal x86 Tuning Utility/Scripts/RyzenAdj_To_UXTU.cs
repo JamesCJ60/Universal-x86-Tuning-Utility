@@ -71,7 +71,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     });
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { }
         }
         private static void ADLX(string command, string value)
         {
