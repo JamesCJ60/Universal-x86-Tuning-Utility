@@ -441,9 +441,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             nvCoreClk = (int)nudNVCore.Value,
                             nvMemClk = (int)nudNVMem.Value,
                         };
-                        amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
+                        intelPresetManager.SavePreset(tbxPresetName.Text, preset);
 
-                        amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+                        intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
 
                         // Get the names of all the stored presets
                         IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
