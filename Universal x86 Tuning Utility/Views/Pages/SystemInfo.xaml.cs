@@ -83,7 +83,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         manufacturer = queryObj["Manufacturer"].ToString();
                         numberOfCores = Convert.ToInt32(queryObj["NumberOfCores"]);
                         numberOfLogicalProcessors = Convert.ToInt32(queryObj["NumberOfLogicalProcessors"]);
-                        l2Size = Convert.ToDouble(queryObj["L2CacheSize"]);
+                        l2Size = Convert.ToDouble(queryObj["L2CacheSize"]) / 1024;
                         l3Size = Convert.ToDouble(queryObj["L3CacheSize"]) / 1024;
                         baseClock = queryObj["MaxClockSpeed"].ToString();
                     }
@@ -100,7 +100,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
 
                 tbProducer.Text = manufacturer;
-                tbCores.Text = GetSystemInfo.getBigLITTLE(numberOfCores, l2Size / 1024);
+                if(numberOfLogicalProcessors == numberOfCores) tbCores.Text = numberOfCores.ToString();
+                else tbCores.Text = GetSystemInfo.getBigLITTLE(numberOfCores, l2Size);
                 tbThreads.Text = numberOfLogicalProcessors.ToString();
                 tbL3Cache.Text = $"{l3Size.ToString("0.##")} MB";
 

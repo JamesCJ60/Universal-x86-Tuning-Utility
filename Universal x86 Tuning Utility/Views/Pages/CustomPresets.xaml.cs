@@ -83,7 +83,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (Family.CPUName.Contains("U") && Family.FAM > Family.RyzenFamily.Renoir) sdAmdPBO.Visibility = Visibility.Collapsed;
                 if(!Family.CPUName.Replace("with Radeon Graphics", null).Contains("G") && Family.CPUName != "AMD Custom APU 0405") if(Family.FAM != Family.RyzenFamily.Renoir && !Family.CPUName.Contains("Ryzen 9") && cbAllCO.Visibility == Visibility) sdAmdCO.Visibility = Visibility.Collapsed;
 
-                if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Visible;
+                if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir || Family.CPUName.Contains("Ryzen 9")) sdAmdCO.Visibility = Visibility.Visible;
                 if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
 
                 if(Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
@@ -441,9 +441,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             nvCoreClk = (int)nudNVCore.Value,
                             nvMemClk = (int)nudNVMem.Value,
                         };
-                        amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
+                        intelPresetManager.SavePreset(tbxPresetName.Text, preset);
 
-                        amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
+                        intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
 
                         // Get the names of all the stored presets
                         IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
