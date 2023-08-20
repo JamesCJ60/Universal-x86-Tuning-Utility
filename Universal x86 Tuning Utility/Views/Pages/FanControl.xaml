@@ -39,7 +39,7 @@
 
             <StackPanel DockPanel.Dock="Top" Margin="0,12,18,0">
                 <TextBlock FontSize="16">Fan Speed (%)</TextBlock>
-                <ui:NumberBox IntegersOnly="True" Max="100" Min="0" Value="50" Margin="0,9,0,0" Name="nudFanSpeed"></ui:NumberBox>
+                <ui:NumberBox  Maximum="100" Minimum="0" Value="50" Margin="0,9,0,0" Name="nudFanSpeed"></ui:NumberBox>
             </StackPanel>
         </DockPanel>
     </Grid>

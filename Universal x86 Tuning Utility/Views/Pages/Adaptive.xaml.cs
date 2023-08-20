@@ -201,20 +201,20 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
             if(Settings.Default.polling != nudPolling.Value)
             {
-                Settings.Default.polling = nudPolling.Value;
+                Settings.Default.polling = (double)nudPolling.Value;
                 Settings.Default.Save();
             }
 
-            if (adaptiveMode.Interval != TimeSpan.FromSeconds(nudPolling.Value))
+            if (adaptiveMode.Interval != TimeSpan.FromSeconds((double)nudPolling.Value))
             {
                 adaptiveMode.Stop();
-                adaptiveMode.Interval = TimeSpan.FromSeconds(nudPolling.Value);
+                adaptiveMode.Interval = TimeSpan.FromSeconds((double)nudPolling.Value);
                 adaptiveMode.Start();
             }
-            if (sensors.Interval != TimeSpan.FromSeconds(nudPolling.Value))
+            if (sensors.Interval != TimeSpan.FromSeconds((double)nudPolling.Value))
             {
                 sensors.Stop();
-                sensors.Interval = TimeSpan.FromSeconds(nudPolling.Value);
+                sensors.Interval = TimeSpan.FromSeconds((double)nudPolling.Value);
                 sensors.Start();
             }
         }

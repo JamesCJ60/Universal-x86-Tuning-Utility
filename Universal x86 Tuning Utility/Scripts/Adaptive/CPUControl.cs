@@ -15,7 +15,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
         private const int PowerLimitIncrement = 2; // watts
         private const int CurveOptimiserIncrement = 1; // CO
 
-        private static int _newPowerLimit; // watts
+        private static int _newPowerLimit = 999; // watts
         public static int _currentPowerLimit; // watts
         private static int _newCO; // CO
         private static int _lastPowerLimit = 1000; // watts
