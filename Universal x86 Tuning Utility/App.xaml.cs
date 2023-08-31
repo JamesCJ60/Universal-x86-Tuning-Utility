@@ -23,6 +23,7 @@ using System.Threading;
 using System.Diagnostics.Metrics;
 using System.Windows.Interop;
 using Universal_x86_Tuning_Utility.Views.Windows;
+using RyzenSmu;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -97,7 +98,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.0.2";
+        public static string version = "2.0.3";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
         /// <summary>
@@ -224,6 +225,8 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnExit(object sender, ExitEventArgs e)
         {
+          if(Family.TYPE != Family.ProcessorType.Intel) SMUCommands.RyzenAccess.Deinitialize();
+
             await _host.StopAsync();
 
             _host.Dispose();
