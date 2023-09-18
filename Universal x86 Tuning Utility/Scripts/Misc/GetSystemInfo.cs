@@ -690,7 +690,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
 
                     smallCores = cores - bigCores;
 
-                    MessageBox.Show(l2.ToString());
+                    //MessageBox.Show(l2.ToString());
 
                     if (smallCores > 0)
                     {
