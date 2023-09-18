@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -132,6 +133,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     else if (CPUModel == 97) FAM = RyzenFamily.Raphael;
 
                     if (CPUModel == 116) FAM = RyzenFamily.PhoenixPoint;
+
+                    if (CPUModel == 120) FAM = RyzenFamily.PhoenixPoint2;
                 }
 
                 // Zen5 - Zen6

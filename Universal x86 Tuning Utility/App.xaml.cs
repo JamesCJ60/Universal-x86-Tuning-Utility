@@ -24,6 +24,7 @@ using System.Diagnostics.Metrics;
 using System.Windows.Interop;
 using Universal_x86_Tuning_Utility.Views.Windows;
 using RyzenSmu;
+using Universal_x86_Tuning_Utility.Scripts.ASUS;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -37,48 +38,10 @@ namespace Universal_x86_Tuning_Utility
         // https://docs.microsoft.com/dotnet/core/extensions/dependency-injection
         // https://docs.microsoft.com/dotnet/core/extensions/configuration
         // https://docs.microsoft.com/dotnet/core/extensions/logging
-        private static readonly IHost _host = Host
-            .CreateDefaultBuilder()
-            .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
-            .ConfigureServices((context, services) =>
-            {
-                // App Host
-                services.AddHostedService<ApplicationHostService>();
+        private static IHost _host;
 
-                // Page resolver service
-                services.AddSingleton<IPageService, PageService>();
-
-                // Theme manipulation
-                services.AddSingleton<IThemeService, ThemeService>();
-
-                // TaskBar manipulation
-                services.AddSingleton<ITaskBarService, TaskBarService>();
-
-                // Service containing navigation, same as INavigationWindow... but without window
-                services.AddSingleton<INavigationService, NavigationService>();
-
-                // Main window with navigation
-                services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
-                services.AddScoped<ViewModels.MainWindowViewModel>();
-
-                // Views and ViewModels
-                services.AddScoped<Views.Pages.DashboardPage>();
-                services.AddScoped<ViewModels.DashboardViewModel>();
-                services.AddScoped<Views.Pages.CustomPresets>();
-                services.AddScoped<Views.Pages.Premade>();
-                services.AddScoped<Views.Pages.Adaptive>();
-                services.AddScoped<Views.Pages.Automations>();
-                services.AddScoped<Views.Pages.FanControl>();
-                services.AddScoped<Views.Pages.SystemInfo>();
-                services.AddScoped<ViewModels.CustomPresetsViewModel>();
-                services.AddScoped<Views.Pages.DataPage>();
-                services.AddScoped<ViewModels.DataViewModel>();
-                services.AddScoped<Views.Pages.SettingsPage>();
-                services.AddScoped<ViewModels.SettingsViewModel>();
-
-                // Configuration
-                services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
-            }).Build();
+        public static ASUSWmi wmi;
+        public static XgMobileConnectionService xgMobileConnectionService;
 
         /// <summary>
         /// Gets registered service.
@@ -119,6 +82,61 @@ namespace Universal_x86_Tuning_Utility
             }
             else
             {
+                _host = Host
+            .CreateDefaultBuilder()
+            .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
+            .ConfigureServices((context, services) =>
+            {
+                // App Host
+                services.AddHostedService<ApplicationHostService>();
+
+                // Page resolver service
+                services.AddSingleton<IPageService, PageService>();
+
+                string mbo = GetSystemInfo.Product;
+
+                if (mbo.Contains("ROG") || mbo.Contains("TUF") || mbo.Contains("Ally") || mbo.Contains("Flow") || mbo.ToLower().Contains("vivobook"))
+                {
+                    wmi = new ASUSWmi();
+                    Settings.Default.isASUS = true;
+                    Settings.Default.Save();
+
+                    services.AddSingleton(wmi);
+                    services.AddSingleton<XgMobileConnectionService>();
+                }
+
+                // Theme manipulation
+                services.AddSingleton<IThemeService, ThemeService>();
+
+                // TaskBar manipulation
+                services.AddSingleton<ITaskBarService, TaskBarService>();
+
+                // Service containing navigation, same as INavigationWindow... but without window
+                services.AddSingleton<INavigationService, NavigationService>();
+
+                // Main window with navigation
+                services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
+                services.AddScoped<ViewModels.MainWindowViewModel>();
+
+                // Views and ViewModels
+                services.AddScoped<Views.Pages.DashboardPage>();
+                services.AddScoped<ViewModels.DashboardViewModel>();
+                services.AddScoped<Views.Pages.CustomPresets>();
+                services.AddScoped<Views.Pages.Premade>();
+                services.AddScoped<Views.Pages.Adaptive>();
+                services.AddScoped<Views.Pages.Automations>();
+                services.AddScoped<Views.Pages.FanControl>();
+                services.AddScoped<Views.Pages.SystemInfo>();
+                services.AddScoped<ViewModels.CustomPresetsViewModel>();
+                services.AddScoped<Views.Pages.DataPage>();
+                services.AddScoped<ViewModels.DataViewModel>();
+                services.AddScoped<Views.Pages.SettingsPage>();
+                services.AddScoped<ViewModels.SettingsViewModel>();
+
+                // Configuration
+                services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
+            }).Build();
+
 
                 _ = Tablet.TabletDevices;
                 bool firstBoot = false;
