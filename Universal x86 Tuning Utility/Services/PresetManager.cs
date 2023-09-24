@@ -143,6 +143,12 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isSoftMaxVCNClk { get; set; }
         public bool isSoftMinSoCClk { get; set; }
         public bool isSoftMaxSoCClk { get; set; }
+
+        public int asusPowerProfile { get; set; }
+        public bool asusGPUUlti { get; set; }
+        public bool asusiGPU { get; set; }
+
+        public int displayHz { get; set; }
     }
 
     public class PresetManager

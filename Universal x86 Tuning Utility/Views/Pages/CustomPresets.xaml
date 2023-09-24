@@ -1468,11 +1468,123 @@
                                 </StackPanel>
                                 <ComboBox
                         Grid.Column="1"
-                        VerticalAlignment="Center" SelectedIndex="0" MinWidth="134" Name="cbxBoost" Height="37">
+                        VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxBoost" Height="37">
                                     <ComboBoxItem>Auto</ComboBoxItem>
                                     <ComboBoxItem>Power Saving</ComboBoxItem>
                                     <ComboBoxItem>Performance</ComboBoxItem>
                                 </ComboBox>
+
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
+                    <ui:CardControl Name="sdRefreshRate"
+IsEnabled="True"
+Icon="Desktop20" Margin="0,8,15,0">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="Display Refresh Rate" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to set a custom supported display refresh rate."/>
+                                </StackPanel>
+                                <ComboBox
+            Grid.Column="1"
+            VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxRefreshRate" Height="37">
+                                </ComboBox>
+
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
+                    <ui:CardControl Name="sdAsusPower"
+IsEnabled="True"
+Icon="Power20" Margin="0,8,15,0">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="ASUS Power Profile" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to set an ASUS power profile. This will override Armoury Crate!"/>
+                                </StackPanel>
+                                <ComboBox
+            Grid.Column="1"
+            VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxAsusPower" Height="37">
+                                    <ComboBoxItem>AC Controlled</ComboBoxItem>
+                                    <ComboBoxItem>Silent</ComboBoxItem>
+                                    <ComboBoxItem>Performance</ComboBoxItem>
+                                    <ComboBoxItem>Turbo</ComboBoxItem>
+                                </ComboBox>
+
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
+                    <ui:CardControl Name="sdAsusUlti"
+IsEnabled="True"
+Icon="FastAcceleration20" Margin="0,8,15,0">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="ASUS GPU Ultimate Mode" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to manually toggle MUX switch on/off. This will override Armoury Crate!"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsASUSUlti" Margin="0,0,9,0"/>
+                                </StackPanel>
+
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
+                    <ui:CardControl Name="sdAsusEco"
+IsEnabled="True"
+Icon="LeafTwo20" Margin="0,8,15,0">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="ASUS iGPU Only Mode" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to toggle iGPU only mode on/off. This will override Armoury Crate!"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsASUSEco" Margin="0,0,9,0"/>
+                                </StackPanel>
 
                             </Grid>
                         </ui:CardControl.Header>

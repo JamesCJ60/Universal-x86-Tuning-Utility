@@ -1,6 +1,7 @@
 ﻿using RyzenSmu;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Management;
 using System.Text;
@@ -17,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
+using Universal_x86_Tuning_Utility.Scripts.ASUS;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui.Common.Interfaces;
@@ -72,6 +74,21 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
             if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
+
+            try
+            {
+                if (Display.uniqueRefreshRates.Count > 1)
+                {
+                    foreach (var rate in Display.uniqueRefreshRates)
+                    {
+                        cbxRefreshRate.Items.Add($"{rate} Hz");
+                    }
+                }
+                else cbxRefreshRate.Visibility = Visibility.Collapsed;
+            } catch 
+            {
+                cbxRefreshRate.Visibility = Visibility.Collapsed;
+            }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
@@ -150,6 +167,38 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             if (IsScrollBarVisible(mainScroll)) mainCon.Margin = new Thickness(15, 0, 0, 0);
             else mainCon.Margin = new Thickness(15, 0, -12, 0);
 
+            if (Settings.Default.isASUS)
+            {
+                uint id = 0;
+                if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.GPUMux;
+                else id = ASUSWmi.GPUMuxVivo;
+                int mux = App.wmi.DeviceGet(id);
+
+                if (mux > 0) tsASUSUlti.IsChecked = false;
+                else if (mux > -1) tsASUSUlti.IsChecked = true;
+                else sdAsusUlti.Visibility = Visibility.Collapsed;
+
+                id = ASUSWmi.GPUEco;
+                int eco = App.wmi.DeviceGet(id);
+
+                if (eco > -1 && eco < 1) tsASUSEco.IsChecked = false;
+                else if (eco > 0) tsASUSEco.IsChecked = true;
+                else sdAsusEco.Visibility = Visibility.Collapsed;
+
+                if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.PerformanceMode;
+                else id = ASUSWmi.VivoBookMode;
+                int perfMode = App.wmi.DeviceGet(id);
+                if (perfMode == (int)ASUSWmi.AsusMode.Silent) cbxAsusPower.SelectedIndex = 1;
+                else if (perfMode == (int)ASUSWmi.AsusMode.Balanced) cbxAsusPower.SelectedIndex = 2;
+                else if (perfMode == (int)ASUSWmi.AsusMode.Turbo) cbxAsusPower.SelectedIndex = 3;
+            }
+            else
+            {
+                sdAsusPower.Visibility = Visibility.Collapsed;
+                sdAsusUlti.Visibility = Visibility.Collapsed;
+                sdAsusEco.Visibility = Visibility.Collapsed;
+            }
+
             Garbage.Garbage_Collect();
         }
 
@@ -173,6 +222,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             Settings.Default.CommandString = commandValues;
             Settings.Default.Save();
+
+            if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
+            if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -293,6 +345,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isSoftMaxDataClk = (bool)cbSoftMaxDataClk.IsChecked,
                             isSoftMaxSoCClk = (bool)cbSoftMaxSoCClk.IsChecked,
                             isSoftMaxVCNClk = (bool)cbSoftMaxVCNClk.IsChecked,
+
+                            asusGPUUlti = (bool)tsASUSUlti.IsChecked,
+                            asusiGPU = (bool)tsASUSEco.IsChecked,
+                            asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
+
+                            displayHz = (int)cbxRefreshRate.SelectedIndex,
                         };
                         apuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -392,6 +450,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IsAmdOC = (bool)tsAmdOC.IsChecked,
                             amdClock = (int)nudAmdCpuClk.Value,
                             amdVID = (int)nudAmdVID.Value,
+
+                            asusGPUUlti = (bool)tsASUSUlti.IsChecked,
+                            asusiGPU = (bool)tsASUSEco.IsChecked,
+                            asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
+
+                            displayHz = (int)cbxRefreshRate.SelectedIndex,
                         };
                         amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -440,6 +504,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isNVIDIA = (bool)tsNV.IsChecked,
                             nvCoreClk = (int)nudNVCore.Value,
                             nvMemClk = (int)nudNVMem.Value,
+
+                            asusGPUUlti = (bool)tsASUSUlti.IsChecked,
+                            asusiGPU = (bool)tsASUSEco.IsChecked,
+                            asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
+
+                            displayHz = (int)cbxRefreshRate.SelectedIndex,
                         };
                         intelPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -667,6 +737,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbSoftMaxFabClk.IsChecked = myPreset.isSoftMaxFabClk;
                         cbSoftMaxSoCClk.IsChecked = myPreset.isSoftMaxSoCClk;
                         cbSoftMaxDataClk.IsChecked = myPreset.isSoftMaxDataClk;
+
+                        tsASUSUlti.IsChecked = myPreset.asusGPUUlti;
+                        tsASUSEco.IsChecked = myPreset.asusiGPU;
+                        cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
+
+                        if(myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
                     }
                 }
 
@@ -747,6 +823,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         tsAmdOC.IsChecked = myPreset.IsAmdOC;
                         nudAmdCpuClk.Value = myPreset.amdClock;
                         nudAmdVID.Value = myPreset.amdVID;
+
+                        tsASUSUlti.IsChecked = myPreset.asusGPUUlti;
+                        tsASUSEco.IsChecked = myPreset.asusiGPU;
+                        cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
+
+                        if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
                     }
                 }
                 if (Family.TYPE == Family.ProcessorType.Intel)
@@ -776,6 +858,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         tsNV.IsChecked = myPreset.isNVIDIA;
                         nudNVCore.Value = myPreset.nvCoreClk;
                         nudNVMem.Value = myPreset.nvMemClk;
+
+                        tsASUSUlti.IsChecked = myPreset.asusGPUUlti;
+                        tsASUSEco.IsChecked = myPreset.asusiGPU;
+                        cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
+
+                        if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
                     }
                 }
                 Garbage.Garbage_Collect();
@@ -786,6 +874,18 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         public string getCommandValues()
         {
             string commandValues = "";
+
+            if (Settings.Default.isASUS)
+            {
+               if(cbxAsusPower.SelectedIndex > 0) commandValues = commandValues + $"--ASUS-Power={cbxAsusPower.SelectedIndex} ";
+               if(sdAsusEco.Visibility == Visibility.Visible) commandValues = commandValues + $"--ASUS-Eco={tsASUSEco.IsChecked} ";
+               if(sdAsusUlti.Visibility == Visibility.Visible) commandValues = commandValues + $"--ASUS-MUX={tsASUSUlti.IsChecked} ";
+            }
+
+            if (cbxRefreshRate.Visibility == Visibility.Visible) 
+            {
+                commandValues = commandValues + $"--Refresh-Rate={Display.uniqueRefreshRates[cbxRefreshRate.SelectedIndex]} ";
+            }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {

@@ -690,8 +690,6 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
 
                     smallCores = cores - bigCores;
 
-                    //MessageBox.Show(l2.ToString());
-
                     if (smallCores > 0)
                     {
                         if (CPUName.Contains("Ultra") && CPUName.Contains("100")) return $"{cores} ({bigCores} Performance Cores + {smallCores - 2} Efficiency Cores + 2 LP Efficiency Cores)";

@@ -61,9 +61,12 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.0.4";
+        public static string version = "2.0.4.1";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
+
+        public static string product = "";
+
         /// <summary>
         /// Occurs when the application is loading.
         /// </summary>
@@ -82,6 +85,13 @@ namespace Universal_x86_Tuning_Utility
             }
             else
             {
+                try
+                {
+                    await Task.Run(() => product = GetSystemInfo.Product);
+                    Display.setUpLists();
+                }
+                catch { }
+
                 _host = Host
             .CreateDefaultBuilder()
             .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
@@ -93,9 +103,8 @@ namespace Universal_x86_Tuning_Utility
                 // Page resolver service
                 services.AddSingleton<IPageService, PageService>();
 
-                string mbo = GetSystemInfo.Product;
 
-                if (mbo.Contains("ROG") || mbo.Contains("TUF") || mbo.Contains("Ally") || mbo.Contains("Flow") || mbo.ToLower().Contains("vivobook"))
+                if (product.Contains("ROG") || product.Contains("TUF") || product.Contains("Ally") || product.Contains("Flow") || product.ToLower().Contains("vivobook") || product.ToLower().Contains("zenbook"))
                 {
                     wmi = new ASUSWmi();
                     Settings.Default.isASUS = true;

@@ -1,10 +1,14 @@
-﻿using RyzenSmu;
+﻿using NvAPIWrapper.Display;
+using RyzenSmu;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Universal_x86_Tuning_Utility.Scripts.ASUS;
 using Universal_x86_Tuning_Utility.Scripts.GPUs.AMD;
 using Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
@@ -38,8 +42,17 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             string ryzenAdjCommandString = command.Split('=')[0].Replace("=", null).Replace("--", null);
                             // Extract the command string after the "=" sign
                             string ryzenAdjCommandValueString = command.Substring(ryzenAdjCommand.IndexOf('=') + 1);
-
-                            if (ryzenAdjCommandString.Contains("ADLX"))
+                            
+                            if (ryzenAdjCommandString.Contains("ASUS"))
+                            {
+                                AsusWmi(ryzenAdjCommandString, ryzenAdjCommandValueString);
+                                Task.Delay(50);
+                            }
+                            else if (ryzenAdjCommandString.Contains("Refresh-Rate"))
+                            {
+                                Universal_x86_Tuning_Utility.Scripts.Misc.Display.ApplySettings(Convert.ToInt32(ryzenAdjCommandValueString));
+                            }
+                            else if (ryzenAdjCommandString.Contains("ADLX"))
                             {
                                 ADLX(ryzenAdjCommandString, ryzenAdjCommandValueString);
                                 Task.Delay(50);
@@ -64,7 +77,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 uint ryzenAdjCommandValue = Convert.ToUInt32(ryzenAdjCommandValueString);
                                 if(ryzenAdjCommandValue <= 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
                                 else SMUCommands.applySettings(ryzenAdjCommandString, ryzenAdjCommandValue);
-                                Task.Delay(2);
+                                Task.Delay(50);
                             }
                         }
                         catch (Exception ex) { }
@@ -102,6 +115,107 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 if (command == "NVIDIA-Clocks") NvTuning.SetClocks(int.Parse(variables[0]), int.Parse(variables[1]));
             }
             catch { }
+        }
+
+        static bool isMessageBoxOpen = false, isUpdatingUltiMode = false;
+        private static void AsusWmi(string command, string value)
+        {
+            try
+            {
+                uint id = 0;
+                int mode = 0;
+                if (command == "ASUS-Power")
+                {
+                    if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.PerformanceMode;
+                    else id = ASUSWmi.VivoBookMode;
+
+                    mode = (int)ASUSWmi.AsusMode.Balanced;
+                    if(value == "1") mode = (int)ASUSWmi.AsusMode.Silent;
+                    else if (value == "2") mode = (int)ASUSWmi.AsusMode.Balanced;
+                    else if (value == "3") mode = (int)ASUSWmi.AsusMode.Turbo;
+                    if (App.wmi.DeviceGet(id) != mode) App.wmi.DeviceSet(id, mode, "PowerMode");
+                }
+                if(command == "ASUS-Eco")
+                {
+                    if(value.ToLower() == "true") App.wmi.SetGPUEco(1);
+                    else App.wmi.SetGPUEco(0);
+                }
+                if (command == "ASUS-MUX")
+                {
+                    if (!isMessageBoxOpen && !isUpdatingUltiMode)
+                    {
+                        if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.GPUMux;
+                        else id = ASUSWmi.GPUMuxVivo;
+
+                        int mux = App.wmi.DeviceGet(id);
+                        if (mux > 0 && value.ToLower() == "true")
+                        {
+                            isMessageBoxOpen = true;
+
+                            var messageBox = new Wpf.Ui.Controls.MessageBox();
+
+                            messageBox.ButtonLeftName = "Restart";
+                            messageBox.ButtonRightName = "Cancel";
+
+                            messageBox.ButtonLeftClick += MessageBox_Enable;
+                            messageBox.ButtonRightClick += MessageBox_Close;
+
+                            messageBox.Show("GPU Ultimate Mode", "Switching the GPU to Ultimate Mode requires a restart to take\naffect!");
+
+
+                        }
+                        else if (mux < 1 && mux > -1 && value.ToLower() == "false")
+                        {
+                            isMessageBoxOpen = true;
+
+                            var messageBox = new Wpf.Ui.Controls.MessageBox();
+
+                            messageBox.ButtonLeftName = "Restart";
+                            messageBox.ButtonRightName = "Cancel";
+
+                            messageBox.ButtonLeftClick += MessageBox_Disable;
+                            messageBox.ButtonRightClick += MessageBox_Close;
+
+                            messageBox.Show("GPU Ultimate Mode", "Disabling GPU Ultimate Mode requires a restart to take\naffect!");
+                        }
+                    }
+                }
+            } 
+            catch { }
+        }
+
+        private static void MessageBox_Enable(object sender, System.Windows.RoutedEventArgs e)
+        {
+            uint id = 0;
+            if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.GPUMux;
+            else id = ASUSWmi.GPUMuxVivo;
+            App.wmi.DeviceSet(id, 0, "MUX");
+            Thread.Sleep(250);
+            Process.Start("shutdown", "/r /t 1");
+
+            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
+            isMessageBoxOpen = false;
+            isUpdatingUltiMode = true;
+        }
+
+        private static void MessageBox_Disable(object sender, System.Windows.RoutedEventArgs e)
+        {
+            uint id = 0;
+            if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.GPUMux;
+            else id = ASUSWmi.GPUMuxVivo;
+            App.wmi.DeviceSet(id, 1, "MUX");
+            Thread.Sleep(250);
+            Process.Start("shutdown", "/r /t 1");
+
+            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
+            isMessageBoxOpen = false;
+            isUpdatingUltiMode = true;
+        }
+
+        private static void MessageBox_Close(object sender, System.Windows.RoutedEventArgs e)
+        {
+            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
+            isMessageBoxOpen = false;
         }
     }
 }
