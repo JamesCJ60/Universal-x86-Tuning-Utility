@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32.TaskScheduler;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Windows;
@@ -187,6 +188,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private void UiPage_Loaded(object sender, RoutedEventArgs e)
         {
             Garbage.Garbage_Collect();
+        }
+
+        private void btnStressTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(Settings.Default.Path + @"\Assets\Stress-Test\AVX2 Stress Test.exe"))
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = Settings.Default.Path + @"\Assets\Stress-Test\AVX2 Stress Test.exe";
+                process.Start();
+
+                process.Dispose();
+                process = null;
+            }
         }
     }
 }

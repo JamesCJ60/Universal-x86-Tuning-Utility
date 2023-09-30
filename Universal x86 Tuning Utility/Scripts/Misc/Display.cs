@@ -147,8 +147,13 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             DEVMODE devMode = new DEVMODE();
             devMode.dmSize = (short)Marshal.SizeOf(devMode);
 
-            if (EnumDisplaySettings(null, 0, ref devMode))
+            if (EnumDisplaySettings(targetDisplayName, 0, ref devMode))
             {
+                int originalWidth = devMode.dmPelsWidth;
+                int originalHeight = devMode.dmPelsHeight;
+
+                devMode.dmPelsWidth = originalWidth;
+                devMode.dmPelsHeight = originalHeight;
                 devMode.dmDisplayFrequency = newRefreshRate;
                 devMode.dmFields = (int)DisplaySettingsFlags.DM_PELSWIDTH | (int)DisplaySettingsFlags.DM_PELSHEIGHT | (int)DisplaySettingsFlags.DM_DISPLAYFREQUENCY;
 

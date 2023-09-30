@@ -47,6 +47,15 @@
             <ui:NumberBox Name="nudAutoReapply" Minimum="1" Value="3" Maximum="60" Margin="9,0,0,0" TextChanged="nudAutoReapply_TextChanged" MaxDecimalPlaces="0"></ui:NumberBox>
         </StackPanel>
         <CheckBox Name="cbAutoCheck" Click="cbAutoCheck_Click">Auto Update Check</CheckBox>
+        <ui:Button Name="btnStressTest" Width="178" Click="btnStressTest_Click" Margin="0,9,0,0">
+            <StackPanel Orientation="Horizontal">
+                <ui:SymbolIcon Symbol="Fire20" FontSize="24" Margin="0,0,9,0"/>
+                <TextBlock VerticalAlignment="Center">Start Stress Test</TextBlock>
+            </StackPanel>
+        </ui:Button>
+
+        <TextBlock Foreground="DarkRed" Margin="0,4.5,0,0" Text="WARNING: This will put extreme stress on your CPU. Use at your own risk!" />
+
         <TextBlock
             Margin="0,24,0,0"
             FontSize="20"
@@ -55,14 +64,14 @@
         <TextBlock Margin="0,12,0,9" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
 
         <StackPanel Orientation="Horizontal">
-            <ui:Button Name="btnCheck" Width="171" Click="btnCheck_Click">
+            <ui:Button Name="btnCheck" Width="178" Click="btnCheck_Click">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24" Margin="0,0,9,0"/>
                     <TextBlock VerticalAlignment="Center">Check for Updates</TextBlock>
                 </StackPanel>
             </ui:Button>
 
-            <ui:Button Name="btnDownload" Margin="9,0,0,0" Width="171" Visibility="Collapsed" Click="btnDownload_Click">
+            <ui:Button Name="btnDownload" Margin="9,0,0,0" Width="178" Visibility="Collapsed" Click="btnDownload_Click">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="ArrowDownload20" FontSize="24" Margin="0,0,9,0"/>
                     <TextBlock VerticalAlignment="Center">Download Update</TextBlock>
