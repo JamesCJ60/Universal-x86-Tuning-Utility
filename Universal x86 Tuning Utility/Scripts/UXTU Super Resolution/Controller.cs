@@ -19,7 +19,7 @@ using Universal_x86_Tuning_Utility.Scripts.Misc;
 namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
 {
     //
-    // This is a customised version Magpie from https://github.com/Blinue/Magpie
+    // This is a customised version of Magpie from https://github.com/Blinue/Magpie
     // I do not take credit for the full functionality of the code.
     //
 

@@ -170,22 +170,25 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         private async void AutoReapply_Tick(object sender, EventArgs e)
         {
-            if ((bool)Settings.Default.AutoReapply == true && (bool)Settings.Default.isAdaptiveModeRunning == false)
+            try
             {
-                string commands = (string)Settings.Default.CommandString;
-                //Check if RyzenAdjArguments is populated
-                if (commands != null && commands != "")
+                if ((bool)Settings.Default.AutoReapply == true && (bool)Settings.Default.isAdaptiveModeRunning == false)
                 {
-                    await Task.Run(() => RyzenAdj_To_UXTU.Translate(commands));
-                }
+                    string commands = (string)Settings.Default.CommandString;
+                    //Check if RyzenAdjArguments is populated
+                    if (commands != null && commands != "")
+                    {
+                        await Task.Run(() => RyzenAdj_To_UXTU.Translate(commands));
+                    }
 
-                if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))
-                {
-                    autoReapply.Stop();
-                    autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
-                    autoReapply.Start();
+                    if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))
+                    {
+                        autoReapply.Stop();
+                        autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
+                        autoReapply.Start();
+                    }
                 }
-            }
+            } catch { }
         }
         int i = 0;
         async void GC_Tick(object sender, EventArgs e)
@@ -265,58 +268,62 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         private async void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
         {
-            if ((bool)Settings.Default.isAdaptiveModeRunning == false)
+            try
             {
-                if (e.Mode == PowerModes.StatusChange)
+                if ((bool)Settings.Default.isAdaptiveModeRunning == false)
                 {
-                    await Task.Run(() => getBattery());
-                    await Task.Run(() => getBattery());
-
-                    if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
+                    if (e.Mode == PowerModes.StatusChange)
                     {
-                        if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "")
+                        await Task.Run(() => getBattery());
+                        await Task.Run(() => getBattery());
+
+                        if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
                         {
-                            Settings.Default.CommandString = Settings.Default.acCommandString;
+                            if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "")
+                            {
+                                Settings.Default.CommandString = Settings.Default.acCommandString;
+                                if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
+                                else if (Settings.Default.resumePreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
+                                else if (Settings.Default.resumePreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
+                                else if (Settings.Default.resumePreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
+                                Settings.Default.Save();
+                                await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.acCommandString));
+                                ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
+                            }
+                        }
+                        else
+                        {
+                            if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "")
+                            {
+                                Settings.Default.CommandString = Settings.Default.dcCommandString;
+                                if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
+                                else if (Settings.Default.resumePreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
+                                else if (Settings.Default.resumePreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
+                                else if (Settings.Default.resumePreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
+                                Settings.Default.Save();
+                                await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.dcCommandString));
+                                ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
+                            }
+                        }
+                    }
+
+                    if (e.Mode == PowerModes.Resume)
+                    {
+                        if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "")
+                        {
+                            Settings.Default.CommandString = Settings.Default.resumeCommandString;
                             if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
                             else if (Settings.Default.resumePreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
                             else if (Settings.Default.resumePreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
                             else if (Settings.Default.resumePreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
                             Settings.Default.Save();
-                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.acCommandString));
-                            ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
+                            Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.resumeCommandString));
+                            ToastNotification.ShowToastNotification("Resume Preset Applied!", $"Your resume preset settings have been applied!");
                         }
-                    }
-                    else
-                    {
-                        if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "")
-                        {
-                            Settings.Default.CommandString = Settings.Default.dcCommandString;
-                            if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
-                            else if (Settings.Default.resumePreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
-                            else if (Settings.Default.resumePreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
-                            else if (Settings.Default.resumePreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
-                            Settings.Default.Save();
-                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.dcCommandString));
-                            ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
-                        }
-                    }
-                }
-
-                if (e.Mode == PowerModes.Resume)
-                {
-                    if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "")
-                    {
-                        Settings.Default.CommandString = Settings.Default.resumeCommandString;
-                        if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
-                        else if (Settings.Default.resumePreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
-                        else if (Settings.Default.resumePreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
-                        else if (Settings.Default.resumePreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
-                        Settings.Default.Save();
-                        Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.resumeCommandString));
-                        ToastNotification.ShowToastNotification("Resume Preset Applied!", $"Your resume preset settings have been applied!");
                     }
                 }
             }
+            catch { }
         }
 
         static UInt16 statuscode = 0;
