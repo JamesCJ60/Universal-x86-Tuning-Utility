@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Gma.System.MouseKeyHook;
+using Microsoft.Win32;
 using RyzenSmu;
 using System;
 using System.Globalization;
@@ -16,6 +17,7 @@ using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
+using Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
@@ -75,6 +77,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
             ApplyOnStart();
 
+            Controller.SetUpMagWindow(this);
 
             Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
         }
@@ -187,9 +190,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         int i = 0;
         async void GC_Tick(object sender, EventArgs e)
         {
-            Task.Run(() => Garbage.Garbage_Collect()); // Execute Garbage_Collect on a separate thread
-            if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized) this.ShowInTaskbar = false;
-            if (i > 2) GC.Stop();
+            Task.Run(() => Garbage.Garbage_Collect());
+            if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false;
+            if (i > 8) GC.Stop();
             i++;
         }
 
@@ -221,6 +224,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+
+            Controller.magWindow?.Dispose();
 
             // Make sure that closing this window will begin the process of closing the application.
             Application.Current.Shutdown();
@@ -344,6 +349,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             Settings.Default.isAdaptiveModeRunning = false;
             Settings.Default.Save();
+            Controller.magWindow?.Dispose();
             System.Windows.Application.Current.Shutdown();
         }
 
@@ -351,39 +357,40 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             Settings.Default.isAdaptiveModeRunning = false;
             Settings.Default.Save();
+            Controller.magWindow?.Dispose();
             Fan_Control.disableFanControl();
         }
 
-       /* static async Task<int> GetGitHubDownloadCount(string owner, string repo)
-        {
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("AppName", "1.0"));
+        /* static async Task<int> GetGitHubDownloadCount(string owner, string repo)
+         {
+             using (var client = new HttpClient())
+             {
+                 client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("AppName", "1.0"));
 
-                string apiUrl = $"https://api.github.com/repos/{owner}/{repo}";
-                string releasesUrl = $"{apiUrl}/releases";
+                 string apiUrl = $"https://api.github.com/repos/{owner}/{repo}";
+                 string releasesUrl = $"{apiUrl}/releases";
 
-                // Retrieve releases
-                var response = await client.GetAsync(releasesUrl);
-                response.EnsureSuccessStatusCode();
-                var responseContent = await response.Content.ReadAsStringAsync();
+                 // Retrieve releases
+                 var response = await client.GetAsync(releasesUrl);
+                 response.EnsureSuccessStatusCode();
+                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                var releases = JsonDocument.Parse(responseContent).RootElement;
+                 var releases = JsonDocument.Parse(responseContent).RootElement;
 
-                int downloadCount = 0;
+                 int downloadCount = 0;
 
-                // Calculate total download count
-                foreach (var release in releases.EnumerateArray())
-                {
-                    foreach (var asset in release.GetProperty("assets").EnumerateArray())
-                    {
-                        downloadCount += asset.GetProperty("download_count").GetInt32();
-                    }
-                }
+                 // Calculate total download count
+                 foreach (var release in releases.EnumerateArray())
+                 {
+                     foreach (var asset in release.GetProperty("assets").EnumerateArray())
+                     {
+                         downloadCount += asset.GetProperty("download_count").GetInt32();
+                     }
+                 }
 
-                return downloadCount;
-            }
-        } */
+                 return downloadCount;
+             }
+         } */
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {

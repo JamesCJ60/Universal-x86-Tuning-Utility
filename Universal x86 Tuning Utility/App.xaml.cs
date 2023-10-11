@@ -65,6 +65,9 @@ namespace Universal_x86_Tuning_Utility
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
+        public static readonly string SCALE_MODELS_JSON_PATH = ".\\ScaleModels.json";
+        public static readonly string LOGS_FOLDER = ".\\logs\\";
+
         public static string product = "";
 
         /// <summary>

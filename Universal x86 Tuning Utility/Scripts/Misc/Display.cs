@@ -152,7 +152,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             if (EnumDisplaySettings(targetDisplayName, 0, ref devMode))
             {
                 devMode.dmDisplayFrequency = newRefreshRate;
-                int result = ChangeDisplaySettingsEx(null, ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
+                int result = ChangeDisplaySettingsEx(targetDisplayName, ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
 
                 if (result == DISP_CHANGE_SUCCESSFUL)
                 {
