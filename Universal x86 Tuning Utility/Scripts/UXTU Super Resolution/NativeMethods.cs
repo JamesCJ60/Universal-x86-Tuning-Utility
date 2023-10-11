@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
 {
+    //
+    // This is a customised version Magpie from https://github.com/Blinue/Magpie
+    // I do not take credit for the full functionality of the code.
+    //
+
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
     internal class NativeMethods
     {

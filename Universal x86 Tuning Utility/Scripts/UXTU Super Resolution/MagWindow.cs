@@ -11,6 +11,11 @@ using Universal_x86_Tuning_Utility.Properties;
 
 namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
 {
+    //
+    // This is a customised version Magpie from https://github.com/Blinue/Magpie
+    // I do not take credit for the full functionality of the code.
+    //
+
     internal class MagWindow
     {
         // 全屏窗口关闭时引发此事件

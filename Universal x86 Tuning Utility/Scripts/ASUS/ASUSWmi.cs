@@ -16,6 +16,11 @@ namespace Universal_x86_Tuning_Utility.Scripts.ASUS
 {
     public class ASUSWmi
     {
+
+        //
+        // This is a customised version of ASUSWmi.cs from https://github.com/seerge/g-helper
+        // I do not take credit for the full functionality of the code.
+        //
         public enum AsusFan
         {
             CPU = 0,
