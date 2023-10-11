@@ -142,6 +142,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         [DllImport("user32.dll")]
         public static extern int ChangeDisplaySettingsEx(string lpszDeviceName, ref DEVMODE lpDevMode, IntPtr hwnd, uint dwflags, IntPtr lParam);
 
+        private const int CDS_UPDATEREGISTRY = 0x01;
+
         public static void ChangeDisplaySettings(string targetDisplayName, int newRefreshRate)
         {
             DEVMODE devMode = new DEVMODE();
@@ -149,15 +151,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
 
             if (EnumDisplaySettings(targetDisplayName, 0, ref devMode))
             {
-                int originalWidth = devMode.dmPelsWidth;
-                int originalHeight = devMode.dmPelsHeight;
-
-                devMode.dmPelsWidth = originalWidth;
-                devMode.dmPelsHeight = originalHeight;
                 devMode.dmDisplayFrequency = newRefreshRate;
-                devMode.dmFields = (int)DisplaySettingsFlags.DM_PELSWIDTH | (int)DisplaySettingsFlags.DM_PELSHEIGHT | (int)DisplaySettingsFlags.DM_DISPLAYFREQUENCY;
-
-                int result = ChangeDisplaySettingsEx(targetDisplayName, ref devMode, IntPtr.Zero, (uint)ChangeDisplaySettingsFlags.CDS_UPDATEREGISTRY, IntPtr.Zero);
+                int result = ChangeDisplaySettingsEx(null, ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
 
                 if (result == DISP_CHANGE_SUCCESSFUL)
                 {
