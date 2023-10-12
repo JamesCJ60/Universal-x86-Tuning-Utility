@@ -21,116 +21,82 @@ SamplerState sam;
 #define min3(a, b, c) min(a, min(b, c))
 #define max3(a, b, c) max(a, max(b, c))
 
-// Filtering for a given tap for the scalar.
 void FsrEasuTap(
 	inout float3 aC, // Accumulated color, with negative lobe.
-	inout float aW, // Accumulated weight.
-	float2 off, // Pixel offset from resolve position to tap.
-	float2 dir, // Gradient direction.
-	float2 len, // Length.
-	float lob, // Negative lobe strength.
-	float clp, // Clipping point.
-	float3 c // Tap color.
+	inout float aW,  // Accumulated weight.
+	float2 off,      // Pixel offset from resolve position to tap.
+	float2 dir,      // Gradient direction.
+	float2 len,      // Length.
+	float lob,       // Negative lobe strength.
+	float clp,       // Clipping point.
+	float3 c        // Tap color.
 ) {
 	// Rotate offset by direction.
-	float2 v;
-	v.x = (off.x * (dir.x)) + (off.y * dir.y);
-	v.y = (off.x * (-dir.y)) + (off.y * dir.x);
+	float2 rotatedOffset = float2(
+		dot(off, dir),
+		dot(off, float2(-dir.y, dir.x))
+	);
+
 	// Anisotropy.
-	v *= len;
-	// Compute distance^2.
-	float d2 = v.x * v.x + v.y * v.y;
-	// Limit to the window as at corner, 2 taps can easily be outside.
+	rotatedOffset *= len;
+
+	// Compute distance squared.
+	float d2 = dot(rotatedOffset, rotatedOffset);
+
+	// Limit to the clipping point.
 	d2 = min(d2, clp);
+
 	// Approximation of lanczos2 without sin() or rcp(), or sqrt() to get x.
-	//  (25/16 * (2/5 * x^2 - 1)^2 - (25/16 - 1)) * (1/4 * x^2 - 1)^2
-	//  |_______________________________________|   |_______________|
-	//                   base                             window
-	// The general form of the 'base' is,
-	//  (a*(b*x^2-1)^2-(a-1))
-	// Where 'a=1/(2*b-b^2)' and 'b' moves around the negative lobe.
-	float wB = 2.0f / 5.0f * d2 - 1;
-	float wA = lob * d2 - 1;
-	wB *= wB;
-	wA *= wA;
-	wB = 25.0f / 16.0f * wB - (25.0f / 16.0f - 1.0f);
+	float wB = 2.0f / 5.0f * d2 - 1.0f;
+	float wA = lob * d2 - 1.0f;
+	wB = (25.0f / 16.0f) * wB * wB - (25.0f / 16.0f - 1.0f);
 	float w = wB * wA;
+
 	// Do weighted average.
 	aC += c * w;
 	aW += w;
 }
 
-// Accumulate direction and length.
 void FsrEasuSet(
 	inout float2 dir,
 	inout float len,
 	float2 pp,
 	bool biS, bool biT, bool biU, bool biV,
-	float lA, float lB, float lC, float lD, float lE) {
-	// Compute bilinear weight, branches factor out as predicates are compiler time immediates.
-	//  s t
-	//  u v
-	float w = 0;
-	if (biS)
-		w = (1 - pp.x) * (1 - pp.y);
-	if (biT)
-		w = pp.x * (1 - pp.y);
-	if (biU)
-		w = (1.0 - pp.x) * pp.y;
-	if (biV)
-		w = pp.x * pp.y;
-	// Direction is the '+' diff.
-	//    a
-	//  b c d
-	//    e
-	// Then takes magnitude from abs average of both sides of 'c'.
-	// Length converts gradient reversal to 0, smoothly to non-reversal at 1, shaped, then adding horz and vert terms.
+	float lA, float lB, float lC, float lD, float lE
+) {
+	// Compute bilinear weight.
+	float w = 0.0f;
+	if (biS) w = (1.0f - pp.x) * (1.0f - pp.y);
+	if (biT) w = pp.x * (1.0f - pp.y);
+	if (biU) w = (1.0f - pp.x) * pp.y;
+	if (biV) w = pp.x * pp.y;
+
+	// Compute horizontal and vertical gradient differences.
 	float dc = lD - lC;
 	float cb = lC - lB;
-	float lenX = max(abs(dc), abs(cb));
-	lenX = rcp(lenX);
-	float dirX = lD - lB;
-	dir.x += dirX * w;
-	lenX = saturate(abs(dirX) * lenX);
-	lenX *= lenX;
-	len += lenX * w;
-	// Repeat for the y axis.
 	float ec = lE - lC;
 	float ca = lC - lA;
+
+	// Compute horizontal and vertical lengths.
+	float lenX = max(abs(dc), abs(cb));
 	float lenY = max(abs(ec), abs(ca));
-	lenY = rcp(lenY);
+
+	// Compute direction and length contributions.
+	float dirX = lD - lB;
 	float dirY = lE - lA;
-	dir.y += dirY * w;
-	lenY = saturate(abs(dirY) * lenY);
-	lenY *= lenY;
-	len += lenY * w;
+
+	// Update direction and length.
+	dir += float2(dirX, dirY) * w;
+	len += saturate(abs(dirX) / lenX * abs(dirX) / lenX) * w;
+	len += saturate(abs(dirY) / lenY * abs(dirY) / lenY) * w;
 }
 
 float3 FsrEasuF(uint2 pos, float4 con0, float4 con1, float4 con2, float2 con3) {
-//------------------------------------------------------------------------------------------------------------------------------
-	// Get position of 'f'.
 	float2 pp = pos * con0.xy + con0.zw;
 	float2 fp = floor(pp);
 	pp -= fp;
-//------------------------------------------------------------------------------------------------------------------------------
-	// 12-tap kernel.
-	//    b c
-	//  e f g h
-	//  i j k l
-	//    n o
-	// Gather 4 ordering.
-	//  a b
-	//  r g
-	// For packed FP16, need either {rg} or {ab} so using the following setup for gather in all versions,
-	//    a b    <- unused (z)
-	//    r g
-	//  a b a b
-	//  r g r g
-	//    a b
-	//    r g    <- unused (z)
-	// Allowing dead-code removal to remove the 'z's.
+
 	float2 p0 = fp * con1.xy + con1.zw;
-	// These are from p0 to avoid pulling two constants on pre-Navi hardware.
 	float2 p1 = p0 + con2.xy;
 	float2 p2 = p0 + con2.zw;
 	float2 p3 = p0 + con3;
@@ -147,13 +113,12 @@ float3 FsrEasuF(uint2 pos, float4 con0, float4 con1, float4 con2, float2 con3) {
 	float4 zzonR = INPUT.GatherRed(sam, p3);
 	float4 zzonG = INPUT.GatherGreen(sam, p3);
 	float4 zzonB = INPUT.GatherBlue(sam, p3);
-//------------------------------------------------------------------------------------------------------------------------------
-	// Simplest multi-channel approximate luma possible (luma times 2, in 2 FMA/MAD).
-	float4 bczzL = bczzB * 0.5 + (bczzR * 0.5 + bczzG);
-	float4 ijfeL = ijfeB * 0.5 + (ijfeR * 0.5 + ijfeG);
-	float4 klhgL = klhgB * 0.5 + (klhgR * 0.5 + klhgG);
-	float4 zzonL = zzonB * 0.5 + (zzonR * 0.5 + zzonG);
-	// Rename.
+
+	float4 bczzL = 0.25f * (bczzR + bczzG) + 0.25f * bczzB;
+	float4 ijfeL = 0.25f * (ijfeR + ijfeG) + 0.25f * ijfeB;
+	float4 klhgL = 0.25f * (klhgR + klhgG) + 0.25f * klhgB;
+	float4 zzonL = 0.25f * (zzonR + zzonG) + 0.25f * zzonB;
+
 	float bL = bczzL.x;
 	float cL = bczzL.y;
 	float iL = ijfeL.x;
@@ -166,13 +131,15 @@ float3 FsrEasuF(uint2 pos, float4 con0, float4 con1, float4 con2, float2 con3) {
 	float gL = klhgL.w;
 	float oL = zzonL.z;
 	float nL = zzonL.w;
-	// Accumulate for bilinear interpolation.
+
 	float2 dir = 0;
 	float len = 0;
+
 	FsrEasuSet(dir, len, pp, true, false, false, false, bL, eL, fL, gL, jL);
 	FsrEasuSet(dir, len, pp, false, true, false, false, cL, fL, gL, hL, kL);
 	FsrEasuSet(dir, len, pp, false, false, true, false, fL, iL, jL, kL, nL);
 	FsrEasuSet(dir, len, pp, false, false, false, true, gL, jL, kL, lL, oL);
+
 //------------------------------------------------------------------------------------------------------------------------------
 	// Normalize with approximation, and cleanup close to zero.
 	float2 dir2 = dir * dir;

@@ -193,7 +193,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         int i = 0;
         async void GC_Tick(object sender, EventArgs e)
         {
-            Task.Run(() => Garbage.Garbage_Collect());
+            await Task.Run(() => Garbage.Garbage_Collect());
             if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false;
             if (i > 8) GC.Stop();
             i++;
@@ -234,7 +234,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             Application.Current.Shutdown();
         }
 
-        private void UiWindow_StateChanged(object sender, EventArgs e)
+        private async void UiWindow_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Minimized)
             {
@@ -248,7 +248,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 //updateDownloads();
             }
 
-            Garbage.Garbage_Collect();
+            await Task.Run(() => Garbage.Garbage_Collect());
         }
 
         private void NotifyIcon_LeftClick(Wpf.Ui.Controls.NotifyIcon sender, RoutedEventArgs e)

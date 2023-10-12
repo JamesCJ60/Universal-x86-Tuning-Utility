@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using System.Windows;
 using Gma.System.MouseKeyHook;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
+using System.Diagnostics;
 
 namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
 {
@@ -89,9 +90,14 @@ namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
             {
                 magWindow.Destory();
                 canReapply = false;
+                using (Process p = Process.GetCurrentProcess()) p.PriorityClass = ProcessPriorityClass.Normal;
                 return;
             }
-            else canReapply = true;
+            else
+            {
+                using (Process p = Process.GetCurrentProcess()) p.PriorityClass = ProcessPriorityClass.AboveNormal;
+                canReapply = true;
+            }
 
             string sharpness = "0.80";
 
@@ -157,8 +163,6 @@ namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
             magWindow.Create(effectsJson);
 
             prevSrcWindow = magWindow.SrcWindow;
-
-            Task.Run(() => Garbage.Garbage_Collect());
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -191,7 +195,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
             return IntPtr.Zero;
         }
 
-        public static void SetUpMagWindow(MainWindow main)
+        public static async void SetUpMagWindow(MainWindow main)
         {
             Handle = new WindowInteropHelper(main).Handle;
 
@@ -200,7 +204,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
 
             OnHotkeyChanged();
 
-            Garbage.Garbage_Collect();
+            await Task.Run(() => Garbage.Garbage_Collect());
         }
 
         private static void MagWindow_Closed()

@@ -445,7 +445,7 @@ namespace Universal_x86_Tuning_Utility.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool Is3DMode {
             get {
                 return ((bool)(this["Is3DMode"]));
@@ -481,7 +481,7 @@ namespace Universal_x86_Tuning_Utility.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool SimulateExclusiveFullscreen {
             get {
                 return ((bool)(this["SimulateExclusiveFullscreen"]));
@@ -565,7 +565,7 @@ namespace Universal_x86_Tuning_Utility.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool VSync {
             get {
                 return ((bool)(this["VSync"]));
