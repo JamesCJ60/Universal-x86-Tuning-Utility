@@ -42,6 +42,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         DispatcherTimer Misc = new DispatcherTimer();
         INavigationService _navigationService;
         public DispatcherTimer autoReapply = new DispatcherTimer();
+        public DispatcherTimer autoRestore = new DispatcherTimer();
         public MainWindow(ViewModels.MainWindowViewModel viewModel, IPageService pageService, INavigationService navigationService)
         {
             ViewModel = viewModel;
@@ -66,6 +67,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             autoReapply.Tick += AutoReapply_Tick;
             autoReapply.Start();
 
+            autoRestore.Interval = TimeSpan.FromSeconds(1);
+            autoRestore.Tick += Controller.AutoRestore_Tick;
+            autoRestore.Start();
 
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
 

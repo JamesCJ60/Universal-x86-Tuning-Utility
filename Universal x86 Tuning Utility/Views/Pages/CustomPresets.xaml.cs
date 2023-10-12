@@ -351,6 +351,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
 
                             displayHz = (int)cbxRefreshRate.SelectedIndex,
+
+                            isVsync = (bool)cbVSync.IsChecked,
+                            isRecap = (bool)cbAutoCap.IsChecked,
+                            Sharpness = (int)nudSharp.Value,
+                            ResScaleIndex = (int)cbxResScale.SelectedIndex,
+
                         };
                         apuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -456,6 +462,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
 
                             displayHz = (int)cbxRefreshRate.SelectedIndex,
+
+                            isVsync = (bool)cbVSync.IsChecked,
+                            isRecap = (bool)cbAutoCap.IsChecked,
+                            Sharpness = (int)nudSharp.Value,
+                            ResScaleIndex = (int)cbxResScale.SelectedIndex,
                         };
                         amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -510,6 +521,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
 
                             displayHz = (int)cbxRefreshRate.SelectedIndex,
+
+                            isVsync = (bool)cbVSync.IsChecked,
+                            isRecap = (bool)cbAutoCap.IsChecked,
+                            Sharpness = (int)nudSharp.Value,
+                            ResScaleIndex = (int)cbxResScale.SelectedIndex,
                         };
                         intelPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -743,6 +759,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
 
                         if(myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
+
+                        cbVSync.IsChecked = myPreset.isVsync;
+                        cbAutoCap.IsChecked = myPreset.isRecap;
+                        nudSharp.Value = myPreset.Sharpness;
+                        cbxResScale.SelectedIndex = myPreset.ResScaleIndex;
                     }
                 }
 
@@ -829,6 +850,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
 
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
+
+                        cbVSync.IsChecked = myPreset.isVsync;
+                        cbAutoCap.IsChecked = myPreset.isRecap;
+                        nudSharp.Value = myPreset.Sharpness;
+                        cbxResScale.SelectedIndex = myPreset.ResScaleIndex;
                     }
                 }
                 if (Family.TYPE == Family.ProcessorType.Intel)
@@ -864,6 +890,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
 
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
+
+                        cbVSync.IsChecked = myPreset.isVsync;
+                        cbAutoCap.IsChecked = myPreset.isRecap;
+                        nudSharp.Value = myPreset.Sharpness;
+                        cbxResScale.SelectedIndex = myPreset.ResScaleIndex;
                     }
                 }
                 Garbage.Garbage_Collect();
@@ -874,6 +905,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         public string getCommandValues()
         {
             string commandValues = "";
+
+            commandValues = commandValues + $"--UXTUSR={tsUXTUSR.IsChecked}-{cbVSync.IsChecked}-{nudSharp.Value / 100}-{cbxResScale.SelectedIndex}-{cbAutoCap.IsChecked} ";
 
             if (Settings.Default.isASUS)
             {

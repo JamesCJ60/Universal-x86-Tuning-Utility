@@ -81,96 +81,105 @@ namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
         static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         public static void ToggleMagWindow()
         {
-            if (!scaleModelManager.IsValid() || magWindow == null)
+            if (Settings.Default.isMagpie || magWindow.Running)
             {
-                return;
-            }
-
-            if (magWindow.Running)
-            {
-                magWindow.Destory();
-                canReapply = false;
-                using (Process p = Process.GetCurrentProcess()) p.PriorityClass = ProcessPriorityClass.Normal;
-                return;
-            }
-            else
-            {
-                using (Process p = Process.GetCurrentProcess()) p.PriorityClass = ProcessPriorityClass.AboveNormal;
-                canReapply = true;
-            }
-
-            string sharpness = "0.80";
-
-            double scaleFactor = 0.59;
-
-            IntPtr foregroundWindow = GetForegroundWindow();
-
-            if (foregroundWindow != IntPtr.Zero)
-            {
-                if (GetWindowRect(foregroundWindow, out RECT windowRect))
+                if (!scaleModelManager.IsValid() || magWindow == null)
                 {
-                    Screen primaryScreen = Screen.PrimaryScreen;
-                    int screenWidth = primaryScreen.Bounds.Width;
-                    int screenHeight = primaryScreen.Bounds.Height;
-
-                    int newWidth = (int)Math.Floor(screenWidth * scaleFactor);
-                    int newHeight = (int)Math.Floor(screenHeight * scaleFactor);
-
-                    int windowStyle = GetWindowLong(foregroundWindow, GWL_STYLE);
-
-                    StringBuilder windowText = new StringBuilder(256);
-                    GetWindowText(foregroundWindow, windowText, windowText.Capacity);
-
-                    string windowTitle = windowText.ToString();
-
-                    AppName = windowTitle;
-
-                    // Check if the window has the WS_BORDER style bit set
-                    bool isBorderless = (windowStyle & 0x00800000) == 0;
-
-                    if (!isBorderless)
-                    {
-
-                        windowStyle = GetWindowLong(foregroundWindow, GWL_STYLE);
-                        int extendedWindowStyle = GetWindowLong(foregroundWindow, GWL_STYLE);
-
-                        // Check if it's a Win32 application by looking for certain window styles
-                        bool isWin32Application = (windowStyle & WS_CHILD) == 0 && (extendedWindowStyle & WS_EX_TOOLWINDOW) == 0;
-
-                        if (isWin32Application) newHeight = newHeight + 32;
-                        else newHeight = newHeight + 40;
-                    }
-
-                    int newX = (screenWidth - newWidth) / 2;
-                    int newY = (screenHeight - newHeight) / 2;
-
-                    SetWindowPos(foregroundWindow, IntPtr.Zero, newX, newY, newWidth, newHeight, SWP_SHOWWINDOW);
+                    return;
                 }
+
+                if (magWindow.Running)
+                {
+                    magWindow.Destory();
+                    canReapply = false;
+                    using (Process p = Process.GetCurrentProcess()) p.PriorityClass = ProcessPriorityClass.Normal;
+                    return;
+                }
+                else
+                {
+                    using (Process p = Process.GetCurrentProcess()) p.PriorityClass = ProcessPriorityClass.AboveNormal;
+                    canReapply = true;
+                }
+
+                string sharpness = Convert.ToString(Settings.Default.Sharpness);
+
+                double scaleFactor = 0.59;
+
+                IntPtr foregroundWindow = GetForegroundWindow();
+
+                if (Settings.Default.ResMode == 1) scaleFactor = 0.77;
+                if (Settings.Default.ResMode == 2) scaleFactor = 0.67;
+                if (Settings.Default.ResMode == 3) scaleFactor = 0.59;
+                if (Settings.Default.ResMode == 4) scaleFactor = 0.50;
+                if (Settings.Default.ResMode == 5) scaleFactor = 0.33;
+
+                if (foregroundWindow != IntPtr.Zero && Settings.Default.ResMode > 0)
+                {
+                    if (GetWindowRect(foregroundWindow, out RECT windowRect))
+                    {
+                        Screen primaryScreen = Screen.PrimaryScreen;
+                        int screenWidth = primaryScreen.Bounds.Width;
+                        int screenHeight = primaryScreen.Bounds.Height;
+
+                        int newWidth = (int)Math.Floor(screenWidth * scaleFactor);
+                        int newHeight = (int)Math.Floor(screenHeight * scaleFactor);
+
+                        int windowStyle = GetWindowLong(foregroundWindow, GWL_STYLE);
+
+                        StringBuilder windowText = new StringBuilder(256);
+                        GetWindowText(foregroundWindow, windowText, windowText.Capacity);
+
+                        string windowTitle = windowText.ToString();
+
+                        AppName = windowTitle;
+
+                        // Check if the window has the WS_BORDER style bit set
+                        bool isBorderless = (windowStyle & 0x00800000) == 0;
+
+                        if (!isBorderless)
+                        {
+
+                            windowStyle = GetWindowLong(foregroundWindow, GWL_STYLE);
+                            int extendedWindowStyle = GetWindowLong(foregroundWindow, GWL_STYLE);
+
+                            // Check if it's a Win32 application by looking for certain window styles
+                            bool isWin32Application = (windowStyle & WS_CHILD) == 0 && (extendedWindowStyle & WS_EX_TOOLWINDOW) == 0;
+
+                            if (isWin32Application) newHeight = newHeight + 32;
+                            else newHeight = newHeight + 40;
+                        }
+
+                        int newX = (screenWidth - newWidth) / 2;
+                        int newY = (screenHeight - newHeight) / 2;
+
+                        SetWindowPos(foregroundWindow, IntPtr.Zero, newX, newY, newWidth, newHeight, SWP_SHOWWINDOW);
+                    }
+                }
+
+                string effectsJson = scaleModelManager.GetScaleModels()![Settings.Default.ScaleMode].Effects;
+
+                int index = effectsJson.LastIndexOf(":");
+                if (index >= 0)
+                    effectsJson = effectsJson.Substring(0, index);
+
+
+
+                effectsJson = effectsJson + ":" + sharpness + "}]";
+
+                //MessageBox.Show(effectsJson);
+
+                magWindow.Create(effectsJson);
+
+                prevSrcWindow = magWindow.SrcWindow;
             }
-
-            string effectsJson = scaleModelManager.GetScaleModels()![Settings.Default.ScaleMode].Effects;
-
-            int index = effectsJson.LastIndexOf(":");
-            if (index >= 0)
-                effectsJson = effectsJson.Substring(0, index);
-
-
-
-            effectsJson = effectsJson + ":" + sharpness + "}]";
-
-            //MessageBox.Show(effectsJson);
-
-            magWindow.Create(effectsJson);
-
-            prevSrcWindow = magWindow.SrcWindow;
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
-        private async void AutoReapply_Tick(object sender, EventArgs e)
+        public static async void AutoRestore_Tick(object sender, EventArgs e)
         {
-            if (Reapply && canReapply)
+            if (Settings.Default.AutoRestore && Settings.Default.isMagpie && canReapply)
             {
                 IntPtr foregroundWindow = GetForegroundWindow();
 

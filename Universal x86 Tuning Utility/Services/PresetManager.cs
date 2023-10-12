@@ -149,6 +149,12 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool asusiGPU { get; set; }
 
         public int displayHz { get; set; }
+
+        public bool isVsync { get; set; }
+        public bool isRecap { get; set; }
+        public int Sharpness { get; set; }
+        public int ResScaleIndex { get; set; }
+
     }
 
     public class PresetManager

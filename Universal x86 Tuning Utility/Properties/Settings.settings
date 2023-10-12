@@ -111,7 +111,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="AdapterIdx" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">-1</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="CropTitleBarOfUWP" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -163,6 +163,15 @@
     </Setting>
     <Setting Name="AutoRestore" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ResMode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="isMagpie" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Sharpness" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.8</Value>
     </Setting>
   </Settings>
 </SettingsFile>

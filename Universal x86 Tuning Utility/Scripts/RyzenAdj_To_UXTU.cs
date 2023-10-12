@@ -1,4 +1,5 @@
-﻿using NvAPIWrapper.Display;
+﻿using GameLib.Plugin.RiotGames.Model;
+using NvAPIWrapper.Display;
 using RyzenSmu;
 using System;
 using System.Collections.Generic;
@@ -42,8 +43,14 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             string ryzenAdjCommandString = command.Split('=')[0].Replace("=", null).Replace("--", null);
                             // Extract the command string after the "=" sign
                             string ryzenAdjCommandValueString = command.Substring(ryzenAdjCommand.IndexOf('=') + 1);
-                            
-                            if (ryzenAdjCommandString.Contains("ASUS"))
+
+
+                            if (ryzenAdjCommandString.Contains("UXTUSR"))
+                            {
+                                UXTUSR(ryzenAdjCommandString, ryzenAdjCommandValueString);
+                                Task.Delay(50);
+                            }
+                            else if (ryzenAdjCommandString.Contains("ASUS"))
                             {
                                 AsusWmi(ryzenAdjCommandString, ryzenAdjCommandValueString);
                                 Task.Delay(50);
@@ -102,6 +109,25 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 if (command == "ADLX-Chill") ADLXBackend.SetChill(int.Parse(variables[0]), bool.Parse(variables[1]), int.Parse(variables[2]), int.Parse(variables[3]));
                 if (command == "ADLX-Sync") ADLXBackend.SetEnhancedSync(int.Parse(variables[0]), bool.Parse(variables[1]));
                 if (command == "ADLX-ImageSharp") ADLXBackend.SetImageSharpning(int.Parse(variables[0]), bool.Parse(variables[1]), int.Parse(variables[2]));
+            }
+            catch { }
+        }
+
+        private static void UXTUSR(string command, string value)
+        {
+            try
+            {
+                string[] variables = value.Split('-');
+
+                if (command == "UXTUSR")
+                {
+                    Universal_x86_Tuning_Utility.Properties.Settings.Default.isMagpie = Convert.ToBoolean(variables[0]);
+                    Universal_x86_Tuning_Utility.Properties.Settings.Default.VSync = Convert.ToBoolean(variables[1]);
+                    Universal_x86_Tuning_Utility.Properties.Settings.Default.Sharpness = Convert.ToDouble(variables[2]);
+                    Universal_x86_Tuning_Utility.Properties.Settings.Default.ResMode = Convert.ToInt32(variables[3]);
+                    Universal_x86_Tuning_Utility.Properties.Settings.Default.AutoRestore = Convert.ToBoolean(variables[0]);
+                    Universal_x86_Tuning_Utility.Properties.Settings.Default.Save();
+                }
             }
             catch { }
         }

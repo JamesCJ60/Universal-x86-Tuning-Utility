@@ -457,7 +457,7 @@ namespace Universal_x86_Tuning_Utility.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int AdapterIdx {
             get {
                 return ((int)(this["AdapterIdx"]));
@@ -668,6 +668,42 @@ namespace Universal_x86_Tuning_Utility.Properties {
             }
             set {
                 this["AutoRestore"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int ResMode {
+            get {
+                return ((int)(this["ResMode"]));
+            }
+            set {
+                this["ResMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isMagpie {
+            get {
+                return ((bool)(this["isMagpie"]));
+            }
+            set {
+                this["isMagpie"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
+        public double Sharpness {
+            get {
+                return ((double)(this["Sharpness"]));
+            }
+            set {
+                this["Sharpness"] = value;
             }
         }
     }

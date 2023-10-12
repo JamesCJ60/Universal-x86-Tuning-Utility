@@ -114,10 +114,10 @@ float3 FsrEasuF(uint2 pos, float4 con0, float4 con1, float4 con2, float2 con3) {
 	float4 zzonG = INPUT.GatherGreen(sam, p3);
 	float4 zzonB = INPUT.GatherBlue(sam, p3);
 
-	float4 bczzL = 0.25f * (bczzR + bczzG) + 0.25f * bczzB;
-	float4 ijfeL = 0.25f * (ijfeR + ijfeG) + 0.25f * ijfeB;
-	float4 klhgL = 0.25f * (klhgR + klhgG) + 0.25f * klhgB;
-	float4 zzonL = 0.25f * (zzonR + zzonG) + 0.25f * zzonB;
+	float4 bczzL = 0.75f * (bczzR + bczzG) + 0.75f * bczzB;
+	float4 ijfeL = 0.75f * (ijfeR + ijfeG) + 0.75f * ijfeB;
+	float4 klhgL = 0.75f * (klhgR + klhgG) + 0.75f * klhgB;
+	float4 zzonL = 0.75f * (zzonR + zzonG) + 0.75f * zzonB;
 
 	float bL = bczzL.x;
 	float cL = bczzL.y;
