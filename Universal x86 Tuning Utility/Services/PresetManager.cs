@@ -150,6 +150,7 @@ namespace Universal_x86_Tuning_Utility.Services
 
         public int displayHz { get; set; }
 
+        public bool isMag { get; set; }
         public bool isVsync { get; set; }
         public bool isRecap { get; set; }
         public int Sharpness { get; set; }

@@ -352,6 +352,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                             displayHz = (int)cbxRefreshRate.SelectedIndex,
 
+                            isMag = (bool)tsUXTUSR.IsChecked,
                             isVsync = (bool)cbVSync.IsChecked,
                             isRecap = (bool)cbAutoCap.IsChecked,
                             Sharpness = (int)nudSharp.Value,
@@ -463,6 +464,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                             displayHz = (int)cbxRefreshRate.SelectedIndex,
 
+                            isMag = (bool)tsUXTUSR.IsChecked,
                             isVsync = (bool)cbVSync.IsChecked,
                             isRecap = (bool)cbAutoCap.IsChecked,
                             Sharpness = (int)nudSharp.Value,
@@ -522,6 +524,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                             displayHz = (int)cbxRefreshRate.SelectedIndex,
 
+                            isMag = (bool)tsUXTUSR.IsChecked,
                             isVsync = (bool)cbVSync.IsChecked,
                             isRecap = (bool)cbAutoCap.IsChecked,
                             Sharpness = (int)nudSharp.Value,
@@ -760,6 +763,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         if(myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
+                        tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
                         cbAutoCap.IsChecked = myPreset.isRecap;
                         nudSharp.Value = myPreset.Sharpness;
@@ -851,6 +855,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
+                        tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
                         cbAutoCap.IsChecked = myPreset.isRecap;
                         nudSharp.Value = myPreset.Sharpness;
@@ -891,6 +896,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
+                        tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
                         cbAutoCap.IsChecked = myPreset.isRecap;
                         nudSharp.Value = myPreset.Sharpness;
