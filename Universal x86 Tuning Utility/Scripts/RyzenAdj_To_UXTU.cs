@@ -121,7 +121,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                 if (command == "UXTUSR")
                 {
-                    Universal_x86_Tuning_Utility.Properties.Settings.Default.AdapterIdx = -1;
+                    Universal_x86_Tuning_Utility.Properties.Settings.Default.AdapterIdx = 0;
                     Universal_x86_Tuning_Utility.Properties.Settings.Default.isMagpie = Convert.ToBoolean(variables[0]);
                     Universal_x86_Tuning_Utility.Properties.Settings.Default.VSync = Convert.ToBoolean(variables[1]);
                     Universal_x86_Tuning_Utility.Properties.Settings.Default.Sharpness = Convert.ToDouble(variables[2]);

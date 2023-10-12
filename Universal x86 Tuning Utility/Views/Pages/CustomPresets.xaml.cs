@@ -23,6 +23,7 @@ using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Controls;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
@@ -79,15 +80,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 if (Display.uniqueRefreshRates.Count > 1)
                 {
+                    cbxRefreshRate.Items.Add($"System Controlled");
                     foreach (var rate in Display.uniqueRefreshRates)
                     {
                         cbxRefreshRate.Items.Add($"{rate} Hz");
                     }
                 }
-                else cbxRefreshRate.Visibility = Visibility.Collapsed;
+                else sdRefreshRate.Visibility = Visibility.Collapsed;
             } catch 
             {
-                cbxRefreshRate.Visibility = Visibility.Collapsed;
+                sdRefreshRate.Visibility = Visibility.Collapsed;
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
@@ -921,9 +923,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                if(sdAsusUlti.Visibility == Visibility.Visible) commandValues = commandValues + $"--ASUS-MUX={tsASUSUlti.IsChecked} ";
             }
 
-            if (cbxRefreshRate.Visibility == Visibility.Visible) 
+            if (sdRefreshRate.Visibility == Visibility.Visible && cbxRefreshRate.SelectedIndex > 0) 
             {
-                commandValues = commandValues + $"--Refresh-Rate={Display.uniqueRefreshRates[cbxRefreshRate.SelectedIndex]} ";
+                commandValues = commandValues + $"--Refresh-Rate={Display.uniqueRefreshRates[cbxRefreshRate.SelectedIndex - 1]} ";
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
