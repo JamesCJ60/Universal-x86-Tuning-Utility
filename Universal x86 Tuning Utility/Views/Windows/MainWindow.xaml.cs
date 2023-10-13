@@ -106,7 +106,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         }
                         else
                         {
-                            RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString);
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
                             ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
                         }
                     }
@@ -121,7 +121,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         }
                         else
                         {
-                            RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString);
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
                             ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
                         }
                     }

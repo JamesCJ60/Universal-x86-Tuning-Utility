@@ -30,6 +30,18 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isBoost { get; set; }
         public bool isImageSharp { get; set; }
         public bool isSync { get; set; }
+
+        public bool isNVIDIA { get; set; }
+        public int nvCoreClk { get; set; }
+        public int nvMemClk { get; set; }
+
+        public int asusPowerProfile { get; set; }
+
+        public bool isMag { get; set; }
+        public bool isVsync { get; set; }
+        public bool isRecap { get; set; }
+        public int Sharpness { get; set; }
+        public int ResScaleIndex { get; set; }
     }
 
     public class AdaptivePresetManager

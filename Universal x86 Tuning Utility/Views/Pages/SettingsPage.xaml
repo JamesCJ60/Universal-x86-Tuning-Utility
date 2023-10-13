@@ -47,6 +47,7 @@
             <ui:NumberBox Name="nudAutoReapply" Minimum="1" Value="3" Maximum="60" Margin="9,0,0,0" TextChanged="nudAutoReapply_TextChanged" MaxDecimalPlaces="0"></ui:NumberBox>
         </StackPanel>
         <CheckBox Name="cbAutoCheck" Click="cbAutoCheck_Click">Auto Update Check</CheckBox>
+        <CheckBox Name="cbAdaptive" Click="cbAdaptive_Click">Auto Start Adaptive Mode</CheckBox>
         <ui:Button Name="btnStressTest" Width="178" Click="btnStressTest_Click" Margin="0,9,0,0">
             <StackPanel Orientation="Horizontal">
                 <ui:SymbolIcon Symbol="Fire20" FontSize="24" Margin="0,0,9,0"/>

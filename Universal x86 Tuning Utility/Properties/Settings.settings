@@ -173,5 +173,8 @@
     <Setting Name="Sharpness" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.8</Value>
     </Setting>
+    <Setting Name="isStartAdpative" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

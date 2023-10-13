@@ -210,7 +210,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             e.Handled = true;
         }
 
-        private void btnApply_Click(object sender, RoutedEventArgs e)
+        private async void btnApply_Click(object sender, RoutedEventArgs e)
         {
             string commandValues = "";
 
@@ -218,7 +218,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (commandValues != "" && commandValues != null)
             {
-                RyzenAdj_To_UXTU.Translate(commandValues);
+                await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandValues));
                 ToastNotification.ShowToastNotification("Preset Applied", $"Your custom preset settings have been applied!");
             }
 

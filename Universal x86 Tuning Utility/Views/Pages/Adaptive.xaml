@@ -207,6 +207,98 @@
                             <TextBlock Margin="0,8,0,0" Foreground="LightGray">Notes: Ensure you balance CPU and iGPU clocks out for the best performance!</TextBlock>
                         </StackPanel>
                 </ui:CardExpander>
+                    <ui:CardExpander Name="sdUXTUSR"
+IsEnabled="True"
+IsExpanded="False"
+Icon="Image24" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="UXTU Super Resolution" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Powered by a customised version of Magpie. Use Alt+F to toggle."/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsUXTUSR" Margin="0,0,9,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Name="cbVSync" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Enable VSync" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Synchronises capture frame rate to display refresh rate." VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Width="130" Name="cbAutoCap" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Auto Recapture" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Auto recaptures the previous capture window after focus was lost and restored." VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Capture Sharpness (%)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls UXTU Super Resolution capture image sharpness." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudSharp" Text="{Binding ElementName=sdSharp, Path=Value}" Value="{Binding ElementName=sdSharp, Path=Value}" Maximum="100" Minimum="5" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0"  />
+                                    <Slider Name="sdSharp" Value="{Binding ElementName=nudSharp, Path=Value}" Maximum="100" Minimum="5" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Resolution Scale</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the resolution of the window being captured. Use application controlled if you do not want UXTU to override the window resolution. Not all applications will be compatible with this mode!" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="208" />
+                                    </Grid.ColumnDefinitions>
+                                    <ComboBox
+Grid.Column="1"
+VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" Height="37">
+                                        <ComboBoxItem>Application Controlled</ComboBoxItem>
+                                        <ComboBoxItem>Ultra Quality (77%)</ComboBoxItem>
+                                        <ComboBoxItem>Quality (67%)</ComboBoxItem>
+                                        <ComboBoxItem>Balanced (59%)</ComboBoxItem>
+                                        <ComboBoxItem>Performance (50%)</ComboBoxItem>
+                                        <ComboBoxItem>Ultra Performance (33%)</ComboBoxItem>
+                                    </ComboBox>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
                     <ui:CardExpander Name="sdADLX"
             IsEnabled="True"
             IsExpanded="False"
@@ -314,6 +406,102 @@
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
+                    <ui:CardExpander Name="sdNVIDIA"
+IsEnabled="True"
+IsExpanded="False"
+Icon="Pulse20" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="NVIDIA GPU Tuning" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to set tune your NVIDIA GPU."/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsNV" Margin="0,0,9,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Core Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudNVCore" Text="{Binding ElementName=sdNVCore, Path=Value}" Value="{Binding ElementName=sdNVCore, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdNVCore" Value="{Binding ElementName=nudNVCore, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Memory Clock (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's VRAM clock" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudNVMem" Text="{Binding ElementName=sdNVMem, Path=Value}" Value="{Binding ElementName=sdNVMem, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdNVMem" Value="{Binding ElementName=nudNVMem, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <TextBlock 
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </ui:CardExpander>
+                    <ui:CardControl Name="sdAsusPower"
+IsEnabled="True"
+Icon="Power20" Margin="0,8,15,0">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="ASUS Power Profile" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to set an ASUS power profile. This will override Armoury Crate!"/>
+                                </StackPanel>
+                                <ComboBox
+            Grid.Column="1"
+            VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxAsusPower" Height="37">
+                                    <ComboBoxItem>AC Controlled</ComboBoxItem>
+                                    <ComboBoxItem>Silent</ComboBoxItem>
+                                    <ComboBoxItem>Performance</ComboBoxItem>
+                                    <ComboBoxItem>Turbo</ComboBoxItem>
+                                </ComboBox>
+
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
 
                     <TextBlock Name="tbLog" Margin="0,9,0,0"></TextBlock>
                 </StackPanel>

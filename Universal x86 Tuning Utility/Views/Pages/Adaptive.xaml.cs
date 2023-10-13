@@ -138,6 +138,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
 
                 foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get()) coreCount += int.Parse(item["NumberOfCores"].ToString());
+
+                if (Settings.Default.isStartAdpative) ToggleAdaptiveMode();
             }
             catch { }
         }
@@ -158,7 +160,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             e.Handled = true;
         }
         bool start = false;
-        private async void btnStart_Click(object sender, RoutedEventArgs e)
+        private void btnStart_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleAdaptiveMode();
+        }
+
+        private async void ToggleAdaptiveMode()
         {
             try
             {
@@ -184,6 +191,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
             catch { }
         }
+
         public static int CPUTemp, CPULoad, CPUClock, CPUPower, GPULoad, GPUClock, GPUMemClock;
 
         private void mainScroll_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -253,6 +261,18 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudRSR.Value = myPreset.rsr;
                     nudBoost.Value = myPreset.boost;
                     nudImageSharp.Value = myPreset.imageSharp;
+
+                    tsNV.IsChecked = myPreset.isNVIDIA;
+                    nudNVCore.Value = myPreset.nvCoreClk;
+                    nudNVMem.Value = myPreset.nvMemClk;
+
+                    cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
+
+                    tsUXTUSR.IsChecked = myPreset.isMag;
+                    cbVSync.IsChecked = myPreset.isVsync;
+                    cbAutoCap.IsChecked = myPreset.isRecap;
+                    nudSharp.Value = myPreset.Sharpness;
+                    cbxResScale.SelectedIndex = myPreset.ResScaleIndex;
                 }
             }
             catch { }
@@ -281,6 +301,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     isAntiLag = (bool)cbAntiLag.IsChecked,
                     isImageSharp = (bool)cbImageSharp.IsChecked,
                     isSync = (bool)cbSync.IsChecked,
+                    isNVIDIA = (bool)tsNV.IsChecked,
+                    nvCoreClk = (int)nudNVCore.Value,
+                    nvMemClk = (int)nudNVMem.Value,
+                    asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
+                    isMag = (bool)tsUXTUSR.IsChecked,
+                    isVsync = (bool)cbVSync.IsChecked,
+                    isRecap = (bool)cbAutoCap.IsChecked,
+                    Sharpness = (int)nudSharp.Value,
+                    ResScaleIndex = (int)cbxResScale.SelectedIndex,
                 };
                 adaptivePresetManager.SavePreset(presetName, preset);
             }
@@ -436,7 +465,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (tsTBOiGPU.IsChecked == true) iGPUControl.UpdateiGPUClock((int)nudMaxGfxClk.Value, (int)nudMinGfxClk.Value, (int)nudTemp.Value, CPUPower, CPUTemp, GPUClock, GPULoad, GPUMemClock, CPUClock, minCPUClock);
 
                         string commandString = "";
-                        if(CPUControl.cpuCommand != lastCPU)
+
+                        commandString = commandString + $"--UXTUSR={tsUXTUSR.IsChecked}-{cbVSync.IsChecked}-{nudSharp.Value / 100}-{cbxResScale.SelectedIndex}-{cbAutoCap.IsChecked} ";
+
+                        if (Settings.Default.isASUS)
+                        {
+                            if (cbxAsusPower.SelectedIndex > 0) commandString = commandString + $"--ASUS-Power={cbxAsusPower.SelectedIndex} ";
+                        }
+
+                        if (CPUControl.cpuCommand != lastCPU)
                         {
                             commandString = commandString + CPUControl.cpuCommand;
                             lastCPU = CPUControl.cpuCommand;
@@ -454,7 +491,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             lastiGPU = iGPUControl.commmand;
                         }
 
-
                         if (tsRadeonGraph.IsChecked == true)
                         {
                             if (cbAntiLag.IsChecked == true) commandString = commandString + $"--ADLX-Lag=0-true --ADLX-Lag=1-true ";
@@ -471,6 +507,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                             if (cbSync.IsChecked == true) commandString = commandString + $"--ADLX-Sync=0-true --ADLX-Sync=1-true ";
                             else commandString = commandString + $"--ADLX-Sync=0-false --ADLX-Sync=1-false ";
+                        }
+
+                        if (tsNV.IsChecked == true)
+                        {
+                            commandString = commandString + $"--NVIDIA-Clocks={nudNVCore.Value}-{nudNVMem.Value} ";
                         }
 
                         if (commandString != null && commandString != "") await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));

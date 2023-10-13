@@ -2,8 +2,13 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using Universal_x86_Tuning_Utility.Properties;
+using Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
 
@@ -32,9 +37,20 @@ namespace Universal_x86_Tuning_Utility.ViewModels
 
         public ICommand OpenWindowCommand => _openWindowCommand ??= new RelayCommand<string>(OnOpenWindow);
 
+        public DispatcherTimer autoAdaptive = new DispatcherTimer();
         public DashboardViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
+
+            autoAdaptive.Interval = TimeSpan.FromSeconds(1);
+            autoAdaptive.Tick += AutoAdaptive_Tick;
+            autoAdaptive.Start();
+        }
+
+        public void AutoAdaptive_Tick(object sender, EventArgs e)
+        {
+           if(Settings.Default.isStartAdpative) _navigationService.Navigate(typeof(Views.Pages.Adaptive));
+            autoAdaptive.Stop();
         }
 
         public void OnNavigatedTo()

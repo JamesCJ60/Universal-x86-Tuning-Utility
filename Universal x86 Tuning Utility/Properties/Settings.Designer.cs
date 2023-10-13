@@ -706,5 +706,17 @@ namespace Universal_x86_Tuning_Utility.Properties {
                 this["Sharpness"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isStartAdpative {
+            get {
+                return ((bool)(this["isStartAdpative"]));
+            }
+            set {
+                this["isStartAdpative"] = value;
+            }
+        }
     }
 }
