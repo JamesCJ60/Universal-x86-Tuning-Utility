@@ -65,6 +65,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudPolling.Value = Settings.Default.polling;
 
             cbAutoSwitch.IsChecked = Settings.Default.autoSwitch;
+
+            if (!Settings.Default.isASUS) sdAsusPower.Visibility = Visibility.Collapsed;
         }
         private static AdaptivePresetManager adaptivePresetManager = new AdaptivePresetManager(Settings.Default.Path + "adaptivePresets.json");
         private async void setUp()
