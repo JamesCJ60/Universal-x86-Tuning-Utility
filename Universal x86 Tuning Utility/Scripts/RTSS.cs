@@ -16,32 +16,18 @@ namespace Universal_x86_Tuning_Utility.Scripts
 {
     public static class RTSS
     {
-        public static string rtssDirectory = Properties.Settings.Default.directoryRTSS;
-
+        public static string rtssDirectory = Settings.Default.directoryRTSS;
         public static int fps = 0;
         public static void getRTSSFPSLimit()
         {
-
-
             if (RTSSRunning())
             {
                 RTSS.LoadProfile();
                 int fpsLimit = 0;
                 RTSS.GetProfileProperty("FramerateLimit", out fpsLimit);
-                if (fpsLimit != fps)
-                {
-                    fps = fpsLimit;
-                }
+                fps = fpsLimit;
             }
         }
-
-        //public static void checkAutoStartRTSS()
-        //{
-        //    if (!RTSSRunning() && Properties.Settings.Default.autoStartRTSS)
-        //    {
-        //        startRTSS();
-        //    }
-        //}
 
         public static bool directoryRTSSExists()
         {
@@ -69,14 +55,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
         public static bool RTSSRunning()
         {
             Process[] pname = Process.GetProcessesByName("rtss");
-            if (pname.Length != 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            if (pname.Length != 0) return true;
+            else return false;
         }
 
         public static void setRTSSFPSLimit(int frameLimit)
@@ -85,6 +65,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
             {
                 RTSS.LoadProfile();
                 RTSS.SetProfileProperty("FramerateLimit", frameLimit);
+                fps = frameLimit;
                 RTSS.SaveProfile();
                 RTSS.UpdateProfiles();
             }

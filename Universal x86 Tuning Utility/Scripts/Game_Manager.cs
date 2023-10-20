@@ -40,8 +40,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
         public static List<GameLauncherItem> installedGames = null;
 
-        public static List<string> gamePaths = new List<string>();
-
         public static List<GameLauncherItem> syncGame_Library()
         {
             try
@@ -49,8 +47,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 List<GameLauncherItem> list = new List<GameLauncherItem>();
                 //gamelauncher
                 LauncherManager gameLauncher = new LauncherManager(new GameLib.Core.LauncherOptions() { QueryOnlineData = false });
-
-                gamePaths = new List<string>();
 
                 GameLauncherItem extraApps = new GameLauncherItem();
 
@@ -61,8 +57,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         case "Steam":
                             foreach (var game in launcher.Games)
                             {
-                                gamePaths.Add($"{game.Name}~{game.InstallDir}");
-
                                 if (!game.Name.Contains("Steamworks") && !game.Name.Contains("SteamVR") && !game.Name.Contains("Google Earth") && !game.Name.Contains("Wallpaper Engine") && !game.Name.Contains("tModLoader"))
                                 {
                                     if (game.Id != "228980")
@@ -123,7 +117,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         case "Battle.net":
                             foreach (var game in launcher.Games)
                             {
-                                gamePaths.Add($"{game.Name}~{game.InstallDir}");
                                 GameLauncherItem launcherItem = new GameLauncherItem();
                                 launcherItem.gameName = game.Name;
                                 launcherItem.gameID = game.Id;
@@ -151,7 +144,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         case "Epic Games":
                             foreach (var game in launcher.Games)
                             {
-                                gamePaths.Add($"{game.Name}~{game.InstallDir}");
                                 GameLauncherItem launcherItem = new GameLauncherItem();
                                 launcherItem.gameName = game.Name;
                                 launcherItem.gameID = game.Id;
@@ -167,7 +159,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         default:
                             foreach (var game in launcher.Games)
                             {
-                                gamePaths.Add($"{game.Name}~{game.InstallDir}");
                                 GameLauncherItem launcherItem = new GameLauncherItem();
                                 launcherItem.gameName = game.Name;
                                 launcherItem.gameID = game.Id;
@@ -214,7 +205,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                         if (strings.Contains(package.DisplayName))
                                         {
                                             GameLauncherItem launcherItem = new GameLauncherItem();
-                                            gamePaths.Add($"{package.DisplayName}~{package.InstalledPath}");
                                             launcherItem.gameName = package.DisplayName;
                                             launcherItem.gameID = package.Id.FullName;
                                             launcherItem.launchCommand = package.Id.FullName;
@@ -259,21 +249,11 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         extraApps.gameName = "Citra";
                         extraApps.path = "Citra.exe";
 
-                        gamePaths.Add($"Yuzu~yuzu.exe");
-
-                        gamePaths.Add($"RPCS3~rpcs3.exe");
-
-                        gamePaths.Add($"Cemu~cemu.exe");
-  
-                        gamePaths.Add($"Dolphin~Dolphin.exe");
-  
-                        gamePaths.Add($"Citra~Citra.exe");
 
                         list.Add(extraApps);
                     }
                 }
                 var distinctGameLauncherItems = list.Distinct(new GameLauncherItemEqualityComparer()).ToList();
-                gamePaths = gamePaths.Distinct().ToList();
                 return distinctGameLauncherItems;
             } catch (Exception ex)
             {

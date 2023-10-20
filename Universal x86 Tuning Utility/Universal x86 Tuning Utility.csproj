@@ -31,7 +31,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DisplaySettingsChanger" Version="1.0.1" />
     <PackageReference Include="GameLib.NET" Version="1.4.1" />
     <PackageReference Include="hidlibrary" Version="3.3.40" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.2" />
@@ -160,6 +159,12 @@
     </None>
     <None Update="Assets\Intel\MSR\WinRing0x64.sys">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\RTSS\RTSSHooks64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\RTSS\RTSSSharedMemoryNET.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Assets\Stress-Test\AVX2 Stress Test.deps.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -432,12 +437,6 @@
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="Assets\RTSS\RTSSHooks64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\RTSS\RTSSSharedMemoryNET.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ucrtbased.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

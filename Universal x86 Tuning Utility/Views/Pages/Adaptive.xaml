@@ -503,6 +503,53 @@ Icon="Power20" Margin="0,8,15,0">
                         </ui:CardControl.Header>
                     </ui:CardControl>
 
+                    <ui:CardExpander Name="sdRTSS" Visibility="Collapsed"
+IsEnabled="True"
+IsExpanded="False"
+Icon="Pulse20" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="Static RTSS Frame Rate" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to set a custom RTSS frame limit."/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsRTSS" Margin="0,0,9,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">RTSS Frame Limit (FPS)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the set FPS limit in RTSS" VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudRTSS" Text="{Binding ElementName=sdRTSSLim, Path=Value}" Value="{Binding ElementName=sdRTSSLim, Path=Value}" Maximum="999" Minimum="0" Grid.Column="0" SmallChange="2" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdRTSSLim" Value="{Binding ElementName=nudRTSS, Path=Value}" Maximum="999" Minimum="0" Grid.Column="1" Margin="12,0,0,0" TickFrequency="2" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+     
+                        </StackPanel>
+                    </ui:CardExpander>
+
                     <TextBlock Name="tbLog" Margin="0,9,0,0"></TextBlock>
                 </StackPanel>
             </ScrollViewer>

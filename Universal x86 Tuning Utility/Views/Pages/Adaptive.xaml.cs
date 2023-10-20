@@ -80,6 +80,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     sdTBOiGPU.Visibility = Visibility.Collapsed;
                     sdADLX.Visibility = Visibility.Collapsed;
                 }
+
+                if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
+
                 if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu || Family.FAM == Family.RyzenFamily.DragonRange) nudPowerLimit.Value = 86;
                 else nudPowerLimit.Value = 28;
                 nudMaxGfxClk.Value = 1900;
@@ -380,6 +383,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             GPUClock = ADLXBackend.GetGPUMetrics(0, 0);
                             GPUMemClock = ADLXBackend.GetGPUMetrics(0, 1);
                         }
+
+                        if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
                     });
 
 
@@ -522,6 +527,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (commandString != null && commandString != "") await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));
                     }
 
+                    if (RTSS.RTSSRunning() && tsRTSS.IsChecked == true) RTSS.setRTSSFPSLimit((int)nudRTSS.Value);
+                    
+
                     //if (RTSS.RTSSRunning())
                     //{
                     //    int i = 0;
@@ -567,9 +575,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         string runningGameName = "Default";
         private void isGameRunning()
         {
-            foreach (var game in Game_Manager.gamePaths)
+            foreach (GameLauncherItem item in installedGames)
             {
-                var gamePath = game.Split("~");
+                //var gamePath = game.Split("~");
 
                 int i = 0;
                 do
@@ -584,9 +592,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             string executableDirectory = System.IO.Path.GetDirectoryName(executablePath);
                             string executableName = System.IO.Path.GetFileName(executablePath);
 
-                            if (executablePath.Contains(gamePath[1]))
+                            if (executablePath.Contains(item.path))
                             {
-                                runningGameName = gamePath[0];
+                                runningGameName = item.gameName;
                                 return;
                             }
                         }
@@ -596,9 +604,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         }
                     }
                     i++;
-                } while (i < RunningGames.appFlags.Count);
+                } while (i < 2);
             }
-
             runningGameName = "Default";
         }
 
