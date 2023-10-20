@@ -145,7 +145,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 }
 
                 if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
-                else if (FAM == RyzenFamily.DragonRange) TYPE = ProcessorType.Amd_Desktop_Cpu;
                 else TYPE = ProcessorType.Amd_Apu;
 
                 Addresses.setAddresses();

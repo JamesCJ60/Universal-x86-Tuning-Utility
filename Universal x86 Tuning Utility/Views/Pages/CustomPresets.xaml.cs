@@ -107,6 +107,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if(Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
 
+                if (Family.FAM < Family.RyzenFamily.DragonRange)
+                {
+                    sdAmdPowerProfile.Visibility = Visibility.Collapsed;
+                    sdAmdCO.Visibility = Visibility.Collapsed;
+                    sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
+                    if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
+                }
+
                 sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
@@ -976,14 +984,37 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (cbxBoost.SelectedIndex == 2) commandValues = commandValues + $"--max-performance ";
                 }
 
-                if(cbCCD1Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={(0 << 20) | ((int)nudCCD1Core1.Value & 0xFFFF)} ";
-                if (cbCCD1Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={(1 << 20) | ((int)nudCCD1Core2.Value & 0xFFFF)} ";
-                if (cbCCD1Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={(2 << 20) | ((int)nudCCD1Core3.Value & 0xFFFF)} ";
-                if (cbCCD1Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={(3 << 20) | ((int)nudCCD1Core4.Value & 0xFFFF)} ";
-                if (cbCCD1Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={(4 << 20) | ((int)nudCCD1Core5.Value & 0xFFFF)} ";
-                if (cbCCD1Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={(5 << 20) | ((int)nudCCD1Core6.Value & 0xFFFF)} ";
-                if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={(6 << 20) | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
-                if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
+                if (Family.FAM == Family.RyzenFamily.DragonRange)
+                {
+                    if (cbCCD1Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 0 % 8 & 15) << 20 | ((int)nudCCD1Core1.Value & 0xFFFF)} ";
+                    if (cbCCD1Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 1 % 8 & 15) << 20 | ((int)nudCCD1Core2.Value & 0xFFFF)} ";
+                    if (cbCCD1Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 2 % 8 & 15) << 20 | ((int)nudCCD1Core3.Value & 0xFFFF)} ";
+                    if (cbCCD1Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 3 % 8 & 15) << 20 | ((int)nudCCD1Core4.Value & 0xFFFF)} ";
+                    if (cbCCD1Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 4 % 8 & 15) << 20 | ((int)nudCCD1Core5.Value & 0xFFFF)} ";
+                    if (cbCCD1Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 5 % 8 & 15) << 20 | ((int)nudCCD1Core6.Value & 0xFFFF)} ";
+                    if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 6 % 8 & 15) << 20 | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
+                    if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 7 % 8 & 15) << 20 | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
+
+                    if (cbCCD2Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 0 % 8 & 15) << 20 | ((int)nudCCD2Core1.Value & 0xFFFF)} ";
+                    if (cbCCD2Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 1 % 8 & 15) << 20 | ((int)nudCCD2Core2.Value & 0xFFFF)} ";
+                    if (cbCCD2Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 2 % 8 & 15) << 20 | ((int)nudCCD2Core3.Value & 0xFFFF)} ";
+                    if (cbCCD2Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 3 % 8 & 15) << 20 | ((int)nudCCD2Core4.Value & 0xFFFF)} ";
+                    if (cbCCD2Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 4 % 8 & 15) << 20 | ((int)nudCCD2Core5.Value & 0xFFFF)} ";
+                    if (cbCCD2Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 5 % 8 & 15) << 20 | ((int)nudCCD2Core6.Value & 0xFFFF)} ";
+                    if (cbCCD2Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 6 % 8 & 15) << 20 | ((int)nudCCD2Core7.Value & 0xFFFF)} ";
+                    if (cbCCD2Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={((1 << 4 | 0 % 1 & 15) << 4 | 7 % 8 & 15) << 20 | ((int)nudCCD2Core8.Value & 0xFFFF)} ";
+                }
+                else
+                {
+                    if (cbCCD1Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={(0 << 20) | ((int)nudCCD1Core1.Value & 0xFFFF)} ";
+                    if (cbCCD1Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={(1 << 20) | ((int)nudCCD1Core2.Value & 0xFFFF)} ";
+                    if (cbCCD1Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={(2 << 20) | ((int)nudCCD1Core3.Value & 0xFFFF)} ";
+                    if (cbCCD1Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={(3 << 20) | ((int)nudCCD1Core4.Value & 0xFFFF)} ";
+                    if (cbCCD1Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={(4 << 20) | ((int)nudCCD1Core5.Value & 0xFFFF)} ";
+                    if (cbCCD1Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={(5 << 20) | ((int)nudCCD1Core6.Value & 0xFFFF)} ";
+                    if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={(6 << 20) | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
+                    if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
+                }
 
                 if (tsAmdOC.IsChecked == true)
                 {

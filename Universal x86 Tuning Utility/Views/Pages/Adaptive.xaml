@@ -36,10 +36,10 @@
                 <TextBlock FontSize="14" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,9,9">Polling Rate</TextBlock>
                 <ui:NumberBox Margin="0,0,9,9" x:Name="nudPolling" Minimum="1" Maximum="8" Value="2" SmallChange="0.05" MaxDecimalPlaces="2"></ui:NumberBox>
                 <CheckBox Name="cbAutoSwitch" Content="Auto switch app profile" Margin="0,0,9,9" VerticalAlignment="Center" Click="cbAutoSwitch_Click"/>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings" Click="btnSave_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings" Click="btnSave_Click" IsEnabled="False">
                     <ui:SymbolIcon Symbol="Save20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="185" Name="btnStart" Click="btnStart_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="185" Name="btnStart" Click="btnStart_Click" IsEnabled="False">
                     <StackPanel Orientation="Horizontal">
                         <ui:SymbolIcon Name="siStartIcon" Symbol="Play20" FontSize="24"/>
                         <TextBlock Name="tbxStartText" VerticalAlignment="Center" Margin="9,0,0,0">Start Adaptive Mode</TextBlock>

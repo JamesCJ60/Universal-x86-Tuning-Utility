@@ -36,6 +36,8 @@ using Windows.Gaming.Preview.GamesEnumeration;
 using System.Management;
 using RyzenSmu;
 using Universal_x86_Tuning_Utility.Scripts.GPUs.AMD;
+using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
+using System.ComponentModel;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
@@ -78,33 +80,30 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     sdTBOiGPU.Visibility = Visibility.Collapsed;
                     sdADLX.Visibility = Visibility.Collapsed;
                 }
-
-                List<string> apps = new List<string>();
-                await Task.Run(() => apps = GetGames());
-
+                if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu || Family.FAM == Family.RyzenFamily.DragonRange) nudPowerLimit.Value = 86;
+                else nudPowerLimit.Value = 28;
                 nudMaxGfxClk.Value = 1900;
                 nudMinGfxClk.Value = 400;
-                nudPowerLimit.Value = 28;
                 nudTemp.Value = 95;
                 nudMinCpuClk.Value = 1500;
 
+                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
 
-                cbxPowerPreset.ItemsSource = apps;
+                cbxPowerPreset.Items.Add("Default");
+                foreach (GameLauncherItem item in Game_Manager.installedGames) cbxPowerPreset.Items.Add(item.gameName);
+
                 cbxPowerPreset.SelectedIndex = 0;
 
-
                 IEnumerable<string> presetNames = adaptivePresetManager.GetPresetNames();
-                foreach (string app in apps)
+
+                foreach (GameLauncherItem item in Game_Manager.installedGames)
                 {
                     bool containsName = false;
-                    try
+
+                    foreach (string names in presetNames)
                     {
-                        foreach (string gameName in presetNames)
-                        {
-                            if (gameName.Contains(app)) containsName = true;
-                        }
+                        if (names.Contains(item.gameName)) containsName = true;
                     }
-                    catch { }
 
                     if (containsName == false)
                     {
@@ -128,7 +127,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isImageSharp = (bool)cbImageSharp.IsChecked,
                             isSync = (bool)cbSync.IsChecked,
                         };
-                        adaptivePresetManager.SavePreset(app, preset);
+                        adaptivePresetManager.SavePreset(item.gameName, preset);
                     }
 
                     if (Family.TYPE == Family.ProcessorType.Intel)
@@ -141,9 +140,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get()) coreCount += int.Parse(item["NumberOfCores"].ToString());
 
+                btnStart.IsEnabled = true;
+                btnSave.IsEnabled = true;
+
                 if (Settings.Default.isStartAdpative) ToggleAdaptiveMode();
             }
-            catch { }
+            catch (Exception ex) { }
         }
 
         [DllImport("user32.dll")]
@@ -209,7 +211,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 update();
             }
-            if(Settings.Default.polling != nudPolling.Value)
+            if (Settings.Default.polling != nudPolling.Value)
             {
                 Settings.Default.polling = (double)nudPolling.Value;
                 Settings.Default.Save();
@@ -277,7 +279,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxResScale.SelectedIndex = myPreset.ResScaleIndex;
                 }
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private void savePreset(string presetName)
@@ -315,7 +317,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 };
                 adaptivePresetManager.SavePreset(presetName, preset);
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private static LASTINPUTINFO lastInput = new LASTINPUTINFO();
@@ -327,9 +329,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             try
             {
                 cbxPowerPreset.ItemsSource = new List<string>();
-                List<string> apps = new List<string>();
-                await Task.Run(() => apps = GetGames());
-                cbxPowerPreset.ItemsSource = apps;
+                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
+                cbxPowerPreset.Items.Clear();
+                cbxPowerPreset.Items.Add("Default");
+                foreach (GameLauncherItem item in Game_Manager.installedGames) cbxPowerPreset.Items.Add(item.gameName);
                 cbxPowerPreset.SelectedIndex = 0;
             }
             catch (Exception ex)
@@ -395,18 +398,18 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             selectedGameName = cbxPowerPreset.SelectedItem.ToString();
                         });
 
-                        if (selectedGameName != gameName)
+                        if (selectedGameName != runningGameName)
                         {
                             Dispatcher.Invoke(() =>
                             {
-                                getRunningGame(gameName);
+                                getRunningGame(runningGameName);
                             });
                         }
                     }
 
                 }
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         public static int GetRadeonGPUCount()
@@ -560,47 +563,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             Garbage.Garbage_Collect();
         }
 
-        private static List<string> gamePaths = new List<string>();
-        private List<string> GetGames()
-        {
-            List<string> gameList = new List<string>();
-            gamePaths = new List<string>();
-            gameList.Add("Default");
 
-            launcherManager = new LauncherManager(new LauncherOptions() { QueryOnlineData = true });
-            launcherManager.Refresh();
-
-            IEnumerable<IGame> allGames = Enumerable.Empty<IGame>();
-
-            allGames = launcherManager.GetAllGames().OrderBy(g => g.Name);
-
-            foreach (var game in allGames)
-            {
-                if (!game.Name.Contains("Steamworks") && !game.Name.Contains("SteamVR") && !game.Name.Contains("Google Earth") && !game.Name.Contains("Wallpaper Engine") && !game.Name.Contains("tModLoader"))
-                {
-                    string gameName = game.Name;
-                    gameList.Add(gameName);
-                    gamePaths.Add($"{game.Name}~{game.InstallDir}");
-                }
-            }
-
-            gameList.Add("Yuzu");
-            gamePaths.Add($"Yuzu~yuzu.exe");
-            gameList.Add("RPCS3");
-            gamePaths.Add($"RPCS3~rpcs3.exe");
-            gameList.Add("Cemu");
-            gamePaths.Add($"Cemu~cemu.exe");
-            gameList.Add("Dolphin");
-            gamePaths.Add($"Dolphin~Dolphin.exe");
-            gameList.Add("Citra");
-            gamePaths.Add($"Citra~Citra.exe");
-
-            return gameList;
-        }
-        string gameName = "Default";
+        string runningGameName = "Default";
         private void isGameRunning()
         {
-            foreach (var game in gamePaths)
+            foreach (var game in Game_Manager.gamePaths)
             {
                 var gamePath = game.Split("~");
 
@@ -619,7 +586,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                             if (executablePath.Contains(gamePath[1]))
                             {
-                                gameName = gamePath[0];
+                                runningGameName = gamePath[0];
                                 return;
                             }
                         }
@@ -632,8 +599,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 } while (i < RunningGames.appFlags.Count);
             }
 
-            gameName = "Default";
+            runningGameName = "Default";
         }
+
 
         private void getRunningGame(string presetName)
         {

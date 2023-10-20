@@ -184,14 +184,14 @@
                 Margin="0,8,4,0"
                 Command="{Binding ViewModel.NavigateCommand}"
                 CommandParameter="navigate_to_icons"
-                Icon="FullScreenMaximize20" 
+                Icon="Games20" 
                 IsEnabled="False">
                 <StackPanel>
                     <TextBlock
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Magpie FSR" />
+                        Text="Game Optimiser" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction

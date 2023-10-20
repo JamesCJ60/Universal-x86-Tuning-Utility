@@ -218,6 +218,8 @@ namespace Universal_x86_Tuning_Utility
 
                 if (IsInternetAvailable()) if (Settings.Default.UpdateCheck) CheckForUpdate();
 
+                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
+
                 await _host.StartAsync();
             }
         }
