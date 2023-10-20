@@ -22,6 +22,7 @@ using System.Reflection;
 using Windows.Gaming.Preview.GamesEnumeration;
 using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
 using GameLib.Plugin.RiotGames.Model;
+using System.Linq.Expressions;
 
 namespace Universal_x86_Tuning_Utility.Scripts
 {
@@ -180,48 +181,51 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 IEnumerable<Windows.ApplicationModel.Package> packages = packageManager.FindPackages();
 
                 DriveInfo[] allDrives = DriveInfo.GetDrives();
-
-                foreach (DriveInfo d in allDrives)
-                {
-                    string xboxGameDirectory = Path.Combine(d.Name, "XboxGames");
-                    string[] filesInDirectory;
-                    if (Directory.Exists(xboxGameDirectory))
+                try {
+                    foreach (DriveInfo d in allDrives)
                     {
-                        filesInDirectory = Directory.GetDirectories(xboxGameDirectory);
-
-                        if (filesInDirectory.Length > 0)
+                        string xboxGameDirectory = Path.Combine(d.Name, "XboxGames");
+                        string[] filesInDirectory;
+                        if (Directory.Exists(xboxGameDirectory))
                         {
-                            string[] strings = filesInDirectory.Select(x => Path.GetFileName(x)).ToArray();
+                            filesInDirectory = Directory.GetDirectories(xboxGameDirectory);
 
-                            if (strings.Length > 0)
+                            if (filesInDirectory.Length > 0)
                             {
-                                foreach (Package package in packages)
-                                {
-                                    string install = package.InstalledLocation.Path;
-                                    string sig = package.SignatureKind.ToString();
+                                string[] strings = filesInDirectory.Select(x => Path.GetFileName(x)).ToArray();
 
-                                    if (install.Contains("WindowsApps") && sig == "Store" && package.IsFramework == false)
+                                if (strings.Length > 0)
+                                {
+                                    foreach (Package package in packages)
                                     {
-                                        if (strings.Contains(package.DisplayName))
+                                        string install = package.InstalledLocation.Path;
+                                        string sig = package.SignatureKind.ToString();
+
+                                        if (install.Contains("WindowsApps") && sig == "Store" && package.IsFramework == false)
                                         {
-                                            GameLauncherItem launcherItem = new GameLauncherItem();
-                                            launcherItem.gameName = package.DisplayName;
-                                            launcherItem.gameID = package.Id.FullName;
-                                            launcherItem.launchCommand = package.Id.FullName;
-                                            launcherItem.path = package.InstalledPath;
-                                            //launcherItem.exe = Path.GetFileNameWithoutExtension(launcherItem.path);
-                                            launcherItem.appType = "Microsoft Store";
-                                            launcherItem.imageLocation = package.Logo.AbsolutePath;
-                                            list.Add(launcherItem);
+                                            if (strings.Contains(package.DisplayName))
+                                            {
+                                                GameLauncherItem launcherItem = new GameLauncherItem();
+                                                launcherItem.gameName = package.DisplayName;
+                                                launcherItem.gameID = package.Id.FullName;
+                                                launcherItem.launchCommand = package.Id.FullName;
+                                                launcherItem.path = package.InstalledPath;
+                                                //launcherItem.exe = Path.GetFileNameWithoutExtension(launcherItem.path);
+                                                launcherItem.appType = "Microsoft Store";
+                                                launcherItem.imageLocation = package.Logo.AbsolutePath;
+                                                list.Add(launcherItem);
+
+                                            }
 
                                         }
 
                                     }
-
                                 }
-                            }
 
+                            }
                         }
+                    }
+                } catch { }
 
                         list = list.OrderBy(item => item.gameName).ToList();
 
@@ -251,8 +255,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
 
                         list.Add(extraApps);
-                    }
-                }
+
                 var distinctGameLauncherItems = list.Distinct(new GameLauncherItemEqualityComparer()).ToList();
                 return distinctGameLauncherItems;
             } catch (Exception ex)
