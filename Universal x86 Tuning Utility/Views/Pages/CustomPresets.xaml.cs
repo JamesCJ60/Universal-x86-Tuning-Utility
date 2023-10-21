@@ -97,12 +97,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdCPU.Visibility = Visibility.Collapsed;
                 sdAmdCpuThermal.Visibility = Visibility.Collapsed;
                 sdIntelCPU.Visibility = Visibility.Collapsed;
-                if (Family.FAM != Family.RyzenFamily.PhoenixPoint && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
-                if (Family.FAM != Family.RyzenFamily.PhoenixPoint && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdCO.Visibility = Visibility.Collapsed;
+                if (Family.FAM != Family.RyzenFamily.PhoenixPoint || Family.FAM != Family.RyzenFamily.PhoenixPoint2 && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
+                if (Family.FAM < Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Mendocino || Family.FAM == Family.RyzenFamily.PhoenixPoint2) sdAmdCO.Visibility = Visibility.Collapsed;
                 if (Family.CPUName.Contains("U") && Family.FAM > Family.RyzenFamily.Renoir) sdAmdPBO.Visibility = Visibility.Collapsed;
-                if(!Family.CPUName.Replace("with Radeon Graphics", null).Contains("G") && Family.CPUName != "AMD Custom APU 0405") if(Family.FAM != Family.RyzenFamily.Renoir && !Family.CPUName.Contains("Ryzen 9") && cbAllCO.Visibility == Visibility) sdAmdCO.Visibility = Visibility.Collapsed;
-
-                if (SystemInformation.PowerStatus.BatteryChargeStatus == BatteryChargeStatus.NoSystemBattery && Family.FAM >= Family.RyzenFamily.Renoir || Family.CPUName.Contains("Ryzen 9")) sdAmdCO.Visibility = Visibility.Visible;
                 if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
 
                 if(Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
@@ -289,6 +286,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ccd1Core7 = (int)nudCCD1Core7.Value,
                             ccd1Core8 = (int)nudCCD1Core8.Value,
 
+                            ccd2Core1 = (int)nudCCD2Core1.Value,
+                            ccd2Core2 = (int)nudCCD2Core2.Value,
+                            ccd2Core3 = (int)nudCCD2Core3.Value,
+                            ccd2Core4 = (int)nudCCD2Core4.Value,
+                            ccd2Core5 = (int)nudCCD2Core5.Value,
+                            ccd2Core6 = (int)nudCCD2Core6.Value,
+                            ccd2Core7 = (int)nudCCD2Core7.Value,
+                            ccd2Core8 = (int)nudCCD2Core8.Value,
+
                             commandValue = getCommandValues(),
 
                             isApuTemp = (bool)cbAPUTemp.IsChecked,
@@ -319,6 +325,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
                             IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
                             IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
+
+                            IsCCD2Core1 = (bool)cbCCD2Core1.IsChecked,
+                            IsCCD2Core2 = (bool)cbCCD2Core2.IsChecked,
+                            IsCCD2Core3 = (bool)cbCCD2Core3.IsChecked,
+                            IsCCD2Core4 = (bool)cbCCD2Core4.IsChecked,
+                            IsCCD2Core5 = (bool)cbCCD2Core5.IsChecked,
+                            IsCCD2Core6 = (bool)cbCCD2Core6.IsChecked,
+                            IsCCD2Core7 = (bool)cbCCD2Core7.IsChecked,
+                            IsCCD2Core8 = (bool)cbCCD2Core8.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
                             nvCoreClk = (int)nudNVCore.Value,
@@ -732,6 +747,24 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbCCD1Core6.IsChecked = myPreset.IsCCD1Core6;
                         cbCCD1Core7.IsChecked = myPreset.IsCCD1Core7;
                         cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
+
+                        nudCCD2Core1.Value = myPreset.ccd1Core1;
+                        nudCCD2Core2.Value = myPreset.ccd1Core2;
+                        nudCCD2Core3.Value = myPreset.ccd1Core3;
+                        nudCCD2Core4.Value = myPreset.ccd1Core4;
+                        nudCCD2Core5.Value = myPreset.ccd1Core5;
+                        nudCCD2Core6.Value = myPreset.ccd1Core6;
+                        nudCCD2Core7.Value = myPreset.ccd1Core7;
+                        nudCCD2Core8.Value = myPreset.ccd1Core8;
+
+                        cbCCD2Core1.IsChecked = myPreset.IsCCD2Core1;
+                        cbCCD2Core2.IsChecked = myPreset.IsCCD2Core2;
+                        cbCCD2Core3.IsChecked = myPreset.IsCCD2Core3;
+                        cbCCD2Core4.IsChecked = myPreset.IsCCD2Core4;
+                        cbCCD2Core5.IsChecked = myPreset.IsCCD2Core5;
+                        cbCCD2Core6.IsChecked = myPreset.IsCCD2Core6;
+                        cbCCD2Core7.IsChecked = myPreset.IsCCD2Core7;
+                        cbCCD2Core8.IsChecked = myPreset.IsCCD2Core8;
 
                         cbxBoost.SelectedIndex = myPreset.boostProfile;
 
