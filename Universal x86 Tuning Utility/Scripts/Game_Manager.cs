@@ -181,8 +181,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 IEnumerable<Windows.ApplicationModel.Package> packages = packageManager.FindPackages();
 
                 DriveInfo[] allDrives = DriveInfo.GetDrives();
-                try {
-                    foreach (DriveInfo d in allDrives)
+
+                foreach (DriveInfo d in allDrives)
+                {
+                    try
                     {
                         string xboxGameDirectory = Path.Combine(d.Name, "XboxGames");
                         string[] filesInDirectory;
@@ -225,40 +227,42 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             }
                         }
                     }
-                } catch { }
+                    catch { }
+                }
 
-                        list = list.OrderBy(item => item.gameName).ToList();
+                list = list.OrderBy(item => item.gameName).ToList();
 
-                        extraApps = new GameLauncherItem();
-                        extraApps.gameName = "Yuzu";
-                        extraApps.path = "yuzu.exe";
-                        list.Add(extraApps);
+                extraApps = new GameLauncherItem();
+                extraApps.gameName = "Yuzu";
+                extraApps.path = "yuzu.exe";
+                list.Add(extraApps);
 
-                        extraApps = new GameLauncherItem();
-                        extraApps.gameName = "RPCS3";
-                        extraApps.path = "rpcs3.exe";
-                        list.Add(extraApps);
+                extraApps = new GameLauncherItem();
+                extraApps.gameName = "RPCS3";
+                extraApps.path = "rpcs3.exe";
+                list.Add(extraApps);
 
-                        extraApps = new GameLauncherItem();
-                        extraApps.gameName = "Cemu";
-                        extraApps.path = "cemu.exe";
-                        list.Add(extraApps);
+                extraApps = new GameLauncherItem();
+                extraApps.gameName = "Cemu";
+                extraApps.path = "cemu.exe";
+                list.Add(extraApps);
 
-                        extraApps = new GameLauncherItem();
-                        extraApps.gameName = "Dolphin";
-                        extraApps.path = "Dolphin.exe";
-                        list.Add(extraApps);
+                extraApps = new GameLauncherItem();
+                extraApps.gameName = "Dolphin";
+                extraApps.path = "Dolphin.exe";
+                list.Add(extraApps);
 
-                        extraApps = new GameLauncherItem();
-                        extraApps.gameName = "Citra";
-                        extraApps.path = "Citra.exe";
+                extraApps = new GameLauncherItem();
+                extraApps.gameName = "Citra";
+                extraApps.path = "Citra.exe";
 
 
-                        list.Add(extraApps);
+                list.Add(extraApps);
 
                 var distinctGameLauncherItems = list.Distinct(new GameLauncherItemEqualityComparer()).ToList();
                 return distinctGameLauncherItems;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
                 return null;

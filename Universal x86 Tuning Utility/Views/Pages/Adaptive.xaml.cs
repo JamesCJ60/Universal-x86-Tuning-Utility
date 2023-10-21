@@ -282,7 +282,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxResScale.SelectedIndex = myPreset.ResScaleIndex;
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { }
         }
 
         private void savePreset(string presetName)
@@ -320,7 +320,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 };
                 adaptivePresetManager.SavePreset(presetName, preset);
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { }
         }
 
         private static LASTINPUTINFO lastInput = new LASTINPUTINFO();
@@ -338,10 +338,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 foreach (GameLauncherItem item in Game_Manager.installedGames) cbxPowerPreset.Items.Add(item.gameName);
                 cbxPowerPreset.SelectedIndex = 0;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
+            catch (Exception ex) { }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -384,15 +381,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             GPUMemClock = ADLXBackend.GetGPUMetrics(0, 1);
                         }
 
-                        if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
+                        isGameRunning();
                     });
 
+                    if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
 
                     minCPUClock = Convert.ToInt32(nudMinCpuClk.Value);
                     if (CPULoad < (100 / coreCount) + 5) newMinCPUClock = minCPUClock + 500;
                     else newMinCPUClock = minCPUClock;
 
-                    await Task.Run(() => isGameRunning());
 
                     if (cbxPowerPreset.Items.Count > 0 && cbAutoSwitch.IsChecked == true)
                     {
@@ -414,7 +411,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex) { }
         }
 
         public static int GetRadeonGPUCount()
@@ -548,7 +545,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     //}
                 }
             }
-            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+            catch (Exception ex) { }
         }
 
         public bool IsScrollBarVisible(ScrollViewer scrollViewer)

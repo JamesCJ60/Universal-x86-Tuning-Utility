@@ -61,7 +61,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.1.1";
+        public static string version = "2.1.2";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -199,12 +199,12 @@ namespace Universal_x86_Tuning_Utility
                     if (Family.FAM > Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.Mendocino) Settings.Default.polling = 3;
                     Settings.Default.Save();
 
-                    PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, true);
-                    PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, false);
-                    PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, true);
-                    PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, false);
-                    PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, true);
-                    PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, false);
+                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, true);
+                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, false);
+                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, true);
+                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, false);
+                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, true);
+                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, false);
 
                     try
                     {
@@ -218,9 +218,9 @@ namespace Universal_x86_Tuning_Utility
 
                 if (IsInternetAvailable()) if (Settings.Default.UpdateCheck) CheckForUpdate();
 
-                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
-
                 await _host.StartAsync();
+
+                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
             }
         }
 
