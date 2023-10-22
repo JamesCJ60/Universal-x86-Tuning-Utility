@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GameLib.Plugin.RiotGames.Model;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -8,9 +9,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Properties;
+using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution;
+using Windows.System;
 using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
+using Settings = Universal_x86_Tuning_Utility.Properties.Settings;
 
 namespace Universal_x86_Tuning_Utility.ViewModels
 {
@@ -94,6 +98,15 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 case "support":
                     Process.Start(new ProcessStartInfo("https://www.paypal.com/paypalme/JamesCJ60") { UseShellExecute = true });
                     Process.Start(new ProcessStartInfo("https://patreon.com/uxtusoftware") { UseShellExecute = true });
+                    return;
+                case "games":
+                    _navigationService.Navigate(typeof(Views.Pages.Games));
+                    return;
+                default:
+                    string[] parts = parameter.Split('-');
+                    MessageBox.Show("Worked!");
+                    if (!parts[0].Contains("Microsoft Store")) Game_Manager.LaunchApp(parts[2], parts[0], parts[1], parts[1]);
+                    else Game_Manager.LaunchApp(parts[1], parts[0], parts[1], parts[1]);
                     return;
             }
         }

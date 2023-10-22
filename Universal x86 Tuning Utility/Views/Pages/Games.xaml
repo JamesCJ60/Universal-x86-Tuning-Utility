@@ -5,37 +5,68 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      d:DataContext="{d:DesignInstance local:CustomPresets, IsDesignTimeCreatable=False}"
+      d:DataContext="{d:DesignInstance local:Games, IsDesignTimeCreatable=False}"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Automations" Loaded="Page_Loaded">
+      Title="Games" Loaded="Page_Loaded">
 
     <Grid>
-        <DockPanel Margin="15,0,15,0">
+        <Grid Panel.ZIndex="1">
+            <ui:Card Name="ccLoading" HorizontalAlignment="Center" Padding="80,40,80,40" HorizontalContentAlignment="Center">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center">Locating Games</TextBlock>
+                    <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorTertiaryBrush}">This should only take a few moments!</TextBlock>
+                    <ui:LoadingScreen VerticalAlignment="Center" Background="Transparent" HorizontalAlignment="Center" Margin="0,15,0,0"></ui:LoadingScreen>
+                </StackPanel>
+            </ui:Card>
+        </Grid>
+        <DockPanel Margin="0,0,0,0" LastChildFill="true">
             <TextBlock
             FontSize="26"
             FontWeight="Medium"
-            Text="Game Optimiser" DockPanel.Dock="Top" Margin="3,10,0,0"/>
+            Text="Game Library" DockPanel.Dock="Top" Margin="18,10,0,0"/>
 
-            <ListBox DockPanel.Dock="Left" Name="lbGames" Width="325">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,9,9,6">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload list of games" Click="btnLoad_Click">
+                    <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
+                </ui:Button>
+            </StackPanel>
+
+            <ListBox DockPanel.Dock="Left" Name="lbGames" Margin="0,8,0,0" Width="Auto" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" BorderBrush="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="False" ScrollViewer.PanningMode="VerticalFirst" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" ScrollViewer.IsDeferredScrollingEnabled="False" >
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding iconPath}" Width="28"></Image>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding gameID}" Margin="8,0,0,0" Visibility="Collapsed"></TextBlock>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding gameName}" Margin="8,0,0,0" FontSize="17"></TextBlock>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding appType}" Margin="8,0,0,0" Visibility="Collapsed"></TextBlock>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding launchCommand}" Margin="8,0,0,0" Visibility="Collapsed"></TextBlock>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding path}" Margin="8,0,0,0" Visibility="Collapsed"></TextBlock>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding exe}" Margin="8,0,0,0" Visibility="Collapsed"></TextBlock>
-                        </StackPanel>
+                        <ui:Card x:Name="ccMain" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="15,8,8,0" Padding="16,14,16,14">
+
+                            <DockPanel HorizontalAlignment="Stretch" LastChildFill="True" Margin="0,4,0,0">
+                                <Border DockPanel.Dock="Left" VerticalAlignment="Center" Width="64" Height="64" Margin="0,0,0,0" BorderBrush="Transparent" CornerRadius="8">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{Binding iconPath}" Stretch="UniformToFill"/>
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel DockPanel.Dock="Left" Margin="18,0,0,0">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding gameName}" FontSize="19"/>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding appType}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding path}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="12"/>
+                                </StackPanel>
+                                <ui:Button Appearance="Primary" Width="95" DockPanel.Dock="Right" HorizontalAlignment="Right" Tag="{Binding launchCommand}" Click="Button_Click">Play</ui:Button>
+                            </DockPanel>
+                        </ui:Card>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-
-            <Frame x:Name="PagesNavigation" NavigationUIVisibility="Hidden"></Frame>
         </DockPanel>
     </Grid>
 </Page>

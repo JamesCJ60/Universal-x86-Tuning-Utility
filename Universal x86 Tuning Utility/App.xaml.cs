@@ -61,7 +61,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.1.3";
+        public static string version = "2.1.4";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -139,6 +139,7 @@ namespace Universal_x86_Tuning_Utility
                 services.AddScoped<Views.Pages.Automations>();
                 services.AddScoped<Views.Pages.FanControl>();
                 services.AddScoped<Views.Pages.SystemInfo>();
+                services.AddScoped<ViewModels.GamesViewModel>();
                 services.AddScoped<Views.Pages.Games>();
                 services.AddScoped<ViewModels.CustomPresetsViewModel>();
                 services.AddScoped<Views.Pages.DataPage>();

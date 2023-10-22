@@ -60,7 +60,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="V2.1.3 Stable" />
+                            Text="V2.2.0 Beta 1" />
                             <ui:Button
                                 Name="btnPremade"
                             Height="36"
@@ -183,15 +183,15 @@
                 Grid.Column="0"
                 Margin="0,8,4,0"
                 Command="{Binding ViewModel.NavigateCommand}"
-                CommandParameter="navigate_to_icons"
-                Icon="Games20" 
-                IsEnabled="False">
+                CommandParameter="games"
+                Icon="Apps20" 
+                IsEnabled="true">
                 <StackPanel>
                     <TextBlock
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Game Optimiser" />
+                        Text="Game Library" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction

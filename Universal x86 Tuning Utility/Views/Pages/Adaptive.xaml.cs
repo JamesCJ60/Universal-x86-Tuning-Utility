@@ -90,7 +90,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 nudTemp.Value = 95;
                 nudMinCpuClk.Value = 1500;
 
-                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
+                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library(true));
 
                 cbxPowerPreset.Items.Add("Default");
                 foreach (GameLauncherItem item in Game_Manager.installedGames) cbxPowerPreset.Items.Add(item.gameName);
@@ -332,7 +332,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             try
             {
                 cbxPowerPreset.ItemsSource = new List<string>();
-                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
+                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library(true));
                 cbxPowerPreset.Items.Clear();
                 cbxPowerPreset.Items.Add("Default");
                 foreach (GameLauncherItem item in Game_Manager.installedGames) cbxPowerPreset.Items.Add(item.gameName);
