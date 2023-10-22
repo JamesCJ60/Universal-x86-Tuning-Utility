@@ -98,21 +98,20 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdCpuThermal.Visibility = Visibility.Collapsed;
                 sdIntelCPU.Visibility = Visibility.Collapsed;
                 if (Family.FAM != Family.RyzenFamily.PhoenixPoint || Family.FAM != Family.RyzenFamily.PhoenixPoint2 && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
-                if (Family.FAM < Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Mendocino || Family.FAM == Family.RyzenFamily.PhoenixPoint2) sdAmdCO.Visibility = Visibility.Collapsed;
+                if (Family.FAM < Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Mendocino) sdAmdCO.Visibility = Visibility.Collapsed;
                 if (Family.CPUName.Contains("U") && Family.FAM > Family.RyzenFamily.Renoir) sdAmdPBO.Visibility = Visibility.Collapsed;
                 if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
 
                 if(Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
 
+                sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
+
                 if (Family.FAM < Family.RyzenFamily.DragonRange)
                 {
                     sdAmdPowerProfile.Visibility = Visibility.Collapsed;
                     sdAmdCO.Visibility = Visibility.Collapsed;
-                    sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
                     if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
                 }
-
-                sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();

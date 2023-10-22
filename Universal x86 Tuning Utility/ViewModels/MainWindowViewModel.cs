@@ -75,6 +75,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     Icon = SymbolRegular.Radar20,
                     PageType = typeof(Views.Pages.Adaptive)
                 },
+                //new NavigationItem()
+                //{
+                //    Content = "Game Opti",
+                //    PageTag = "games",
+                //    Icon = SymbolRegular.Games20,
+                //    PageType = typeof(Views.Pages.Games)
+                //},
                 new NavigationItem()
                 {
                     Content = "Auto",
@@ -157,6 +164,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     Icon = SymbolRegular.Radar20,
                     PageType = typeof(Views.Pages.Adaptive)
                 },
+                //new NavigationItem()
+                //{
+                //    Content = "Game Opti",
+                //    PageTag = "games",
+                //    Icon = SymbolRegular.Games20,
+                //    PageType = typeof(Views.Pages.Games)
+                //},
                 new NavigationItem()
                 {
                     Content = "Auto",

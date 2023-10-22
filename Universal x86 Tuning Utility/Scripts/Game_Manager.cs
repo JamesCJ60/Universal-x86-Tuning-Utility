@@ -23,6 +23,11 @@ using Windows.Gaming.Preview.GamesEnumeration;
 using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
 using GameLib.Plugin.RiotGames.Model;
 using System.Linq.Expressions;
+using System.Drawing;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using Image = System.Drawing.Image;
+using Universal_x86_Tuning_Utility.Views.Pages;
 
 namespace Universal_x86_Tuning_Utility.Scripts
 {
@@ -37,6 +42,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
             public string path { get; set; }
             public string exe { get; set; }
             public string imageLocation { get; set; } = "";
+            public string iconPath { get; set; } = "";
         }
 
         public static List<GameLauncherItem> installedGames = null;
@@ -66,6 +72,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                         launcherItem.gameName = game.Name;
                                         launcherItem.gameID = game.Id;
                                         launcherItem.launchCommand = game.LaunchString;
+                                        launcherItem.iconPath = game.ExecutableIcon;
 
                                         if (game.Executables.Count() == 1)
                                         {
@@ -122,6 +129,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 launcherItem.gameName = game.Name;
                                 launcherItem.gameID = game.Id;
                                 launcherItem.launchCommand = game.LaunchString;
+                                launcherItem.iconPath = game.ExecutableIcon;
                                 switch (game.Name)
                                 {
                                     case "Call of Duty Black Ops Cold War":
@@ -150,6 +158,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 launcherItem.gameID = game.Id;
                                 launcherItem.launchCommand = game.LaunchString;
                                 launcherItem.path = game.InstallDir;
+                                launcherItem.iconPath = game.ExecutableIcon;
                                 launcherItem.exe = Path.GetFileNameWithoutExtension(launcherItem.path);
                                 launcherItem.appType = launcher.Name;
                                 list.Add(launcherItem);
@@ -167,6 +176,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 launcherItem.path = game.InstallDir;
                                 launcherItem.exe = Path.GetFileNameWithoutExtension(launcherItem.path);
                                 launcherItem.appType = launcher.Name;
+                                launcherItem.iconPath = game.ExecutableIcon;
                                 list.Add(launcherItem);
                             }
                             break;
