@@ -103,7 +103,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
 
                             // Use Task.WhenAny to fetch icons in parallel and return the first matching one
                             var iconTasks = icons
-                                .Where(hero => iconSizeThresholds.Any(size => hero.Width >= size))
+                                .Where(hero => iconSizeThresholds.Any(size => hero.Width == size))
                                 .Select(async hero =>
                                 {
                                     var iconUrl = hero.FullImageUrl;

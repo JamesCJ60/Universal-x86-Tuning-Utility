@@ -1039,8 +1039,8 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVCore" Text="{Binding ElementName=sdNVCore, Path=Value}" Value="{Binding ElementName=sdNVCore, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
-                                    <Slider Name="sdNVCore" Value="{Binding ElementName=nudNVCore, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudNVCore" Text="{Binding ElementName=sdNVCore, Path=Value}" Value="{Binding ElementName=sdNVCore, Path=Value}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdNVCore" Value="{Binding ElementName=nudNVCore, Path=Value}" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -1054,8 +1054,8 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVMem" Text="{Binding ElementName=sdNVMem, Path=Value}" Value="{Binding ElementName=sdNVMem, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
-                                    <Slider Name="sdNVMem" Value="{Binding ElementName=nudNVMem, Path=Value}" Maximum="900" Minimum="-900" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudNVMem" Text="{Binding ElementName=sdNVMem, Path=Value}" Value="{Binding ElementName=sdNVMem, Path=Value}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdNVMem" Value="{Binding ElementName=nudNVMem, Path=Value}" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
 
