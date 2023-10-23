@@ -2,7 +2,7 @@
 
 [![Download Latest](https://img.shields.io/github/downloads/JamesCJ60/Universal-x86-Tuning-Utility/latest/total?style=flat-square&color=orange&label=Download%20Latest)](https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases/latest)
 [![Total Downloads](https://img.shields.io/github/downloads/JamesCJ60/Universal-x86-Tuning-Utility/total?style=flat-square&color=orange&label=Download%20Total)](https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases/latest)
-[![discord](https://img.shields.io/discord/772105072720871435?color=orange&label=Discord&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/3EkYMZGJwq)
+[![discord](https://img.shields.io/discord/772105072720871435?color=orange&label=Discord&logo=discord&logoColor=white&style=flat-square)](https://discord.gg/9FeYVcbbUQ)
 [![Donations](https://img.shields.io/badge/PayPal-00457C?style=flat-square&color=orange&label=Donations&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/JamesCJ60)
 [![Support us on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Duxtusoftware%26type%3Dpatrons&style=flat-square&color=orange&label=Patreon&logoColor=white)](https://patreon.com/uxtusoftware)
 
@@ -12,7 +12,7 @@ This project is still very much a WORK IN PROGRESS!
 
 PLEASE READ THIS: THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. MISUSE OF THIS SOFTWARE COULD CAUSE SYSTEM INSTABILITY OR MALFUNCTION.
 
-If you come across any issues or errors with UXTU please open an issue or ping `@JamesCJ#2022`, `@sbski#2700`, or `@ProjectSBC#9711` in our [discord community server](https://discord.gg/M3hVqnT4pQ). 
+If you come across any issues or errors with UXTU please open an issue or ping `@JamesCJ#2022`, `@sbski#2700`, or `@ProjectSBC#9711` in our [discord community server](https://discord.gg/9FeYVcbbUQ). 
 
 If you would like to support the development of Universal x86 Tuning Utility by donating, you can do so via [Patreon](https://www.patreon.com/uxtusoftware) or [PayPal](https://www.paypal.me/JamesCJ60)
 
