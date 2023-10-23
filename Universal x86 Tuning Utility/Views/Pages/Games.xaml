@@ -50,18 +50,27 @@
                     <DataTemplate>
                         <ui:Card x:Name="ccMain" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="15,8,8,0" Padding="16,14,16,14">
 
-                            <DockPanel HorizontalAlignment="Stretch" LastChildFill="True" Margin="0,4,0,0">
+                            <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Margin="0,4,0,0">
                                 <Border DockPanel.Dock="Left" VerticalAlignment="Center" Width="64" Height="64" Margin="0,0,0,0" BorderBrush="Transparent" CornerRadius="8">
                                     <Border.Background>
                                         <ImageBrush ImageSource="{Binding iconPath}" Stretch="UniformToFill"/>
                                     </Border.Background>
                                 </Border>
-                                <StackPanel DockPanel.Dock="Left" Margin="18,0,0,0">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding gameName}" FontSize="19"/>
+                                <StackPanel DockPanel.Dock="Left" Margin="18,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding gameName}" FontSize="18"/>
                                     <TextBlock VerticalAlignment="Center" Text="{Binding appType}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
                                     <TextBlock VerticalAlignment="Center" Text="{Binding path}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="12"/>
                                 </StackPanel>
-                                <ui:Button Appearance="Primary" Width="95" DockPanel.Dock="Right" HorizontalAlignment="Right" Tag="{Binding launchCommand}" Click="Button_Click">Play</ui:Button>
+                                <ui:Button Appearance="Primary" Width="48" Height="40" DockPanel.Dock="Right" HorizontalAlignment="Right" Tag="{Binding launchCommand}" Click="Button_Click">
+                                    <ui:SymbolIcon Symbol="Play20" FontSize="24" Margin="0,1,0,0"/>
+                                </ui:Button>
+                                <ui:Button Appearance="Caution" Width="48" Height="40" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,9,0" IsEnabled="False">
+                                    <ui:SymbolIcon Symbol="Toolbox20" FontSize="24" Margin="0,1,0,0"/>
+                                </ui:Button>
+                                <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
+                                    <TextBlock HorizontalAlignment="Center" Text="Average FPS" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding fpsData}" FontSize="18"/>
+                                </StackPanel>
                             </DockPanel>
                         </ui:Card>
                     </DataTemplate>

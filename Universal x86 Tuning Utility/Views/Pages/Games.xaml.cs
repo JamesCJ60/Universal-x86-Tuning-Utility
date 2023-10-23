@@ -1,9 +1,12 @@
-﻿using Octokit;
+﻿using GameLib.Plugin.RiotGames.Model;
+using Octokit;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,12 +19,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
+using Windows.Gaming.Preview.GamesEnumeration;
 using Wpf.Ui.Common.Interfaces;
+using YamlDotNet.Core;
 using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
+using Settings = Universal_x86_Tuning_Utility.Properties.Settings;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
@@ -35,8 +42,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             get;
         }
 
-        public class GameLauncherItem
+        public class GameLauncherItem : INotifyPropertyChanged
         {
+            private string _fpsData;
+
             public string gameID { get; set; }
             public string gameName { get; set; }
             public string appType { get; set; }
@@ -44,10 +53,33 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             public string path { get; set; }
             public string exe { get; set; }
             public string imageLocation { get; set; } = "";
+
+            public string fpsData
+            {
+                get { return _fpsData; }
+                set
+                {
+                    if (_fpsData != value)
+                    {
+                        _fpsData = value;
+                        OnPropertyChanged(nameof(fpsData));
+                    }
+                }
+            }
+
             public string iconPath { get; set; } = "";
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected virtual void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
+
         public static List<GameLauncherItem> GameList = null;
+        DispatcherTimer updateFPS = new DispatcherTimer();
         public Games(ViewModels.GamesViewModel viewModel)
         {
             InitializeComponent();
@@ -55,16 +87,67 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             ViewModel = viewModel;
             setUp();
             Garbage.Garbage_Collect();
+            updateFPS.Interval = TimeSpan.FromSeconds(1.5);
+            updateFPS.Tick += UpdateFPS_Tick;
+            updateFPS.Start();
         }
 
+        private void UpdateFPS_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
+                IEnumerable<string> presetNames = gameDataManager.GetPresetNames();
+                foreach (string name in presetNames)
+                {
+                    GameLauncherItem itemToUpdate = GameList.FirstOrDefault(item => item.gameName == name);
+                    if (itemToUpdate != null)
+                    {
+                        GameData gameData = gameDataManager.GetPreset(name);
+                        string fps = "";
+                        if (gameData?.fpsData != "No Data") fps = $"{gameData?.fpsData} FPS";
+                        else fps = $"{gameData?.fpsData}";
+                        itemToUpdate.fpsData = fps;
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private static GameDataManager gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
         public async void setUp()
         {
             lbGames.ItemsSource = null;
             ccLoading.Visibility = Visibility.Visible;
             await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
             GameList = new List<GameLauncherItem>();
+
             await Task.WhenAll(Game_Manager.installedGames.Select(async game =>
             {
+                IEnumerable<string> presetNames = gameDataManager.GetPresetNames();
+
+                bool containsName = false;
+
+                foreach (string names in presetNames)
+                {
+                    if (names.Contains(game.gameName)) containsName = true;
+                }
+
+                if (containsName == false)
+                {
+                    GameData preset = new GameData
+                    {
+                        fpsData = "No Data"
+                    };
+                    gameDataManager.SavePreset(game.gameName, preset);
+                }
+
+                gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
+                GameData gameData = gameDataManager.GetPreset(game.gameName);
+                string fps = "";
+                if (gameData?.fpsData != "No Data") fps = $"{gameData?.fpsData} FPS";
+                else fps = $"{gameData?.fpsData}";
+
                 GameLauncherItem launcherItem = new GameLauncherItem
                 {
                     gameName = game.gameName,
@@ -73,6 +156,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     launchCommand = game.launchCommand,
                     exe = game.exe,
                     gameID = game.gameID,
+                    fpsData = fps,
                     iconPath = await GetImages.GetIconImageUrl(game.gameName)
                 };
 

@@ -43,6 +43,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
             public string path { get; set; }
             public string exe { get; set; }
             public string imageLocation { get; set; } = "";
+            public string fpsData { get; set; } = "No Data";
             public string iconPath { get; set; } = "";
         }
 
