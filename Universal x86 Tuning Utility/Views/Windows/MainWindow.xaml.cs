@@ -1,8 +1,17 @@
-﻿using Gma.System.MouseKeyHook;
+﻿using Accord.Math.Distances;
+using DuoVia.FuzzyStrings;
+using GameLib.Plugin.RiotGames.Model;
+using Gma.System.MouseKeyHook;
+using HidSharp.Utility;
 using Microsoft.Win32;
+using RTSSSharedMemoryNET;
 using RyzenSmu;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Management;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -18,11 +27,14 @@ using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution;
+using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
+using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
+using Settings = Universal_x86_Tuning_Utility.Properties.Settings;
 
 namespace Universal_x86_Tuning_Utility.Views.Windows
 {
@@ -59,9 +71,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             GC.Tick += GC_Tick;
             GC.Start();
 
-            //Misc.Interval = TimeSpan.FromSeconds(2.5);
-            //Misc.Tick += Misc_Tick;
-            //Misc.Start();
+            Misc.Interval = TimeSpan.FromSeconds(1);
+            Misc.Tick += Misc_Tick;
+            Misc.Start();
 
             autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
             autoReapply.Tick += AutoReapply_Tick;
@@ -146,9 +158,117 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         //    }
         //}
 
+        static bool firstTime = true;
+        private static List<GameLauncherItem> listOfGames = null;
+        int garbage = -1;
         private async void Misc_Tick(object sender, EventArgs e)
         {
-            //getBatTempData();
+            try
+            {
+                if (File.Exists(Settings.Default.Path + "\\gameData.json"))
+                {
+                    if (RTSS.RTSSRunning())
+                    {
+                        var osd = new OSD("RTSSDemo");
+                        var appEntries = OSD.GetAppEntries().Where(x => (x.Flags & AppFlags.MASK) != AppFlags.None).ToArray();
+                        if (!firstTime)
+                        {
+                            foreach (Game_Manager.GameLauncherItem item in listOfGames)
+                            {
+                                foreach (var app in appEntries)
+                                {
+                                    if (item.path != null && app.Name.ToLower().Contains(item.path.ToLower()) || app.Name.ToLower().Contains(GetImages.CleanFileName(item.gameName.ToLower())) || item.exe != null && app.Name.ToLower().Contains(item.exe))
+                                    {
+                                        GameDataManager gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
+                                        //string graphAPI = "";
+                                        //if (Convert.ToInt32(app.Flags) == 196616) graphAPI = "D3D12";
+                                        //else if (app.Flags == AppFlags.Direct3D11 || Convert.ToInt32(app.Flags) == 65543) graphAPI = "D3D11";
+                                        //else if (app.Flags == AppFlags.Direct3D10) graphAPI = "D3D10";
+                                        //else if (app.Flags == AppFlags.Direct3D9 || app.Flags == AppFlags.Direct3D9Ex) graphAPI = "D3D9";
+                                        //else if (app.Flags == AppFlags.Direct3D8) graphAPI = "D3D8";
+                                        //else if (app.Flags == AppFlags.OpenGL) graphAPI = "OpenGL";
+                                        //else if (Convert.ToInt32(app.Flags) == 65546) graphAPI = "Vulkan";
+
+                                        GameData gameData = gameDataManager.GetPreset(item.gameName);
+                                        uint fps = app.InstantaneousFrames;
+
+                                        string fpsString = gameData.fpsAvData;
+
+                                        uint[] fpsArray = fpsString.Split(',').Select(uint.Parse).ToArray();
+
+                                        Array.Resize(ref fpsArray, fpsArray.Length + 1);
+                                        fpsArray[fpsArray.Length - 1] = fps;
+
+                                        for (int i = 0; i < fpsArray.Length - 1; i++)
+                                        {
+                                            fpsArray[i] = fpsArray[i + 1];
+                                        }
+
+                                        uint totalFps = fpsArray.Aggregate((uint)0, (sum, fps) => sum + fps);
+                                        uint averageFps = (uint)(totalFps / (uint)fpsArray.Length);
+
+                                        fpsString = string.Join(",", fpsArray);
+
+                                        string timeSpanString = gameData.msAvData;
+
+                                        string[] timeSpanArray = timeSpanString.Split(',');
+
+                                        TimeSpan[] timeSpans = timeSpanArray.Select(TimeSpan.Parse).ToArray();
+                                        TimeSpan newTimeSpan = app.InstantaneousFrameTime;
+
+                                        Array.Resize(ref timeSpans, timeSpans.Length + 1);
+                                        timeSpans[timeSpans.Length - 1] = newTimeSpan;
+
+                                        for (int i = 0; i < timeSpans.Length - 1; i++)
+                                        {
+                                            timeSpans[i] = timeSpans[i + 1];
+                                        }
+
+                                        TimeSpan totalTimeSpan = new TimeSpan(timeSpans.Select(ts => ts.Ticks).Sum());
+                                        TimeSpan averageTimeSpan = TimeSpan.FromTicks(totalTimeSpan.Ticks / timeSpans.Length);
+
+                                        timeSpanString = string.Join(",", timeSpans);
+
+                                        GameData preset = new GameData
+                                        {
+                                            fpsData = averageFps.ToString(),
+                                            fpsAvData = fpsString,
+                                            msData = string.Format("{0:0.##}", averageTimeSpan.TotalMilliseconds),
+                                            msAvData = timeSpanString,
+                                        };
+                                        gameDataManager.SavePreset(item.gameName, preset);
+
+                                        garbage++;
+
+                                        if(garbage >= 20)
+                                        {
+                                            await Task.Run(() => {
+                                                Garbage.Garbage_Collect();
+                                                Garbage.Garbage_Collect();
+                                            });
+
+                                            garbage = -1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Misc.Stop();
+                            await Task.Run(() => {
+                                listOfGames = Game_Manager.syncGame_Library();
+                                Garbage.Garbage_Collect();
+                                Garbage.Garbage_Collect();
+                            });
+                            firstTime = false;
+                            Misc.Start();
+                        }
+                    }
+                }
+                else RTSS.startRTSS();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
         }
 
         //private async void updateDownloads()
@@ -192,7 +312,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         autoReapply.Start();
                     }
                 }
-            } catch { }
+            }
+            catch { }
         }
         int i = 0;
         async void GC_Tick(object sender, EventArgs e)
@@ -237,16 +358,18 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             // Make sure that closing this window will begin the process of closing the application.
             Application.Current.Shutdown();
         }
-
+        public static bool isMini = false;
         private async void UiWindow_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Minimized)
             {
+                isMini = true;
                 this.WindowStyle = WindowStyle.ToolWindow;
                 this.ShowInTaskbar = false;
             }
             else
             {
+                isMini = false;
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.ShowInTaskbar = true;
                 //updateDownloads();

@@ -43,7 +43,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
             public string path { get; set; }
             public string exe { get; set; }
             public string imageLocation { get; set; } = "";
-            public string fpsData { get; set; } = "No Data";
             public string iconPath { get; set; } = "";
         }
 
@@ -66,7 +65,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         case "Steam":
                             foreach (var game in launcher.Games)
                             {
-                                if (!game.Name.Contains("Steamworks") && !game.Name.Contains("SteamVR") && !game.Name.Contains("Google Earth") && !game.Name.Contains("Wallpaper Engine") && !game.Name.Contains("tModLoader") && !game.Name.Contains("- Original Soundtrack"))
+                                if (!game.Name.Contains("Steamworks") && !game.Name.Contains("SteamVR") && !game.Name.Contains("Google Earth") && !game.Name.Contains("Wallpaper Engine") && !game.Name.Contains("tModLoader") && !game.Name.Contains("- Original Soundtrack"));
                                 {
                                     if (game.Id != "228980")
                                     {
@@ -112,7 +111,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                         }
                                         if (launcherItem.path == "" || launcherItem.exe == "")
                                         {
-                                            launcherItem.path = game.InstallDir;
+                                            launcherItem.path = Path.GetFileNameWithoutExtension(game.Executables.Last());
                                             launcherItem.exe = Path.GetFileNameWithoutExtension(game.Executables.Last());
                                         }
 

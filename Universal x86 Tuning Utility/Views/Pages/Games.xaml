@@ -68,6 +68,10 @@
                                     <ui:SymbolIcon Symbol="Toolbox20" FontSize="24" Margin="0,1,0,0"/>
                                 </ui:Button>
                                 <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
+                                    <TextBlock HorizontalAlignment="Center" Text="Average Frametime" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding msData}" FontSize="18"/>
+                                </StackPanel>
+                                <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
                                     <TextBlock HorizontalAlignment="Center" Text="Average FPS" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
                                     <TextBlock HorizontalAlignment="Center" Text="{Binding fpsData}" FontSize="18"/>
                                 </StackPanel>

@@ -33,6 +33,7 @@
   <ItemGroup>
     <PackageReference Include="Accord.Math" Version="3.8.0" />
     <PackageReference Include="craftersmine.SteamGridDB.Net" Version="1.1.5" />
+    <PackageReference Include="FuzzyStrings.NetStandard" Version="1.0.1" />
     <PackageReference Include="GameLib.NET" Version="1.4.1" />
     <PackageReference Include="hidlibrary" Version="3.3.40" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.2" />
@@ -119,7 +120,7 @@
 
   <ItemGroup>
     <Reference Include="RTSSSharedMemoryNET">
-      <HintPath>RTSSSharedMemoryNET.dll</HintPath>
+      <HintPath>Assets\RTSS\RTSSSharedMemoryNET.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -24,6 +24,7 @@ using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
+using Universal_x86_Tuning_Utility.Views.Windows;
 using Windows.Gaming.Preview.GamesEnumeration;
 using Wpf.Ui.Common.Interfaces;
 using YamlDotNet.Core;
@@ -45,6 +46,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         public class GameLauncherItem : INotifyPropertyChanged
         {
             private string _fpsData;
+            private string _msData;
 
             public string gameID { get; set; }
             public string gameName { get; set; }
@@ -63,6 +65,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         _fpsData = value;
                         OnPropertyChanged(nameof(fpsData));
+                    }
+                }
+            }
+
+            public string msData
+            {
+                get { return _msData; }
+                set
+                {
+                    if (_msData != value)
+                    {
+                        _msData = value;
+                        OnPropertyChanged(nameof(msData));
                     }
                 }
             }
@@ -87,7 +102,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             ViewModel = viewModel;
             setUp();
             Garbage.Garbage_Collect();
-            updateFPS.Interval = TimeSpan.FromSeconds(1.5);
+            updateFPS.Interval = TimeSpan.FromSeconds(2);
             updateFPS.Tick += UpdateFPS_Tick;
             updateFPS.Start();
         }
@@ -96,18 +111,24 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             try
             {
-                gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
-                IEnumerable<string> presetNames = gameDataManager.GetPresetNames();
-                foreach (string name in presetNames)
+                if (!MainWindow.isMini && Family.TYPE == Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 3 || Family.TYPE != Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 4)
                 {
-                    GameLauncherItem itemToUpdate = GameList.FirstOrDefault(item => item.gameName == name);
-                    if (itemToUpdate != null)
+                    gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
+                    IEnumerable<string> presetNames = gameDataManager.GetPresetNames();
+                    foreach (string name in presetNames)
                     {
-                        GameData gameData = gameDataManager.GetPreset(name);
-                        string fps = "";
-                        if (gameData?.fpsData != "No Data") fps = $"{gameData?.fpsData} FPS";
-                        else fps = $"{gameData?.fpsData}";
-                        itemToUpdate.fpsData = fps;
+                        GameLauncherItem itemToUpdate = GameList.FirstOrDefault(item => item.gameName == name);
+                        if (itemToUpdate != null)
+                        {
+                            GameData gameData = gameDataManager.GetPreset(name);
+                            string fps = "", ms = "";
+                            if (gameData?.fpsData != "No Data") fps = $"{gameData?.fpsData} FPS";
+                            else fps = $"{gameData?.fpsData}";
+                            itemToUpdate.fpsData = fps;
+                            if (gameData?.msData != "No Data") ms = $"{gameData?.msData} ms";
+                            else ms = $"{gameData?.msData}";
+                            itemToUpdate.msData = ms;
+                        }
                     }
                 }
             }

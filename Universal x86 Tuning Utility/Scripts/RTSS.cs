@@ -187,151 +187,146 @@ namespace Universal_x86_Tuning_Utility.Scripts
     {
         public static List<AppFlags> appFlags = new List<AppFlags>()
         {
-            {AppFlags.Direct3D12 },
-            {AppFlags.Direct3D12AFR },
             {AppFlags.Direct3D9Ex },
             {AppFlags.Direct3D9 },
             {AppFlags.Direct3D10 },
             {AppFlags.Direct3D11 },
-            {AppFlags.Vulkan },
             {AppFlags.OpenGL }
 
         };
-        public static unsafe int closeGame()
-        {
-            int processID = 0;
-            if (RTSS.RTSSRunning())
-            {
+        //public static unsafe int closeGame()
+        //{
+        //    int processID = 0;
+        //    if (RTSS.RTSSRunning())
+        //    {
 
-                AppFlags appFlag = appFlags[0];
-                AppEntry[] appEntries = OSD.GetAppEntries(appFlag);
-
-
-                while (appEntries.Length == 0)
-                {
-                    foreach (AppFlags af in appFlags)
-                    {
-                        appEntries = OSD.GetAppEntries(af);
-                        if (appEntries.Length > 0) { appFlag = af; break; }
-                    }
-
-                }
-
-                foreach (var app in appEntries)
-                {
-                    processID = app.ProcessId;
-
-                    System.Diagnostics.Process procs = null;
-
-                    try
-                    {
-                        procs = Process.GetProcessById(processID);
+        //        AppFlags appFlag = appFlags[0];
+        //        AppEntry[] appEntries = OSD.GetAppEntries(appFlag);
 
 
+        //        while (appEntries.Length == 0)
+        //        {
+        //            foreach (AppFlags af in appFlags)
+        //            {
+        //                appEntries = OSD.GetAppEntries(af);
+        //                if (appEntries.Length > 0) { appFlag = af; break; }
+        //            }
 
-                        if (!procs.HasExited)
-                        {
-                            procs.CloseMainWindow();
-                        }
-                    }
-                    finally
-                    {
-                        if (procs != null)
-                        {
-                            procs.Dispose();
-                        }
-                    }
-                }
+        //        }
+
+        //        foreach (var app in appEntries)
+        //        {
+        //            processID = app.ProcessId;
+
+        //            System.Diagnostics.Process procs = null;
+
+        //            try
+        //            {
+        //                procs = Process.GetProcessById(processID);
 
 
 
-            }
-            return processID;
-
-
-        }
-        public static Dictionary<string, int> gameRunningDictionary()
-        {
-            //RTSS01
-            Dictionary<string, int> returnDictionary = new Dictionary<string, int>();
-            try
-            {
-
-                if (RTSS.RTSSRunning())
-                {
-
-
-                    AppEntry[] appEntries;
-
-
-                    foreach (AppFlags af in appFlags)
-                    {
-                        appEntries = OSD.GetAppEntries(af);
-                        if (appEntries.Length > 0)
-                        {
-                            foreach (var app in appEntries)
-                            {
-                                string[] gamedir = app.Name.Split('\\');
-                                if (gamedir.Length > 0)
-                                {
-                                    string currGameName = gamedir[gamedir.Length - 1].Substring(0, gamedir[gamedir.Length - 1].Length - 4);
-                                    returnDictionary.Add(currGameName, app.ProcessId);
-                                }
-
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return returnDictionary;
-            }
-            return returnDictionary;
-        }
-        public static unsafe int gameRunningProcessID()
-        {
-
-            int gameRunning = 0;
-            try
-            {
-
-                if (RTSS.RTSSRunning())
-                {
-
-                    AppFlags appFlag = appFlags[0];
-                    AppEntry[] appEntries = OSD.GetAppEntries(appFlag);
-
-                    foreach (AppFlags af in appFlags)
-                    {
-                        appEntries = OSD.GetAppEntries(af);
-                        if (appEntries.Length > 0) { appFlag = af; break; }
-                    }
-
-                    foreach (var app in appEntries)
-                    {
-                        gameRunning = app.ProcessId;
-                        break;
-
-                    }
-
-                }
+        //                if (!procs.HasExited)
+        //                {
+        //                    procs.CloseMainWindow();
+        //                }
+        //            }
+        //            finally
+        //            {
+        //                if (procs != null)
+        //                {
+        //                    procs.Dispose();
+        //                }
+        //            }
+        //        }
 
 
 
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return 0;
-            }
-            return gameRunning;
-        }
+        //    }
+        //    return processID;
 
 
+        //}
+        //public static Dictionary<string, int> gameRunningDictionary()
+        //{
+        //    //RTSS01
+        //    Dictionary<string, int> returnDictionary = new Dictionary<string, int>();
+        //    try
+        //    {
+
+        //        if (RTSS.RTSSRunning())
+        //        {
+
+
+        //            AppEntry[] appEntries;
+
+
+        //            foreach (AppFlags af in appFlags)
+        //            {
+        //                appEntries = OSD.GetAppEntries(af);
+        //                if (appEntries.Length > 0)
+        //                {
+        //                    foreach (var app in appEntries)
+        //                    {
+        //                        string[] gamedir = app.Name.Split('\\');
+        //                        if (gamedir.Length > 0)
+        //                        {
+        //                            string currGameName = gamedir[gamedir.Length - 1].Substring(0, gamedir[gamedir.Length - 1].Length - 4);
+        //                            returnDictionary.Add(currGameName, app.ProcessId);
+        //                        }
+
+        //                    }
+
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //        return returnDictionary;
+        //    }
+        //    return returnDictionary;
+        //}
+        //public static unsafe int gameRunningProcessID()
+        //{
+
+        //    int gameRunning = 0;
+        //    try
+        //    {
+
+        //        if (RTSS.RTSSRunning())
+        //        {
+
+        //            AppFlags appFlag = appFlags[0];
+        //            AppEntry[] appEntries = OSD.GetAppEntries(appFlag);
+
+        //            foreach (AppFlags af in appFlags)
+        //            {
+        //                appEntries = OSD.GetAppEntries(af);
+        //                if (appEntries.Length > 0) { appFlag = af; break; }
+        //            }
+
+        //            foreach (var app in appEntries)
+        //            {
+        //                gameRunning = app.ProcessId;
+        //                break;
+
+        //            }
+
+        //        }
+
+
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //        return 0;
+        //    }
+        //    return gameRunning;
+        //}
     }
 }

@@ -12,6 +12,9 @@ namespace Universal_x86_Tuning_Utility.Services
     public class GameData
     {
         public string fpsData { get; set; } = "No Data";
+        public string fpsAvData { get; set; } = "0,0,0,0,0,0,0,0,0,0";
+        public string msData { get; set; } = "No Data";
+        public string msAvData { get; set; } = "0,0,0,0,0";
     }
 
     public class GameDataManager

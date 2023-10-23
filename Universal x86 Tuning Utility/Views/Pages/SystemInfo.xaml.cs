@@ -211,7 +211,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private async void Bat_Tick(object sender, EventArgs e)
         {
-            if (Family.TYPE == Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 4 || Family.TYPE != Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 5)
+            if (Family.TYPE == Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 5 || Family.TYPE != Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 6)
             {
                 decimal batRate = 0;
                 await Task.Run(() => batRate = GetSystemInfo.GetBatteryRate() / 1000);
