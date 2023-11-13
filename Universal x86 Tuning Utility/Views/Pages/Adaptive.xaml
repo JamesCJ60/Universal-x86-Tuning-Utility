@@ -49,10 +49,38 @@
 
             <ScrollViewer Name="mainScroll" Margin="0,9,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="False" PanningMode="VerticalFirst" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" IsDeferredScrollingEnabled="False" DockPanel.Dock="Top" ScrollChanged="mainScroll_ScrollChanged">
                 <StackPanel Name="mainCon">
+                    <ui:CardControl Name="sdEnabled"
+                             IsEnabled="True"
+                             Icon="PresenceAvailable10"
+                             VerticalAlignment="Top"
+                             Margin="0,0,15,0">
+                        
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="14"
+                                        FontWeight="Medium"
+                                        Text="Auto Switch" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                        Text="Enable this preset for automatic switching. Can be used to exclude games/apps from auto switch."/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsAutoSwitch" Margin="0,0,9,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
                 <ui:CardExpander Name="sdBasic"
             IsEnabled="True"
             IsExpanded="False"
-            Icon="Book20" VerticalAlignment="Top" Margin="0,0,15,0">
+            Icon="Book20" VerticalAlignment="Top" Margin="0,8,15,0">
                     <ui:CardExpander.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>

@@ -89,6 +89,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 nudMinGfxClk.Value = 400;
                 nudTemp.Value = 95;
                 nudMinCpuClk.Value = 1500;
+                tsAutoSwitch.IsChecked = true;
 
                 await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
 
@@ -129,6 +130,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isAntiLag = (bool)cbAntiLag.IsChecked,
                             isImageSharp = (bool)cbImageSharp.IsChecked,
                             isSync = (bool)cbSync.IsChecked,
+                            isAutoSwitch = (bool)tsAutoSwitch.IsChecked
                         };
                         adaptivePresetManager.SavePreset(item.gameName, preset);
                     }
@@ -249,6 +251,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (myPreset != null)
                 {
+                    tsAutoSwitch.IsChecked = myPreset.isAutoSwitch;
+
                     nudTemp.Value = myPreset.Temp;
                     nudPowerLimit.Value = myPreset.Power;
                     nudCurve.Value = myPreset.CO;
@@ -317,6 +321,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     isRecap = (bool)cbAutoCap.IsChecked,
                     Sharpness = (int)nudSharp.Value,
                     ResScaleIndex = (int)cbxResScale.SelectedIndex,
+                    isAutoSwitch = (bool)tsAutoSwitch.IsChecked
                 };
                 adaptivePresetManager.SavePreset(presetName, preset);
             }
@@ -591,6 +596,17 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                             if (executablePath.Contains(item.path))
                             {
+                                bool autoSwitch = true;
+                                AdaptivePreset preset = adaptivePresetManager.GetPreset(item.gameName);
+                                if (preset != null)
+                                {
+                                    autoSwitch = preset.isAutoSwitch;
+                                }
+                                if (!autoSwitch)
+                                {
+                                    continue;
+                                }
+
                                 runningGameName = item.gameName;
                                 return;
                             }

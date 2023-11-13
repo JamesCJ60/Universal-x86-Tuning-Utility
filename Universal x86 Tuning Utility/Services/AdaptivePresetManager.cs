@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,10 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isRecap { get; set; }
         public int Sharpness { get; set; }
         public int ResScaleIndex { get; set; }
+
+        [DefaultValue(true)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool isAutoSwitch { get; set; }
     }
 
     public class AdaptivePresetManager
