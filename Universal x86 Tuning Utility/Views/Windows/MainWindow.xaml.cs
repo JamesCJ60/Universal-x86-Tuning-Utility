@@ -268,7 +268,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 }
                 else RTSS.startRTSS();
             }
-            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+            catch (Exception ex) { }
         }
 
         //private async void updateDownloads()

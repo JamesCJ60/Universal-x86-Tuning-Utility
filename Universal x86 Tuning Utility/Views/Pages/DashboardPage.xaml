@@ -60,7 +60,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="V2.2.0 Beta 1" />
+                            Text="V2.2.0 Beta 2" />
                             <ui:Button
                                 Name="btnPremade"
                             Height="36"
@@ -184,7 +184,7 @@
                 Margin="0,8,4,0"
                 Command="{Binding ViewModel.NavigateCommand}"
                 CommandParameter="games"
-                Icon="Apps20" 
+                Icon="Games20" 
                 IsEnabled="true">
                 <StackPanel>
                     <TextBlock

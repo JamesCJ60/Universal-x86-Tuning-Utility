@@ -61,7 +61,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.1.4";
+        public static string version = "2.1.5";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -75,155 +75,158 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnStartup(object sender, StartupEventArgs e)
         {
-            if (!App.IsAdministrator())
+            try
             {
-                // Restart and run as admin
-                var exeName = Process.GetCurrentProcess().MainModule.FileName;
-                ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                startInfo.Verb = "runas";
-                startInfo.UseShellExecute = true;
-                startInfo.Arguments = "restart";
-                Process.Start(startInfo);
-                Environment.Exit(0);
-            }
-            else
-            {
-                try
+                if (!App.IsAdministrator())
                 {
-                    await Task.Run(() => product = GetSystemInfo.Product);
-                    Display.setUpLists();
+                    // Restart and run as admin
+                    var exeName = Process.GetCurrentProcess().MainModule.FileName;
+                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
+                    startInfo.Verb = "runas";
+                    startInfo.UseShellExecute = true;
+                    startInfo.Arguments = "restart";
+                    Process.Start(startInfo);
+                    Environment.Exit(0);
                 }
-                catch { }
-
-                _host = Host
-            .CreateDefaultBuilder()
-            .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
-            .ConfigureServices((context, services) =>
-            {
-                // App Host
-                services.AddHostedService<ApplicationHostService>();
-
-                // Page resolver service
-                services.AddSingleton<IPageService, PageService>();
-
-
-                if (product.Contains("ROG") || product.Contains("TUF") || product.Contains("Ally") || product.Contains("Flow") || product.ToLower().Contains("vivobook") || product.ToLower().Contains("zenbook"))
+                else
                 {
-                    wmi = new ASUSWmi();
-                    Settings.Default.isASUS = true;
-                    Settings.Default.Save();
-
-                    services.AddSingleton(wmi);
-                    services.AddSingleton<XgMobileConnectionService>();
-                }
-
-                // Theme manipulation
-                services.AddSingleton<IThemeService, ThemeService>();
-
-                // TaskBar manipulation
-                services.AddSingleton<ITaskBarService, TaskBarService>();
-
-                // Service containing navigation, same as INavigationWindow... but without window
-                services.AddSingleton<INavigationService, NavigationService>();
-
-                // Main window with navigation
-                services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
-                services.AddScoped<ViewModels.MainWindowViewModel>();
-
-                // Views and ViewModels
-                services.AddScoped<Views.Pages.DashboardPage>();
-                services.AddScoped<ViewModels.DashboardViewModel>();
-                services.AddScoped<Views.Pages.CustomPresets>();
-                services.AddScoped<Views.Pages.Premade>();
-                services.AddScoped<Views.Pages.Adaptive>();
-                services.AddScoped<Views.Pages.Automations>();
-                services.AddScoped<Views.Pages.FanControl>();
-                services.AddScoped<Views.Pages.SystemInfo>();
-                services.AddScoped<ViewModels.GamesViewModel>();
-                services.AddScoped<Views.Pages.Games>();
-                services.AddScoped<ViewModels.CustomPresetsViewModel>();
-                services.AddScoped<Views.Pages.DataPage>();
-                services.AddScoped<ViewModels.DataViewModel>();
-                services.AddScoped<Views.Pages.SettingsPage>();
-                services.AddScoped<ViewModels.SettingsViewModel>();
-
-                // Configuration
-                services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
-            }).Build();
-
-
-                _ = Tablet.TabletDevices;
-                bool firstBoot = false;
-                try
-                {
-                    if (Settings.Default.SettingsUpgradeRequired)
-                    {
-                        try
-                        {
-                            Settings.Default.Upgrade();
-                            Settings.Default.SettingsUpgradeRequired = false;
-                            Settings.Default.Save();
-                        }
-                        catch { }
-                    }
-
-                    firstBoot = Settings.Default.FirstBoot;
-                }
-                catch (ConfigurationErrorsException ex)
-                {
-                    string filename = ((ConfigurationErrorsException)ex.InnerException).Filename;
-                    File.Delete(filename);
-                    Settings.Default.Reload();
-                }
-
-                bool createdNew;
-                mutex = new Mutex(true, MutexName, out createdNew);
-
-                if (!createdNew)
-                {
-                    MessageBox.Show("An instance of Universal x86 Tuning Utility is already open!", "Error starting Universal x86 Tuning Utility");
-                    // Close the new instance
-                    Shutdown();
-                    return;
-                }
-
-                if (File.Exists("C:\\Universal.x86.Tuning.Utility.V2.msi")) File.Delete("C:\\Universal.x86.Tuning.Utility.V2.msi");
-
-                Family.setCpuFamily();
-                Family.setCpuFamily();
-                string path = System.Reflection.Assembly.GetEntryAssembly().Location;
-                path = path.Replace("Universal x86 Tuning Utility.dll", null);
-
-                if (firstBoot || Settings.Default.Path != path)
-                {
-                    Settings.Default.Path = path;
-                    Settings.Default.FirstBoot = false;
-                    if (Family.FAM > Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.Mendocino) Settings.Default.polling = 3;
-                    Settings.Default.Save();
-
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, false);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, false);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, false);
-
                     try
                     {
-                        await Task.Run(() => UnblockFilesInDirectory(path));
+                        await Task.Run(() => product = GetSystemInfo.Product);
+                        Display.setUpLists();
                     }
-                    catch
+                    catch { }
+
+                    _host = Host
+                .CreateDefaultBuilder()
+                .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
+                .ConfigureServices((context, services) =>
+                {
+                    // App Host
+                    services.AddHostedService<ApplicationHostService>();
+
+                    // Page resolver service
+                    services.AddSingleton<IPageService, PageService>();
+
+
+                    if (product.Contains("ROG") || product.Contains("TUF") || product.Contains("Ally") || product.Contains("Flow") || product.ToLower().Contains("vivobook") || product.ToLower().Contains("zenbook"))
                     {
+                        wmi = new ASUSWmi();
+                        Settings.Default.isASUS = true;
+                        Settings.Default.Save();
 
+                        services.AddSingleton(wmi);
+                        services.AddSingleton<XgMobileConnectionService>();
                     }
+
+                    // Theme manipulation
+                    services.AddSingleton<IThemeService, ThemeService>();
+
+                    // TaskBar manipulation
+                    services.AddSingleton<ITaskBarService, TaskBarService>();
+
+                    // Service containing navigation, same as INavigationWindow... but without window
+                    services.AddSingleton<INavigationService, NavigationService>();
+
+                    // Main window with navigation
+                    services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
+                    services.AddScoped<ViewModels.MainWindowViewModel>();
+
+                    // Views and ViewModels
+                    services.AddScoped<Views.Pages.DashboardPage>();
+                    services.AddScoped<ViewModels.DashboardViewModel>();
+                    services.AddScoped<Views.Pages.CustomPresets>();
+                    services.AddScoped<Views.Pages.Premade>();
+                    services.AddScoped<Views.Pages.Adaptive>();
+                    services.AddScoped<Views.Pages.Automations>();
+                    services.AddScoped<Views.Pages.FanControl>();
+                    services.AddScoped<Views.Pages.SystemInfo>();
+                    services.AddScoped<ViewModels.GamesViewModel>();
+                    services.AddScoped<Views.Pages.Games>();
+                    services.AddScoped<ViewModels.CustomPresetsViewModel>();
+                    services.AddScoped<Views.Pages.DataPage>();
+                    services.AddScoped<ViewModels.DataViewModel>();
+                    services.AddScoped<Views.Pages.SettingsPage>();
+                    services.AddScoped<ViewModels.SettingsViewModel>();
+
+                    // Configuration
+                    services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
+                }).Build();
+
+
+                    _ = Tablet.TabletDevices;
+                    bool firstBoot = false;
+                    try
+                    {
+                        if (Settings.Default.SettingsUpgradeRequired)
+                        {
+                            try
+                            {
+                                Settings.Default.Upgrade();
+                                Settings.Default.SettingsUpgradeRequired = false;
+                                Settings.Default.Save();
+                            }
+                            catch { }
+                        }
+
+                        firstBoot = Settings.Default.FirstBoot;
+                    }
+                    catch (ConfigurationErrorsException ex)
+                    {
+                        string filename = ((ConfigurationErrorsException)ex.InnerException).Filename;
+                        File.Delete(filename);
+                        Settings.Default.Reload();
+                    }
+
+                    bool createdNew;
+                    mutex = new Mutex(true, MutexName, out createdNew);
+
+                    if (!createdNew)
+                    {
+                        MessageBox.Show("An instance of Universal x86 Tuning Utility is already open!", "Error starting Universal x86 Tuning Utility");
+                        // Close the new instance
+                        Shutdown();
+                        return;
+                    }
+
+                    if (File.Exists("C:\\Universal.x86.Tuning.Utility.V2.msi")) File.Delete("C:\\Universal.x86.Tuning.Utility.V2.msi");
+
+                    Family.setCpuFamily();
+                    Family.setCpuFamily();
+                    string path = System.Reflection.Assembly.GetEntryAssembly().Location;
+                    path = path.Replace("Universal x86 Tuning Utility.dll", null);
+
+                    if (firstBoot || Settings.Default.Path != path)
+                    {
+                        Settings.Default.Path = path;
+                        Settings.Default.FirstBoot = false;
+                        if (Family.FAM > Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.Mendocino) Settings.Default.polling = 3;
+                        Settings.Default.Save();
+
+                        //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, true);
+                        //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, false);
+                        //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, true);
+                        //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, false);
+                        //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, true);
+                        //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, false);
+
+                        try
+                        {
+                            await Task.Run(() => UnblockFilesInDirectory(path));
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+
+                    if (IsInternetAvailable()) if (Settings.Default.UpdateCheck) CheckForUpdate();
+
+                    await _host.StartAsync();
+
+                    await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
                 }
-
-                if (IsInternetAvailable()) if (Settings.Default.UpdateCheck) CheckForUpdate();
-
-                await _host.StartAsync();
-
-                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
-            }
+            } catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         public static async void CheckForUpdate()

@@ -64,7 +64,7 @@
                                 <ui:Button Appearance="Primary" Width="48" Height="40" DockPanel.Dock="Right" HorizontalAlignment="Right" Tag="{Binding launchCommand}" Click="Button_Click">
                                     <ui:SymbolIcon Symbol="Play20" FontSize="24" Margin="0,1,0,0"/>
                                 </ui:Button>
-                                <ui:Button Appearance="Caution" Width="48" Height="40" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,9,0" IsEnabled="False">
+                                <ui:Button Visibility="Collapsed" Appearance="Caution" Width="48" Height="40" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,9,0" IsEnabled="False">
                                     <ui:SymbolIcon Symbol="Toolbox20" FontSize="24" Margin="0,1,0,0"/>
                                 </ui:Button>
                                 <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
