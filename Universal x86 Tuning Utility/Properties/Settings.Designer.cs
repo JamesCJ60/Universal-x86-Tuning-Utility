@@ -718,5 +718,17 @@ namespace Universal_x86_Tuning_Utility.Properties {
                 this["isStartAdpative"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isTrack {
+            get {
+                return ((bool)(this["isTrack"]));
+            }
+            set {
+                this["isTrack"] = value;
+            }
+        }
     }
 }

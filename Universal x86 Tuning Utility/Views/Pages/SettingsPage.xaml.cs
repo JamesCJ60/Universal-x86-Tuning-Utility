@@ -34,6 +34,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudAutoReapply.Value = Settings.Default.AutoReapplyTime;
             cbAutoCheck.IsChecked = Settings.Default.UpdateCheck;
             cbAdaptive.IsChecked = Settings.Default.isStartAdpative;
+            cbTrack.IsChecked = Settings.Default.isTrack;
 
             checkUpdate();
         }
@@ -207,6 +208,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private void cbAdaptive_Click(object sender, RoutedEventArgs e)
         {
             Settings.Default.isStartAdpative = (bool)cbAdaptive.IsChecked;
+            Settings.Default.Save();
+        }
+
+        private void cbTrack_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.isTrack = (bool)cbTrack.IsChecked;
             Settings.Default.Save();
         }
     }

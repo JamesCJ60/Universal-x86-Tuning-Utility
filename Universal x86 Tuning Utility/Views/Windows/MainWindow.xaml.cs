@@ -165,7 +165,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             try
             {
-                if (File.Exists(Settings.Default.Path + "\\gameData.json"))
+                if (File.Exists(Settings.Default.Path + "\\gameData.json") && Settings.Default.isTrack == true)
                 {
                     if (RTSS.RTSSRunning())
                     {
