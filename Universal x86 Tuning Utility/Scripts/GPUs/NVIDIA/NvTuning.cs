@@ -14,7 +14,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA
 {
     internal class NvTuning
     {
-        public const int MinCoreOffset = -900, MinMemoryOffset = -900, MaxCoreOffset = 900, MaxMemoryOffset = 900;
+        public const int MinCoreOffset = -900, MinMemoryOffset = -900, MaxCoreOffset = 2000, MaxMemoryOffset = 2000;
 
         private static PhysicalGPU? _internalGpu;
 
