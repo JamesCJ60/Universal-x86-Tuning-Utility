@@ -61,7 +61,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.2.0";
+        public static string version = "2.2.1";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -108,16 +108,18 @@ namespace Universal_x86_Tuning_Utility
                     // Page resolver service
                     services.AddSingleton<IPageService, PageService>();
 
-
-                    if (product.Contains("ROG") || product.Contains("TUF") || product.Contains("Ally") || product.Contains("Flow") || product.ToLower().Contains("vivobook") || product.ToLower().Contains("zenbook"))
+                    try
                     {
-                        wmi = new ASUSWmi();
-                        Settings.Default.isASUS = true;
-                        Settings.Default.Save();
+                        if (product.Contains("ROG") || product.Contains("TUF") || product.Contains("Ally") || product.Contains("Flow") || product.ToLower().Contains("vivobook") || product.ToLower().Contains("zenbook"))
+                        {
+                            wmi = new ASUSWmi();
+                            Settings.Default.isASUS = true;
+                            Settings.Default.Save();
 
-                        services.AddSingleton(wmi);
-                        services.AddSingleton<XgMobileConnectionService>();
-                    }
+                            services.AddSingleton(wmi);
+                            services.AddSingleton<XgMobileConnectionService>();
+                        }
+                    } catch { }
 
                     // Theme manipulation
                     services.AddSingleton<IThemeService, ThemeService>();

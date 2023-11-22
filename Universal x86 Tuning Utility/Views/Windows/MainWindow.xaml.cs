@@ -265,8 +265,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                             Misc.Start();
                         }
                     }
+                    else RTSS.startRTSS();
                 }
-                else RTSS.startRTSS();
+                
             }
             catch (Exception ex) { }
         }

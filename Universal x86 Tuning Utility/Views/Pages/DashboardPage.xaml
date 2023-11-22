@@ -60,7 +60,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="V2.2.0 Stable" />
+                            Text="V2.2.1 Stable" />
                             <ui:Button
                                 Name="btnPremade"
                             Height="36"
