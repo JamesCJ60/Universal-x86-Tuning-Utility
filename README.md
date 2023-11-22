@@ -26,7 +26,7 @@ If you would like to support the development of Universal x86 Tuning Utility by 
 - If you intend to use Universal x86 Tuning Utility in a video/text post online (e.g. YouTube, Reddit), please credit the Universal x86 Tuning Utility team by linking to the Universal x86 Tuning Utility GitHub release page! We ask this so that viewers/readers can download the software from a trusted source, and so the developers get the proper recognition for their work.
 - Universal x86 Tuning Utility Team is not liable for any damages that may occur from using Universal x86 Tuning Utility. Please use it at your own risk!
 - "AMD", "APU", "Ryzen", and "AMD Ryzen" are trademarked by and belong to Advanced Micro Devices, Inc. Universal x86 Tuning Utility Team makes no claims to these assets and uses them for informational purposes only.
-- If you wish to gain developer access to Universal x86 Tuning Utility, ping `@jamescj`, `projectsbc` or `@sbski` in our [discord community server](https://discord.gg/M3hVqnT4pQ). 
+- If you wish to gain developer access to Universal x86 Tuning Utility, ping `@jamescj`, `projectsbc` or `@sbski` in our [discord community server](https://discord.gg/9FeYVcbbUQ). 
 
 ## Installation
 - Head over to the [releases page](https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases)
