@@ -683,27 +683,29 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             int smallCores = 0;
             if (TYPE == ProcessorType.Intel)
             {
-                if (CPUName.Contains("12th") || CPUName.Contains("13th") || CPUName.Contains("14th") || CPUName.Contains("Core") && CPUName.Contains("1000") && !CPUName.Contains("i"))
-                {
-                    if (l2 % 1.25 == 0) bigCores = (int)(l2 / 1.25);
-                    else if (l2 % 2 == 0) bigCores = (int)(l2 / 2);
+                //if (CPUName.Contains("12th") || CPUName.Contains("13th") || CPUName.Contains("14th") || CPUName.Contains("Core") && CPUName.Contains("1000") && !CPUName.Contains("i"))
+                //{
+                //    if (l2 % 1.25 == 0) bigCores = (int)(l2 / 1.25);
+                //    else if (l2 % 2 == 0) bigCores = (int)(l2 / 2);
 
-                    smallCores = cores - bigCores;
+                //    smallCores = cores - bigCores;
 
-                    if (smallCores > 0)
-                    {
-                        if (CPUName.Contains("Ultra") && CPUName.Contains("100")) return $"{cores} ({bigCores} Performance Cores + {smallCores - 2} Efficiency Cores + 2 LP Efficiency Cores)";
-                        else return $"{cores} ({bigCores} Performance Cores + {smallCores} Efficiency Cores)";
-                    }
-                    else return cores.ToString();
-                }
-                else return cores.ToString();
+                //    if (smallCores > 0)
+                //    {
+                //        if (CPUName.Contains("Ultra") && CPUName.Contains("100")) return $"{cores} ({bigCores} Performance Cores + {smallCores - 2} Efficiency Cores + 2 LP Efficiency Cores)";
+                //        else return $"{cores} ({bigCores} Performance Cores + {smallCores} Efficiency Cores)";
+                //    }
+                //    else return cores.ToString();
+                //}
+                //else
+                return cores.ToString();
             }
             else
             {
-                if (CPUName.Contains("7540U") || CPUName.Contains("7440U"))
+                if (CPUName.Contains("7545U") && Family.FAM == RyzenFamily.PhoenixPoint2 || CPUName.Contains("Z1") && Family.FAM == RyzenFamily.PhoenixPoint2 || CPUName.Contains("7440U"))
                 {
-                    bigCores = 2;
+                    if (CPUName.Contains("7440U")) bigCores = 0;
+                    else bigCores = 2;
                     smallCores = cores - bigCores;
                     return $"{cores} ({bigCores} Prime Cores + {smallCores} Compact Cores)";
                 }
