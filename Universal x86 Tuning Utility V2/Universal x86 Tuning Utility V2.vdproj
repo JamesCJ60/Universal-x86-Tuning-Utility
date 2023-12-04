@@ -218,15 +218,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Universal x86 Tuning Utility"
-        "ProductCode" = "8:{1BD67EDE-2093-4DE2-9B81-B839B405588C}"
-        "PackageCode" = "8:{99FFEC1E-DA53-4EFA-BEC4-8E534963B734}"
+        "ProductCode" = "8:{0A6DD8FD-AD91-4D91-B1E3-D5AAD87E2A38}"
+        "PackageCode" = "8:{25D4E597-E634-4C25-95BE-24BD4FF1C35E}"
         "UpgradeCode" = "8:{300E743A-4C69-440D-9425-14C446AB2658}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.2.1"
+        "ProductVersion" = "8:2.2.2"
         "Manufacturer" = "8:JamesCJ60"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -768,7 +768,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0FAC7670CF204A74B0B84BA8720E5EFC"
             {
-            "SourcePath" = "8:..\\Universal x86 Tuning Utility\\obj\\x64\\Debug\\net7.0-windows10.0.22621.0\\apphost.exe"
+            "SourcePath" = "8:..\\Universal x86 Tuning Utility\\obj\\Debug\\net7.0-windows10.0.22621.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B208FDAB7341429AB15D831E1F00D044"
