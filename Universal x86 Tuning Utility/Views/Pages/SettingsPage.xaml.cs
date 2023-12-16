@@ -62,6 +62,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         td.Principal.RunLevel = TaskRunLevel.Highest;
                         td.RegistrationInfo.Description = "Start UXTU";
                         td.Settings.DisallowStartIfOnBatteries = false;
+                        td.Settings.StopIfGoingOnBatteries = false;
+                        td.Settings.DisallowStartOnRemoteAppSession = false;
 
                         // Create a trigger that will fire the task at this time every other day
                         td.Triggers.Add(new LogonTrigger());
