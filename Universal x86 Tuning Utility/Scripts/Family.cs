@@ -135,6 +135,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     if (CPUModel == 116) FAM = RyzenFamily.PhoenixPoint;
 
                     if (CPUModel == 120) FAM = RyzenFamily.PhoenixPoint2;
+
+                    if (CPUModel == 117) FAM = RyzenFamily.HawkPoint;
                 }
 
                 // Zen5 - Zen6
