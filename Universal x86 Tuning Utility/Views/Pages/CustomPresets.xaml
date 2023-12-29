@@ -1030,7 +1030,22 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Core Clock (MHz)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Frequency-Adjusted Voltage Limit (MHz)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudNVMaxCore" Text="{Binding ElementName=sdMaxNVCore, Path=Value}" Value="{Binding ElementName=sdNVMaxCore, Path=Value}" Maximum="4000" Minimum="400" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdNVMaxCore" Value="{Binding ElementName=nudNVMaxCore, Path=Value}" Maximum="4000" Minimum="400" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Core Clock Offset (MHz)</TextBlock>
                                     <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
@@ -1045,7 +1060,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Memory Clock (MHz)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Memory Clock Offset (MHz)</TextBlock>
                                     <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's VRAM clock" VerticalAlignment="Bottom" />
                                 </StackPanel>
 

@@ -297,6 +297,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             try
             {
+                if (niTray.Visibility == Visibility.Hidden && this.Visibility == Visibility.Hidden) niTray.Visibility = Visibility.Visible;
+
                 if ((bool)Settings.Default.AutoReapply == true && (bool)Settings.Default.isAdaptiveModeRunning == false)
                 {
                     string commands = (string)Settings.Default.CommandString;

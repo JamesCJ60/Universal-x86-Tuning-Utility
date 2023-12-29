@@ -59,6 +59,7 @@ namespace Universal_x86_Tuning_Utility.Services
         public int ccd2Core7 { get; set; }
         public int ccd2Core8 { get; set; }
 
+        public int nvMaxCoreClk { get; set; } = 4000;
         public int nvCoreClk { get; set; }
         public int nvMemClk { get; set; }
 

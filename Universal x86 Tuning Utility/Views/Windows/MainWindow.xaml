@@ -88,6 +88,7 @@
             UseSnapLayout="True" Grid.ColumnSpan="4" VerticalAlignment="Center">
             <ui:TitleBar.Tray>
                 <ui:NotifyIcon
+                    Name="niTray"
                     LeftClick="NotifyIcon_LeftClick"
                     FocusOnLeftClick="False"
                     Icon="pack://application:,,,/Assets/applicationIcon-256.png"

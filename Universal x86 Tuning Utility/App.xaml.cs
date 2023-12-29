@@ -61,7 +61,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.2.2";
+        public static string version = "2.2.3";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -110,14 +110,18 @@ namespace Universal_x86_Tuning_Utility
 
                     try
                     {
+                        Settings.Default.isASUS = false;
+                        Settings.Default.Save();
+
                         if (product.Contains("ROG") || product.Contains("TUF") || product.Contains("Ally") || product.Contains("Flow") || product.ToLower().Contains("vivobook") || product.ToLower().Contains("zenbook"))
                         {
                             wmi = new ASUSWmi();
-                            Settings.Default.isASUS = true;
-                            Settings.Default.Save();
-
+                            
                             services.AddSingleton(wmi);
                             services.AddSingleton<XgMobileConnectionService>();
+
+                            Settings.Default.isASUS = true;
+                            Settings.Default.Save();
                         }
                     } catch { }
 

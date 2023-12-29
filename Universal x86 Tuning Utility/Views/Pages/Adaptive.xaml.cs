@@ -89,6 +89,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 nudMinGfxClk.Value = 400;
                 nudTemp.Value = 95;
                 nudMinCpuClk.Value = 1500;
+                nudNVMaxCore.Value = 4000;
                 tsAutoSwitch.IsChecked = true;
 
                 await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library(true));
@@ -130,6 +131,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isAntiLag = (bool)cbAntiLag.IsChecked,
                             isImageSharp = (bool)cbImageSharp.IsChecked,
                             isSync = (bool)cbSync.IsChecked,
+                            isNVIDIA = (bool)tsNV.IsChecked,
+                            nvMaxCoreClk = (int)nudNVMaxCore.Value,
+                            nvCoreClk = (int)nudNVCore.Value,
+                            nvMemClk = (int)nudNVMem.Value,
+                            asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
+                            isMag = (bool)tsUXTUSR.IsChecked,
+                            isVsync = (bool)cbVSync.IsChecked,
+                            isRecap = (bool)cbAutoCap.IsChecked,
+                            Sharpness = (int)nudSharp.Value,
+                            ResScaleIndex = (int)cbxResScale.SelectedIndex,
                             isAutoSwitch = (bool)tsAutoSwitch.IsChecked
                         };
                         adaptivePresetManager.SavePreset(item.gameName, preset);
@@ -274,6 +285,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudImageSharp.Value = myPreset.imageSharp;
 
                     tsNV.IsChecked = myPreset.isNVIDIA;
+                    nudNVMaxCore.Value = myPreset.nvMaxCoreClk;
                     nudNVCore.Value = myPreset.nvCoreClk;
                     nudNVMem.Value = myPreset.nvMemClk;
 
@@ -313,6 +325,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     isImageSharp = (bool)cbImageSharp.IsChecked,
                     isSync = (bool)cbSync.IsChecked,
                     isNVIDIA = (bool)tsNV.IsChecked,
+                    nvMaxCoreClk = (int)nudNVMaxCore.Value,
                     nvCoreClk = (int)nudNVCore.Value,
                     nvMemClk = (int)nudNVMem.Value,
                     asusPowerProfile = (int)cbxAsusPower.SelectedIndex,

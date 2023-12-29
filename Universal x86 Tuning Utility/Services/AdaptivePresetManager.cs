@@ -33,6 +33,7 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isSync { get; set; }
 
         public bool isNVIDIA { get; set; }
+        public int nvMaxCoreClk { get; set; } = 4000;
         public int nvCoreClk { get; set; }
         public int nvMemClk { get; set; }
 
