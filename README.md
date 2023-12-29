@@ -35,3 +35,11 @@ If you would like to support the development of Universal x86 Tuning Utility by 
 - The application should now be installed
 - Finally, find the shortcut on your desktop and double-click on it to open UXTU
 - UXTU should now open, have fun!!!!
+
+## Projects Used:
+- [G-Helper (github)](https://github.com/seerge/g-helper)  
+- [WPF UI (github)](https://github.com/lepoco/wpfui)
+- [reverse_engineering (github)](https://github.com/zllovesuki/reverse_engineering)  
+- [Laptops (github)](https://github.com/ahahahahahMtnf/Laptops/tree/main/Asus/WMI)  
+- [ADLX SDK Wrapper (github)](https://github.com/JamesCJ60/ADLX-SDK-Wrapper)
+- [Magpie (github)](https://github.com/Blinue/Magpie)
