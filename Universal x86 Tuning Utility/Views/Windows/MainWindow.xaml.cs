@@ -244,7 +244,6 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                                         {
                                             await Task.Run(() => {
                                                 Garbage.Garbage_Collect();
-                                                Garbage.Garbage_Collect();
                                             });
 
                                             garbage = -1;
@@ -258,7 +257,6 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                             Misc.Stop();
                             await Task.Run(() => {
                                 listOfGames = Game_Manager.syncGame_Library();
-                                Garbage.Garbage_Collect();
                                 Garbage.Garbage_Collect();
                             });
                             firstTime = false;
@@ -409,7 +407,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
                         if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
                         {
-                            if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "")
+                            if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "" && Settings.Default.acPreset != "None")
                             {
                                 Settings.Default.CommandString = Settings.Default.acCommandString;
                                 if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
@@ -423,7 +421,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         }
                         else
                         {
-                            if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "")
+                            if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "" && Settings.Default.dcPreset != "None")
                             {
                                 Settings.Default.CommandString = Settings.Default.dcCommandString;
                                 if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
@@ -439,7 +437,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
                     if (e.Mode == PowerModes.Resume)
                     {
-                        if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "")
+                        if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "" && Settings.Default.resumePreset != "None")
                         {
                             Settings.Default.CommandString = Settings.Default.resumeCommandString;
                             if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
