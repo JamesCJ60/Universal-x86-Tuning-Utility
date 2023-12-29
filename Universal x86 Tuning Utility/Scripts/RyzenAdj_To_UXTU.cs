@@ -139,13 +139,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
             {
                 string[] variables = value.Split('-');
 
-                if (command == "NVIDIA-Clocks" && variables.Length >= 3)
-                {
-                    NvTuning.SetMaxGPUClock(int.Parse(variables[0]));
-                    NvTuning.SetClocks(int.Parse(variables[1]), int.Parse(variables[2]));
-                }
-                else if (command == "NVIDIA-Clocks" && variables.Length < 3) NvTuning.SetClocks(int.Parse(variables[0]), int.Parse(variables[1]));
-                
+                if (command == "NVIDIA-Clocks") NvTuning.SetClocks(int.Parse(variables[0]), int.Parse(variables[1]));
             }
             catch { }
         }

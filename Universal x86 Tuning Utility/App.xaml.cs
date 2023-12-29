@@ -25,7 +25,6 @@ using System.Windows.Interop;
 using Universal_x86_Tuning_Utility.Views.Windows;
 using RyzenSmu;
 using Universal_x86_Tuning_Utility.Scripts.ASUS;
-using Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -62,7 +61,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.2.3";
+        public static string version = "2.2.2";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -109,20 +108,16 @@ namespace Universal_x86_Tuning_Utility
                     // Page resolver service
                     services.AddSingleton<IPageService, PageService>();
 
-                    Settings.Default.isASUS = false;
-                    Settings.Default.Save();
-
                     try
                     {
                         if (product.Contains("ROG") || product.Contains("TUF") || product.Contains("Ally") || product.Contains("Flow") || product.ToLower().Contains("vivobook") || product.ToLower().Contains("zenbook"))
                         {
                             wmi = new ASUSWmi();
+                            Settings.Default.isASUS = true;
+                            Settings.Default.Save();
 
                             services.AddSingleton(wmi);
                             services.AddSingleton<XgMobileConnectionService>();
-
-                            Settings.Default.isASUS = true;
-                            Settings.Default.Save();
                         }
                     } catch { }
 

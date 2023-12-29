@@ -90,7 +90,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 nudTemp.Value = 95;
                 nudMinCpuClk.Value = 1500;
                 tsAutoSwitch.IsChecked = true;
-                nudNvFreqMax.Value = 4000;
 
                 await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library(true));
 
@@ -131,16 +130,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isAntiLag = (bool)cbAntiLag.IsChecked,
                             isImageSharp = (bool)cbImageSharp.IsChecked,
                             isSync = (bool)cbSync.IsChecked,
-                            isNVIDIA = (bool)tsNV.IsChecked,
-                            nvMaxCoreClk = (int)nudNvFreqMax.Value,
-                            nvCoreClk = (int)nudNVCore.Value,
-                            nvMemClk = (int)nudNVMem.Value,
-                            asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
-                            isMag = (bool)tsUXTUSR.IsChecked,
-                            isVsync = (bool)cbVSync.IsChecked,
-                            isRecap = (bool)cbAutoCap.IsChecked,
-                            Sharpness = (int)nudSharp.Value,
-                            ResScaleIndex = (int)cbxResScale.SelectedIndex,
                             isAutoSwitch = (bool)tsAutoSwitch.IsChecked
                         };
                         adaptivePresetManager.SavePreset(item.gameName, preset);
@@ -285,7 +274,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudImageSharp.Value = myPreset.imageSharp;
 
                     tsNV.IsChecked = myPreset.isNVIDIA;
-                    nudNvFreqMax.Value = myPreset.nvMaxCoreClk;
                     nudNVCore.Value = myPreset.nvCoreClk;
                     nudNVMem.Value = myPreset.nvMemClk;
 
@@ -325,7 +313,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     isImageSharp = (bool)cbImageSharp.IsChecked,
                     isSync = (bool)cbSync.IsChecked,
                     isNVIDIA = (bool)tsNV.IsChecked,
-                    nvMaxCoreClk = (int)nudNvFreqMax.Value,
                     nvCoreClk = (int)nudNVCore.Value,
                     nvMemClk = (int)nudNVMem.Value,
                     asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
@@ -536,7 +523,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         if (tsNV.IsChecked == true)
                         {
-                            commandString = commandString + $"--NVIDIA-Clocks={nudNvFreqMax.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
+                            commandString = commandString + $"--NVIDIA-Clocks={nudNVCore.Value}-{nudNVMem.Value} ";
                         }
 
                         if (commandString != null && commandString != "") await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));

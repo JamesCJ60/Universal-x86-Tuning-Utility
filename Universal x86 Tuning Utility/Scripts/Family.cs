@@ -133,7 +133,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     else if (CPUModel == 97) FAM = RyzenFamily.Raphael;
 
                     if (CPUModel == 116) FAM = RyzenFamily.PhoenixPoint;
-                    if (CPUModel == 117) FAM = RyzenFamily.HawkPoint;
 
                     if (CPUModel == 120) FAM = RyzenFamily.PhoenixPoint2;
                 }
