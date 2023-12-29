@@ -536,7 +536,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         if (tsNV.IsChecked == true)
                         {
-                            commandString = commandString + $"--NVIDIA-Clocks={nudNVCore.Value}-{nudNVMem.Value} ";
+                            commandString = commandString + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
                         }
 
                         if (commandString != null && commandString != "") await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));
