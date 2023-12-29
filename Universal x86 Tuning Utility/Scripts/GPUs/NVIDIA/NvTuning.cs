@@ -1,10 +1,12 @@
-﻿using NvAPIWrapper.GPU;
+﻿using Microsoft.Extensions.Logging;
+using NvAPIWrapper.GPU;
 using NvAPIWrapper.Native;
 using NvAPIWrapper.Native.GPU;
 using NvAPIWrapper.Native.GPU.Structures;
 using NvAPIWrapper.Native.Interfaces.GPU;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +16,9 @@ namespace Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA
 {
     internal class NvTuning
     {
-        public const int MinCoreOffset = -900, MinMemoryOffset = -900, MaxCoreOffset = 2000, MaxMemoryOffset = 2000;
+        public const int MinCoreOffset = -900, MinMemoryOffset = -900, MaxCoreOffset = 2000, MaxMemoryOffset = 2000, MaxGPUClock = 4000, MinGPUClock = 400;
 
-        private static PhysicalGPU? _internalGpu;
+        private static PhysicalGPU? _internalGpu = PhysicalGPU.GetPhysicalGPUs().First();
 
         public static int SetClocks(int core, int memory, int voltage = 0)
         {
@@ -49,5 +51,65 @@ namespace Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA
             return 1;
         }
 
+        public static int GetMaxGPUCLock()
+        {
+            PhysicalGPU internalGpu = _internalGpu!;
+            try
+            {
+                PrivateClockBoostLockV2 data = GPUApi.GetClockBoostLock(internalGpu.Handle);
+                int limit = (int)data.ClockBoostLocks[0].VoltageInMicroV / 1000;
+                return limit;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
+        public static int SetMaxGPUClock(int clock)
+        {
+            if (clock < MinGPUClock || clock >= MaxGPUClock) clock = 0;
+
+            int _clockLimit = GetMaxGPUCLock();
+
+            if (_clockLimit != clock)
+            {
+                if (clock > 0) RunPowershellCommand($"nvidia-smi -lgc 0,{clock}");
+                else RunPowershellCommand($"nvidia-smi -rgc");
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        private static bool RunPowershellCommand(string script)
+        {
+            try
+            {
+                RunCMD("powershell", script);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+        public static void RunCMD(string name, string args)
+        {
+            var cmd = new Process();
+            cmd.StartInfo.UseShellExecute = false;
+            cmd.StartInfo.CreateNoWindow = true;
+            cmd.StartInfo.RedirectStandardOutput = true;
+            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            cmd.StartInfo.FileName = name;
+            cmd.StartInfo.Arguments = args;
+            cmd.Start();
+
+            string result = cmd.StandardOutput.ReadToEnd().Replace(Environment.NewLine, " ").Trim(' ');
+
+            cmd.WaitForExit();
+        }
     }
 }

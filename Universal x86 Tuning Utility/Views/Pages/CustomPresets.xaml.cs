@@ -68,6 +68,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudIntelPL2.Value = 65;
             nudAmdVID.Value = 1200;
             nudAmdCpuClk.Value = 3200;
+            nudNvFreqMax.Value = 4000;
 
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
@@ -232,7 +233,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             Settings.Default.Save();
 
             if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
+            else sdADLX.Visibility = Visibility.Visible;
             if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
+            else sdNVIDIA.Visibility = Visibility.Visible;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -337,6 +340,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IsCCD2Core8 = (bool)cbCCD2Core8.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
+                            nvMaxCoreClk = (int)nudNvFreqMax.Value,
                             nvCoreClk = (int)nudNVCore.Value,
                             nvMemClk = (int)nudNVMem.Value,
 
@@ -441,6 +445,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isCoAllCore = (bool)cbAllCO.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
+                            nvMaxCoreClk = (int)nudNvFreqMax.Value,
                             nvCoreClk = (int)nudNVCore.Value,
                             nvMemClk = (int)nudNVMem.Value,
 
@@ -541,6 +546,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isIntelPL2 = (bool)cbIntelPL2.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
+                            nvMaxCoreClk = (int)nudNvFreqMax.Value,
                             nvCoreClk = (int)nudNVCore.Value,
                             nvMemClk = (int)nudNVMem.Value,
 
@@ -770,6 +776,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbxBoost.SelectedIndex = myPreset.boostProfile;
 
                         tsNV.IsChecked = myPreset.isNVIDIA;
+                        nudNvFreqMax.Value = myPreset.nvMaxCoreClk;
                         nudNVCore.Value = myPreset.nvCoreClk;
                         nudNVMem.Value = myPreset.nvMemClk;
 
@@ -886,6 +893,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbCCD2Core8.IsChecked = myPreset.IsCCD2Core8;
 
                         tsNV.IsChecked = myPreset.isNVIDIA;
+                        nudNvFreqMax.Value = myPreset.nvMaxCoreClk;
                         nudNVCore.Value = myPreset.nvCoreClk;
                         nudNVMem.Value = myPreset.nvMemClk;
 
@@ -931,6 +939,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         nudImageSharp.Value = myPreset.imageSharp;
 
                         tsNV.IsChecked = myPreset.isNVIDIA;
+                        nudNvFreqMax.Value = myPreset.nvMaxCoreClk;
                         nudNVCore.Value = myPreset.nvCoreClk;
                         nudNVMem.Value = myPreset.nvMemClk;
 
@@ -1153,7 +1162,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if(tsNV.IsChecked == true)
             {
-                commandValues = commandValues + $"--NVIDIA-Clocks={nudNVCore.Value}-{nudNVMem.Value} ";
+                commandValues = commandValues + $"--NVIDIA-Clocks={nudNvFreqMax}-{nudNVCore.Value}-{nudNVMem.Value} ";
             }
 
             return commandValues;
