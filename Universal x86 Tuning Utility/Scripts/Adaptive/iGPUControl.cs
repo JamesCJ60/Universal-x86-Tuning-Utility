@@ -19,13 +19,13 @@ namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
         private static int _lastGpuUsage = 50; // %
         public static int _currentPowerLimit = 28;
         public static string commmand = "";
-        private const int LastWindowSize = 4; // Number of samples in the sliding window
+        private const int LastWindowSize = 8; // Number of samples in the sliding window
         private static Queue<int> gpuLastLoadSamples = new Queue<int>();
         private static double averageLastGpuLoad = 0.0;
         private const int WindowSize = 2; // Number of samples in the sliding window
         private static Queue<int> gpuLoadSamples = new Queue<int>();
         private static double averageGpuLoad = 0.0;
-        public static async void UpdateiGPUClock(int maxClock, int minClock, int MaxTemperature, int _powerdraw, int _temperature, int _currentClock, int _gpuLoad, int memClock, int cpuClocks, int minCPUClock)
+        public static async void UpdateiGPUClock(int maxClock, int minClock, int MaxTemperature, int _powerdraw, int _temperature, int _currentClock, int _gpuLoad, int memClock, int cpuClocks, int minCPUClock, double fps = 0, int fpsLimit = 0)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
 
                 _gpuLoad = (int)averageGpuLoad;
 
-                if (_gpuLoad >= 87 && _gpuLoad <= 92 && _temperature <= MaxTemperature && memClock >= 550) newClock = _lastClock;
+                if (_gpuLoad >= 87 && _gpuLoad <= 92 && _temperature <= MaxTemperature && memClock >= 550 && cpuClocks > minCPUClock) newClock = _lastClock;
                 else
                 {
                     // Remove oldest sample if the window is full
@@ -61,25 +61,46 @@ namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
 
                     if ((int)averageLastGpuLoad <= 40 && _gpuLoad > 60 && _currentClock < 650 && cpuClocks >= minCPUClock && memClock > 550) newClock = (int)(maxClock / 1.6);
 
-                    if(_gpuLoad > 92 && _temperature <= MaxTemperature && memClock >= 550 && cpuClocks > minCPUClock)
+                    if (fps > 0 && fpsLimit > 0)
                     {
-
-                        if (_currentClock < maxClock / 4) newClock = _currentClock + 125;
-                        else if (_currentClock < maxClock / 3) newClock = _currentClock + 100;
-                        else if (_currentClock < maxClock / 2) newClock = _currentClock + 75;
-                        else if (_currentClock < maxClock / 1.33) newClock = _currentClock + 50;
-                        else newClock = _currentClock + 25;
-
-
-                    }
-                    else if (_temperature > MaxTemperature || _gpuLoad < 87 || _powerdraw >= _currentPowerLimit + 1 || memClock <= 550 || cpuClocks < minCPUClock && CPUControl._lastUsage > 20)
-                    {
-                        if (_currentClock > minClock)
+                        if (_gpuLoad > 92 && _temperature <= MaxTemperature && memClock >= 550 && cpuClocks > minCPUClock || fps < fpsLimit)
                         {
-                            if (_currentClock > minClock && _gpuLoad > 50) newClock = _currentClock - 25;
-                            else if (_currentClock > minClock && _gpuLoad < 20) newClock = _currentClock - 50;
+                            if (_currentClock < maxClock / 4) newClock = _currentClock + 75;
+                            else if (_currentClock < maxClock / 3) newClock = _currentClock + 50;
+                            else if (_currentClock < maxClock / 2) newClock = _currentClock + 35;
+                            else if (_currentClock < maxClock / 1.33) newClock = _currentClock + 25;
+                            else newClock = _currentClock + 25;
+                        }
+                        else if (_temperature > MaxTemperature || _gpuLoad < 87 || memClock < 550 || cpuClocks < minCPUClock || fps > fpsLimit)
+                        {
+                            if (_currentClock > minClock)
+                            {
+                                if (_currentClock > minClock && _gpuLoad > 50) newClock = _currentClock - 25;
+                                else if (_currentClock > minClock && _gpuLoad < 20) newClock = _currentClock - 50;
+                            }
                         }
                     }
+                    else
+                    {
+                        if (_gpuLoad > 92 && _temperature <= MaxTemperature && memClock >= 550 && cpuClocks > minCPUClock)
+                        {
+                            if (_currentClock < maxClock / 4) newClock = _currentClock + 75;
+                            else if (_currentClock < maxClock / 3) newClock = _currentClock + 50;
+                            else if (_currentClock < maxClock / 2) newClock = _currentClock + 35;
+                            else if (_currentClock < maxClock / 1.33) newClock = _currentClock + 25;
+                            else newClock = _currentClock + 25;
+                        }
+
+                        else if (_temperature > MaxTemperature || _gpuLoad < 87 || memClock < 550 || cpuClocks < minCPUClock)
+                        {
+                            if (_currentClock > minClock)
+                            {
+                                if (_currentClock > minClock && _gpuLoad > 50) newClock = _currentClock - 25;
+                                else if (_currentClock > minClock && _gpuLoad < 20) newClock = _currentClock - 50;
+                            }
+                        }
+                    }
+
                 }
 
                 if (_currentClock > maxClock) newClock = maxClock - 10;
@@ -94,8 +115,9 @@ namespace Universal_x86_Tuning_Utility.Scripts.Adaptive
                 gpuLastLoadSamples.Enqueue(_gpuLoad);
                 _lastGpuUsage = (int)_gpuLoad;
             }
-            catch { }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
 
         }
     }
 }
+

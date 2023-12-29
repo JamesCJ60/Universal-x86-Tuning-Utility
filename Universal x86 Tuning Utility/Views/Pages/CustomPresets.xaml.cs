@@ -68,6 +68,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudIntelPL2.Value = 65;
             nudAmdVID.Value = 1200;
             nudAmdCpuClk.Value = 3200;
+            nudNVMaxCore.Value = 4000;
 
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
