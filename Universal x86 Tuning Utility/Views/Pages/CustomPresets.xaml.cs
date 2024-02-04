@@ -208,6 +208,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAsusEco.Visibility = Visibility.Collapsed;
             }
 
+            if (Family.FAM == Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Lucienne || Family.FAM == Family.RyzenFamily.Mendocino || Family.FAM == Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.PhoenixPoint || Family.FAM == Family.RyzenFamily.PhoenixPoint2 || Family.FAM == Family.RyzenFamily.HawkPoint) sdAmdApuiGPUClk.Visibility = Visibility.Visible;
+
             Garbage.Garbage_Collect();
         }
 
