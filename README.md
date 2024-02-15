@@ -36,6 +36,44 @@ If you would like to support the development of Universal x86 Tuning Utility by 
 - Finally, find the shortcut on your desktop and double-click on it to open UXTU
 - UXTU should now open, have fun!!!!
 
+## Getting Started
+_New to the Universal x86 Tuning Utility?_ _No worries!_ _This quickstart guide covers everything needed to get started._
+
+#### Launching UXTU
+* After successful installation, locate the UXTU icon on your desktop and double click to launch the application.
+
+#### Navigating the Interface
+* The UXTU UI has three main sections - Premade Presets, Custom Presets, and Adaptive Mode.
+* These three sections allow you to tune your device however you prefer.
+* Other sections include the Game Library, System Info, and Automations.
+
+#### Premade Presets
+* Universal x86 Tuning Utility offers premade presets specifically designed for Zen-based processors.
+* These presets are preconfigured settings tailored for specific use cases, providing convenience and efficiency.
+* Premade presets serve as excellent starting points for customization and experimentation while tuning.
+* Simply click on a desired preset to apply it to your device.
+
+#### Custom Presets
+* The Custom Presets section allows you to create advanced tuning configurations.
+* Depending on your system, there are various settings you can modify according to your preferences.
+* After configuring your desired settings, there is an option to apply them and/or save them for future use.
+* Custom Presets provide a high level of flexibility, allowing users to tailor their device's performance to meet specific needs.
+
+#### Adaptive Mode
+* UXTU features an Adaptive Mode, offering an intelligent approach to optimizing processor performance.
+* Adaptive Mode implements an adaptive TDP (Thermal Design Power) algorithm, dynamically adjusting power limits to optimize performance while maintaining stability.
+* By continuously monitoring processor temperatures, Adaptive Mode intelligently balances power limits to achieve the most stable performance settings.
+* Turn on Adaptive Mode with the "Start Adaptive Mode" button, and adjust the polling rate to your preference.
+
+#### Other Sections
+* Game Library: View and launch installed games.
+* System Info: View device specifications and information.
+* Automations: Choose to automatically apply settings during specified events.
+
+#### Tips for Successful Tuning
+* Make gradual changes instead of drastic ones to maintain stability and longevity.
+* Be cautious of the recommended maximum temperature and TDP for your hardware.
+
 ## Projects Used:
 - [G-Helper (github)](https://github.com/seerge/g-helper)  
 - [WPF UI (github)](https://github.com/lepoco/wpfui)
