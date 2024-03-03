@@ -237,7 +237,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
             else sdADLX.Visibility = Visibility.Visible;
             if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
-            else sdADLX.Visibility = Visibility.Visible;
+            else sdNVIDIA.Visibility = Visibility.Visible;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -407,6 +407,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         }
 
                         ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
+
+                        if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
+                        else sdADLX.Visibility = Visibility.Visible;
+                        if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
+                        else sdNVIDIA.Visibility = Visibility.Visible;
                     }
                 }
 
