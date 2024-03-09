@@ -13,11 +13,10 @@
       Title="Premade" Loaded="Page_Loaded">
     <Grid>
         <DockPanel>
-            <TextBlock
+            <TextBlock Name="tbxMessage"
             FontSize="26"
             FontWeight="Medium"
             Text="Premade Presets" DockPanel.Dock="Top" Margin="18,10,0,0"/>
-
             <ui:Card DockPanel.Dock="Bottom" Height="55" Margin="0,0,9,12" Padding="0" MaxWidth="662">
                 <UniformGrid Columns="4" VerticalAlignment="Center" Height="60" HorizontalAlignment="Center">
                     <ToggleButton Width="155" Margin="4.5,0" Name="tbEco" Click="tbEco_Click">
@@ -55,6 +54,7 @@
                     <DockPanel LastChildFill="False" MinHeight="260">
                         <StackPanel DockPanel.Dock="Top">
                             <TextBlock Name="tbPresetName" FontWeight="DemiBold" FontSize="20" Margin="0,-6,0,0">Performance Preset</TextBlock>
+                            <ui:Badge Appearance="Success" Margin="0,9,0,0" Width="150" HorizontalAlignment="Left" Name="bdgCertified">Device Certified Preset</ui:Badge>
                             <TextBlock Name="tbPresetDesc" FontSize="14.5" Margin="0,9,0,0" TextWrapping="Wrap">TEST TEST TEST</TextBlock>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Bottom">

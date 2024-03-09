@@ -404,16 +404,34 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                     {
                         await Task.Run(() => getBattery());
                         await Task.Run(() => getBattery());
+                        await Task.Run(() => PremadePresets.SetPremadePresets());
 
                         if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
                         {
                             if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "" && Settings.Default.acPreset != "None")
                             {
+                                if (Settings.Default.acPreset.Contains("PM - Eco"))
+                                {
+                                    Settings.Default.premadePreset = 0;
+                                    Settings.Default.acCommandString = PremadePresets.EcoPreset;
+                                }
+                                else if (Settings.Default.acPreset.Contains("PM - Bal"))
+                                {
+                                    Settings.Default.premadePreset = 1;
+                                    Settings.Default.acCommandString = PremadePresets.BalPreset;
+                                }
+                                else if (Settings.Default.acPreset.Contains("PM - Perf"))
+                                {
+                                    Settings.Default.premadePreset = 2;
+                                    Settings.Default.acCommandString = PremadePresets.PerformancePreset;
+                                }
+                                else if (Settings.Default.acPreset.Contains("PM - Ext"))
+                                {
+                                    Settings.Default.premadePreset = 3;
+                                    Settings.Default.acCommandString = PremadePresets.ExtremePreset;
+                                }
+
                                 Settings.Default.CommandString = Settings.Default.acCommandString;
-                                if (Settings.Default.acPreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
-                                else if (Settings.Default.acPreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
-                                else if (Settings.Default.acPreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
-                                else if (Settings.Default.acPreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
                                 Settings.Default.Save();
                                 await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.acCommandString));
                                 ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
@@ -423,11 +441,27 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         {
                             if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "" && Settings.Default.dcPreset != "None")
                             {
+                                if (Settings.Default.dcPreset.Contains("PM - Eco"))
+                                {
+                                    Settings.Default.premadePreset = 0;
+                                    Settings.Default.dcCommandString = PremadePresets.EcoPreset;
+                                }
+                                else if (Settings.Default.dcPreset.Contains("PM - Bal"))
+                                {
+                                    Settings.Default.premadePreset = 1;
+                                    Settings.Default.dcCommandString = PremadePresets.BalPreset;
+                                }
+                                else if (Settings.Default.dcPreset.Contains("PM - Perf"))
+                                {
+                                    Settings.Default.premadePreset = 2;
+                                    Settings.Default.dcCommandString = PremadePresets.PerformancePreset;
+                                }
+                                else if (Settings.Default.dcPreset.Contains("PM - Ext"))
+                                {
+                                    Settings.Default.premadePreset = 3;
+                                    Settings.Default.dcCommandString = PremadePresets.ExtremePreset;
+                                }
                                 Settings.Default.CommandString = Settings.Default.dcCommandString;
-                                if (Settings.Default.dcPreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
-                                else if (Settings.Default.dcPreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
-                                else if (Settings.Default.dcPreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
-                                else if (Settings.Default.dcPreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
                                 Settings.Default.Save();
                                 await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.dcCommandString));
                                 ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
@@ -439,11 +473,27 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                     {
                         if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "" && Settings.Default.resumePreset != "None")
                         {
+                            if (Settings.Default.resumePreset.Contains("PM - Eco"))
+                            {
+                                Settings.Default.premadePreset = 0;
+                                Settings.Default.resumeCommandString = PremadePresets.EcoPreset;
+                            }
+                            else if (Settings.Default.resumePreset.Contains("PM - Bal"))
+                            {
+                                Settings.Default.premadePreset = 1;
+                                Settings.Default.resumeCommandString = PremadePresets.BalPreset;
+                            }
+                            else if (Settings.Default.resumePreset.Contains("PM - Perf"))
+                            {
+                                Settings.Default.premadePreset = 2;
+                                Settings.Default.resumeCommandString = PremadePresets.PerformancePreset;
+                            }
+                            else if (Settings.Default.resumePreset.Contains("PM - Ext"))
+                            {
+                                Settings.Default.premadePreset = 3;
+                                Settings.Default.resumeCommandString = PremadePresets.ExtremePreset;
+                            }
                             Settings.Default.CommandString = Settings.Default.resumeCommandString;
-                            if (Settings.Default.resumePreset.Contains("PM - Eco")) Settings.Default.premadePreset = 0;
-                            else if (Settings.Default.resumePreset.Contains("PM - Bal")) Settings.Default.premadePreset = 1;
-                            else if (Settings.Default.resumePreset.Contains("PM - Perf")) Settings.Default.premadePreset = 2;
-                            else if (Settings.Default.resumePreset.Contains("PM - Ext")) Settings.Default.premadePreset = 3;
                             Settings.Default.Save();
                             Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.resumeCommandString));
                             ToastNotification.ShowToastNotification("Resume Preset Applied!", $"Your resume preset settings have been applied!");

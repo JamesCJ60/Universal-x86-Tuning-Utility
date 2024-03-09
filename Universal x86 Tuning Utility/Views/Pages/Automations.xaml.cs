@@ -63,10 +63,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxDischarge.Items.Add(presetName);
                     cbxResume.Items.Add(presetName);
                 }
-
-                getAcPreset(Settings.Default.acPreset);
-                getDcPreset(Settings.Default.dcPreset);
-                getResumePreset(Settings.Default.resumePreset);
             }
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
             {
@@ -96,10 +92,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxDischarge.Items.Add(presetName);
                     cbxResume.Items.Add(presetName);
                 }
-
-                getAcPreset(Settings.Default.acPreset);
-                getDcPreset(Settings.Default.dcPreset);
-                getResumePreset(Settings.Default.resumePreset);
             }
             if (Family.TYPE == Family.ProcessorType.Intel)
             {
@@ -113,13 +105,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxDischarge.Items.Add(presetName);
                     cbxResume.Items.Add(presetName);
                 }
-
-                getAcPreset(Settings.Default.acPreset);
-                getDcPreset(Settings.Default.dcPreset);
-                getResumePreset(Settings.Default.resumePreset);
             }
 
             Garbage.Garbage_Collect();
+
+            getAcPreset(Settings.Default.acPreset);
+            getDcPreset(Settings.Default.dcPreset);
+            getResumePreset(Settings.Default.resumePreset);
+            setup = true;
         }
 
         private void getAcPreset(string searchName)
@@ -131,12 +124,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (item.ToString() == searchName)
                 {
                     cbxCharge.SelectedItem = item;
-                    setup = true;
                     return;
                 }
             }
 
-            setup = true;
             cbxCharge.SelectedIndex = selectedIndex;
         }
 
@@ -149,12 +140,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (item.ToString() == searchName)
                 {
                     cbxDischarge.SelectedItem = item;
-                    setup = true;
                     return;
                 }
             }
 
-            setup = true;
             cbxDischarge.SelectedIndex = selectedIndex;
         }
 
@@ -167,13 +156,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (item.ToString() == searchName)
                 {
                     cbxResume.SelectedItem = item;
-                    setup = true;
                     return;
                 }
             }
 
-            setup = true;
-            cbxDischarge.SelectedIndex = selectedIndex;
+            cbxResume.SelectedIndex = selectedIndex;
         }
 
         private void btnChargeLoad_Click(object sender, RoutedEventArgs e)
@@ -247,8 +234,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
             }
 
-
             getAcPreset(oldPreset);
+            setup = true;
         }
 
         private void btnDischargeLoad_Click(object sender, RoutedEventArgs e)
@@ -324,6 +311,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
 
             getDcPreset(oldPreset);
+            setup = true;
         }
 
         private void btnResume_Click(object sender, RoutedEventArgs e)
@@ -396,9 +384,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxResume.Items.Add(presetName);
                 }
             }
-
-
             getResumePreset(oldPreset);
+            setup = true;
         }
 
         private void cbxCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -415,21 +402,25 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             if(presetName.Contains("PM - Eco"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.EcoPreset;
                             }
                             else if (presetName.Contains("PM - Bal"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.BalPreset;
                             }
                             else if (presetName.Contains("PM - Perf"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.PerformancePreset;
                             }
                             else if (presetName.Contains("PM - Ext"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.ExtremePreset;
                             }
                             else
@@ -454,21 +445,25 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             if (presetName.Contains("PM - Eco"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.EcoPreset;
                             }
                             else if (presetName.Contains("PM - Bal"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.BalPreset;
                             }
                             else if (presetName.Contains("PM - Perf"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.PerformancePreset;
                             }
                             else if (presetName.Contains("PM - Ext"))
                             {
                                 Settings.Default.acPreset = presetName;
+                                PremadePresets.SetPremadePresets();
                                 Settings.Default.acCommandString = PremadePresets.ExtremePreset;
                             }
                             else
@@ -520,21 +515,25 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (presetName.Contains("PM - Eco"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.EcoPreset;
                         }
                         else if (presetName.Contains("PM - Bal"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.BalPreset;
                         }
                         else if (presetName.Contains("PM - Perf"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.PerformancePreset;
                         }
                         else if (presetName.Contains("PM - Ext"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.ExtremePreset;
                         }
                         else
@@ -558,21 +557,25 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (presetName.Contains("PM - Eco"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.EcoPreset;
                         }
                         else if (presetName.Contains("PM - Bal"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.BalPreset;
                         }
                         else if (presetName.Contains("PM - Perf"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.PerformancePreset;
                         }
                         else if (presetName.Contains("PM - Ext"))
                         {
                             Settings.Default.dcPreset = presetName;
+                            PremadePresets.SetPremadePresets();
                             Settings.Default.dcCommandString = PremadePresets.ExtremePreset;
                         }
                         else

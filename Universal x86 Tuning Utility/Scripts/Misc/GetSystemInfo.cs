@@ -19,6 +19,36 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         private static ManagementObjectSearcher motherboardSearcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_MotherboardDevice");
         private static ManagementObjectSearcher ComputerSsystemInfo = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_ComputerSystemProduct");
 
+        public static bool IsGPUPresent(string gpuName)
+        {
+            // Create a query to search for GPU devices
+            var query = new SelectQuery("SELECT * FROM Win32_VideoController");
+
+            // Create a ManagementObjectSearcher object with the query
+            using (var searcher = new ManagementObjectSearcher(query))
+            {
+                // Execute the query and get the collection of ManagementObject
+                var results = searcher.Get();
+
+                // Iterate through each ManagementObject in the collection
+                foreach (var result in results)
+                {
+                    // Get the Name property of the GPU
+                    var name = result["Name"]?.ToString();
+
+                    // Check if the GPU name matches the specified name
+                    if (!string.IsNullOrEmpty(name) && name.Contains(gpuName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // GPU with the specified name found, return true
+                        return true;
+                    }
+                }
+            }
+
+            // GPU with the specified name not found, return false
+            return false;
+        }
+
         public static string GetCPUName()
         {
             try

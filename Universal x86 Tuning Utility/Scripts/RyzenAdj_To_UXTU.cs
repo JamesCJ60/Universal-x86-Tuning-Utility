@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,14 @@ namespace Universal_x86_Tuning_Utility.Scripts
     internal class RyzenAdj_To_UXTU
     {
         static int i = 0;
+
+        [DllImport("powrprof.dll", EntryPoint = "PowerSetActiveOverlayScheme")]
+        public static extern uint PowerSetActiveOverlayScheme(Guid OverlaySchemeGuid);
+
+        static string balancedPowerScheme = "3af9B8d9-7c97-431d-ad78-34a8bfea439f";
+        static string highPerformancePowerScheme = "DED574B5-45A0-4F42-8737-46345C09C238";
+        static string powerSaverPowerScheme = "961CC777-2547-4F9D-8174-7D86181b8A7A";
+
         //Translate RyzenAdj like cli arguments to UXTU
         public static async void Translate(string _ryzenAdjString, bool isAutoReapply = false)
         {
@@ -48,6 +57,13 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             if (ryzenAdjCommandString.Contains("UXTUSR"))
                             {
                                 UXTUSR(ryzenAdjCommandString, ryzenAdjCommandValueString);
+                                Task.Delay(50);
+                            }
+                            else if (ryzenAdjCommandString.Contains("Win-Power"))
+                            {
+                                if(ryzenAdjCommandValueString == "0") PowerSetActiveOverlayScheme(new Guid(powerSaverPowerScheme.ToLower()));
+                                else if (ryzenAdjCommandValueString == "1") PowerSetActiveOverlayScheme(new Guid(balancedPowerScheme.ToLower()));
+                                else if (ryzenAdjCommandValueString == "2") PowerSetActiveOverlayScheme(new Guid(highPerformancePowerScheme.ToLower()));
                                 Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("ASUS"))

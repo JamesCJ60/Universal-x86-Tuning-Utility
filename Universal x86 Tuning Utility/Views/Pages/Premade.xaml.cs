@@ -73,6 +73,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     cpuName = Family.CPUName.Replace("AMD", null).Replace("with", null).Replace("Mobile", null).Replace("Ryzen", null).Replace("Radeon", null).Replace("Graphics", null).Replace("Vega", null).Replace("Gfx", null);
 
+                    if (GetSystemInfo.Product.ToLower().Contains("laptop 16 (amd ryzen 7040") && GetSystemInfo.Manufacturer.ToLower().Contains("framework"))
+                    {
+                        tbxMessage.Text = "Premade Presets - Framework Laptop 16 (AMD Ryzen 7040HS Series)";
+                        bdgCertified.Visibility = Visibility.Visible;
+                    }
+                    else if (GetSystemInfo.Product.ToLower().Contains("laptop 13 (amd ryzen 7040") && GetSystemInfo.Manufacturer.ToLower().Contains("framework"))
+                    {
+                        tbxMessage.Text = "Premade Presets - Framework Laptop 13 (AMD Ryzen 7040U Series)";
+                        bdgCertified.Visibility = Visibility.Visible;
+                    }
+                    else bdgCertified.Visibility = Visibility.Collapsed;
+                   
+
                     PremadePresets.SetPremadePresets();
 
                     EcoPreset = PremadePresets.EcoPreset;
