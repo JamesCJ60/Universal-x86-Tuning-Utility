@@ -26,34 +26,34 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                     if (Family.TYPE == Family.ProcessorType.Amd_Apu)
                     {
-                        uri = new Uri("pack://application:,,,/Assets/Laptops/Framework/framework-laptop-16.png");
                         if (GetSystemInfo.Product.ToLower().Contains("laptop 16 (amd ryzen 7040") && GetSystemInfo.Manufacturer.ToLower().Contains("framework"))
                         {
+                            uri = new Uri("pack://application:,,,/Assets/Laptops/Framework/framework-laptop-16.png");
                             bool has7700S = GetSystemInfo.IsGPUPresent("AMD Radeon(TM) RX 7700S");
 
                             if (has7700S)
                             {
-                                EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=30000  --fast-limit=35000 --stapm-time=64 --slow-limit=30000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=0 ";
-                                BalPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=95000  --fast-limit=950000 --stapm-time=64 --slow-limit=95000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=1 ";
-                                PerformancePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=100000  --fast-limit=100000 --stapm-time=64 --slow-limit=120000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
-                                ExtremePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=120000  --fast-limit=140000 --stapm-time=64 --slow-limit=120000 --slow-time=128 --vrm-current=200000 --vrmmax-current=200000 --vrmsoc-current=200000 --vrmsocmax-current=200000 --vrmgfx-current=200000 --Win-Power=2 ";
+                                EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=30000 --fast-limit=35000 --slow-limit=30000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=0 ";
+                                BalPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=95000 --fast-limit=950000 --slow-limit=95000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=1 ";
+                                PerformancePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=100000 --fast-limit=100000 --slow-limit=120000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
+                                ExtremePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=120000 --fast-limit=140000 --slow-limit=120000 --vrm-current=200000 --vrmmax-current=200000 --vrmsoc-current=200000 --vrmsocmax-current=200000 --vrmgfx-current=200000 --Win-Power=2 ";
                             }
                             else
                             {
-                                EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=6000  --fast-limit=8000 --stapm-time=64 --slow-limit=6000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=0 ";
-                                BalPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=35000  --fast-limit=45000 --stapm-time=64 --slow-limit=38000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=1 ";
-                                PerformancePreset = "--tctl-temp=100 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=45000  --fast-limit=55000 --stapm-time=64 --slow-limit=50000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
-                                ExtremePreset = "--tctl-temp=100 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=55000  --fast-limit=70000 --stapm-time=64 --slow-limit=65000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
+                                EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=6000 --fast-limit=8000 --slow-limit=6000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=0 ";
+                                BalPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=35000 --fast-limit=45000 --slow-limit=38000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=1 ";
+                                PerformancePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=45000 --fast-limit=55000 --slow-limit=50000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
+                                ExtremePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=55000 --fast-limit=70000 --slow-limit=65000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
                             }
                         }
                         else if (GetSystemInfo.Product.ToLower().Contains("laptop 13 (amd ryzen 7040") && GetSystemInfo.Manufacturer.ToLower().Contains("framework"))
                         {
                             uri = new Uri("pack://application:,,,/Assets/Laptops/Framework/framework-laptop-13.png");
 
-                            EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=8000  --fast-limit=10000 --stapm-time=64 --slow-limit=8000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=0 ";
-                            BalPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=15000  --fast-limit=18000 --stapm-time=64 --slow-limit=15000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=1 ";
-                            PerformancePreset = "--tctl-temp=100 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=28000  --fast-limit=35000 --stapm-time=64 --slow-limit=28000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
-                            ExtremePreset = "--tctl-temp=100 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=35000  --fast-limit=60000 --stapm-time=64 --slow-limit=35000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
+                            EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=8000 --fast-limit=10000 --slow-limit=8000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=0 ";
+                            BalPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=50 --stapm-limit=15000 --fast-limit=18000 --slow-limit=15000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=1 ";
+                            PerformancePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=28000 --fast-limit=35000 --slow-limit=28000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
+                            ExtremePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=35000 --fast-limit=60000 --slow-limit=35000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
                         }
                         else {
                             if (Family.FAM < Family.RyzenFamily.Matisse)
