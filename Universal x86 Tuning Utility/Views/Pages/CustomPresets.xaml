@@ -1229,6 +1229,22 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                     <ui:NumberBox Name="nudAllCO" Text="{Binding ElementName=sdAllCO, Path=Value}" Value="{Binding ElementName=sdAllCO, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
                                     <Slider Name="sdAllCO" Value="{Binding ElementName=nudAllCO, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
+                                <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                        <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">iGPU Offset</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the iGPU Curve Optimiser Frequency/Voltage curve offset" VerticalAlignment="Bottom" />
+                                </StackPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Name="cbGfxCO"/>
+                                        <ui:NumberBox Name="nudGfxCO" Text="{Binding ElementName=sdGfxCO, Path=Value}" Value="{Binding ElementName=sdGfxCO, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
+                                        <Slider Name="sdGfxCO" Value="{Binding ElementName=nudGfxCO, Path=Value}" Maximum="30" Minimum="-50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>

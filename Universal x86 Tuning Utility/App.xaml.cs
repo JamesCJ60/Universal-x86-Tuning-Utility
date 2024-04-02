@@ -61,7 +61,7 @@ namespace Universal_x86_Tuning_Utility
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        public static string version = "2.2.8";
+        public static string version = "2.2.10";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 

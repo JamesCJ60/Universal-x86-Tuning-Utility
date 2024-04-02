@@ -271,6 +271,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             pboScalar = (int)nudPBOScaler.Value,
                             coAllCore = (int)nudAllCO.Value,
 
+                            coGfx = (int)nudGfxCO.Value,
+                            isCoGfx = (bool)cbGfxCO.IsChecked,
+
                             boostProfile = (int)cbxBoost.SelectedIndex,
 
                             rsr = (int)nudRSR.Value,
@@ -450,6 +453,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isDtCpuEDC = (bool)cbEDC.IsChecked,
                             isPboScalar = (bool)cbPBOScaler.IsChecked,
                             isCoAllCore = (bool)cbAllCO.IsChecked,
+
+                            coGfx= (int)nudGfxCO.Value,
+                            isCoGfx = (bool)cbGfxCO.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
                             nvMaxCoreClk = (int)nudNVMaxCore.Value,
@@ -730,9 +736,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         nudPBOScaler.Value = myPreset.pboScalar;
                         nudAllCO.Value = myPreset.coAllCore;
+                        nudGfxCO.Value = myPreset.coGfx;
 
                         cbPBOScaler.IsChecked = myPreset.isPboScalar;
                         cbAllCO.IsChecked = myPreset.isCoAllCore;
+                        cbGfxCO.IsChecked = myPreset.isCoGfx;
 
                         tsRadeonGraph.IsChecked = myPreset.isRadeonGraphics;
                         cbAntiLag.IsChecked = myPreset.isAntiLag;
@@ -849,9 +857,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         nudPBOScaler.Value = myPreset.pboScalar;
                         nudAllCO.Value = myPreset.coAllCore;
+                        nudGfxCO.Value = myPreset.coGfx;
 
                         cbPBOScaler.IsChecked = myPreset.isPboScalar;
                         cbAllCO.IsChecked = myPreset.isCoAllCore;
+                        cbGfxCO.IsChecked = myPreset.isCoGfx;
 
                         tsRadeonGraph.IsChecked = myPreset.isRadeonGraphics;
                         cbAntiLag.IsChecked = myPreset.isAntiLag;
@@ -1010,6 +1020,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (nudAllCO.Value < 0) commandValues = commandValues + $"--set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudAllCO.Value))} ";
                 }
 
+                if (cbGfxCO.IsChecked == true)
+                {
+                    if (nudGfxCO.Value >= 0) commandValues = commandValues + $"--set-cogfx={nudGfxCO.Value} ";
+                    if (nudGfxCO.Value < 0) commandValues = commandValues + $"--set-cogfx={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudGfxCO.Value))} ";
+                }
+
                 if (cbSoftMiniGPUClk.IsChecked == true) commandValues = commandValues + $"--min-gfxclk={nudSoftMiniGPUClk.Value} ";
                 if (cbSoftMaxiGPUClk.IsChecked == true) commandValues = commandValues + $"--max-gfxclk={nudSoftMaxiGPUClk.Value} ";
 
@@ -1097,10 +1113,17 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (cbTDC.IsChecked == true) commandValues = commandValues + $"--tdc-limit={nudTDC.Value * 1000} ";
                 if (cbEDC.IsChecked == true) commandValues = commandValues + $"--edc-limit={nudEDC.Value * 1000} ";
                 if (cbPBOScaler.IsChecked == true) commandValues = commandValues + $"--pbo-scalar={nudPBOScaler.Value * 100} ";
+
                 if (cbAllCO.IsChecked == true)
                 {
                     if (nudAllCO.Value >= 0) commandValues = commandValues + $"--set-coall={nudAllCO.Value} ";
                     if (nudAllCO.Value < 0) commandValues = commandValues + $"--set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudAllCO.Value))} ";
+                }
+
+                if (cbGfxCO.IsChecked == true)
+                {
+                    if (nudGfxCO.Value >= 0) commandValues = commandValues + $"--set-cogfx={nudGfxCO.Value} ";
+                    if (nudGfxCO.Value < 0) commandValues = commandValues + $"--set-cogfx={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)nudGfxCO.Value))} ";
                 }
 
                 if (cbCCD1Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={((0 << 4 | 0 % 1 & 15) << 4 | 0 % 8 & 15) << 20 | ((int)nudCCD1Core1.Value & 0xFFFF)} ";

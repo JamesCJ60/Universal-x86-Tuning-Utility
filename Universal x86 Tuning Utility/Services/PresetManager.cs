@@ -27,6 +27,7 @@ namespace Universal_x86_Tuning_Utility.Services
         public int apuGfxClk { get; set; }
         public int pboScalar { get; set; }
         public int coAllCore { get; set; }
+        public int coGfx { get; set; }
 
         public int dtCpuTemp { get; set; }
         public int dtCpuPPT { get; set; }
@@ -96,6 +97,7 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool isApuGfxClk { get; set; }
         public bool isPboScalar { get; set; }
         public bool isCoAllCore { get; set; }
+        public bool isCoGfx { get; set; }
 
         public bool isDtCpuTemp { get; set; }
         public bool isDtCpuPPT { get; set; }
