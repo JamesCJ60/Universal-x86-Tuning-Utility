@@ -20,10 +20,10 @@ using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Diagnostics.Metrics;
-using System.Windows.Interop;
-using Universal_x86_Tuning_Utility.Views.Windows;
+using Microsoft.Extensions.Logging;
 using RyzenSmu;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 using Universal_x86_Tuning_Utility.Scripts.ASUS;
 
 namespace Universal_x86_Tuning_Utility
@@ -42,6 +42,7 @@ namespace Universal_x86_Tuning_Utility
 
         public static ASUSWmi wmi;
         public static XgMobileConnectionService xgMobileConnectionService;
+        private static ILogger<App>? _logger;
 
         /// <summary>
         /// Gets registered service.
@@ -75,6 +76,14 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnStartup(object sender, StartupEventArgs e)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console(theme: AnsiConsoleTheme.Code, applyThemeToRedirectedOutput: true)
+                .WriteTo.File(LOGS_FOLDER + "uxtu_log.txt", 
+                    fileSizeLimitBytes: 8*1024*1024, // 8MB
+                    rollingInterval: RollingInterval.Day
+                )
+                .CreateLogger();
+            
             try
             {
                 if (!App.IsAdministrator())
@@ -95,11 +104,19 @@ namespace Universal_x86_Tuning_Utility
                         await Task.Run(() => product = GetSystemInfo.Product);
                         Display.setUpLists();
                     }
-                    catch { }
+                    catch (Exception ex)
+                    {
+                        Log.Logger.Error(ex, "Failed to setup product and display refresh rates");
+                    }
 
                     _host = Host
                 .CreateDefaultBuilder()
                 .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddSerilog();
+                })
                 .ConfigureServices((context, services) =>
                 {
                     // App Host
@@ -123,7 +140,11 @@ namespace Universal_x86_Tuning_Utility
                             Settings.Default.isASUS = true;
                             Settings.Default.Save();
                         }
-                    } catch { }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Logger.Error(ex, "Failed to setup ASUS WMI services");
+                    }
 
                     // Theme manipulation
                     services.AddSingleton<IThemeService, ThemeService>();
@@ -159,6 +180,7 @@ namespace Universal_x86_Tuning_Utility
                     services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
                 }).Build();
 
+                    _logger = _host.Services.GetRequiredService<ILogger<App>>();
 
                     _ = Tablet.TabletDevices;
                     bool firstBoot = false;
@@ -172,7 +194,10 @@ namespace Universal_x86_Tuning_Utility
                                 Settings.Default.SettingsUpgradeRequired = false;
                                 Settings.Default.Save();
                             }
-                            catch { }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex, "Failed to update settings on startup");
+                            }
                         }
 
                         firstBoot = Settings.Default.FirstBoot;
@@ -189,6 +214,7 @@ namespace Universal_x86_Tuning_Utility
 
                     if (!createdNew)
                     {
+                        _logger.LogWarning("Failed to start app, as there is already running uxtu instance. Shutting down");
                         MessageBox.Show("An instance of Universal x86 Tuning Utility is already open!", "Error starting Universal x86 Tuning Utility");
                         // Close the new instance
                         Shutdown();
@@ -220,9 +246,9 @@ namespace Universal_x86_Tuning_Utility
                         {
                             await Task.Run(() => UnblockFilesInDirectory(path));
                         }
-                        catch
+                        catch (Exception ex)
                         {
-
+                            _logger.LogError(ex, "Failed to unblock files in {dir} directory", path);
                         }
                     }
 
@@ -232,7 +258,12 @@ namespace Universal_x86_Tuning_Utility
 
                     await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
                 }
-            } catch (Exception ex) { MessageBox.Show(ex.Message); }
+            } 
+            catch (Exception ex) 
+            { 
+                Log.Logger.Fatal(ex, "Failed to build and start a host");
+                MessageBox.Show(ex.Message); 
+            }
         }
 
         public static async void CheckForUpdate()
@@ -281,6 +312,7 @@ namespace Universal_x86_Tuning_Utility
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+            _logger?.LogCritical(e.Exception, "Unhandled dispatcher exception");
         }
 
         static void UnblockFilesInDirectory(string directoryPath)
