@@ -26,6 +26,7 @@ using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 using Universal_x86_Tuning_Utility.Views.Windows;
 using Windows.Gaming.Preview.GamesEnumeration;
+using Microsoft.Extensions.Logging;
 using Wpf.Ui.Common.Interfaces;
 using YamlDotNet.Core;
 using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
@@ -92,11 +93,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
         }
 
+        private readonly ILogger<Games> _logger;
 
         public static List<GameLauncherItem> GameList = null;
         DispatcherTimer updateFPS = new DispatcherTimer();
-        public Games(ViewModels.GamesViewModel viewModel)
+        public Games(ViewModels.GamesViewModel viewModel, ILogger<Games> logger)
         {
+            _logger = logger;
             InitializeComponent();
             _ = Tablet.TabletDevices;
             ViewModel = viewModel;
@@ -132,7 +135,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to update fps");
+            }
         }
 
         private static GameDataManager gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Windows;
+using Microsoft.Extensions.Logging;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Wpf.Ui.Common.Interfaces;
@@ -16,14 +17,17 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
     /// </summary>
     public partial class SettingsPage : INavigableView<ViewModels.SettingsViewModel>
     {
+        private readonly ILogger<SettingsPage> _logger;
+
         public ViewModels.SettingsViewModel ViewModel
         {
             get;
         }
 
-        public SettingsPage(ViewModels.SettingsViewModel viewModel)
+        public SettingsPage(ViewModels.SettingsViewModel viewModel, ILogger<SettingsPage> logger)
         {
             ViewModel = viewModel;
+            _logger = logger;
 
             InitializeComponent();
 
@@ -157,6 +161,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 catch (Exception ex)
                 {
                     // log error or display error message to user
+                    _logger.LogError(ex, "Failed to launch MSI");
                     MessageBox.Show("Failed to launch MSI: " + ex.Message);
                 }
             }

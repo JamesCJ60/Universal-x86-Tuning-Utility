@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Universal_x86_Tuning_Utility.Scripts.ASUS
 {
     public class XgMobileConnectionService
     {
+        private readonly ILogger<XgMobileConnectionService> _logger;
         private readonly ASUSWmi wmi;
         private static readonly byte[] XG_MOBILE_CURVE_FUNC_NAME = { 0x5e, 0xd1, 0x01 };
         private static readonly byte[] XG_MOBILE_DISABLE_FAN_CONTROL_FUNC_NAME = { 0x5e, 0xd1, 0x02 };
@@ -25,15 +27,19 @@ namespace Universal_x86_Tuning_Utility.Scripts.ASUS
         }
         public event EventHandler<XgMobileStatusEvent>? XgMobileStatus;
 
-        public XgMobileConnectionService(ASUSWmi wmi)
+        public XgMobileConnectionService(ASUSWmi wmi, ILogger<XgMobileConnectionService> logger)
         {
+            this.wmi = wmi;
+            _logger = logger;
             try
             {
-                this.wmi = wmi;
                 UpdateXgMobileStatus();
                 wmi.SubscribeToEvents((a, b) => UpdateXgMobileStatus());
             }
-            catch { return; }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to initialize XgMobileConnectionService");
+            }
         }
 
         private void UpdateXgMobileStatus()
@@ -62,7 +68,10 @@ namespace Universal_x86_Tuning_Utility.Scripts.ASUS
                     });
                 }
             }
-            catch { return; }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to update UpdateXgMobileStatus");
+            }
         }
 
         private bool IsEGPUDetected()
@@ -133,8 +142,9 @@ namespace Universal_x86_Tuning_Utility.Scripts.ASUS
                 Array.Copy(command, paramsArr, command.Length);
                 return device.WriteFeatureData(paramsArr);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to send xg mobile usb command");
                 throw;
             }
             finally
