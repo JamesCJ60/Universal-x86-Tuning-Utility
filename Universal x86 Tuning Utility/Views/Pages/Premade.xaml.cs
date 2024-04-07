@@ -15,9 +15,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Extensions.Logging;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
+using Exception = System.Exception;
 using Uri = System.Uri;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
@@ -27,6 +29,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
     /// </summary>
     public partial class Premade : Page
     {
+        private readonly ILogger<Premade> _logger;
         private string ExtremePreset = "", PerformancePreset = "", BalPreset = "", EcoPreset = "";
 
         private void tbPerf_Click(object sender, RoutedEventArgs e)
@@ -54,8 +57,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         }
 
         private string cpuName = "";
-        public Premade()
+        public Premade(ILogger<Premade> logger)
         {
+            _logger = logger;
+
             try
             {
                 InitializeComponent();
@@ -63,7 +68,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 PremadePresets.SetPremadePresets();
                 update();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to initialize Premade page");
+            }
         }
 
         private void update()
@@ -104,7 +112,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (selectedPreset == 3) exPreset();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to update Premade page");
+            }
         }
 
         private async void perfPreset()
@@ -128,9 +139,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 Settings.Default.CommandString = PerformancePreset;
                 Settings.Default.premadePreset = 2;
                 Settings.Default.Save();
-            } catch
+            } 
+            catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Failed to setup performance preset");
             }
         }
 
@@ -160,7 +172,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 Settings.Default.premadePreset = 3;
                 Settings.Default.Save();
-            } catch { }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to setup extreme preset");
+            }
         }
 
         private async void ecoPreset()
@@ -184,7 +200,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 Settings.Default.CommandString = EcoPreset;
                 Settings.Default.premadePreset = 0;
                 Settings.Default.Save();
-            } catch { }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to setup eco preset");
+            }
         }
 
         private async void balPreset()
@@ -208,9 +228,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 Settings.Default.CommandString = BalPreset;
                 Settings.Default.premadePreset = 1;
                 Settings.Default.Save();
-            } catch
+            }
+            catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Failed to setup balanced preset");
             }
         }
     }
