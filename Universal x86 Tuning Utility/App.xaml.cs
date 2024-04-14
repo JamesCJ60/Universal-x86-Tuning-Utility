@@ -55,13 +55,6 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static bool IsAdministrator()
-        {
-            WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
         public static string version = "2.2.10";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
@@ -86,28 +79,15 @@ namespace Universal_x86_Tuning_Utility
             
             try
             {
-                if (!App.IsAdministrator())
+                try
                 {
-                    // Restart and run as admin
-                    var exeName = Process.GetCurrentProcess().MainModule.FileName;
-                    ProcessStartInfo startInfo = new ProcessStartInfo(exeName);
-                    startInfo.Verb = "runas";
-                    startInfo.UseShellExecute = true;
-                    startInfo.Arguments = "restart";
-                    Process.Start(startInfo);
-                    Environment.Exit(0);
+                    await Task.Run(() => product = GetSystemInfo.Product);
+                    Display.setUpLists();
                 }
-                else
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        await Task.Run(() => product = GetSystemInfo.Product);
-                        Display.setUpLists();
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Logger.Error(ex, "Failed to setup product and display refresh rates");
-                    }
+                    Log.Logger.Error(ex, "Failed to setup product and display refresh rates");
+                }
 
                     _host = Host
                 .CreateDefaultBuilder()
@@ -256,8 +236,7 @@ namespace Universal_x86_Tuning_Utility
 
                     await _host.StartAsync();
 
-                    await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
-                }
+                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
             } 
             catch (Exception ex) 
             { 
