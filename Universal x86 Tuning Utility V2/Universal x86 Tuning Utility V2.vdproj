@@ -45,27 +45,22 @@
         "InstallerBootstrapper" = "3:2"
             "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
             {
-            "Enabled" = "11:TRUE"
+            "Enabled" = "11:FALSE"
             "PromptEnabled" = "11:TRUE"
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.CoreRuntime.8.0.x64"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    "Name" = "8:.NET Runtime 8.0.5 (x64)"
+                    "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.8.0.x64"
                     }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.CoreRuntime.7.0.x64"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.DesktopRuntime.8.0.x64"
                     {
-                    "Name" = "8:.NET Runtime 7.0.5 (x64)"
-                    "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.7.0.x64"
-                    }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.DesktopRuntime.7.0.x64"
-                    {
-                    "Name" = "8:.NET Desktop Runtime 7.0.5 (x64)"
-                    "ProductCode" = "8:Microsoft.NetCore.DesktopRuntime.7.0.x64"
+                    "Name" = "8:.NET Desktop Runtime 8.0.5 (x64)"
+                    "ProductCode" = "8:Microsoft.NetCore.DesktopRuntime.8.0.x64"
                     }
                 }
             }
@@ -218,15 +213,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Universal x86 Tuning Utility"
-        "ProductCode" = "8:{05BD79FB-A585-41EC-8BEE-7F30E26E5049}"
-        "PackageCode" = "8:{C236D001-4771-4D8B-9D4D-0F6C3D3899B2}"
+        "ProductCode" = "8:{DD982784-4FF4-4DD7-BC02-E7D75366E2C1}"
+        "PackageCode" = "8:{63104DA5-BD43-46AE-8661-706343D8B881}"
         "UpgradeCode" = "8:{300E743A-4C69-440D-9425-14C446AB2658}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.2.9"
+        "ProductVersion" = "8:2.2.12"
         "Manufacturer" = "8:JamesCJ60"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -768,7 +763,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0FAC7670CF204A74B0B84BA8720E5EFC"
             {
-            "SourcePath" = "8:..\\Universal x86 Tuning Utility\\obj\\Debug\\net7.0-windows10.0.22621.0\\apphost.exe"
+            "SourcePath" = "8:..\\Universal x86 Tuning Utility\\obj\\Debug\\net8.0-windows10.0.22621.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B208FDAB7341429AB15D831E1F00D044"

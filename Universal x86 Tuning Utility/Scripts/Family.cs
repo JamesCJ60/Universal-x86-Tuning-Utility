@@ -142,7 +142,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 // Zen5 - Zen6
                 if (CPUFamily == 26)
                 {
-                    if (CPUModel == 32) FAM = RyzenFamily.StrixPoint;
+                    if (CPUModel == 32 || CPUModel == 36) FAM = RyzenFamily.StrixPoint;
                     else FAM = RyzenFamily.GraniteRidge;
                 }
 
