@@ -91,8 +91,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 
                                 if (ryzenAdjCommandString == "intel-pl") TDP_Management.changeTDPAll(ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
+                                //else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
+                                //else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
                             }
                             else
                             {
