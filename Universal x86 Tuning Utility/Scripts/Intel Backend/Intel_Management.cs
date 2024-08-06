@@ -196,7 +196,6 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
 
                         commandArguments = " -s write 0x610 0x00438" + hexPL2 + " 0x00DD8" + hexPL1;
                         processMSR = BaseDir + "Assets\\Intel\\MSR\\msr-cmd.exe";
-                        MessageBox.Show(commandArguments);
                         Run_CLI.RunCommand(commandArguments, false, processMSR);
 
                         Task.Delay(100);

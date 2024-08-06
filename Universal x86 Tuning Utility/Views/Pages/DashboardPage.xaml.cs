@@ -30,13 +30,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 caPremade.IsEnabled = false;
                 btnPremade.IsEnabled = false;
             }
-
-            int[] ratios = Intel_Management.readClockRatios();
-
-            foreach(int ratio in ratios)
-            {
-                MessageBox.Show(ratio.ToString());
-            }
         }
     }
 }
