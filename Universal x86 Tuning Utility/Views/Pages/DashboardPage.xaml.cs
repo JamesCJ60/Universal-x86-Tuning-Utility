@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
@@ -28,6 +29,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 caPremade.IsEnabled = false;
                 btnPremade.IsEnabled = false;
+            }
+
+            int[] ratios = Intel_Management.readClockRatios();
+
+            foreach(int ratio in ratios)
+            {
+                MessageBox.Show(ratio.ToString());
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using Universal_x86_Tuning_Utility.Properties;
@@ -70,6 +71,49 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
 
             Task.Delay(100);
         }
+
+        public static int[] readClockRatios()
+        {
+            string processMSR = "";
+            string commandArguments = "";
+            string output = "";
+
+            try
+            {
+                commandArguments += $" read 0x1AD;";
+                processMSR = BaseDir + "Assets\\Intel\\MSR\\msr-cmd.exe";
+                output = Run_CLI.RunCommand(commandArguments, true, processMSR);
+            }
+            catch (Exception ex)
+            {
+                return new int[0];
+            }
+
+            string[] lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (lines.Length < 2) return new int[0];
+            
+            string secondLine = lines[1];
+            string[] parts = secondLine.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length < 2) return new int[0];
+            
+            string hexValue = parts[parts.Length - 1];
+            hexValue = hexValue.Substring(2);
+
+            int numberOfParts = hexValue.Length / 2;
+            string[] hexParts = new string[numberOfParts];
+            int[] intParts = new int[numberOfParts];
+
+            for (int i = 0; i < numberOfParts; i++)
+            {
+                hexParts[i] = hexValue.Substring(i * 2, 2);
+                intParts[i] = Convert.ToInt32(hexParts[i], 16);
+            }
+
+            return intParts;
+        }
+
 
 
         public static int changeGpuClock(int value)
