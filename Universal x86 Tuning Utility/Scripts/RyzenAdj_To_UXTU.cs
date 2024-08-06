@@ -90,7 +90,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 //Convert value of select cli argument to int
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 
-                                if (ryzenAdjCommandString == "intel-pl") TDP_Management.changeTDPAll(ryzenAdjCommandValue);
+                                if (ryzenAdjCommandString == "intel-pl") Intel_Management.changeTDPAll(ryzenAdjCommandValue);
                                 //else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
                                 //else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
                             }

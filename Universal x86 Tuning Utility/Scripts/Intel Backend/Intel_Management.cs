@@ -12,7 +12,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
 {
 
-    public static class TDP_Management
+    public static class Intel_Management
     {
         private static System.Object objLock = new System.Object();
         public static string BaseDir = Settings.Default.Path;
@@ -49,12 +49,12 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
 
                 Run_CLI.RunCommand(commandArguments, false, processMSR);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
 
             Task.Delay(100);
         }
 
-        public static void ChangeClockRatioOffset(int[] clockRatios)
+        public static void changeClockRatioOffset(int[] clockRatios)
         {
             string processMSR = "";
             string commandArguments = "";
@@ -62,11 +62,11 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             {
                 string hexValue = "";
                 for (int i = 0; i < clockRatios.Length; ++i) hexValue += clockRatios[i].ToString("X2");
-                commandArguments += $"-s write 0x1AD 0x{hexValue};";
+                commandArguments += $"-s write 0x1AD 0x0 0x{hexValue};";
                 processMSR = BaseDir + "Assets\\Intel\\MSR\\msr-cmd.exe";
                 Run_CLI.RunCommand(commandArguments, false, processMSR);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
 
             Task.Delay(100);
         }
@@ -87,7 +87,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                 Run_CLI.RunCommand(commandArguments, true, processKX);
                 Task.Delay(100);
             }
-            catch(Exception ex) { }
+            catch(Exception ex) { MessageBox.Show(ex.ToString()); }
 
             return 0;
         }
@@ -150,15 +150,16 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                             if (hexPL2.Length == 2) { hexPL2 = "0" + hexPL2; }
                         }
 
-                        commandArguments = " -s write 0x610 0x00438" + hexPL2 + " 0x00dd8" + hexPL1;
+                        commandArguments = " -s write 0x610 0x00438" + hexPL2 + " 0x00DD8" + hexPL1;
                         processMSR = BaseDir + "Assets\\Intel\\MSR\\msr-cmd.exe";
+                        MessageBox.Show(commandArguments);
                         Run_CLI.RunCommand(commandArguments, false, processMSR);
 
                         Task.Delay(100);
                     }
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
         }
 
 

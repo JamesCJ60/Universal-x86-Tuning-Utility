@@ -25,6 +25,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
+using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution;
 using Universal_x86_Tuning_Utility.Services;
