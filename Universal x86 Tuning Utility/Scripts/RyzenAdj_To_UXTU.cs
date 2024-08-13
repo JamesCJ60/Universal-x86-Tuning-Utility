@@ -97,6 +97,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 else if (ryzenAdjCommandString == "intel-volt-sa") Intel_Management.changeVoltageOffset(3, ryzenAdjCommandValue);
                                 else if (ryzenAdjCommandString == "intel-bal-cpu") Intel_Management.changePowerBalance(0, ryzenAdjCommandValue);
                                 else if (ryzenAdjCommandString == "intel-bal-gpu") Intel_Management.changePowerBalance(1, ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "intel-gpu") Intel_Management.changeGpuClock(ryzenAdjCommandValue);
                                 //else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
                                 //else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
                             }

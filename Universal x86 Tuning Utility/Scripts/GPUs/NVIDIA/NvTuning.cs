@@ -16,7 +16,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA
 {
     internal class NvTuning
     {
-        public const int MinCoreOffset = -900, MinMemoryOffset = -900, MaxCoreOffset = 2000, MaxMemoryOffset = 2000, MinClockLimit = 400, MaxClockLimit = 4000;
+        public const int MinCoreOffset = -900, MinMemoryOffset = -900, MaxCoreOffset = 4000, MaxMemoryOffset = 4000, MinClockLimit = 400, MaxClockLimit = 4000;
 
         public static int SetClocks(int core, int memory, int voltage = 0)
         {

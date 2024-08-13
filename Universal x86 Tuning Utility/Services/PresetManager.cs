@@ -46,8 +46,8 @@ namespace Universal_x86_Tuning_Utility.Services
         public int IntelVoltSA { get; set; }
 
         public bool IsIntelBal { get; set; }
-        public int IntelBalCPU { get; set; }
-        public int IntelBalGPU { get; set; }
+        public int IntelBalCPU { get; set; } = 9;
+        public int IntelBalGPU { get; set; } = 13;
 
         public int rsr { get; set; }
         public int boost { get; set; }
@@ -163,6 +163,8 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool asusiGPU { get; set; }
 
         public int displayHz { get; set; }
+
+        public int powerMode { get; set; }
 
         public bool isMag { get; set; }
         public bool isVsync { get; set; }

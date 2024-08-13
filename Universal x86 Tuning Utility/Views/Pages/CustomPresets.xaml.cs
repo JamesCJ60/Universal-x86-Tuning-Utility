@@ -59,7 +59,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudGfxVrmEdc.Value = 64;
             nudSocVrmTdc.Value = 64;
             nudSocVrmEdc.Value = 64;
-            nudAPUiGPUClk.Value = 1500;
+            nudAPUiGPUClk.Value = 1000;
             nudCPUTemp.Value = 85;
             nudPPT.Value = 140;
             nudEDC.Value = 160;
@@ -69,6 +69,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudAmdVID.Value = 1200;
             nudAmdCpuClk.Value = 3200;
             nudNVMaxCore.Value = 4000;
+
+            nudIntelCpuBal.Value = 9;
+            nudIntelGpuBal.Value = 13;
 
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
@@ -88,7 +91,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     }
                 }
                 else sdRefreshRate.Visibility = Visibility.Collapsed;
-            } catch 
+            }
+            catch
             {
                 sdRefreshRate.Visibility = Visibility.Collapsed;
             }
@@ -103,9 +107,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (Family.FAM != Family.RyzenFamily.PhoenixPoint || Family.FAM != Family.RyzenFamily.PhoenixPoint2 && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
                 if (Family.CPUName.Contains("U") && Family.FAM > Family.RyzenFamily.Renoir) sdAmdPBO.Visibility = Visibility.Collapsed;
-                if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
+                if (SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
 
-                if(Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
+                if (Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
 
                 if (Family.FAM < Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Mendocino) sdAmdCO.Visibility = Visibility.Collapsed;
                 else sdAmdCO.Visibility = Visibility.Visible;
@@ -164,7 +168,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdApuThermal.Visibility = Visibility.Collapsed;
                 sdAmdApuVRM.Visibility = Visibility.Collapsed;
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;
-                sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
+                //sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
+
+                nudAPUiGPUClk.Minimum = 0;
+                sdAPUiGPUClk.Minimum = 0;
+
                 sdAmdCpuClk.Visibility = Visibility.Collapsed;
                 sdAmdPBO.Visibility = Visibility.Collapsed;
                 sdAmdCpuTune.Visibility = Visibility.Collapsed;
@@ -400,6 +408,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             Sharpness = (int)nudSharp.Value,
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
+                            powerMode = (int)cbxPowerMode.SelectedIndex,
+
                         };
                         apuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -461,7 +471,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isPboScalar = (bool)cbPBOScaler.IsChecked,
                             isCoAllCore = (bool)cbAllCO.IsChecked,
 
-                            coGfx= (int)nudGfxCO.Value,
+                            coGfx = (int)nudGfxCO.Value,
                             isCoGfx = (bool)cbGfxCO.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
@@ -520,6 +530,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isRecap = (bool)cbAutoCap.IsChecked,
                             Sharpness = (int)nudSharp.Value,
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
+
+                            powerMode = (int)cbxPowerMode.SelectedIndex,
                         };
                         amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -556,6 +568,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IntelBalCPU = (int)nudIntelCpuBal.Value,
                             IntelBalGPU = (int)nudIntelGpuBal.Value,
 
+                            isApuGfxClk = (bool)cbAPUiGPUClk.IsChecked,
+                            apuGfxClk = (int)nudAPUiGPUClk.Value,
+
                             rsr = (int)nudRSR.Value,
                             boost = (int)nudBoost.Value,
                             imageSharp = (int)nudImageSharp.Value,
@@ -589,6 +604,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             isRecap = (bool)cbAutoCap.IsChecked,
                             Sharpness = (int)nudSharp.Value,
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
+
+                            powerMode = (int)cbxPowerMode.SelectedIndex,
                         };
                         intelPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -620,7 +637,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             try
             {
-                if(Family.TYPE == Family.ProcessorType.Amd_Apu)
+                if (Family.TYPE == Family.ProcessorType.Amd_Apu)
                 {
                     if (cbxPowerPreset.Text != "" && cbxPowerPreset.Text != null)
                     {
@@ -691,7 +708,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         ToastNotification.ShowToastNotification("Preset Deleted", $"Your preset {deletePresetName} has been deleted successfully!");
                     }
                 }
-            } catch (Exception ex) {  }
+            }
+            catch (Exception ex) { }
         }
 
 
@@ -700,7 +718,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
             intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
-            if(cbxPowerPreset.Text != null && cbxPowerPreset.Text != "") updateValues(cbxPowerPreset.SelectedItem.ToString());
+            if (cbxPowerPreset.Text != null && cbxPowerPreset.Text != "") updateValues(cbxPowerPreset.SelectedItem.ToString());
         }
 
         public void updateValues(string preset)
@@ -842,7 +860,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         tsASUSEco.IsChecked = myPreset.asusiGPU;
                         cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
 
-                        if(myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
+                        if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
+
+                        cbxPowerMode.SelectedIndex = myPreset.powerMode;
 
                         tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
@@ -939,6 +959,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
+                        cbxPowerMode.SelectedIndex = myPreset.powerMode;
+
                         tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
                         cbAutoCap.IsChecked = myPreset.isRecap;
@@ -960,6 +982,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbIntelPL1.IsChecked = myPreset.isIntelPL1;
                         cbIntelPL2.IsChecked = myPreset.isIntelPL2;
 
+                        nudAPUiGPUClk.Value = myPreset.apuGfxClk;
+
+                        cbAPUiGPUClk.IsChecked = myPreset.isApuGfxClk;
+
                         tsRadeonGraph.IsChecked = myPreset.isRadeonGraphics;
                         cbAntiLag.IsChecked = myPreset.isAntiLag;
                         cbRSR.IsChecked = myPreset.isRSR;
@@ -980,6 +1006,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
 
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
+
+                        cbxPowerMode.SelectedIndex = myPreset.powerMode;
 
                         tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
@@ -1012,15 +1040,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (Settings.Default.isASUS)
             {
-               if(cbxAsusPower.SelectedIndex > 0) commandValues = commandValues + $"--ASUS-Power={cbxAsusPower.SelectedIndex} ";
-               if(sdAsusEco.Visibility == Visibility.Visible) commandValues = commandValues + $"--ASUS-Eco={tsASUSEco.IsChecked} ";
-               if(sdAsusUlti.Visibility == Visibility.Visible) commandValues = commandValues + $"--ASUS-MUX={tsASUSUlti.IsChecked} ";
+                if (cbxAsusPower.SelectedIndex > 0) commandValues = commandValues + $"--ASUS-Power={cbxAsusPower.SelectedIndex} ";
+                if (sdAsusEco.Visibility == Visibility.Visible) commandValues = commandValues + $"--ASUS-Eco={tsASUSEco.IsChecked} ";
+                if (sdAsusUlti.Visibility == Visibility.Visible) commandValues = commandValues + $"--ASUS-MUX={tsASUSUlti.IsChecked} ";
             }
 
-            if (sdRefreshRate.Visibility == Visibility.Visible && cbxRefreshRate.SelectedIndex > 0) 
-            {
-                commandValues = commandValues + $"--Refresh-Rate={Display.uniqueRefreshRates[cbxRefreshRate.SelectedIndex - 1]} ";
-            }
+            if (sdRefreshRate.Visibility == Visibility.Visible && cbxRefreshRate.SelectedIndex > 0) commandValues = commandValues + $"--Refresh-Rate={Display.uniqueRefreshRates[cbxRefreshRate.SelectedIndex - 1]} ";
+            
+            if (sdPowerMode.Visibility == Visibility.Visible && cbxPowerMode.SelectedIndex > 0) commandValues = commandValues + $"--Win-Power={cbxPowerMode.SelectedIndex - 1} ";
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
@@ -1198,6 +1225,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-2={nudIntelPL2.Value} ";
                 if (tsIntelUV.IsChecked == true) commandValues = commandValues + $"--intel-volt-cpu={nudIntelCoreUV.Value} --intel-volt-gpu={nudIntelGfxUV.Value} --intel-volt-cache={nudIntelCacheUV.Value} --intel-volt-cpu={nudIntelSAUV.Value} ";
                 if (tsIntelBal.IsChecked == true) commandValues = commandValues + $"--intel-bal-cpu={nudIntelCpuBal.Value} --intel-bal-gpu={nudIntelGpuBal.Value} ";
+                if (cbAPUiGPUClk.IsChecked == true) commandValues = commandValues + $"--intel-gpu={nudAPUiGPUClk.Value} ";
+                
             }
 
             if (tsRadeonGraph.IsChecked == true)
@@ -1218,10 +1247,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 else commandValues = commandValues + $"--ADLX-Sync=0-false --ADLX-Sync=1-false ";
             }
 
-            if(tsNV.IsChecked == true)
-            {
-                commandValues = commandValues + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
-            }
+            if (tsNV.IsChecked == true) commandValues = commandValues + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
+            
 
             return commandValues;
         }
@@ -1259,7 +1286,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 cbImageSharp.IsChecked = false;
             }
 
-            if(checkBox == cbImageSharp) cbRSR.IsChecked = false;
+            if (checkBox == cbImageSharp) cbRSR.IsChecked = false;
 
             Garbage.Garbage_Collect();
         }

@@ -539,11 +539,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="APU iGPU Tuning" />
+                            Text="iGPU Tuning" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a static iGPU clock on select APUs."/>
+                            Text="Provides the ability to set a static iGPU clock on select APUs/CPUs."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -552,7 +552,7 @@
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">iGPU Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the static clock speed of the iGPU, requires either a system reboot or system sleep to revert back to normal." VerticalAlignment="Bottom" />
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the static clock speed of the iGPU, requires either a system reboot or system sleep to revert back to normal on AMD systems." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1083,7 +1083,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                     <ui:CardExpander Name="sdIntelBal"
 IsEnabled="True"
 IsExpanded="False"
-Icon="Pulse20" Margin="0,8,15,0">
+Icon="Scales20" Margin="0,8,15,0">
                         <ui:CardExpander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -1778,6 +1778,45 @@ Icon="Desktop20" Margin="0,8,15,0">
                                 <ComboBox
             Grid.Column="1"
             VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxRefreshRate" Height="37">
+                                </ComboBox>
+
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
+                    <ui:CardControl Name="sdPowerMode"
+IsEnabled="True"
+Icon="Power20" Margin="0,8,15,0">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="Windows Power Mode" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to change the Windows power mode from a preset."/>
+                                </StackPanel>
+                                <ComboBox
+            Grid.Column="1"
+            VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxPowerMode" Height="37">
+                                    <ComboBoxItem>
+                                        System Controlled
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        Best Power Effciency
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        Balanced
+                                    </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        Best Performance
+                                    </ComboBoxItem>
                                 </ComboBox>
 
                             </Grid>
