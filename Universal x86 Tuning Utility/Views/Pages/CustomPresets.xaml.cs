@@ -98,6 +98,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdCPU.Visibility = Visibility.Collapsed;
                 sdAmdCpuThermal.Visibility = Visibility.Collapsed;
                 sdIntelCPU.Visibility = Visibility.Collapsed;
+                sdIntelUV.Visibility = Visibility.Collapsed;
+                sdIntelBal.Visibility = Visibility.Collapsed;
+
                 if (Family.FAM != Family.RyzenFamily.PhoenixPoint || Family.FAM != Family.RyzenFamily.PhoenixPoint2 && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
                 if (Family.CPUName.Contains("U") && Family.FAM > Family.RyzenFamily.Renoir) sdAmdPBO.Visibility = Visibility.Collapsed;
                 if(SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
@@ -109,12 +112,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 sdAmdCCD1CO.Visibility = sdAmdCO.Visibility;
 
-                if (Family.FAM < Family.RyzenFamily.DragonRange)
+                if (Family.FAM < Family.RyzenFamily.Renoir)
                 {
                     sdAmdPowerProfile.Visibility = Visibility.Collapsed;
                     sdAmdCO.Visibility = Visibility.Collapsed;
-                    if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
                 }
+
+                if (Family.FAM == Family.RyzenFamily.DragonRange) if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
@@ -132,6 +136,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdApuThermal.Visibility = Visibility.Collapsed;
                 sdAmdApuVRM.Visibility = Visibility.Collapsed;
                 sdIntelCPU.Visibility = Visibility.Collapsed;
+                sdIntelUV.Visibility = Visibility.Collapsed;
+                sdIntelBal.Visibility = Visibility.Collapsed;
+
                 sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;
 
@@ -542,6 +549,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         {
                             IntelPL1 = (int)nudIntelPL1.Value,
                             IntelPL2 = (int)nudIntelPL2.Value,
+                            IntelVoltCPU = (int)nudIntelCoreUV.Value,
+                            IntelVoltGPU = (int)nudIntelGfxUV.Value,
+                            IntelVoltCache = (int)nudIntelCacheUV.Value,
+                            IntelVoltSA = (int)nudIntelSAUV.Value,
+                            IntelBalCPU = (int)nudIntelCpuBal.Value,
+                            IntelBalGPU = (int)nudIntelGpuBal.Value,
 
                             rsr = (int)nudRSR.Value,
                             boost = (int)nudBoost.Value,
@@ -557,6 +570,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                             isIntelPL1 = (bool)cbIntelPL1.IsChecked,
                             isIntelPL2 = (bool)cbIntelPL2.IsChecked,
+                            IsIntelVolt = (bool)tsIntelUV.IsChecked,
+                            IsIntelBal = (bool)tsIntelBal.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
                             nvMaxCoreClk = (int)nudNVMaxCore.Value,
@@ -971,6 +986,17 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbAutoCap.IsChecked = myPreset.isRecap;
                         nudSharp.Value = myPreset.Sharpness;
                         cbxResScale.SelectedIndex = myPreset.ResScaleIndex;
+
+                        tsIntelUV.IsChecked = myPreset.IsIntelVolt;
+                        nudIntelCoreUV.Value = myPreset.IntelVoltCPU;
+                        nudIntelGfxUV.Value = myPreset.IntelVoltGPU;
+                        nudIntelCacheUV.Value = myPreset.IntelVoltCache;
+                        nudIntelSAUV.Value = myPreset.IntelVoltSA;
+
+                        tsIntelBal.IsChecked = myPreset.IsIntelBal;
+                        nudIntelCpuBal.Value = myPreset.IntelBalCPU;
+                        nudIntelGpuBal.Value = myPreset.IntelBalGPU;
+
                     }
                 }
                 Garbage.Garbage_Collect();
@@ -1170,6 +1196,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 if (cbIntelPL1.IsChecked == true) commandValues = commandValues + $"--intel-pl={nudIntelPL1.Value} ";
                 if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-2={nudIntelPL2.Value} ";
+                if (tsIntelUV.IsChecked == true) commandValues = commandValues + $"--intel-volt-cpu={nudIntelCoreUV.Value} --intel-volt-gpu={nudIntelGfxUV.Value} --intel-volt-cache={nudIntelCacheUV.Value} --intel-volt-cpu={nudIntelSAUV.Value} ";
+                if (tsIntelBal.IsChecked == true) commandValues = commandValues + $"--intel-bal-cpu={nudIntelCpuBal.Value} --intel-bal-gpu={nudIntelGpuBal.Value} ";
             }
 
             if (tsRadeonGraph.IsChecked == true)

@@ -24,7 +24,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
         [DllImport("powrprof.dll", EntryPoint = "PowerSetActiveOverlayScheme")]
         public static extern uint PowerSetActiveOverlayScheme(Guid OverlaySchemeGuid);
 
-        static string balancedPowerScheme = "3af9B8d9-7c97-431d-ad78-34a8bfea439f";
+        static string balancedPowerScheme = "00000000-0000-0000-0000-000000000000";
         static string highPerformancePowerScheme = "DED574B5-45A0-4F42-8737-46345C09C238";
         static string powerSaverPowerScheme = "961CC777-2547-4F9D-8174-7D86181b8A7A";
 
@@ -91,6 +91,12 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 
                                 if (ryzenAdjCommandString == "intel-pl") Intel_Management.changeTDPAll(ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "intel-volt-cpu") Intel_Management.changeVoltageOffset(0, ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "intel-volt-gpu") Intel_Management.changeVoltageOffset(1, ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "intel-volt-cache") Intel_Management.changeVoltageOffset(2, ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "intel-volt-sa") Intel_Management.changeVoltageOffset(3, ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "intel-bal-cpu") Intel_Management.changePowerBalance(0, ryzenAdjCommandValue);
+                                else if (ryzenAdjCommandString == "intel-bal-gpu") Intel_Management.changePowerBalance(1, ryzenAdjCommandValue);
                                 //else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
                                 //else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
                             }

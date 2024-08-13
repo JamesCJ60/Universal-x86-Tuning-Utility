@@ -38,6 +38,17 @@ namespace Universal_x86_Tuning_Utility.Services
 
         public int IntelPL1 { get; set; }
         public int IntelPL2 { get; set; }
+
+        public bool IsIntelVolt { get; set; }
+        public int IntelVoltCPU { get; set; }
+        public int IntelVoltGPU { get; set; }
+        public int IntelVoltCache { get; set; }
+        public int IntelVoltSA { get; set; }
+
+        public bool IsIntelBal { get; set; }
+        public int IntelBalCPU { get; set; }
+        public int IntelBalGPU { get; set; }
+
         public int rsr { get; set; }
         public int boost { get; set; }
         public int imageSharp { get; set; }

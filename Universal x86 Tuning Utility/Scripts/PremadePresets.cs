@@ -182,7 +182,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 {
                                     EcoPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
                                     BalPreset = "--tctl-temp=95 --ppt-limit=95000 --edc-limit=130000 --tdc-limit=130000 ";
-                                    PerformancePreset = "--tctl-temp=95 --ppt-limit=125000 --edc-limit=142 --tdc-limit=142000 ";
+                                    PerformancePreset = "--tctl-temp=95 --ppt-limit=125000 --edc-limit=142000 --tdc-limit=142000 ";
                                     ExtremePreset = "--tctl-temp=95 --ppt-limit=170000 --edc-limit=230000 --tdc-limit=230000 ";
                                 }
                                 else if (cpuName.Contains("X"))
@@ -194,10 +194,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 }
                                 else
                                 {
-                                    EcoPreset = "--tctl-temp=95 --ppt-limit=45 --edc-limit=90 --tdc-limit=90 ";
-                                    BalPreset = "--tctl-temp=95 --ppt-limit=65 --edc-limit=90 --tdc-limit=90 ";
-                                    PerformancePreset = "--tctl-temp=95 --ppt-limit=88 --edc-limit=125 --tdc-limit=125 ";
-                                    ExtremePreset = "--tctl-temp=95 --ppt-limit=105 --edc-limit=142 --tdc-limit=142 ";
+                                    EcoPreset = "--tctl-temp=95 --ppt-limit=45000 --edc-limit=90000 --tdc-limit=90000 ";
+                                    BalPreset = "--tctl-temp=95 --ppt-limit=65000 --edc-limit=90000 --tdc-limit=90000 ";
+                                    PerformancePreset = "--tctl-temp=95 --ppt-limit=88000 --edc-limit=125000 --tdc-limit=125000 ";
+                                    ExtremePreset = "--tctl-temp=95 --ppt-limit=105000 --edc-limit=142000 --tdc-limit=142000 ";
                                 }
                             }
                             else

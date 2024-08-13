@@ -1018,7 +1018,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set tune your NVIDIA GPU."/>
+                            Text="Provides the ability to tune your NVIDIA GPU."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -1078,6 +1078,160 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </ui:CardExpander>
+                    <ui:CardExpander Name="sdIntelBal"
+IsEnabled="True"
+IsExpanded="False"
+Icon="Pulse20" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="Intel Power Balance" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to tune the power balance of your Intel CPU."/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsIntelBal" Margin="0,0,9,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">CPU Balance</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelCpuBal" Text="{Binding ElementName=sdIntelCpuBal, Path=Value}" Value="{Binding ElementName=sdIntelCpuBal, Path=Value}" Maximum="31" Minimum="0" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelCpuBal" Value="{Binding ElementName=nudIntelCpuBal, Path=Value}" Maximum="31" Minimum="0" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Balance</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelGpuBal" Text="{Binding ElementName=sdIntelGpuBal, Path=Value}" Value="{Binding ElementName=sdIntelGpuBal, Path=Value}" Maximum="31" Minimum="0" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelGpuBal" Value="{Binding ElementName=nudIntelGpuBal, Path=Value}" Maximum="31" Minimum="0" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
+                    <ui:CardExpander Name="sdIntelUV"
+IsEnabled="True"
+IsExpanded="False"
+Icon="Pulse20" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="Intel FIVR Tuning" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to tune the voltages of your Intel CPU."/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsIntelUV" Margin="0,0,9,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Offset (mV)</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelCoreUV" Text="{Binding ElementName=sdIntelCoreUV, Path=Value}" Value="{Binding ElementName=sdIntelCoreUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelCoreUV" Value="{Binding ElementName=nudIntelCoreUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">iGPU Offset (mV)</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelGfxUV" Text="{Binding ElementName=sdIntelGfxUV, Path=Value}" Value="{Binding ElementName=sdIntelGfxUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelGfxUV" Value="{Binding ElementName=nudIntelGfxUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Cache Offset (mV)</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelCacheUV" Text="{Binding ElementName=sdIntelCacheUV, Path=Value}" Value="{Binding ElementName=sdIntelCacheUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelCacheUV" Value="{Binding ElementName=nudIntelCacheUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">System Agent Offset (mV)</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelSAUV" Text="{Binding ElementName=sdIntelSAUV, Path=Value}" Value="{Binding ElementName=sdIntelSAUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelSAUV" Value="{Binding ElementName=nudIntelSAUV, Path=Value}" Maximum="250" Minimum="-250" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <TextBlock 
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
                         </StackPanel>
                     </ui:CardExpander>
                     <ui:CardExpander Name="sdAmdCpuTune" Visibility="Collapsed"
