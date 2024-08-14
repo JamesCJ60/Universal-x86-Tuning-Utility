@@ -1280,10 +1280,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     {
                         if (core < intelRatioControls.Length)
                         {
-                            if (core == clockRatio.Length) commandValues = commandValues + $"{intelRatioControls[core].Value} ";
+                            if (core == clockRatio.Length -1) commandValues = commandValues + $"{intelRatioControls[core].Value} ";
                             else commandValues = commandValues + $"{intelRatioControls[core].Value}-";
                         }
-
                         core++;
                     }
                 }

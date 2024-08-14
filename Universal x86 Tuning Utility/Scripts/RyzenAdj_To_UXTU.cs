@@ -39,6 +39,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 string[] ryzenAdjCommands = _ryzenAdjString.Split(' ');
                 ryzenAdjCommands = ryzenAdjCommands.Distinct().ToArray();
 
+                MessageBox.Show(_ryzenAdjString);
                 //Run through array
                 foreach (string ryzenAdjCommand in ryzenAdjCommands)
                 {
@@ -97,20 +98,22 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                         Intel_Management.changeClockRatioOffset(intArray);
                                     }
                                 }
+                                else
+                                {
+                                    //Convert value of select cli argument to int
+                                    int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 
-                                //Convert value of select cli argument to int
-                                int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
-
-                                if (ryzenAdjCommandString == "intel-pl") Intel_Management.changeTDPAll(ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "intel-volt-cpu") Intel_Management.changeVoltageOffset(0, ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "intel-volt-gpu") Intel_Management.changeVoltageOffset(1, ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "intel-volt-cache") Intel_Management.changeVoltageOffset(2, ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "intel-volt-sa") Intel_Management.changeVoltageOffset(3, ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "intel-bal-cpu") Intel_Management.changePowerBalance(0, ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "intel-bal-gpu") Intel_Management.changePowerBalance(1, ryzenAdjCommandValue);
-                                else if (ryzenAdjCommandString == "intel-gpu") Intel_Management.changeGpuClock(ryzenAdjCommandValue);
-                                //else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
-                                //else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
+                                    if (ryzenAdjCommandString == "intel-pl") Intel_Management.changeTDPAll(ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-volt-cpu") Intel_Management.changeVoltageOffset(0, ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-volt-gpu") Intel_Management.changeVoltageOffset(1, ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-volt-cache") Intel_Management.changeVoltageOffset(2, ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-volt-sa") Intel_Management.changeVoltageOffset(3, ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-bal-cpu") Intel_Management.changePowerBalance(0, ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-bal-gpu") Intel_Management.changePowerBalance(1, ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-gpu") Intel_Management.changeGpuClock(ryzenAdjCommandValue);
+                                    //else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
+                                    //else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
+                                }
                             }
                             else
                             {

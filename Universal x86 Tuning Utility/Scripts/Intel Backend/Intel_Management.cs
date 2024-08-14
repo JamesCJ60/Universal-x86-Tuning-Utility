@@ -23,10 +23,14 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
         {
             try
             {
-                runIntelTDPChangeMMIOKX(pl, pl);
                 runIntelTDPChangeMSR(pl, pl);
             }
-            catch (Exception ex) { }
+            catch { }
+
+            try { 
+                runIntelTDPChangeMMIOKX(pl, pl); 
+            }
+            catch { }
         }
 
         public static void changePowerBalance(int value, int cpuOrGpu)
@@ -148,19 +152,20 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             {
 
                 processKX = BaseDir + "Assets\\Intel\\KX\\KX.exe";
-                hexPL1 = convertTDPToHexMMIO(pl1TDP);
-                hexPL2 = convertTDPToHexMMIO(pl2TDP);
-                if (hexPL1 != "Error" && hexPL2 != "Error" && MCHBAR != null)
+                hexPL1 = ConvertTDPToHexMMIO(pl1TDP);
+                hexPL2 = ConvertTDPToHexMMIO(pl2TDP);
+
+                if (hexPL1 != "Error" && hexPL2 != "Error" && MCHBAR != "")
                 {
-                    lock (objLock)
-                    {
-                        commandArgumentsPL1 = " /wrmem16 " + MCHBAR + "a0 0x" + hexPL1;
-                        if (pl1TDP > 0) Run_CLI.RunCommand(commandArgumentsPL1, true, processKX);
-                        Task.Delay(500);
-                        if (pl2TDP > 0) commandArgumentsPL2 = " /wrmem16 " + MCHBAR + "a4 0x" + hexPL2;
-                        Run_CLI.RunCommand(commandArgumentsPL2, true, processKX);
-                        Task.Delay(100);
-                    }
+                    commandArgumentsPL1 = "/wrmem16 " + MCHBAR + "a0 0x" + hexPL1;
+
+                    Run_CLI.RunCommand(commandArgumentsPL1, true, processKX);
+                    Task.Delay(500);
+                    commandArgumentsPL2 = "/wrmem16 " + MCHBAR + "a4 0x" + hexPL2;
+
+                    Run_CLI.RunCommand(commandArgumentsPL2, true, processKX);
+
+                    Task.Delay(100);
                 }
             }
             catch (Exception ex) { }
@@ -195,7 +200,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                             if (hexPL2.Length == 2) { hexPL2 = "0" + hexPL2; }
                         }
 
-                        commandArguments = " -s write 0x610 0x00438" + hexPL2 + " 0x00DD8" + hexPL1;
+                        commandArguments = "-s write 0x610 0x00438" + hexPL2 + " 0x00dd8" + hexPL1;
                         processMSR = BaseDir + "Assets\\Intel\\MSR\\msr-cmd.exe";
                         Run_CLI.RunCommand(commandArguments, false, processMSR);
 
@@ -217,7 +222,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                 string hexvalue;
                 hexvalue = "0x" + value.ToString("X");
 
-                commandArguments = " -s write " + address + " " + hexvalue;
+                commandArguments = "-s write " + address + " " + hexvalue;
                 processMSR = BaseDir + "Assets\\Intel\\MSR\\msr-cmd.exe";
 
                 Run_CLI.RunCommand(commandArguments, false, processMSR);
@@ -281,7 +286,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             return str.Substring(startIndex);
         }
 
-        static string convertTDPToHexMMIO(int tdp)
+        private static string ConvertTDPToHexMMIO(int tdp)
         {
             try
             {
@@ -291,11 +296,12 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             }
             catch (Exception ex)
             {
-                return "";
+
+                return "Error";
             }
         }
 
-        static string convertTDPToHexMSR(int tdp)
+        private static string convertTDPToHexMSR(int tdp)
         {
             try
             {
@@ -305,7 +311,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             }
             catch (Exception ex)
             {
-                return "";
+
+                return "Error";
             }
         }
 
