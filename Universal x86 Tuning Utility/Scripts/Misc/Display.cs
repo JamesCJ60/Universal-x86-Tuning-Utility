@@ -115,13 +115,14 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             DISPLAY_DEVICE displayDevice = new DISPLAY_DEVICE();
             displayDevice.cb = (uint)Marshal.SizeOf(displayDevice);
             int displayCount = Screen.AllScreens.Length;
-            if (App.product.Contains("aya"))
-            {
-                refreshRates.Add(60);
-            }
-            else
-            {
-                for (uint deviceIndex = 0; EnumDisplayDevices(null, deviceIndex, ref displayDevice, 0); deviceIndex++)
+            //if (App.product.Contains("aya"))
+            //{
+            //    if(App.product.Contains("flip")) refreshRates.Add(120);
+            //    refreshRates.Add(60);
+            //}
+            //else
+            //{
+            for (uint deviceIndex = 0; EnumDisplayDevices(null, deviceIndex, ref displayDevice, 0); deviceIndex++)
                 {
                     if (displayDevice.DeviceName == targetDisplayName)
                     {
@@ -137,7 +138,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         break;
                     }
                 }
-            }
+            //}
 
             return refreshRates;
         }
