@@ -109,6 +109,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdIntelCPU.Visibility = Visibility.Collapsed;
                 sdIntelUV.Visibility = Visibility.Collapsed;
                 sdIntelBal.Visibility = Visibility.Collapsed;
+                sdIntelCoreRatio.Visibility = Visibility.Collapsed;
 
                 if (Family.FAM != Family.RyzenFamily.PhoenixPoint || Family.FAM != Family.RyzenFamily.PhoenixPoint2 && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
                 if (Family.CPUName.Contains("U") && Family.FAM > Family.RyzenFamily.Renoir) sdAmdPBO.Visibility = Visibility.Collapsed;
@@ -147,6 +148,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdIntelCPU.Visibility = Visibility.Collapsed;
                 sdIntelUV.Visibility = Visibility.Collapsed;
                 sdIntelBal.Visibility = Visibility.Collapsed;
+                sdIntelCoreRatio.Visibility = Visibility.Collapsed;
 
                 sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;

@@ -1158,7 +1158,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to tune the clock ratios based number of core used."/>
+                Text="Provides the ability to tune the clock ratios of your Intel CPU based the number of cores actively in use."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
