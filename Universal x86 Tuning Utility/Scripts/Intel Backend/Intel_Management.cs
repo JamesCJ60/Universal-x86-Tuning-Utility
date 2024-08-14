@@ -242,6 +242,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
 
         public static void determineCPU()
         {
+            checkDriverBlockRegistry();
             DetermineIntelMCHBAR();
         }
 
