@@ -49,6 +49,17 @@ namespace Universal_x86_Tuning_Utility.Services
         public int IntelBalCPU { get; set; } = 9;
         public int IntelBalGPU { get; set; } = 13;
 
+        public bool isIntelClockRatio { get; set; }
+
+        public int intelClockRatioC1 { get; set; } = 20;
+        public int intelClockRatioC2 { get; set; } = 20;
+
+        public int intelClockRatioC3 { get; set; } = 20;
+        public int intelClockRatioC4 { get; set; } = 20;
+        public int intelClockRatioC5 { get; set; } = 20;
+        public int intelClockRatioC6 { get; set; } = 20;
+        public int intelClockRatioC7 { get; set; } = 20;
+        public int intelClockRatioC8 { get; set; } = 20;
         public int rsr { get; set; }
         public int boost { get; set; }
         public int imageSharp { get; set; }

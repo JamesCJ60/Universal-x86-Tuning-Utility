@@ -13,12 +13,14 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.ASUS;
+using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui.Common.Interfaces;
@@ -41,6 +43,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private PresetManager apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
         private PresetManager amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
         private PresetManager intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+
+        int[] clockRatio = null;
+        NumberBox[] intelRatioControls = null;
         public CustomPresets()
         {
             InitializeComponent();
@@ -178,6 +183,30 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdCpuTune.Visibility = Visibility.Collapsed;
                 sdAmdCO.Visibility = Visibility.Collapsed;
 
+                clockRatio = Intel_Management.readClockRatios();
+
+                intelRatioControls = new NumberBox[]
+                {
+                    nudIntelRatioC1,
+                    nudIntelRatioC2,
+                    nudIntelRatioC3,
+                    nudIntelRatioC4,
+                    nudIntelRatioC5,
+                    nudIntelRatioC6,
+                    nudIntelRatioC7,
+                    nudIntelRatioC8
+                };
+
+                if (clockRatio != null)
+                {
+                    int core = 0;
+                    foreach (var clock in clockRatio)
+                    {
+                        if (core < intelRatioControls.Length) intelRatioControls[core].Value = clock;
+                        
+                        core++;
+                    }
+                }
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
 
@@ -606,6 +635,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
                             powerMode = (int)cbxPowerMode.SelectedIndex,
+
+                            isIntelClockRatio = (bool)tsIntelRatioCore.IsChecked,
+                            intelClockRatioC1 = (int)nudIntelRatioC1.Value,
+                            intelClockRatioC2 = (int)nudIntelRatioC2.Value,
+                            intelClockRatioC3 = (int)nudIntelRatioC3.Value,
+                            intelClockRatioC4 = (int)nudIntelRatioC4.Value,
+                            intelClockRatioC5 = (int)nudIntelRatioC5.Value,
+                            intelClockRatioC6 = (int)nudIntelRatioC6.Value,
+                            intelClockRatioC7 = (int)nudIntelRatioC7.Value,
+                            intelClockRatioC8 = (int)nudIntelRatioC8.Value,
                         };
                         intelPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -1025,6 +1064,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         nudIntelCpuBal.Value = myPreset.IntelBalCPU;
                         nudIntelGpuBal.Value = myPreset.IntelBalGPU;
 
+                        tsIntelRatioCore.IsChecked = myPreset.isIntelClockRatio;
+                        nudIntelRatioC1.Value = myPreset.intelClockRatioC1;
+                        nudIntelRatioC2.Value = myPreset.intelClockRatioC2;
+                        nudIntelRatioC3.Value = myPreset.intelClockRatioC3;
+                        nudIntelRatioC4.Value = myPreset.intelClockRatioC4;
+                        nudIntelRatioC5.Value = myPreset.intelClockRatioC5;
+                        nudIntelRatioC6.Value = myPreset.intelClockRatioC6;
+                        nudIntelRatioC7.Value = myPreset.intelClockRatioC7;
+                        nudIntelRatioC8.Value = myPreset.intelClockRatioC8;
+
                     }
                 }
                 Garbage.Garbage_Collect();
@@ -1046,7 +1095,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
 
             if (sdRefreshRate.Visibility == Visibility.Visible && cbxRefreshRate.SelectedIndex > 0) commandValues = commandValues + $"--Refresh-Rate={Display.uniqueRefreshRates[cbxRefreshRate.SelectedIndex - 1]} ";
-            
+
             if (sdPowerMode.Visibility == Visibility.Visible && cbxPowerMode.SelectedIndex > 0) commandValues = commandValues + $"--Win-Power={cbxPowerMode.SelectedIndex - 1} ";
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
@@ -1221,12 +1270,26 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (Family.TYPE == Family.ProcessorType.Intel)
             {
+                if (tsIntelRatioCore.IsChecked == true)
+                {
+                    commandValues = commandValues + $"--intel-ratio=";
+                    int core = 0;
+                    foreach(int clock in clockRatio)
+                    {
+                        if (core < intelRatioControls.Length)
+                        {
+                            if (core == clockRatio.Length) commandValues = commandValues + $"{intelRatioControls[core].Value} ";
+                            else commandValues = commandValues + $"{intelRatioControls[core].Value}-";
+                        }
+
+                        core++;
+                    }
+                }
                 if (cbIntelPL1.IsChecked == true) commandValues = commandValues + $"--intel-pl={nudIntelPL1.Value} ";
-                if (cbIntelPL2.IsChecked == true) commandValues = commandValues + $"--power-limit-2={nudIntelPL2.Value} ";
                 if (tsIntelUV.IsChecked == true) commandValues = commandValues + $"--intel-volt-cpu={nudIntelCoreUV.Value} --intel-volt-gpu={nudIntelGfxUV.Value} --intel-volt-cache={nudIntelCacheUV.Value} --intel-volt-cpu={nudIntelSAUV.Value} ";
                 if (tsIntelBal.IsChecked == true) commandValues = commandValues + $"--intel-bal-cpu={nudIntelCpuBal.Value} --intel-bal-gpu={nudIntelGpuBal.Value} ";
                 if (cbAPUiGPUClk.IsChecked == true) commandValues = commandValues + $"--intel-gpu={nudAPUiGPUClk.Value} ";
-                
+
             }
 
             if (tsRadeonGraph.IsChecked == true)
@@ -1248,7 +1311,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
 
             if (tsNV.IsChecked == true) commandValues = commandValues + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
-            
+
 
             return commandValues;
         }

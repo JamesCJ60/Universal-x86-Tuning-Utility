@@ -87,6 +87,17 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             }
                             else if (ryzenAdjCommandString.Contains("intel"))
                             {
+                                if (ryzenAdjCommandValueString.Contains("-"))
+                                {
+                                    if (ryzenAdjCommandString == "intel-ratio")
+                                    {
+                                        string[] stringArray = ryzenAdjCommandValueString.Split('-');
+                                        int[] intArray = stringArray.Select(int.Parse).ToArray();
+
+                                        Intel_Management.changeClockRatioOffset(intArray);
+                                    }
+                                }
+
                                 //Convert value of select cli argument to int
                                 int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 

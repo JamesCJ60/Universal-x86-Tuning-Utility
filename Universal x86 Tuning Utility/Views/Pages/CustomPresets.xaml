@@ -9,7 +9,7 @@
           d:DataContext="{d:DesignInstance local:CustomPresets, IsDesignTimeCreatable=False}"
           d:Background="{DynamicResource ApplicationBackgroundBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-      d:DesignHeight="1500" d:DesignWidth="800"
+      d:DesignHeight="2500" d:DesignWidth="800"
       Title="CustomPresets" Loaded="Page_Loaded">
 
     <Grid>
@@ -1136,6 +1136,156 @@ Icon="Scales20" Margin="0,8,15,0">
                                     </Grid.ColumnDefinitions>
                                     <ui:NumberBox Name="nudIntelGpuBal" Text="{Binding ElementName=sdIntelGpuBal, Path=Value}" Value="{Binding ElementName=sdIntelGpuBal, Path=Value}" Maximum="31" Minimum="0" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
                                     <Slider Name="sdIntelGpuBal" Value="{Binding ElementName=nudIntelGpuBal, Path=Value}" Maximum="31" Minimum="0" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </ui:CardExpander>
+                    <ui:CardExpander Name="sdIntelCoreRatio"
+IsEnabled="True"
+IsExpanded="False"
+Icon="Pulse20" Margin="0,8,15,0">
+                        <ui:CardExpander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="Intel Clock Ratio Control" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Provides the ability to tune the clock ratios based number of core used."/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                    <ui:ToggleSwitch Name="tsIntelRatioCore" Margin="0,0,9,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:CardExpander.Header>
+                        <!--  CardExpander content  -->
+                        <StackPanel>
+                            <StackPanel Margin="0,-8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 1</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC1" Text="{Binding ElementName=sdIntelRatioC1, Path=Value}" Value="{Binding ElementName=sdIntelRatioC1, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC1" Value="{Binding ElementName=nudIntelRatioC1, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 2</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC2" Text="{Binding ElementName=sdIntelRatioC2, Path=Value}" Value="{Binding ElementName=sdIntelRatioC2, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC2" Value="{Binding ElementName=nudIntelRatioC2, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 3</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC3" Text="{Binding ElementName=sdIntelRatioC3, Path=Value}" Value="{Binding ElementName=sdIntelRatioC3, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC3" Value="{Binding ElementName=nudIntelRatioC3, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 4</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC4" Text="{Binding ElementName=sdIntelRatioC4, Path=Value}" Value="{Binding ElementName=sdIntelRatioC4, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC4" Value="{Binding ElementName=nudIntelRatioC4, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 5</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC5" Text="{Binding ElementName=sdIntelRatioC5, Path=Value}" Value="{Binding ElementName=sdIntelRatioC5, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC5" Value="{Binding ElementName=nudIntelRatioC5, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 6</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC6" Text="{Binding ElementName=sdIntelRatioC6, Path=Value}" Value="{Binding ElementName=sdIntelRatioC6, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC6" Value="{Binding ElementName=nudIntelRatioC6, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 7</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC7" Text="{Binding ElementName=sdIntelRatioC7, Path=Value}" Value="{Binding ElementName=sdIntelRatioC7, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC7" Value="{Binding ElementName=nudIntelRatioC7, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,8,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 8</TextBlock>
+                                    <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
+                                </StackPanel>
+
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:NumberBox Name="nudIntelRatioC8" Text="{Binding ElementName=sdIntelRatioC8, Path=Value}" Value="{Binding ElementName=sdIntelRatioC8, Path=Value}" Maximum="83" Minimum="4" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0" />
+                                    <Slider Name="sdIntelRatioC8" Value="{Binding ElementName=nudIntelRatioC8, Path=Value}" Maximum="83" Minimum="4" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
                         </StackPanel>
