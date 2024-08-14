@@ -170,8 +170,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdPowerProfile.Visibility = Visibility.Collapsed;
                 //sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
 
-                nudAPUiGPUClk.Minimum = 0;
-                sdAPUiGPUClk.Minimum = 0;
+                nudAPUiGPUClk.Minimum = 100;
+                sdAPUiGPUClk.Minimum = 100;
 
                 sdAmdCpuClk.Visibility = Visibility.Collapsed;
                 sdAmdPBO.Visibility = Visibility.Collapsed;

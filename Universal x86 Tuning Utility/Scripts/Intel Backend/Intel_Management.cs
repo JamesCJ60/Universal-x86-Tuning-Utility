@@ -254,56 +254,31 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             if (!File.Exists(processKX))
                 return false;
 
-            ProcessStartInfo startInfo = new ProcessStartInfo(processKX)
-            {
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true,
-                Arguments = "/RdPci32 0 0 0 0x48"
-            };
+            string output = Run_CLI.RunCommand("/RdPci32 0 0 0 0x48", true, processKX);
 
-            try
+            if (output.Contains("Return"))
             {
-                using (Process process = Process.Start(startInfo))
-                {
-                    while (!process.StandardOutput.EndOfStream)
-                    {
-                        string output = process.StandardOutput.ReadLine();
-                        if (output.Contains("Return"))
-                        {
-                            string mchbarValue = Between(output, "Return ");
-                            MCHBAR = "0x" + long.Parse(mchbarValue).ToString("X2").Substring(0, 4);
-                            process.Close();
-                            return true;
-                        }
-                    }
-                    process.Close();
-                }
-            }
-            catch
-            {
-                return false;
+                string mchbarValue = GetValueAfter(output, "Return ");
+                MCHBAR = "0x" + long.Parse(mchbarValue).ToString("X2").Substring(0, 4);
+                return true;
             }
             return false;
         }
 
-        private static string Between(string str, string firstString, string lastString = null, bool keepBorders = false)
+
+        private static string GetValueAfter(string str, string searchString)
         {
-            if (string.IsNullOrEmpty(str))
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(searchString))
                 return string.Empty;
 
-            int startIndex = str.IndexOf(firstString) + firstString.Length;
-            int endIndex = str.Length;
+            int startIndex = str.IndexOf(searchString);
+            if (startIndex == -1)
+                return string.Empty;
 
-            if (lastString != null)
-                endIndex = str.IndexOf(lastString, startIndex);
+            startIndex += searchString.Length;
 
-            string result = str.Substring(startIndex, endIndex - startIndex);
-
-            return keepBorders ? firstString + result + lastString : result;
+            return str.Substring(startIndex);
         }
-
 
         static string convertTDPToHexMMIO(int tdp)
         {
