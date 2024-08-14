@@ -19,6 +19,9 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         [DllImport("user32.dll")]
         public static extern bool EnumDisplaySettings(string lpszDeviceName, uint iModeNum, ref DEVMODE lpDevMode);
 
+        [DllImport("user32.dll")]
+        public static extern int ChangeDisplaySettingsEx(string lpszDeviceName, ref DEVMODE lpDevMode, IntPtr hwnd, uint dwflags, IntPtr lParam);
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         public struct DISPLAY_DEVICE
         {
@@ -75,7 +78,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         public static List<int> uniqueRefreshRates = GetSupportedRefreshRates(targetDisplayName);
 
         public static void setUpLists()
-        {;
+        {
             uniqueRefreshRates = GetSupportedRefreshRates(targetDisplayName);
             uniqueRefreshRates = uniqueRefreshRates.Distinct().ToList();
             uniqueRefreshRates.Sort();
@@ -126,7 +129,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         devMode.dmSize = (short)Marshal.SizeOf(devMode);
                         for (uint modeIndex = 0; EnumDisplaySettings(displayDevice.DeviceName, modeIndex, ref devMode); modeIndex++)
                         {
-                            if (devMode.dmDisplayFrequency > 0) // Exclude modes with zero refresh rate
+                            if (devMode.dmDisplayFrequency > 0)
                             {
                                 refreshRates.Add(devMode.dmDisplayFrequency);
                             }
@@ -139,20 +142,18 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             return refreshRates;
         }
 
-        [DllImport("user32.dll")]
-        public static extern int ChangeDisplaySettingsEx(string lpszDeviceName, ref DEVMODE lpDevMode, IntPtr hwnd, uint dwflags, IntPtr lParam);
-
-        private const int CDS_UPDATEREGISTRY = 0x01;
-
         public static void ChangeDisplaySettings(string targetDisplayName, int newRefreshRate)
         {
             DEVMODE devMode = new DEVMODE();
             devMode.dmSize = (short)Marshal.SizeOf(devMode);
 
-            if (EnumDisplaySettings(targetDisplayName, 0, ref devMode))
+            if (EnumDisplaySettings(targetDisplayName, ENUM_CURRENT_SETTINGS, ref devMode))
             {
+                devMode.dmFields = (int)(DisplaySettingsFlags.DM_PELSWIDTH | DisplaySettingsFlags.DM_PELSHEIGHT | DisplaySettingsFlags.DM_DISPLAYFREQUENCY);
+
                 devMode.dmDisplayFrequency = newRefreshRate;
-                int result = ChangeDisplaySettingsEx(targetDisplayName, ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
+
+                int result = ChangeDisplaySettingsEx(targetDisplayName, ref devMode, IntPtr.Zero, (uint)ChangeDisplaySettingsFlags.CDS_UPDATEREGISTRY, IntPtr.Zero);
 
                 if (result == DISP_CHANGE_SUCCESSFUL)
                 {
@@ -162,6 +163,10 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                 {
                     Console.WriteLine("\nFailed to change display settings.");
                 }
+            }
+            else
+            {
+                Console.WriteLine("\nFailed to retrieve current display settings.");
             }
         }
 
@@ -179,6 +184,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
         }
 
         const int DISP_CHANGE_SUCCESSFUL = 0;
+        public const uint ENUM_CURRENT_SETTINGS = 0xFFFFFFFF;
 
         [Flags()]
         public enum DisplaySettingsFlags : int
@@ -200,7 +206,6 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             CDS_NORESET = 0x10000000
         }
 
-        public const int ENUM_CURRENT_SETTINGS = -1;
         public const string defaultDevice = @"\\.\DISPLAY1";
 
         public static string? FindLaptopScreen(bool log = false)
