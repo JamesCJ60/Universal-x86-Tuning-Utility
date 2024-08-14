@@ -543,7 +543,7 @@
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a static iGPU clock on select APUs/CPUs."/>
+                            Text="Provides the ability to set a static iGPU boost clock on select APUs/CPUs."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -552,7 +552,7 @@
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">iGPU Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the static clock speed of the iGPU, requires either a system reboot or system sleep to revert back to normal on AMD systems." VerticalAlignment="Bottom" />
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the static boost clock speed of the iGPU, requires either a system reboot or system sleep to revert back to normal." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">

@@ -8,6 +8,7 @@ using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 
 namespace Universal_x86_Tuning_Utility.Scripts
 {
@@ -90,7 +91,11 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 Debug.WriteLine("Error: " + e.Message);
             }
 
-            if (CPUName.Contains("Intel")) TYPE = ProcessorType.Intel;
+            if (CPUName.Contains("Intel"))
+            {
+                TYPE = ProcessorType.Intel;
+                Intel_Management.determineCPU();
+            }
             else
             {
                 //Zen1 - Zen2
@@ -104,7 +109,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                     if (CPUModel == 24) FAM = RyzenFamily.Picasso;
 
-                    if(CPUModel == 32 && CPUName.Contains("15e") || CPUModel == 32 && CPUName.Contains("15Ce") || CPUModel == 32 && CPUName.Contains("20e")) FAM = RyzenFamily.Pollock;
+                    if (CPUModel == 32 && CPUName.Contains("15e") || CPUModel == 32 && CPUName.Contains("15Ce") || CPUModel == 32 && CPUName.Contains("20e")) FAM = RyzenFamily.Pollock;
                     else if (CPUModel == 32) FAM = RyzenFamily.Dali;
 
                     if (CPUModel == 80) FAM = RyzenFamily.FireFlight;

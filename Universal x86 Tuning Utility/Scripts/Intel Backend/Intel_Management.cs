@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,7 +23,6 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
         {
             try
             {
-                determineCPU();
                 runIntelTDPChangeMMIOKX(pl, pl);
                 runIntelTDPChangeMSR(pl, pl);
             }
@@ -121,12 +121,13 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             string processKX = "";
             string commandArguments = "";
             string clockHex = "";
+
             try
             {
                 processKX = BaseDir + "Assets\\Intel\\KX\\KX.exe";
                 clockHex = convertClockToHexMMIO(value);
 
-                commandArguments = " /wrmem8 " + MCHBAR + "5994 0x" + clockHex;
+                commandArguments = "/wrmem8 " + MCHBAR + "5994 " + clockHex;
 
                 Run_CLI.RunCommand(commandArguments, true, processKX);
                 Task.Delay(100);
@@ -241,28 +242,68 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
 
         public static void determineCPU()
         {
-            object processorNameRegistry = Registry.GetValue("HKEY_LOCAL_MACHINE\\hardware\\description\\system\\centralprocessor\\0", "ProcessorNameString", null);
-            string processorName;
-
-            if (processorNameRegistry != null)
-            {
-                determineIntelMCHBAR();
-            }
+            DetermineIntelMCHBAR();
         }
 
         static string MCHBAR = null;
 
-        static void determineIntelMCHBAR()
+        static bool DetermineIntelMCHBAR()
         {
-            object processorModelRegistry = Registry.GetValue("HKEY_LOCAL_MACHINE\\hardware\\description\\system\\centralprocessor\\0", "Identifier", null);
-            string processorModel = null;
-            if (processorModelRegistry != null)
-            {
-                processorModel = processorModelRegistry.ToString();
-                if (processorModel.IndexOf("Model 140") >= 0) { MCHBAR = "0xFEDC59"; } else { MCHBAR = "0xFED159"; };
-            }
+            string processKX = BaseDir + "Assets\\Intel\\KX\\KX.exe";
 
+            if (!File.Exists(processKX))
+                return false;
+
+            ProcessStartInfo startInfo = new ProcessStartInfo(processKX)
+            {
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+                Arguments = "/RdPci32 0 0 0 0x48"
+            };
+
+            try
+            {
+                using (Process process = Process.Start(startInfo))
+                {
+                    while (!process.StandardOutput.EndOfStream)
+                    {
+                        string output = process.StandardOutput.ReadLine();
+                        if (output.Contains("Return"))
+                        {
+                            string mchbarValue = Between(output, "Return ");
+                            MCHBAR = "0x" + long.Parse(mchbarValue).ToString("X2").Substring(0, 4);
+                            process.Close();
+                            return true;
+                        }
+                    }
+                    process.Close();
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
         }
+
+        private static string Between(string str, string firstString, string lastString = null, bool keepBorders = false)
+        {
+            if (string.IsNullOrEmpty(str))
+                return string.Empty;
+
+            int startIndex = str.IndexOf(firstString) + firstString.Length;
+            int endIndex = str.Length;
+
+            if (lastString != null)
+                endIndex = str.IndexOf(lastString, startIndex);
+
+            string result = str.Substring(startIndex, endIndex - startIndex);
+
+            return keepBorders ? firstString + result + lastString : result;
+        }
+
 
         static string convertTDPToHexMMIO(int tdp)
         {
@@ -301,8 +342,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
         
         static string convertClockToHexMMIO(int value)
         {
-            int hex = value = 50;
-            return value.ToString("X2");
+            value /= 50;
+            return "0x" + value.ToString("X2");
         }
     }
 }
