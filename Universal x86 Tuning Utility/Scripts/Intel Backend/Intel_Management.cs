@@ -155,7 +155,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                 hexPL1 = ConvertTDPToHexMMIO(pl1TDP);
                 hexPL2 = ConvertTDPToHexMMIO(pl2TDP);
 
-                if (hexPL1 != "Error" && hexPL2 != "Error" && MCHBAR != "")
+                if (hexPL1 != "Error" && hexPL2 != "Error")
                 {
                     commandArgumentsPL1 = "/wrmem16 " + MCHBAR + "a0 0x" + hexPL1;
 
@@ -168,7 +168,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                     Task.Delay(100);
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { MessageBox.Show(ex.ToString()); }
         }
 
 
@@ -185,7 +185,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
                 hexPL1 = convertTDPToHexMSR(pl1TDP);
                 hexPL2 = convertTDPToHexMSR(pl2TDP);
 
-                if (hexPL1 != "Error" && hexPL2 != "Error" && MCHBAR != null)
+                if (hexPL1 != "Error" && hexPL2 != "Error")
                 {
                     lock (objLock)
                     {

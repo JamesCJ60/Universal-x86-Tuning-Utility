@@ -39,7 +39,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 string[] ryzenAdjCommands = _ryzenAdjString.Split(' ');
                 ryzenAdjCommands = ryzenAdjCommands.Distinct().ToArray();
 
-                MessageBox.Show(_ryzenAdjString);
+                //MessageBox.Show(_ryzenAdjString);
                 //Run through array
                 foreach (string ryzenAdjCommand in ryzenAdjCommands)
                 {
