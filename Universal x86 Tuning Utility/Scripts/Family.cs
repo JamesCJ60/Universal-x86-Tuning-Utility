@@ -40,9 +40,9 @@ namespace Universal_x86_Tuning_Utility.Scripts
             SonomaValley,
             GraniteRidge,
             FireRange,
+            StrixHalo,
             StrixPoint,
             StrixPoint2,
-            Sarlak,
         }
 
         public static RyzenFamily FAM = RyzenFamily.Unknown;
@@ -148,7 +148,9 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 if (CPUFamily == 26)
                 {
                     if (CPUModel == 32 || CPUModel == 36) FAM = RyzenFamily.StrixPoint;
-                    else FAM = RyzenFamily.GraniteRidge;
+                    if (CPUModel == 112) FAM = RyzenFamily.StrixHalo;
+                    if (CPUModel == 68) FAM = RyzenFamily.GraniteRidge;
+                    else FAM = RyzenFamily.StrixPoint2;
                 }
 
                 if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;

@@ -697,9 +697,9 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                     case RyzenFamily.StrixPoint:
                         return "Strix Point";
                     case RyzenFamily.StrixPoint2:
-                        return "Strix Point 2";
-                    case RyzenFamily.Sarlak:
-                        return "Sarlak";
+                        return "Strix Point 2 / Kraken";
+                    case RyzenFamily.StrixHalo:
+                        return "Strix Halo";
                     default:
                         return "";
                 }
