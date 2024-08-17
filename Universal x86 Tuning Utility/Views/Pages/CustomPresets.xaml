@@ -1923,7 +1923,7 @@ Icon="Desktop20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to set a custom supported display refresh rate. Many not work for everyone!"/>
+                Text="Provides the ability to set a custom supported display refresh rate. May not work for everyone!"/>
                                 </StackPanel>
                                 <ComboBox
             Grid.Column="1"
