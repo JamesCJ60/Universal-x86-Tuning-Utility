@@ -319,10 +319,11 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
         static string convertVoltageToHexMSR(int volt)
         {
             double hex = volt * 1.024;
-            volt = (int)Math.Round(hex) << 21;
-            return hex.ToString("X");
+            int result = (int)Math.Round(hex) << 21;
+            return result.ToString("X");
         }
-        
+
+
         static string convertClockToHexMMIO(int value)
         {
             value /= 50;

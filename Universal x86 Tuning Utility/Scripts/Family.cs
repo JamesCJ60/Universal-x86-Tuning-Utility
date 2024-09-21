@@ -120,7 +120,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                     if (CPUModel == 113) FAM = RyzenFamily.Matisse;
 
-                    if (CPUModel == 144) FAM = RyzenFamily.VanGogh;
+                    if (CPUModel == 144 || CPUModel == 145) FAM = RyzenFamily.VanGogh;
 
                     if (CPUModel == 160) FAM = RyzenFamily.Mendocino;
                 }
@@ -158,9 +158,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                 Addresses.setAddresses();
             }
-
-            //Clipboard.SetText(System.Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER").ToString());
-            //MessageBox.Show(CPUFamily.ToString() + " "  + FAM.ToString());
         }
     }
 }

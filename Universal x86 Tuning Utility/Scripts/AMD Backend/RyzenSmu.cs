@@ -149,7 +149,18 @@ namespace RyzenSmu
                 RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10570;
                 RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A40;
             }
-            else {
+            else if(Family.FAM >= Family.RyzenFamily.StrixPoint)
+            {
+                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3b10928;
+                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3b10978;
+                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3b10998;
+
+                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10a20;
+                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10a80;
+                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10a88;
+            }
+            else 
+            {
                 RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10528;
                 RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10578;
                 RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
