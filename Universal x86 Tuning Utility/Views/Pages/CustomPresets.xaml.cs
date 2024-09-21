@@ -844,14 +844,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         cbCCD1Core7.IsChecked = myPreset.IsCCD1Core7;
                         cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
 
-                        nudCCD2Core1.Value = myPreset.ccd1Core1;
-                        nudCCD2Core2.Value = myPreset.ccd1Core2;
-                        nudCCD2Core3.Value = myPreset.ccd1Core3;
-                        nudCCD2Core4.Value = myPreset.ccd1Core4;
-                        nudCCD2Core5.Value = myPreset.ccd1Core5;
-                        nudCCD2Core6.Value = myPreset.ccd1Core6;
-                        nudCCD2Core7.Value = myPreset.ccd1Core7;
-                        nudCCD2Core8.Value = myPreset.ccd1Core8;
+                        nudCCD2Core1.Value = myPreset.ccd2Core1;
+                        nudCCD2Core2.Value = myPreset.ccd2Core2;
+                        nudCCD2Core3.Value = myPreset.ccd2Core3;
+                        nudCCD2Core4.Value = myPreset.ccd2Core4;
+                        nudCCD2Core5.Value = myPreset.ccd2Core5;
+                        nudCCD2Core6.Value = myPreset.ccd2Core6;
+                        nudCCD2Core7.Value = myPreset.ccd2Core7;
+                        nudCCD2Core8.Value = myPreset.ccd2Core8;
 
                         cbCCD2Core1.IsChecked = myPreset.IsCCD2Core1;
                         cbCCD2Core2.IsChecked = myPreset.IsCCD2Core2;
