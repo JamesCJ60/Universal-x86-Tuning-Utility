@@ -94,11 +94,6 @@
                     "Name" = "8:.NET Runtime 8.0.7 (x64)"
                     "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.8.0.x64"
                     }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.DesktopRuntime.7.0.x64"
-                    {
-                    "Name" = "8:.NET Desktop Runtime 7.0.20 (x64)"
-                    "ProductCode" = "8:Microsoft.NetCore.DesktopRuntime.7.0.x64"
-                    }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x64"
                     {
                     "Name" = "8:Visual C++ \"14\" Runtime Libraries (x64)"
@@ -213,15 +208,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Universal x86 Tuning Utility"
-        "ProductCode" = "8:{47F1503E-5750-41C2-8EBC-23BE8998638B}"
-        "PackageCode" = "8:{282393D4-31BA-4D35-B285-B41427C00612}"
+        "ProductCode" = "8:{A636DAEC-C927-4999-8A25-F7F52168D55B}"
+        "PackageCode" = "8:{A9A8E763-605B-45F3-84E1-1305D711837B}"
         "UpgradeCode" = "8:{300E743A-4C69-440D-9425-14C446AB2658}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.3.2"
+        "ProductVersion" = "8:2.3.3"
         "Manufacturer" = "8:JamesCJ60"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -44,9 +44,9 @@ namespace RyzenSmu
             RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10564;
             RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
 
-            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10A20;
-            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10A80;
-            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A88;
+            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10A20;
+            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10A80;
+            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10A88;
 
             SMUCommands.commands = new List<(string, bool, uint)>
             {
@@ -92,9 +92,9 @@ namespace RyzenSmu
             RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10564;
             RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
 
-            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10A20;
-            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10A80;
-            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A88;
+            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10A20;
+            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10A80;
+            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10A88;
 
             SMUCommands.commands = new List<(string, bool, uint)>
             {
@@ -139,25 +139,15 @@ namespace RyzenSmu
 
         private static void Socket_FT6_FP7_FP8()
         {
-            if (Family.FAM == Family.RyzenFamily.DragonRange)
-            {
-                RyzenSmu.Smu.MP1_ADDR_MSG = 0x3010508;
-                RyzenSmu.Smu.MP1_ADDR_RSP = 0x3010988;
-                RyzenSmu.Smu.MP1_ADDR_ARG = 0x3010984;
-
-                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10524;
-                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10570;
-                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A40;
-            }
-            else if(Family.FAM >= Family.RyzenFamily.StrixPoint)
+            if(Family.FAM >= Family.RyzenFamily.StrixPoint)
             {
                 RyzenSmu.Smu.MP1_ADDR_MSG = 0x3b10928;
                 RyzenSmu.Smu.MP1_ADDR_RSP = 0x3b10978;
                 RyzenSmu.Smu.MP1_ADDR_ARG = 0x3b10998;
 
-                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10a20;
-                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10a80;
-                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10a88;
+                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10a20;
+                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10a80;
+                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10a88;
             }
             else 
             {
@@ -165,9 +155,9 @@ namespace RyzenSmu
                 RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10578;
                 RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
 
-                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10a20;
-                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10a80;
-                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10a88;
+                RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10a20;
+                RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10a80;
+                RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10a88;
             }
 
             SMUCommands.commands = new List<(string, bool, uint)>
@@ -212,9 +202,9 @@ namespace RyzenSmu
             RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10578;
             RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
 
-            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10a20;
-            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10a80;
-            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10a88;
+            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10a20;
+            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10a80;
+            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10a88;
 
             SMUCommands.commands = new List<(string, bool, uint)>
             {
@@ -251,9 +241,9 @@ namespace RyzenSmu
             RyzenSmu.Smu.MP1_ADDR_RSP = 0X3B10564;
             RyzenSmu.Smu.MP1_ADDR_ARG = 0X3B10598;
 
-            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B1051C;
-            RyzenSmu.Smu.PSMU_ADDR_RSP = 0X3B10568;
-            RyzenSmu.Smu.PSMU_ADDR_ARG = 0X3B10590;
+            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B1051C;
+            RyzenSmu.Smu.PSMU_ADDR_RSP = 0X03B10568;
+            RyzenSmu.Smu.PSMU_ADDR_ARG = 0X03B10590;
 
             SMUCommands.commands = new List<(string, bool, uint)>
             {
@@ -278,9 +268,9 @@ namespace RyzenSmu
             RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B1057C;
             RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B109C4;
 
-            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10524;
-            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10570;
-            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A40;
+            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10524;
+            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10570;
+            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10A40;
 
             SMUCommands.commands = new List<(string, bool, uint)>
             {
@@ -291,7 +281,7 @@ namespace RyzenSmu
                 ("tdc-limit",false , 0x54),
                 ("edc-limit",true , 0x3c),
                 ("edc-limit",false , 0x55),
-                ("tctl-temp",true , 0x23),
+                ("tctl-temp",true , 0x3E),
                 ("tctl-temp",false , 0x56),
                 ("pbo-scalar",false , 0x58),
                 ("oc-clk", true, 0x26),
@@ -312,13 +302,13 @@ namespace RyzenSmu
 
         private static void Socket_AM5_V1()
         {
-            RyzenSmu.Smu.MP1_ADDR_MSG = 0x3010508;
-            RyzenSmu.Smu.MP1_ADDR_RSP = 0x3010988;
-            RyzenSmu.Smu.MP1_ADDR_ARG = 0x3010984;
+            RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10530;
+            RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B1057C;
+            RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B109C4;
 
-            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x3B10524;
-            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x3B10570;
-            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x3B10A40;
+            RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10524;
+            RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10570;
+            RyzenSmu.Smu.PSMU_ADDR_ARG = 0x03B10A40;
 
             SMUCommands.commands = new List<(string, bool, uint)>
             {

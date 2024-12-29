@@ -1,136 +1,76 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Universal_x86_Tuning_Utility.Scripts.Misc
 {
     internal class GetSensor
     {
-        public static void openSensor()
-        {
-            thisPC.Open();
-            cpu = thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
-            amdGPU = thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuAmd);
-        }
-
-        public static void updateSensor()
-        {
-            var hardware = thisPC.Hardware;
-            
-        }
-
-        public static void closeSensor()
-        {
-            var cpu = thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
-            cpu.Update();
-            var gpu = thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuAmd);
-            gpu.Update();
-        }
-
-        public static Computer thisPC = new Computer
+        private static readonly Computer thisPC = new Computer
         {
             IsCpuEnabled = true,
             IsGpuEnabled = true,
-            IsMemoryEnabled = true,
+            IsMemoryEnabled = true
         };
-        public static bool updateCPU = true;
-        public static bool updateAMDGPU = true;
 
-        private static IHardware cpu;
-        public static float getCPUInfo(SensorType sensorType, string sensorName)
+        private static DateTime lastUpdate;
+        private static readonly TimeSpan updateInterval = TimeSpan.FromSeconds(1);
+
+        public static void OpenSensor()
         {
-            float value = 0;
-            try
-            {
-                //Computer computer = new Computer
-                //{
-                //    IsCpuEnabled = true,
-                //};
-                //computer.Open();
-                if (updateCPU)
-                {
-                    cpu.Update();
-                    updateCPU = false;
-                }
-                var sensor = cpu.Sensors.FirstOrDefault(s => s.SensorType == sensorType && s.Name.Contains(sensorName));
-                if (sensor != null)
-                {
-                    value = (int)sensor.Value;
-                    //computer.Close();
-                    return value;
-                }
-                else
-                {
-                    //computer.Close();
-                    return value;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                return 0;
-            }
-        }
-        private static IHardware amdGPU;
-        public static float getAMDGPU(SensorType sensorType, string sensorName)
-        {
-            float value = 0;
-            try
-            {
-                if (updateAMDGPU)
-                {
-                    amdGPU.Update();
-                    updateAMDGPU = false;
-                }
-                var sensor = amdGPU.Sensors.FirstOrDefault(s => s.SensorType == sensorType && s.Name.Contains(sensorName));
-                if (sensor != null)
-                {
-                    value = (int)sensor.Value;
-                    //computer.Close();
-                    return value;
-                }
-                else
-                {
-                    //computer.Close();
-                    return value;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                return 0;
-            }
+            thisPC.Open();
         }
 
-        public static float getNVGPU(SensorType sensorType, string sensorName)
+        public static void CloseSensor()
         {
-            float value = 0;
-            try
-            {
-                foreach (var hardware in thisPC.Hardware)
-                {
-                    hardware.Update();
-                    if (hardware.HardwareType == HardwareType.GpuNvidia)
-                    {
-                        foreach (var sensor in hardware.Sensors)
-                        {
-                            if (sensor.SensorType == sensorType && sensor.Name.Contains(sensorName))
-                            {
-                                value = sensor.Value.GetValueOrDefault();
-                            }
-                        }
-                    }
+            thisPC.Close();
+        }
 
-                }
-                return value;
-            }
-            catch (Exception ex)
+        private static void UpdateAllHardware()
+        {
+            if (DateTime.UtcNow - lastUpdate < updateInterval)
             {
-                return value;
+                return;
             }
+
+            foreach (var hardware in thisPC.Hardware)
+            {
+                hardware.Update();
+            }
+
+            lastUpdate = DateTime.UtcNow;
+        }
+
+        public static float GetCPUInfo(SensorType sensorType, string sensorName)
+        {
+            UpdateAllHardware();
+            return GetSensorValue(thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu), sensorType, sensorName);
+        }
+
+        public static float GetAMDGPUInfo(SensorType sensorType, string sensorName)
+        {
+            UpdateAllHardware();
+            return GetSensorValue(thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuAmd), sensorType, sensorName);
+        }
+
+        public static float GetNVGPUInfo(SensorType sensorType, string sensorName)
+        {
+            UpdateAllHardware();
+            return thisPC.Hardware
+                .Where(h => h.HardwareType == HardwareType.GpuNvidia)
+                .Select(h => GetSensorValue(h, sensorType, sensorName))
+                .FirstOrDefault();
+        }
+
+        private static float GetSensorValue(IHardware hardware, SensorType sensorType, string sensorName)
+        {
+            if (hardware == null)
+            {
+                return 0;
+            }
+
+            var sensor = hardware.Sensors.FirstOrDefault(s => s.SensorType == sensorType && s.Name.Contains(sensorName));
+            return sensor?.Value ?? 0;
         }
     }
 }

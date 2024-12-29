@@ -194,7 +194,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     start = false;
                     siStartIcon.Symbol = Wpf.Ui.Common.SymbolRegular.Play20;
                     tbxStartText.Text = "Start Adaptive Mode";
-                    GetSensor.closeSensor();
+                    GetSensor.CloseSensor();
                     Settings.Default.isAdaptiveModeRunning = false;
                     Settings.Default.Save();
 
@@ -204,7 +204,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     start = true;
                     siStartIcon.Symbol = Wpf.Ui.Common.SymbolRegular.Stop20;
                     tbxStartText.Text = "Stop Adaptive Mode";
-                    await Task.Run(() => GetSensor.openSensor());
+                    await Task.Run(() => GetSensor.OpenSensor());
                     Settings.Default.isAdaptiveModeRunning = true;
                     Settings.Default.Save();
                 }
@@ -373,17 +373,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     await Task.Run(() =>
                     {
-                        //GetSensor.updateSensor();
-                        GetSensor.updateCPU = true;
-                        GetSensor.updateAMDGPU = true;
-                        if (Family.TYPE == Family.ProcessorType.Intel) CPUTemp = (int)GetSensor.getCPUInfo(SensorType.Temperature, "Package");
-                        else CPUTemp = (int)GetSensor.getCPUInfo(SensorType.Temperature, "Core");
-                        CPULoad = (int)GetSensor.getCPUInfo(SensorType.Load, "Total");
+                        if (Family.TYPE == Family.ProcessorType.Intel) CPUTemp = (int)GetSensor.GetCPUInfo(SensorType.Temperature, "Package");
+                        else CPUTemp = (int)GetSensor.GetCPUInfo(SensorType.Temperature, "Core");
+                        CPULoad = (int)GetSensor.GetCPUInfo(SensorType.Load, "Total");
 
                         int i = 1;
                         do
                         {
-                            if (i <= i) CPUClock = CPUClock + (int)GetSensor.getCPUInfo(SensorType.Clock, $"Core #{i}");
+                            if (i <= i) CPUClock = CPUClock + (int)GetSensor.GetCPUInfo(SensorType.Clock, $"Core #{i}");
                             i++;
                         }
                         while (i <= coreCount);
