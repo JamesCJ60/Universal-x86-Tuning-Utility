@@ -75,9 +75,9 @@ _New to the Universal x86 Tuning Utility?_ _No worries!_ _This quickstart guide 
 * Be cautious of the recommended maximum temperature and TDP for your hardware.
 
 ## Projects Used:
-- [G-Helper (github)](https://github.com/seerge/g-helper)  
-- [WPF UI (github)](https://github.com/lepoco/wpfui)
-- [reverse_engineering (github)](https://github.com/zllovesuki/reverse_engineering)  
-- [Laptops (github)](https://github.com/ahahahahahMtnf/Laptops/tree/main/Asus/WMI)  
-- [ADLX SDK Wrapper (github)](https://github.com/JamesCJ60/ADLX-SDK-Wrapper)
-- [Magpie (github)](https://github.com/Blinue/Magpie)
+- [G-Helper (GitHub)](https://github.com/seerge/g-helper)  
+- [WPF UI (GitHub)](https://github.com/lepoco/wpfui)
+- [reverse_engineering (GitHub)](https://github.com/zllovesuki/reverse_engineering)  
+- [Laptops (GitHub)](https://github.com/ahahahahahMtnf/Laptops/tree/main/Asus/WMI)  
+- [ADLX SDK Wrapper (GitHub)](https://github.com/JamesCJ60/ADLX-SDK-Wrapper)
+- [Magpie (GitHub)](https://github.com/Blinue/Magpie)
