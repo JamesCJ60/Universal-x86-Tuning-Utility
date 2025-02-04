@@ -52,7 +52,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                             EcoPreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=45 --stapm-limit=8000 --fast-limit=10000 --slow-limit=8000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=0 ";
                             BalPreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=15000 --fast-limit=18000 --slow-limit=15000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=1 ";
-                            PerformancePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=30000 --fast-limit=55000 --slow-limit=30000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
+                            PerformancePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=28000 --fast-limit=42000 --slow-limit=28000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
                             ExtremePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=35000 --fast-limit=60000 --slow-limit=35000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
                         }
                         else {
