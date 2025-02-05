@@ -429,6 +429,13 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         private void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (Settings.Default.MinimizeClose)
+            {
+                WindowState = WindowState.Minimized;
+                e.Cancel = true;
+                return;
+            }
+            
             Settings.Default.isAdaptiveModeRunning = false;
             Settings.Default.Save();
             Controller.magWindow?.Dispose();

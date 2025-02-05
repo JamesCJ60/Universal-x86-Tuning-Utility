@@ -33,6 +33,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             cbStartBoot.IsChecked = Settings.Default.StartOnBoot;
             cbStartMini.IsChecked = Settings.Default.StartMini;
+            cbMinimizeClose.IsChecked = Settings.Default.MinimizeClose;
             cbApplyStart.IsChecked = Settings.Default.ApplyOnStart;
             cbAutoReapply.IsChecked = Settings.Default.AutoReapply;
             nudAutoReapply.Value = Settings.Default.AutoReapplyTime;
@@ -91,6 +92,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private void cbStartMini_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Settings.Default.StartMini = (bool)cbStartMini.IsChecked;
+            Settings.Default.Save();
+        }
+
+        private void cbMinimizeClose_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Settings.Default.MinimizeClose = (bool)cbMinimizeClose.IsChecked;
             Settings.Default.Save();
         }
 

@@ -41,6 +41,7 @@
             IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />-->
         <CheckBox Name="cbStartBoot" Click="cbStartBoot_Click">Start on System Boot</CheckBox>
         <CheckBox Name="cbStartMini" Click="cbStartMini_Click">Start Minimised</CheckBox>
+        <CheckBox Name="cbMinimizeClose" Click="cbMinimizeClose_Click">Minimize on close</CheckBox>
         <CheckBox Name="cbApplyStart" Click="cbApplyStart_Click">Reapply On Start</CheckBox>
         <StackPanel Orientation="Horizontal">
             <CheckBox Name="cbAutoReapply" Click="cbAutoReapply_Click">Auto Reapply (s)</CheckBox>
