@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Tracing;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
@@ -30,6 +32,8 @@ using Microsoft.Extensions.Logging;
 using Wpf.Ui.Common.Interfaces;
 using YamlDotNet.Core;
 using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Path = System.IO.Path;
 using Settings = Universal_x86_Tuning_Utility.Properties.Settings;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
@@ -141,10 +145,55 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
         }
 
+        public static string? CustomGameIconsDirectoryPath;
+
+        public async void addCutomGame()
+        {
+            var openFileDialog = new OpenFileDialog()
+            {
+                Title = "Select game",
+                Filter = "Executable (*.exe)|*.exe"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var icon = Icon.ExtractAssociatedIcon(openFileDialog.FileName);
+                CustomGameIconsDirectoryPath ??= Directory.CreateTempSubdirectory().FullName;
+                var iconPath = System.IO.Path.Combine(CustomGameIconsDirectoryPath, openFileDialog.SafeFileName + ".ico");
+                using (var fileStream = new FileStream(iconPath, System.IO.FileMode.Create))
+                {
+                    icon.Save(fileStream);
+                    icon.Dispose();
+                }
+
+                var gameName = openFileDialog.SafeFileName;
+                var game = new GameLauncherItem
+                {
+                    gameName = Path.GetFileNameWithoutExtension(openFileDialog.FileName),
+                    appType = "Manually added game",
+                    path = Path.GetDirectoryName(openFileDialog.FileName)!,
+                    launchCommand = $"Exe-{openFileDialog.FileName}-0-{gameName}",
+                    exe = openFileDialog.FileName,
+                    iconPath = iconPath
+                };
+                
+                var preset = new GameData
+                {
+                    fpsData = "No Data"
+                };
+                gameDataManager.SavePreset(game.gameName, preset);
+                
+                GameList.Add(game);
+                lbGames.ItemsSource = null;
+                lbGames.ItemsSource = GameList;
+            }
+        }
+
         private static GameDataManager gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
         public async void setUp()
         {
             lbGames.ItemsSource = null;
+            ActionsPanel.IsEnabled = false;
             ccLoading.Visibility = Visibility.Visible;
             await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
             GameList = new List<GameLauncherItem>();
@@ -196,6 +245,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             GameList = GameList.OrderBy(item => item.gameName).ToList();
             GameList = GameList.Distinct().ToList();
             ccLoading.Visibility = Visibility.Collapsed;
+            ActionsPanel.IsEnabled = true;
             lbGames.ItemsSource = GameList;
         }
 
@@ -209,6 +259,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             setUp();
         }
 
+        private void addGameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            addCutomGame();
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.Button button)
@@ -216,6 +271,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (button.Tag is string parameter)
                 {
                     string[] parts = parameter.Split('-');
+                    
                     if (!parts[0].Contains("Microsoft Store"))
                     {
                         Game_Manager.LaunchApp(parts[2], parts[0], parts[1], parts[1]);

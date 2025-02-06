@@ -28,9 +28,12 @@
             FontWeight="Medium"
             Text="Game Library" DockPanel.Dock="Top" Margin="18,10,0,0"/>
 
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,9,9,6">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,9,9,6" Name="ActionsPanel">
                 <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload list of games" Click="btnLoad_Click">
                     <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
+                </ui:Button>
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" ToolTip="Add a game manually" Click="addGameBtn_Click">
+                    <ui:SymbolIcon Symbol="Add20" FontSize="24"/>
                 </ui:Button>
             </StackPanel>
 
