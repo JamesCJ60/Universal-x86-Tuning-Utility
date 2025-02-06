@@ -25,6 +25,7 @@ using RyzenSmu;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 using Universal_x86_Tuning_Utility.Scripts.ASUS;
+using Universal_x86_Tuning_Utility.Views.Pages;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -278,11 +279,16 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnExit(object sender, ExitEventArgs e)
         {
-          if(Family.TYPE != Family.ProcessorType.Intel) SMUCommands.RyzenAccess.Deinitialize();
+           if (Family.TYPE != Family.ProcessorType.Intel) SMUCommands.RyzenAccess.Deinitialize();
 
             await _host.StopAsync();
 
             _host.Dispose();
+            
+            if (Games.CustomGameIconsDirectoryPath != null) //will be refactored in the future
+            {
+                Directory.Delete(Games.CustomGameIconsDirectoryPath, true);
+            }
         }
 
         /// <summary>
