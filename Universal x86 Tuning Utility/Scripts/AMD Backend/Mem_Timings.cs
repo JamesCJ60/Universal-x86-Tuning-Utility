@@ -78,6 +78,17 @@ namespace Universal_x86_Tuning_Utility.Scripts.AMD_Backend
         public uint tSTAG2LR { get; set; }
         public uint tSTAGLR { get; set; }
         public uint tWRMPR { get; set; }
+        public string ProcODT { get; set; }
+        public string RttNom { get; set; }
+        public string RttWr { get; set; }
+        public string RttPark { get; set; }
+        public string AddrCmdSetup { get; set; }
+        public string CsOdtSetup { get; set; }
+        public string CkeSetup { get; set; }
+        public string ClkDrvStrength { get; set; }
+        public string AddrCmdDrvStrength { get; set; }
+        public string CsOdtDrvStrength { get; set; }
+        public string CkeDrvStrength { get; set; }
 
         /// <summary>
         /// Retrieves and calculates all memory timings using the OpenLibSys API.
@@ -87,32 +98,22 @@ namespace Universal_x86_Tuning_Utility.Scripts.AMD_Backend
         public static Mem_Timings RetrieveTimings()
         {
             Mem_Timings mem = new Mem_Timings();
-
-            // These values must not be changed.
             bool SMUSlow = false;
             int SMUDelay = SMUSlow ? 60 : 10;
 
             Ols ols = new Ols();
-            Ols.OlsStatus status = ols.Status;
-            Ols.OlsDllStatus dllStatus = ols.DllStatus;
-            if (status != Ols.OlsStatus.NO_ERROR)
-                throw new ApplicationException($"OlsStatus error:\nstatus {status}\ndllStatus {dllStatus}");
-            if (dllStatus != Ols.OlsDllStatus.OLS_DLL_NO_ERROR)
-                throw new ApplicationException($"OlsDllStatus error:\nstatus {status}\ndllStatus {dllStatus}");
+            if (ols.Status != Ols.OlsStatus.NO_ERROR || ols.DllStatus != Ols.OlsDllStatus.OLS_DLL_NO_ERROR)
+                throw new ApplicationException("Ols initialization error.");
 
-            // Get CPU information.
             uint eax = 0, ebx = 0, ecx = 0, edx = 0;
             ols.CpuidPx(0x80000001, ref eax, ref ebx, ref ecx, ref edx, (UIntPtr)0x01);
             uint CPUFMS = eax & 0xFFFF00;
 
-            // Read SMUORG register.
             uint SMUORG = ols.ReadPciConfigDword(0x00, 0xB8);
             Thread.Sleep(SMUDelay);
 
-            // Determine offset.
             uint someOffset = ReadDword(0x50200, ols, SMUDelay) == 0x300 ? 0x100000u : 0u;
 
-            // Read registers (do not modify the HEX values).
             uint BGS = ReadDword(0x00050058 + someOffset, ols, SMUDelay);
             uint BGSA = ReadDword(0x000500D0 + someOffset, ols, SMUDelay);
             uint DramConfiguration = ReadDword(0x00050200 + someOffset, ols, SMUDelay);
@@ -135,13 +136,10 @@ namespace Universal_x86_Tuning_Utility.Scripts.AMD_Backend
 
             uint tRFCTiming0 = ReadDword(0x00050260 + someOffset, ols, SMUDelay);
             uint tRFCTiming1 = ReadDword(0x00050264 + someOffset, ols, SMUDelay);
-
             uint tSTAGTiming0 = ReadDword(0x00050270 + someOffset, ols, SMUDelay);
             uint tSTAGTiming1 = ReadDword(0x00050274 + someOffset, ols, SMUDelay);
-
             uint DramTiming35 = ReadDword(0x0005028C + someOffset, ols, SMUDelay);
 
-            // Determine which timing values to use.
             uint tRFCTiming, tSTAGTiming;
             if (tRFCTiming0 == tRFCTiming1)
             {
@@ -159,9 +157,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.AMD_Backend
                 tSTAGTiming = tSTAGTiming0;
             }
 
-            // Calculate timing values.
-            mem.BGS = BGS != 0x87654321;
-            mem.BGSA = BGSA == 0x111107F1;
+            mem.BGS = (BGS != 0x87654321);
+            mem.BGSA = (BGSA == 0x111107F1);
             mem.Preamble2T = ((DramConfiguration & 0x1000) >> 12) != 0;
             mem.GDM = ((DramConfiguration & 0x800) >> 11) != 0;
             mem.Cmd2T = ((DramConfiguration & 0x400) >> 10) != 0;
@@ -246,7 +243,381 @@ namespace Universal_x86_Tuning_Utility.Scripts.AMD_Backend
 
             mem.tWRMPR = (DramTiming35 & 0x3F000000) >> 24;
 
-            // Restore registers.
+            uint eax2 = 0, ebx2 = 0, ecx2 = 0, edx2 = 0;
+            ols.CpuidPx(0x80000001, ref eax2, ref ebx2, ref ecx2, ref edx2, (UIntPtr)0x01);
+            eax2 &= 0xFFFF00;
+            ebx2 = (ebx2 & 0xF0000000) >> 28;
+            uint someOffset2 = 0;
+            if (ebx2 == 7)
+                someOffset2 = 0x2180;
+            else if (ebx2 == 2)
+                someOffset2 = 0x100;
+            else
+                someOffset2 = 0x00;
+
+            if (eax2 == 0x810F00 || (ebx2 == 1 || ebx2 == 3 || ebx2 == 4))
+            {
+                mem.ProcODT = "N/A";
+                mem.RttNom = "N/A";
+                mem.RttWr = "N/A";
+                mem.RttPark = "N/A";
+                mem.AddrCmdSetup = "N/A";
+                mem.CsOdtSetup = "N/A";
+                mem.CkeSetup = "N/A";
+                mem.ClkDrvStrength = "N/A";
+                mem.AddrCmdDrvStrength = "N/A";
+                mem.CsOdtDrvStrength = "N/A";
+                mem.CkeDrvStrength = "N/A";
+            }
+            else
+            {
+                ols.WritePciConfigDword(0x00, 0xB8, 0x3B10528);
+                ols.WritePciConfigDword(0x00, 0xBC, 0x2C);
+                ols.WritePciConfigDword(0x00, 0xB8, 0x3B1059C);
+                uint x = ols.ReadPciConfigDword(0, 0xBC);
+                ulong num26 = x - someOffset2;
+                Ols.IsInpOutDriverOpen2();
+                uint num27 = 0xB1;
+                uint physLong1 = ols.GetPhysLong(new UIntPtr(num26 + num27));
+                uint num28 = 0xB5;
+                uint physLong2 = ols.GetPhysLong(new UIntPtr(num26 + num28));
+                uint num29 = 0xBA;
+                uint physLong3 = ols.GetPhysLong(new UIntPtr(num26 + num29));
+
+                uint addrCmdSetup = physLong1 & 0xFF;
+                switch (addrCmdSetup)
+                {
+                    case 0: mem.AddrCmdSetup = "0/0"; break;
+                    case 1: mem.AddrCmdSetup = "0/1"; break;
+                    case 2: mem.AddrCmdSetup = "0/2"; break;
+                    case 3: mem.AddrCmdSetup = "0/3"; break;
+                    case 4: mem.AddrCmdSetup = "0/4"; break;
+                    case 5: mem.AddrCmdSetup = "0/5"; break;
+                    case 6: mem.AddrCmdSetup = "0/6"; break;
+                    case 7: mem.AddrCmdSetup = "0/7"; break;
+                    case 8: mem.AddrCmdSetup = "0/8"; break;
+                    case 9: mem.AddrCmdSetup = "0/9"; break;
+                    case 10: mem.AddrCmdSetup = "0/10"; break;
+                    case 11: mem.AddrCmdSetup = "0/11"; break;
+                    case 12: mem.AddrCmdSetup = "0/12"; break;
+                    case 13: mem.AddrCmdSetup = "0/13"; break;
+                    case 14: mem.AddrCmdSetup = "0/14"; break;
+                    case 15: mem.AddrCmdSetup = "0/15"; break;
+                    case 16: mem.AddrCmdSetup = "0/16"; break;
+                    case 17: mem.AddrCmdSetup = "0/17"; break;
+                    case 18: mem.AddrCmdSetup = "0/18"; break;
+                    case 19: mem.AddrCmdSetup = "0/19"; break;
+                    case 20: mem.AddrCmdSetup = "0/20"; break;
+                    case 21: mem.AddrCmdSetup = "0/21"; break;
+                    case 22: mem.AddrCmdSetup = "0/22"; break;
+                    case 23: mem.AddrCmdSetup = "0/23"; break;
+                    case 24: mem.AddrCmdSetup = "0/24"; break;
+                    case 25: mem.AddrCmdSetup = "0/25"; break;
+                    case 26: mem.AddrCmdSetup = "0/26"; break;
+                    case 27: mem.AddrCmdSetup = "0/27"; break;
+                    case 28: mem.AddrCmdSetup = "0/28"; break;
+                    case 29: mem.AddrCmdSetup = "0/29"; break;
+                    case 30: mem.AddrCmdSetup = "0/30"; break;
+                    case 31: mem.AddrCmdSetup = "0/31"; break;
+                    case 32: mem.AddrCmdSetup = "1/0"; break;
+                    case 33: mem.AddrCmdSetup = "1/1"; break;
+                    case 34: mem.AddrCmdSetup = "1/2"; break;
+                    case 35: mem.AddrCmdSetup = "1/3"; break;
+                    case 36: mem.AddrCmdSetup = "1/4"; break;
+                    case 37: mem.AddrCmdSetup = "1/5"; break;
+                    case 38: mem.AddrCmdSetup = "1/6"; break;
+                    case 39: mem.AddrCmdSetup = "1/7"; break;
+                    case 40: mem.AddrCmdSetup = "1/8"; break;
+                    case 41: mem.AddrCmdSetup = "1/9"; break;
+                    case 42: mem.AddrCmdSetup = "1/10"; break;
+                    case 43: mem.AddrCmdSetup = "1/11"; break;
+                    case 44: mem.AddrCmdSetup = "1/12"; break;
+                    case 45: mem.AddrCmdSetup = "1/13"; break;
+                    case 46: mem.AddrCmdSetup = "1/14"; break;
+                    case 47: mem.AddrCmdSetup = "1/15"; break;
+                    case 48: mem.AddrCmdSetup = "1/16"; break;
+                    case 49: mem.AddrCmdSetup = "1/17"; break;
+                    case 50: mem.AddrCmdSetup = "1/18"; break;
+                    case 51: mem.AddrCmdSetup = "1/19"; break;
+                    case 52: mem.AddrCmdSetup = "1/20"; break;
+                    case 53: mem.AddrCmdSetup = "1/21"; break;
+                    case 54: mem.AddrCmdSetup = "1/22"; break;
+                    case 55: mem.AddrCmdSetup = "1/23"; break;
+                    case 56: mem.AddrCmdSetup = "1/24"; break;
+                    case 57: mem.AddrCmdSetup = "1/25"; break;
+                    case 58: mem.AddrCmdSetup = "1/26"; break;
+                    case 59: mem.AddrCmdSetup = "1/27"; break;
+                    case 60: mem.AddrCmdSetup = "1/28"; break;
+                    case 61: mem.AddrCmdSetup = "1/29"; break;
+                    case 62: mem.AddrCmdSetup = "1/30"; break;
+                    case 63: mem.AddrCmdSetup = "1/31"; break;
+                }
+
+                uint csOdtSetup = (physLong1 & 0xFF00) >> 8;
+                switch (csOdtSetup)
+                {
+                    case 0: mem.CsOdtSetup = "0/0"; break;
+                    case 1: mem.CsOdtSetup = "0/1"; break;
+                    case 2: mem.CsOdtSetup = "0/2"; break;
+                    case 3: mem.CsOdtSetup = "0/3"; break;
+                    case 4: mem.CsOdtSetup = "0/4"; break;
+                    case 5: mem.CsOdtSetup = "0/5"; break;
+                    case 6: mem.CsOdtSetup = "0/6"; break;
+                    case 7: mem.CsOdtSetup = "0/7"; break;
+                    case 8: mem.CsOdtSetup = "0/8"; break;
+                    case 9: mem.CsOdtSetup = "0/9"; break;
+                    case 10: mem.CsOdtSetup = "0/10"; break;
+                    case 11: mem.CsOdtSetup = "0/11"; break;
+                    case 12: mem.CsOdtSetup = "0/12"; break;
+                    case 13: mem.CsOdtSetup = "0/13"; break;
+                    case 14: mem.CsOdtSetup = "0/14"; break;
+                    case 15: mem.CsOdtSetup = "0/15"; break;
+                    case 16: mem.CsOdtSetup = "0/16"; break;
+                    case 17: mem.CsOdtSetup = "0/17"; break;
+                    case 18: mem.CsOdtSetup = "0/18"; break;
+                    case 19: mem.CsOdtSetup = "0/19"; break;
+                    case 20: mem.CsOdtSetup = "0/20"; break;
+                    case 21: mem.CsOdtSetup = "0/21"; break;
+                    case 22: mem.CsOdtSetup = "0/22"; break;
+                    case 23: mem.CsOdtSetup = "0/23"; break;
+                    case 24: mem.CsOdtSetup = "0/24"; break;
+                    case 25: mem.CsOdtSetup = "0/25"; break;
+                    case 26: mem.CsOdtSetup = "0/26"; break;
+                    case 27: mem.CsOdtSetup = "0/27"; break;
+                    case 28: mem.CsOdtSetup = "0/28"; break;
+                    case 29: mem.CsOdtSetup = "0/29"; break;
+                    case 30: mem.CsOdtSetup = "0/30"; break;
+                    case 31: mem.CsOdtSetup = "0/31"; break;
+                    case 32: mem.CsOdtSetup = "1/0"; break;
+                    case 33: mem.CsOdtSetup = "1/1"; break;
+                    case 34: mem.CsOdtSetup = "1/2"; break;
+                    case 35: mem.CsOdtSetup = "1/3"; break;
+                    case 36: mem.CsOdtSetup = "1/4"; break;
+                    case 37: mem.CsOdtSetup = "1/5"; break;
+                    case 38: mem.CsOdtSetup = "1/6"; break;
+                    case 39: mem.CsOdtSetup = "1/7"; break;
+                    case 40: mem.CsOdtSetup = "1/8"; break;
+                    case 41: mem.CsOdtSetup = "1/9"; break;
+                    case 42: mem.CsOdtSetup = "1/10"; break;
+                    case 43: mem.CsOdtSetup = "1/11"; break;
+                    case 44: mem.CsOdtSetup = "1/12"; break;
+                    case 45: mem.CsOdtSetup = "1/13"; break;
+                    case 46: mem.CsOdtSetup = "1/14"; break;
+                    case 47: mem.CsOdtSetup = "1/15"; break;
+                    case 48: mem.CsOdtSetup = "1/16"; break;
+                    case 49: mem.CsOdtSetup = "1/17"; break;
+                    case 50: mem.CsOdtSetup = "1/18"; break;
+                    case 51: mem.CsOdtSetup = "1/19"; break;
+                    case 52: mem.CsOdtSetup = "1/20"; break;
+                    case 53: mem.CsOdtSetup = "1/21"; break;
+                    case 54: mem.CsOdtSetup = "1/22"; break;
+                    case 55: mem.CsOdtSetup = "1/23"; break;
+                    case 56: mem.CsOdtSetup = "1/24"; break;
+                    case 57: mem.CsOdtSetup = "1/25"; break;
+                    case 58: mem.CsOdtSetup = "1/26"; break;
+                    case 59: mem.CsOdtSetup = "1/27"; break;
+                    case 60: mem.CsOdtSetup = "1/28"; break;
+                    case 61: mem.CsOdtSetup = "1/29"; break;
+                    case 62: mem.CsOdtSetup = "1/30"; break;
+                    case 63: mem.CsOdtSetup = "1/31"; break;
+                }
+
+                uint ckeSetup = (physLong1 & 0xFF0000) >> 16;
+                switch (ckeSetup)
+                {
+                    case 0: mem.CkeSetup = "0/0"; break;
+                    case 1: mem.CkeSetup = "0/1"; break;
+                    case 2: mem.CkeSetup = "0/2"; break;
+                    case 3: mem.CkeSetup = "0/3"; break;
+                    case 4: mem.CkeSetup = "0/4"; break;
+                    case 5: mem.CkeSetup = "0/5"; break;
+                    case 6: mem.CkeSetup = "0/6"; break;
+                    case 7: mem.CkeSetup = "0/7"; break;
+                    case 8: mem.CkeSetup = "0/8"; break;
+                    case 9: mem.CkeSetup = "0/9"; break;
+                    case 10: mem.CkeSetup = "0/10"; break;
+                    case 11: mem.CkeSetup = "0/11"; break;
+                    case 12: mem.CkeSetup = "0/12"; break;
+                    case 13: mem.CkeSetup = "0/13"; break;
+                    case 14: mem.CkeSetup = "0/14"; break;
+                    case 15: mem.CkeSetup = "0/15"; break;
+                    case 16: mem.CkeSetup = "0/16"; break;
+                    case 17: mem.CkeSetup = "0/17"; break;
+                    case 18: mem.CkeSetup = "0/18"; break;
+                    case 19: mem.CkeSetup = "0/19"; break;
+                    case 20: mem.CkeSetup = "0/20"; break;
+                    case 21: mem.CkeSetup = "0/21"; break;
+                    case 22: mem.CkeSetup = "0/22"; break;
+                    case 23: mem.CkeSetup = "0/23"; break;
+                    case 24: mem.CkeSetup = "0/24"; break;
+                    case 25: mem.CkeSetup = "0/25"; break;
+                    case 26: mem.CkeSetup = "0/26"; break;
+                    case 27: mem.CkeSetup = "0/27"; break;
+                    case 28: mem.CkeSetup = "0/28"; break;
+                    case 29: mem.CkeSetup = "0/29"; break;
+                    case 30: mem.CkeSetup = "0/30"; break;
+                    case 31: mem.CkeSetup = "0/31"; break;
+                    case 32: mem.CkeSetup = "1/0"; break;
+                    case 33: mem.CkeSetup = "1/1"; break;
+                    case 34: mem.CkeSetup = "1/2"; break;
+                    case 35: mem.CkeSetup = "1/3"; break;
+                    case 36: mem.CkeSetup = "1/4"; break;
+                    case 37: mem.CkeSetup = "1/5"; break;
+                    case 38: mem.CkeSetup = "1/6"; break;
+                    case 39: mem.CkeSetup = "1/7"; break;
+                    case 40: mem.CkeSetup = "1/8"; break;
+                    case 41: mem.CkeSetup = "1/9"; break;
+                    case 42: mem.CkeSetup = "1/10"; break;
+                    case 43: mem.CkeSetup = "1/11"; break;
+                    case 44: mem.CkeSetup = "1/12"; break;
+                    case 45: mem.CkeSetup = "1/13"; break;
+                    case 46: mem.CkeSetup = "1/14"; break;
+                    case 47: mem.CkeSetup = "1/15"; break;
+                    case 48: mem.CkeSetup = "1/16"; break;
+                    case 49: mem.CkeSetup = "1/17"; break;
+                    case 50: mem.CkeSetup = "1/18"; break;
+                    case 51: mem.CkeSetup = "1/19"; break;
+                    case 52: mem.CkeSetup = "1/20"; break;
+                    case 53: mem.CkeSetup = "1/21"; break;
+                    case 54: mem.CkeSetup = "1/22"; break;
+                    case 55: mem.CkeSetup = "1/23"; break;
+                    case 56: mem.CkeSetup = "1/24"; break;
+                    case 57: mem.CkeSetup = "1/25"; break;
+                    case 58: mem.CkeSetup = "1/26"; break;
+                    case 59: mem.CkeSetup = "1/27"; break;
+                    case 60: mem.CkeSetup = "1/28"; break;
+                    case 61: mem.CkeSetup = "1/29"; break;
+                    case 62: mem.CkeSetup = "1/30"; break;
+                    case 63: mem.CkeSetup = "1/31"; break;
+                }
+
+                uint clkDrvStrength = (physLong1 & 0xFF000000) >> 24;
+                if (clkDrvStrength <= 7)
+                {
+                    switch (clkDrvStrength)
+                    {
+                        case 0: mem.ClkDrvStrength = "120.0Ω"; break;
+                        case 1: mem.ClkDrvStrength = "60.0Ω"; break;
+                        case 3: mem.ClkDrvStrength = "40.0Ω"; break;
+                        case 7: mem.ClkDrvStrength = "30.0Ω"; break;
+                    }
+                }
+                else if (clkDrvStrength != 15)
+                {
+                    if (clkDrvStrength == 31)
+                        mem.ClkDrvStrength = "20.0Ω";
+                }
+                else
+                    mem.ClkDrvStrength = "24.0Ω";
+
+                uint addrCmdDrvStrength = physLong2 & 0xFF;
+                if (addrCmdDrvStrength <= 7)
+                {
+                    switch (addrCmdDrvStrength)
+                    {
+                        case 0: mem.AddrCmdDrvStrength = "120.0Ω"; break;
+                        case 1: mem.AddrCmdDrvStrength = "60.0Ω"; break;
+                        case 3: mem.AddrCmdDrvStrength = "40.0Ω"; break;
+                        case 7: mem.AddrCmdDrvStrength = "30.0Ω"; break;
+                    }
+                }
+                else if (addrCmdDrvStrength != 15)
+                {
+                    if (addrCmdDrvStrength == 31)
+                        mem.AddrCmdDrvStrength = "20.0Ω";
+                }
+                else
+                    mem.AddrCmdDrvStrength = "24.0Ω";
+
+                uint csOdtDrvStrength = (physLong2 & 0xFF00) >> 8;
+                if (csOdtDrvStrength <= 7)
+                {
+                    switch (csOdtDrvStrength)
+                    {
+                        case 0: mem.CsOdtDrvStrength = "120.0Ω"; break;
+                        case 1: mem.CsOdtDrvStrength = "60.0Ω"; break;
+                        case 3: mem.CsOdtDrvStrength = "40.0Ω"; break;
+                        case 7: mem.CsOdtDrvStrength = "30.0Ω"; break;
+                    }
+                }
+                else if (csOdtDrvStrength != 15)
+                {
+                    if (csOdtDrvStrength == 31)
+                        mem.CsOdtDrvStrength = "20.0Ω";
+                }
+                else
+                    mem.CsOdtDrvStrength = "24.0Ω";
+
+                uint ckeDrvStrength = (physLong2 & 0xFF0000) >> 16;
+                if (ckeDrvStrength <= 7)
+                {
+                    switch (ckeDrvStrength)
+                    {
+                        case 0: mem.CkeDrvStrength = "120.0Ω"; break;
+                        case 1: mem.CkeDrvStrength = "60.0Ω"; break;
+                        case 3: mem.CkeDrvStrength = "40.0Ω"; break;
+                        case 7: mem.CkeDrvStrength = "30.0Ω"; break;
+                    }
+                }
+                else if (ckeDrvStrength != 15)
+                {
+                    if (ckeDrvStrength == 31)
+                        mem.CkeDrvStrength = "20.0Ω";
+                }
+                else
+                    mem.CkeDrvStrength = "24.0Ω";
+
+                uint rttNom = physLong3 & 0xFF;
+                switch (rttNom)
+                {
+                    case 0: mem.RttNom = "Disabled"; break;
+                    case 1: mem.RttNom = "60.0Ω"; break;
+                    case 2: mem.RttNom = "120.0Ω"; break;
+                    case 3: mem.RttNom = "40.0Ω"; break;
+                    case 4: mem.RttNom = "240.0Ω"; break;
+                    case 5: mem.RttNom = "48.0Ω"; break;
+                    case 6: mem.RttNom = "80.0Ω"; break;
+                    case 7: mem.RttNom = "34.3Ω"; break;
+                }
+                uint rttWr = (physLong3 & 0xFF00) >> 8;
+                switch (rttWr)
+                {
+                    case 0: mem.RttWr = "Disabled"; break;
+                    case 1: mem.RttWr = "120.0Ω"; break;
+                    case 2: mem.RttWr = "240.0Ω"; break;
+                    case 3: mem.RttWr = "Hi-Z"; break;
+                    case 4: mem.RttWr = "80.0Ω"; break;
+                }
+                uint rttPark = (physLong3 & 0xFF0000) >> 16;
+                switch (rttPark)
+                {
+                    case 0: mem.RttPark = "Disabled"; break;
+                    case 1: mem.RttPark = "60.0Ω"; break;
+                    case 2: mem.RttPark = "120.0Ω"; break;
+                    case 3: mem.RttPark = "40.0Ω"; break;
+                    case 4: mem.RttPark = "240.0Ω"; break;
+                    case 5: mem.RttPark = "48.0Ω"; break;
+                    case 6: mem.RttPark = "80.0Ω"; break;
+                    case 7: mem.RttPark = "34.3Ω"; break;
+                }
+                uint procODT = (physLong3 & 0xFF000000) >> 24;
+                if (procODT == 8) mem.ProcODT = "120.0Ω";
+                else if (procODT == 9) mem.ProcODT = "96.0Ω";
+                else if (procODT == 10) mem.ProcODT = "80.0Ω";
+                else if (procODT == 11) mem.ProcODT = "68.6Ω";
+                else if (procODT == 24) mem.ProcODT = "60.0Ω";
+                else if (procODT == 25) mem.ProcODT = "53.3Ω";
+                else if (procODT == 26) mem.ProcODT = "48.0Ω";
+                else if (procODT == 27) mem.ProcODT = "43.6Ω";
+                else if (procODT == 56) mem.ProcODT = "40.0Ω";
+                else if (procODT == 57) mem.ProcODT = "36.9Ω";
+                else if (procODT == 58) mem.ProcODT = "34.3Ω";
+                else if (procODT == 59) mem.ProcODT = "32.0Ω";
+                else if (procODT == 62) mem.ProcODT = "30.0Ω";
+                else if (procODT == 63) mem.ProcODT = "28.2Ω";
+                else mem.ProcODT = "N/A";
+            }
+
             ols.WritePciConfigDword(0x0, 0xB8, 0x3B10528);
             ols.WritePciConfigDword(0x0, 0xBC, 0x02);
             ols.WritePciConfigDword(0x00, 0xB8, SMUORG);
