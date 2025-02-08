@@ -8,6 +8,7 @@ using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 
 namespace Universal_x86_Tuning_Utility.Scripts
@@ -98,6 +99,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
             }
             else
             {
+                App.memTimings = Mem_Timings.RetrieveTimings();
+
                 //Zen1 - Zen2
                 if (CPUFamily == 23)
                 {

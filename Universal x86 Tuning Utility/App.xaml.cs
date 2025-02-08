@@ -26,6 +26,7 @@ using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 using Universal_x86_Tuning_Utility.Scripts.ASUS;
 using Universal_x86_Tuning_Utility.Views.Pages;
+using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 
 namespace Universal_x86_Tuning_Utility
 {
@@ -44,6 +45,7 @@ namespace Universal_x86_Tuning_Utility
         public static ASUSWmi wmi;
         public static XgMobileConnectionService xgMobileConnectionService;
         private static ILogger<App>? _logger;
+        public static Mem_Timings memTimings = new Mem_Timings();
 
         /// <summary>
         /// Gets registered service.
@@ -56,7 +58,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "2.3.4";
+        public static string version = "2.4.1";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 

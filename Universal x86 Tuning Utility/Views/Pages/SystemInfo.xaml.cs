@@ -33,6 +33,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             InitializeComponent();
             _ = Tablet.TabletDevices;
+
+            if(Family.TYPE != Family.ProcessorType.Intel) this.DataContext = App.memTimings;
+            else spRAMTime.Visibility = Visibility.Collapsed;
             getCPUInfo();
             getRAMInfo();
             getDeviceInfo();

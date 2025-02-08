@@ -9,7 +9,7 @@
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d" 
-      d:DesignHeight="1500" d:DesignWidth="800"
+      d:DesignHeight="3000" d:DesignWidth="800"
       Title="SystemInfo">
 
     <Grid>
@@ -143,6 +143,239 @@
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbWidth"></TextBlock>
                                     <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbSlots"></TextBlock>
                                 </StackPanel>
+                            </StackPanel>
+                            <StackPanel Name="spRAMTime" Margin="24,8,12,0">
+                            <TextBlock  FontWeight="DemiBold">RAM Timings:</TextBlock>
+                                <Grid Margin="-5,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="BGS:" Margin="5"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding BGS}" Margin="5"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="BGSA:" Margin="5"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding BGSA}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Preamble2T:" Margin="5"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Preamble2T}" Margin="5"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="GDM:" Margin="5"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding GDM}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Cmd2T:" Margin="5"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Cmd2T}" Margin="5"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="tRCDWR:" Margin="5"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding tRCDWR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="tRCDRD:" Margin="5"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding tRCDRD}" Margin="5"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="2" Text="tRAS:" Margin="5"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="3" Text="{Binding tRAS}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="tCL:" Margin="5"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding tCL}" Margin="5"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="2" Text="tRPPB:" Margin="5"/>
+                                    <TextBlock Grid.Row="4" Grid.Column="3" Text="{Binding tRPPB}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="5" Grid.Column="0" Text="tRP:" Margin="5"/>
+                                    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding tRP}" Margin="5"/>
+                                    <TextBlock Grid.Row="5" Grid.Column="2" Text="tRCPB:" Margin="5"/>
+                                    <TextBlock Grid.Row="5" Grid.Column="3" Text="{Binding tRCPB}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="6" Grid.Column="0" Text="tRC:" Margin="5"/>
+                                    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding tRC}" Margin="5"/>
+                                    <TextBlock Grid.Row="6" Grid.Column="2" Text="tRTP:" Margin="5"/>
+                                    <TextBlock Grid.Row="6" Grid.Column="3" Text="{Binding tRTP}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="7" Grid.Column="0" Text="tRRDDLR:" Margin="5"/>
+                                    <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding tRRDDLR}" Margin="5"/>
+                                    <TextBlock Grid.Row="7" Grid.Column="2" Text="tRRDL:" Margin="5"/>
+                                    <TextBlock Grid.Row="7" Grid.Column="3" Text="{Binding tRRDL}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="8" Grid.Column="0" Text="tRRDS:" Margin="5"/>
+                                    <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding tRRDS}" Margin="5"/>
+                                    <TextBlock Grid.Row="8" Grid.Column="2" Text="tFAWDLR:" Margin="5"/>
+                                    <TextBlock Grid.Row="8" Grid.Column="3" Text="{Binding tFAWDLR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="9" Grid.Column="0" Text="tFAWSLR:" Margin="5"/>
+                                    <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding tFAWSLR}" Margin="5"/>
+                                    <TextBlock Grid.Row="9" Grid.Column="2" Text="tFAW:" Margin="5"/>
+                                    <TextBlock Grid.Row="9" Grid.Column="3" Text="{Binding tFAW}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="10" Grid.Column="0" Text="tWTRL:" Margin="5"/>
+                                    <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding tWTRL}" Margin="5"/>
+                                    <TextBlock Grid.Row="10" Grid.Column="2" Text="tWTRS:" Margin="5"/>
+                                    <TextBlock Grid.Row="10" Grid.Column="3" Text="{Binding tWTRS}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="11" Grid.Column="0" Text="tCWL:" Margin="5"/>
+                                    <TextBlock Grid.Row="11" Grid.Column="1" Text="{Binding tCWL}" Margin="5"/>
+                                    <TextBlock Grid.Row="11" Grid.Column="2" Text="tWR:" Margin="5"/>
+                                    <TextBlock Grid.Row="11" Grid.Column="3" Text="{Binding tWR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="12" Grid.Column="0" Text="tRCPage:" Margin="5"/>
+                                    <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding tRCPage}" Margin="5"/>
+                                    <TextBlock Grid.Row="12" Grid.Column="2" Text="tRDRDBAN:" Margin="5"/>
+                                    <TextBlock Grid.Row="12" Grid.Column="3" Text="{Binding tRDRDBAN}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="13" Grid.Column="0" Text="tRDRDSCL:" Margin="5"/>
+                                    <TextBlock Grid.Row="13" Grid.Column="1" Text="{Binding tRDRDSCL}" Margin="5"/>
+                                    <TextBlock Grid.Row="13" Grid.Column="2" Text="tRDRDSCDLR:" Margin="5"/>
+                                    <TextBlock Grid.Row="13" Grid.Column="3" Text="{Binding tRDRDSCDLR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="14" Grid.Column="0" Text="tRDRDSC:" Margin="5"/>
+                                    <TextBlock Grid.Row="14" Grid.Column="1" Text="{Binding tRDRDSC}" Margin="5"/>
+                                    <TextBlock Grid.Row="14" Grid.Column="2" Text="tRDRDSD:" Margin="5"/>
+                                    <TextBlock Grid.Row="14" Grid.Column="3" Text="{Binding tRDRDSD}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="15" Grid.Column="0" Text="tRDRDDD:" Margin="5"/>
+                                    <TextBlock Grid.Row="15" Grid.Column="1" Text="{Binding tRDRDDD}" Margin="5"/>
+                                    <TextBlock Grid.Row="15" Grid.Column="2" Text="tWRWRBAN:" Margin="5"/>
+                                    <TextBlock Grid.Row="15" Grid.Column="3" Text="{Binding tWRWRBAN}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="16" Grid.Column="0" Text="tWRWRSCL:" Margin="5"/>
+                                    <TextBlock Grid.Row="16" Grid.Column="1" Text="{Binding tWRWRSCL}" Margin="5"/>
+                                    <TextBlock Grid.Row="16" Grid.Column="2" Text="tWRWRSCDLR:" Margin="5"/>
+                                    <TextBlock Grid.Row="16" Grid.Column="3" Text="{Binding tWRWRSCDLR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="17" Grid.Column="0" Text="tWRWRSC:" Margin="5"/>
+                                    <TextBlock Grid.Row="17" Grid.Column="1" Text="{Binding tWRWRSC}" Margin="5"/>
+                                    <TextBlock Grid.Row="17" Grid.Column="2" Text="tWRWRSD:" Margin="5"/>
+                                    <TextBlock Grid.Row="17" Grid.Column="3" Text="{Binding tWRWRSD}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="18" Grid.Column="0" Text="tWRWRDD:" Margin="5"/>
+                                    <TextBlock Grid.Row="18" Grid.Column="1" Text="{Binding tWRWRDD}" Margin="5"/>
+                                    <TextBlock Grid.Row="18" Grid.Column="2" Text="tWRRDSCDLR:" Margin="5"/>
+                                    <TextBlock Grid.Row="18" Grid.Column="3" Text="{Binding tWRRDSCDLR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="19" Grid.Column="0" Text="tRDWR:" Margin="5"/>
+                                    <TextBlock Grid.Row="19" Grid.Column="1" Text="{Binding tRDWR}" Margin="5"/>
+                                    <TextBlock Grid.Row="19" Grid.Column="2" Text="tWRRD:" Margin="5"/>
+                                    <TextBlock Grid.Row="19" Grid.Column="3" Text="{Binding tWRRD}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="20" Grid.Column="0" Text="tREF:" Margin="5"/>
+                                    <TextBlock Grid.Row="20" Grid.Column="1" Text="{Binding tREF}" Margin="5"/>
+                                    <TextBlock Grid.Row="20" Grid.Column="2" Text="tREFCT:" Margin="5"/>
+                                    <TextBlock Grid.Row="20" Grid.Column="3" Text="{Binding tREFCT}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="21" Grid.Column="0" Text="tMODPDA:" Margin="5"/>
+                                    <TextBlock Grid.Row="21" Grid.Column="1" Text="{Binding tMODPDA}" Margin="5"/>
+                                    <TextBlock Grid.Row="21" Grid.Column="2" Text="tMRDPDA:" Margin="5"/>
+                                    <TextBlock Grid.Row="21" Grid.Column="3" Text="{Binding tMRDPDA}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="22" Grid.Column="0" Text="tMOD:" Margin="5"/>
+                                    <TextBlock Grid.Row="22" Grid.Column="1" Text="{Binding tMOD}" Margin="5"/>
+                                    <TextBlock Grid.Row="22" Grid.Column="2" Text="tMRD:" Margin="5"/>
+                                    <TextBlock Grid.Row="22" Grid.Column="3" Text="{Binding tMRD}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="23" Grid.Column="0" Text="tSTAG:" Margin="5"/>
+                                    <TextBlock Grid.Row="23" Grid.Column="1" Text="{Binding tSTAG}" Margin="5"/>
+                                    <TextBlock Grid.Row="23" Grid.Column="2" Text="tCKE:" Margin="5"/>
+                                    <TextBlock Grid.Row="23" Grid.Column="3" Text="{Binding tCKE}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="24" Grid.Column="0" Text="tPHYWRD:" Margin="5"/>
+                                    <TextBlock Grid.Row="24" Grid.Column="1" Text="{Binding tPHYWRD}" Margin="5"/>
+                                    <TextBlock Grid.Row="24" Grid.Column="2" Text="tPHYRDLAT:" Margin="5"/>
+                                    <TextBlock Grid.Row="24" Grid.Column="3" Text="{Binding tPHYRDLAT}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="25" Grid.Column="0" Text="tPHYWRLAT:" Margin="5"/>
+                                    <TextBlock Grid.Row="25" Grid.Column="1" Text="{Binding tPHYWRLAT}" Margin="5"/>
+                                    <TextBlock Grid.Row="25" Grid.Column="2" Text="tRDDATA:" Margin="5"/>
+                                    <TextBlock Grid.Row="25" Grid.Column="3" Text="{Binding tRDDATA}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="26" Grid.Column="0" Text="tRFC4:" Margin="5"/>
+                                    <TextBlock Grid.Row="26" Grid.Column="1" Text="{Binding tRFC4}" Margin="5"/>
+                                    <TextBlock Grid.Row="26" Grid.Column="2" Text="tRFC4CT:" Margin="5"/>
+                                    <TextBlock Grid.Row="26" Grid.Column="3" Text="{Binding tRFC4CT}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="27" Grid.Column="0" Text="tRFC2:" Margin="5"/>
+                                    <TextBlock Grid.Row="27" Grid.Column="1" Text="{Binding tRFC2}" Margin="5"/>
+                                    <TextBlock Grid.Row="27" Grid.Column="2" Text="tRFC2CT:" Margin="5"/>
+                                    <TextBlock Grid.Row="27" Grid.Column="3" Text="{Binding tRFC2CT}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="28" Grid.Column="0" Text="tRFC:" Margin="5"/>
+                                    <TextBlock Grid.Row="28" Grid.Column="1" Text="{Binding tRFC}" Margin="5"/>
+                                    <TextBlock Grid.Row="28" Grid.Column="2" Text="tRFCCT:" Margin="5"/>
+                                    <TextBlock Grid.Row="28" Grid.Column="3" Text="{Binding tRFCCT}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="29" Grid.Column="0" Text="tSTAG4LR:" Margin="5"/>
+                                    <TextBlock Grid.Row="29" Grid.Column="1" Text="{Binding tSTAG4LR}" Margin="5"/>
+                                    <TextBlock Grid.Row="29" Grid.Column="2" Text="tSTAG2LR:" Margin="5"/>
+                                    <TextBlock Grid.Row="29" Grid.Column="3" Text="{Binding tSTAG2LR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="30" Grid.Column="0" Text="tSTAGLR:" Margin="5"/>
+                                    <TextBlock Grid.Row="30" Grid.Column="1" Text="{Binding tSTAGLR}" Margin="5"/>
+                                    <TextBlock Grid.Row="30" Grid.Column="2" Text="tWRMPR:" Margin="5"/>
+                                    <TextBlock Grid.Row="30" Grid.Column="3" Text="{Binding tWRMPR}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="31" Grid.Column="0" Text="ProcODT (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="31" Grid.Column="1" Text="{Binding ProcODT}" Margin="5"/>
+                                    <TextBlock Grid.Row="31" Grid.Column="2" Text="RttNom (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="31" Grid.Column="3" Text="{Binding RttNom}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="32" Grid.Column="0" Text="RttWr (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="32" Grid.Column="1" Text="{Binding RttWr}" Margin="5"/>
+                                    <TextBlock Grid.Row="32" Grid.Column="2" Text="RttPark (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="32" Grid.Column="3" Text="{Binding RttPark}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="33" Grid.Column="0" Text="AddrCmdSetup:" Margin="5"/>
+                                    <TextBlock Grid.Row="33" Grid.Column="1" Text="{Binding AddrCmdSetup}" Margin="5"/>
+                                    <TextBlock Grid.Row="33" Grid.Column="2" Text="CsOdtSetup:" Margin="5"/>
+                                    <TextBlock Grid.Row="33" Grid.Column="3" Text="{Binding CsOdtSetup}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="34" Grid.Column="0" Text="CkeSetup:" Margin="5"/>
+                                    <TextBlock Grid.Row="34" Grid.Column="1" Text="{Binding CkeSetup}" Margin="5"/>
+                                    <TextBlock Grid.Row="34" Grid.Column="2" Text="ClkDrvStrength (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="34" Grid.Column="3" Text="{Binding ClkDrvStrength}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="35" Grid.Column="0" Text="AddrCmdDrvStrength (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="35" Grid.Column="1" Text="{Binding AddrCmdDrvStrength}" Margin="5"/>
+                                    <TextBlock Grid.Row="35" Grid.Column="2" Text="CsOdtDrvStrength (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="35" Grid.Column="3" Text="{Binding CsOdtDrvStrength}" Margin="5"/>
+
+                                    <TextBlock Grid.Row="36" Grid.Column="0" Text="CkeDrvStrength (Ω):" Margin="5"/>
+                                    <TextBlock Grid.Row="36" Grid.Column="1" Text="{Binding CkeDrvStrength}" Margin="5"/>
+                                </Grid>
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
