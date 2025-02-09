@@ -166,10 +166,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 });
 
                 if (width > 128 && Family.FAM == Family.RyzenFamily.StrixHalo) if (width > 256) width = 256;
-                else if (width > 128 && Family.FAM < Family.RyzenFamily.StrixPoint2 && Family.TYPE != Family.ProcessorType.Intel) width = 128;
                 else if (width > 64 && Family.FAM == Family.RyzenFamily.Mendocino) width = 64;
-
-
+                else if (width > 128 && Family.FAM < Family.RyzenFamily.FireRange && Family.TYPE != Family.ProcessorType.Intel) width = 128;
 
                 capacity = capacity / 1024 / 1024 / 1024;
 

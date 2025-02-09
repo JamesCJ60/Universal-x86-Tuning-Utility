@@ -58,7 +58,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "2.4.1";
+        public static string version = "2.4.2";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -207,7 +207,7 @@ namespace Universal_x86_Tuning_Utility
                 if (File.Exists("C:\\Universal.x86.Tuning.Utility.V2.msi")) File.Delete("C:\\Universal.x86.Tuning.Utility.V2.msi");
 
                 Family.setCpuFamily();
-                Family.setCpuFamily();
+
                 string path = System.Reflection.Assembly.GetEntryAssembly().Location;
                 path = path.Replace("Universal x86 Tuning Utility.dll", null);
 
@@ -227,7 +227,7 @@ namespace Universal_x86_Tuning_Utility
 
                     try
                     {
-                        await Task.Run(() => UnblockFilesInDirectory(path));
+                        Task.Run(() => UnblockFilesInDirectory(path));
                     }
                     catch (Exception ex)
                     {

@@ -99,7 +99,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
             }
             else
             {
-                App.memTimings = Mem_Timings.RetrieveTimings();
+                try
+                {
+                    App.memTimings = Mem_Timings.RetrieveTimings();
+                } catch { }
 
                 //Zen1 - Zen2
                 if (CPUFamily == 23)
