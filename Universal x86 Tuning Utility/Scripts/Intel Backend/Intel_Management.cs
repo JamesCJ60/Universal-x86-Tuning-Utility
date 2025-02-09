@@ -27,10 +27,10 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             }
             catch { }
 
-            try { 
-                runIntelTDPChangeMMIOKX(pl, pl); 
-            }
-            catch { }
+            //try { 
+            //    runIntelTDPChangeMMIOKX(pl, pl); 
+            //}
+            //catch { }
         }
 
         public static void changePowerBalance(int value, int cpuOrGpu)
