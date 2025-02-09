@@ -348,7 +348,7 @@
                                     <TextBlock Grid.Row="30" Grid.Column="2" Text="tWRMPR:" Margin="5"/>
                                     <TextBlock Grid.Row="30" Grid.Column="3" Text="{Binding tWRMPR}" Margin="5"/>
 
-                                    <TextBlock Grid.Row="31" Grid.Column="0" Text="ProcODT (Ω):" Margin="5"/>
+                                    <!--<TextBlock Grid.Row="31" Grid.Column="0" Text="ProcODT (Ω):" Margin="5"/>
                                     <TextBlock Grid.Row="31" Grid.Column="1" Text="{Binding ProcODT}" Margin="5"/>
                                     <TextBlock Grid.Row="31" Grid.Column="2" Text="RttNom (Ω):" Margin="5"/>
                                     <TextBlock Grid.Row="31" Grid.Column="3" Text="{Binding RttNom}" Margin="5"/>
@@ -374,7 +374,7 @@
                                     <TextBlock Grid.Row="35" Grid.Column="3" Text="{Binding CsOdtDrvStrength}" Margin="5"/>
 
                                     <TextBlock Grid.Row="36" Grid.Column="0" Text="CkeDrvStrength (Ω):" Margin="5"/>
-                                    <TextBlock Grid.Row="36" Grid.Column="1" Text="{Binding CkeDrvStrength}" Margin="5"/>
+                                    <TextBlock Grid.Row="36" Grid.Column="1" Text="{Binding CkeDrvStrength}" Margin="5"/>-->
                                 </Grid>
                             </StackPanel>
                         </StackPanel>

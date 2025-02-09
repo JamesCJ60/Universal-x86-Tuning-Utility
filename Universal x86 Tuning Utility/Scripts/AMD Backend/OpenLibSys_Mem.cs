@@ -447,27 +447,6 @@ namespace OpenLibSys_Mem
                 //return *(uint*)buf;
             }
         }
-
-        [DllImport("inpoutx64.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IsInpOutDriverOpen();
-
-        [DllImport("inpoutx64.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetPhysLong(UIntPtr memAddress, out uint Data);
-
-        public static bool IsInpOutDriverOpen2()
-        {
-            return IsInpOutDriverOpen();
-        }
-
-        public static unsafe uint GetPhysLong2(UIntPtr memAddress)
-        {
-            uint num;
-            if (GetPhysLong(memAddress, out num))
-                return num;
-            return 0;
-        }
 #endif
     }
 }
