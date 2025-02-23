@@ -58,7 +58,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "2.4.2";
+        public static string version = "2.4.3";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -206,8 +206,6 @@ namespace Universal_x86_Tuning_Utility
 
                 if (File.Exists("C:\\Universal.x86.Tuning.Utility.V2.msi")) File.Delete("C:\\Universal.x86.Tuning.Utility.V2.msi");
 
-                Family.setCpuFamily();
-
                 string path = System.Reflection.Assembly.GetEntryAssembly().Location;
                 path = path.Replace("Universal x86 Tuning Utility.dll", null);
 
@@ -233,13 +231,25 @@ namespace Universal_x86_Tuning_Utility
                     {
                         _logger.LogError(ex, "Failed to unblock files in {dir} directory", path);
                     }
-                }
 
-                if (IsInternetAvailable()) if (Settings.Default.UpdateCheck) CheckForUpdate();
+                    Family.setCpuFamily();
+                }
+                try
+                {
+                    if (IsInternetAvailable()) if (Settings.Default.UpdateCheck) CheckForUpdate();
+                }
+                catch (Exception ex) { _logger.LogError(ex, "Failed to check for updates"); }
 
                 await _host.StartAsync();
 
-                await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
+                try
+                {
+                    await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to sync game library");
+                }
             } 
             catch (Exception ex) 
             { 

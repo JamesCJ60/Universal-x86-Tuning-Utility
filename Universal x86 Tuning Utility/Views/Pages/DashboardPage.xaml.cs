@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using Universal_x86_Tuning_Utility.Scripts;
+using Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Wpf.Ui.Common.Interfaces;
@@ -29,6 +30,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 caPremade.IsEnabled = false;
                 btnPremade.IsEnabled = false;
+            }
+
+            try
+            {
+                NvHwCheck.CheckROPCount();
+            }
+            catch
+            {
+
             }
         }
     }
