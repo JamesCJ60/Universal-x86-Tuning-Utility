@@ -58,7 +58,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "2.4.3";
+        public static string version = "2.4.4";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 

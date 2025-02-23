@@ -325,38 +325,38 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                                 lastAppliedState = "dc";
                             }
                         }
+                    }
 
-                        if (e.Mode == PowerModes.Resume)
+                    if (e.Mode == PowerModes.Resume)
+                    {
+                        if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "" && Settings.Default.resumePreset != "None")
                         {
-                            if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "" && Settings.Default.resumePreset != "None")
+                            if (Settings.Default.resumePreset.Contains("PM - Eco"))
                             {
-                                if (Settings.Default.resumePreset.Contains("PM - Eco"))
-                                {
-                                    Settings.Default.premadePreset = 0;
-                                    Settings.Default.resumeCommandString = PremadePresets.EcoPreset;
-                                }
-                                else if (Settings.Default.resumePreset.Contains("PM - Bal"))
-                                {
-                                    Settings.Default.premadePreset = 1;
-                                    Settings.Default.resumeCommandString = PremadePresets.BalPreset;
-                                }
-                                else if (Settings.Default.resumePreset.Contains("PM - Perf"))
-                                {
-                                    Settings.Default.premadePreset = 2;
-                                    Settings.Default.resumeCommandString = PremadePresets.PerformancePreset;
-                                }
-                                else if (Settings.Default.resumePreset.Contains("PM - Ext"))
-                                {
-                                    Settings.Default.premadePreset = 3;
-                                    Settings.Default.resumeCommandString = PremadePresets.ExtremePreset;
-                                }
-                                Settings.Default.CommandString = Settings.Default.resumeCommandString;
-                                Settings.Default.Save();
-                                Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.resumeCommandString));
-
-                                if (lastAppliedState != "resume") ToastNotification.ShowToastNotification("Resume Preset Applied!", $"Your resume preset settings have been applied!");
-                                lastAppliedState = "resume";
+                                Settings.Default.premadePreset = 0;
+                                Settings.Default.resumeCommandString = PremadePresets.EcoPreset;
                             }
+                            else if (Settings.Default.resumePreset.Contains("PM - Bal"))
+                            {
+                                Settings.Default.premadePreset = 1;
+                                Settings.Default.resumeCommandString = PremadePresets.BalPreset;
+                            }
+                            else if (Settings.Default.resumePreset.Contains("PM - Perf"))
+                            {
+                                Settings.Default.premadePreset = 2;
+                                Settings.Default.resumeCommandString = PremadePresets.PerformancePreset;
+                            }
+                            else if (Settings.Default.resumePreset.Contains("PM - Ext"))
+                            {
+                                Settings.Default.premadePreset = 3;
+                                Settings.Default.resumeCommandString = PremadePresets.ExtremePreset;
+                            }
+                            Settings.Default.CommandString = Settings.Default.resumeCommandString;
+                            Settings.Default.Save();
+                            Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.resumeCommandString));
+
+                            if (lastAppliedState != "resume") ToastNotification.ShowToastNotification("Resume Preset Applied!", $"Your resume preset settings have been applied!");
+                            lastAppliedState = "resume";
                         }
                     }
                 }
