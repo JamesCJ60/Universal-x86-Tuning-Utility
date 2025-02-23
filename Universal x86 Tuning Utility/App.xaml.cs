@@ -206,6 +206,8 @@ namespace Universal_x86_Tuning_Utility
 
                 if (File.Exists("C:\\Universal.x86.Tuning.Utility.V2.msi")) File.Delete("C:\\Universal.x86.Tuning.Utility.V2.msi");
 
+                Family.setCpuFamily();
+
                 string path = System.Reflection.Assembly.GetEntryAssembly().Location;
                 path = path.Replace("Universal x86 Tuning Utility.dll", null);
 
@@ -231,8 +233,6 @@ namespace Universal_x86_Tuning_Utility
                     {
                         _logger.LogError(ex, "Failed to unblock files in {dir} directory", path);
                     }
-
-                    Family.setCpuFamily();
                 }
                 try
                 {
