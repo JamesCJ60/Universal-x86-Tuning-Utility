@@ -58,7 +58,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "2.4.4";
+        public static string version = "2.4.5";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -266,7 +266,8 @@ namespace Universal_x86_Tuning_Utility
 
             if (isUpdateAvailable)
             {
-                ToastNotification.ShowToastNotification("New Update Available!", $"Head to the settings menu to easily download the new Universal x86 Tuning Utility update!");
+                if (updateManager._newVersion.StartsWith("3.")) ToastNotification.ShowToastNotification("Phantom Control Centre Now Available!", $"Head to the Phantom Control Centre GitHub releases page to easily download the latest build!");
+                else ToastNotification.ShowToastNotification("New Update Available!", $"Head to the settings menu to easily download the new Universal x86 Tuning Utility update!");
             }
         }
 

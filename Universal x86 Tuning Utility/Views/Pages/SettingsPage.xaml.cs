@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Wpf.Ui.Common.Interfaces;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
@@ -134,8 +135,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (isUpdateAvailable)
                 {
-                    tbDownloadMsg.Text = "An update for Universal x86 Tuning Utility has been found!";
-                    btnDownload.Visibility = System.Windows.Visibility.Visible;
+                    if (updateManager._newVersion.StartsWith("3.")) tbDownloadMsg.Text = "Head to the Phantom Control Centre GitHub releases page to easily download the latest build!";
+                    else {
+                        tbDownloadMsg.Text = "An update for Universal x86 Tuning Utility has been found!";
+                        btnDownload.Visibility = System.Windows.Visibility.Visible;
+                    }
                 }
                 else if(isUserCheck) tbDownloadMsg.Text = "Universal x86 Tuning Utility is up to date!";
             }

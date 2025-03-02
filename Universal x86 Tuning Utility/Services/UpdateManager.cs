@@ -13,7 +13,7 @@ public class UpdateManager
     private readonly string _repo;
     private readonly string _currentVersion;
     private readonly string _downloadPath;
-
+    public string _newVersion;
     public UpdateManager(string owner, string repo, string currentVersion, string downloadPath)
     {
         _owner = owner;
@@ -31,7 +31,7 @@ public class UpdateManager
 
             var latestRelease = releases[0];
             var latestVersion = new Version(latestRelease.TagName);
-
+            _newVersion = latestVersion.ToString();
             var currentVersion = new Version(_currentVersion);
 
             return latestVersion.CompareTo(currentVersion) > 0;

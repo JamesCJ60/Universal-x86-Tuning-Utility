@@ -60,7 +60,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="V2.4.4 Stable" />
+                            Text="V2.4.5 Stable" />
                             <ui:Button
                                 Name="btnPremade"
                             Height="36"
@@ -80,8 +80,16 @@
                         VerticalAlignment="Bottom"
                         FontSize="10"
                         Foreground="#57FFFFFF"
-                        Text="Created by JamesCJ, sbski and ProjectSBC" />
-                        
+                        Text="Created by JamesCJ, sbski, ProjectSBC, and you!" />
+
+                    <Border Width="320" Height="120" HorizontalAlignment="Left" VerticalAlignment="Bottom" CornerRadius="0,4,0,0">
+                        <Border.Background>
+                            <ImageBrush
+    ImageSource="pack://application:,,,/Assets/PCC Banner.png"
+    RenderOptions.BitmapScalingMode="HighQuality"
+    Stretch="UniformToFill" />
+                        </Border.Background>
+                    </Border>
                     </Grid>
                 </Border>
             </Border>
