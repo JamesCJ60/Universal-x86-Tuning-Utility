@@ -116,12 +116,11 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 commandString = Settings.Default.CommandString;
             }
 
-            if (Settings.Default.acPreset != "None" || Settings.Default.dcPreset != "None")
+            if (Settings.Default.acPreset != "None" && !string.IsNullOrWhiteSpace(Settings.Default.acPreset) && Settings.Default.dcPreset != "None" && !string.IsNullOrWhiteSpace(Settings.Default.dcPreset))
             {
                 Settings.Default.CommandString = commandString;
                 Settings.Default.Save();
                 await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));
-
                 var presetType = isCharging ? "Charge" : "Discharge";
                 ToastNotification.ShowToastNotification($"{presetType} Preset Applied!", $"Your {presetType.ToLower()} preset settings have been applied!");
             }
