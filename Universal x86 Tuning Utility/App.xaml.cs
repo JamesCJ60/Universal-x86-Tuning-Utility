@@ -72,7 +72,7 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnStartup(object sender, StartupEventArgs e)
         {
-            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code, applyThemeToRedirectedOutput: true)
