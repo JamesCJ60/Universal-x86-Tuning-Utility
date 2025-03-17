@@ -233,7 +233,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             if (!Settings.Default.AutoReapply || Settings.Default.isAdaptiveModeRunning) return;
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.CommandString))
+            if (Settings.Default.CommandString != null && Settings.Default.CommandString != "")
             {
                 await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
             }
