@@ -58,7 +58,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "2.4.5";
+        public static string version = "2.4.6";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -72,6 +72,8 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnStartup(object sender, StartupEventArgs e)
         {
+            Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console(theme: AnsiConsoleTheme.Code, applyThemeToRedirectedOutput: true)
                 .WriteTo.File(LOGS_FOLDER + "uxtu_log.txt", 
