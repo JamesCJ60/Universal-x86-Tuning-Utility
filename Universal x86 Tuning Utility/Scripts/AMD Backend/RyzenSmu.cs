@@ -164,7 +164,7 @@ namespace RyzenSmu
             {
                 // Store the commands
                 ("stapm-limit", true, 0x14), // Use MP1 address
-                //("stapm-limit", false, 0x31), // Use RSMU address
+                ("stapm-limit", false, 0x31),// Use RSMU address
                 ("stapm-time", true, 0x18),
                 ("fast-limit", true, 0x15),
                 ("fast-limit", false, 0x32),
