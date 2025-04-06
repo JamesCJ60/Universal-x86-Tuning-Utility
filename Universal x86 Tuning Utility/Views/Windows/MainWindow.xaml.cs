@@ -102,21 +102,19 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         private async void ApplyStartupSettings()
         {
-            if (!Settings.Default.ApplyOnStart) return;
+            if (Settings.Default.ApplyOnStart == false) return;
 
-            if (string.IsNullOrWhiteSpace(Settings.Default.CommandString)) return;
+            if (Settings.Default.CommandString == "" || Settings.Default.CommandString == null) return;
 
             await Task.Run(GetBatteryStatus);
 
             var isCharging = statuscode is 2 or 6 or 7 or 8;
             var commandString = isCharging ? Settings.Default.acCommandString : Settings.Default.dcCommandString;
 
-            if (string.IsNullOrWhiteSpace(commandString))
-            {
-                commandString = Settings.Default.CommandString;
-            }
+            if (commandString != null && commandString != "") commandString = Settings.Default.CommandString;
+            
 
-            if (Settings.Default.acPreset != "None" && !string.IsNullOrWhiteSpace(Settings.Default.acPreset) && Settings.Default.dcPreset != "None" && !string.IsNullOrWhiteSpace(Settings.Default.dcPreset))
+            if (Settings.Default.acPreset != "None" && Settings.Default.acPreset != null && Settings.Default.acPreset != "" || Settings.Default.dcPreset != "None" && Settings.Default.dcPreset != null && Settings.Default.dcPreset != "")
             {
                 Settings.Default.CommandString = commandString;
                 Settings.Default.Save();

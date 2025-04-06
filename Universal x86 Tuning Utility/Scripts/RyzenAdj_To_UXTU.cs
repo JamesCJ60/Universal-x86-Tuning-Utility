@@ -119,7 +119,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             {
                                 //Convert value of select cli argument to uint
                                 uint ryzenAdjCommandValue = Convert.ToUInt32(ryzenAdjCommandValueString);
-                                if(ryzenAdjCommandValue <= 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
+
+                                if (ryzenAdjCommand.Contains("skin")) ryzenAdjCommandValue *= 256;
+
+                                if (ryzenAdjCommandValue <= 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
                                 else SMUCommands.applySettings(ryzenAdjCommandString, ryzenAdjCommandValue);
                                 Task.Delay(50);
                             }
