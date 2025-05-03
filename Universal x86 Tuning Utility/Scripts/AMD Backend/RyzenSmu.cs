@@ -312,6 +312,11 @@ namespace RyzenSmu
             SMUCommands.commands = new List<(string, bool, uint)>
             {
                 // Store the commands
+                ("stapm-limit",true, 0x14),
+                ("stapm-time",true , 0x18),
+                ("fast-limit",true , 0x15),
+                ("slow-limit",true , 0x16),
+                ("slow-time",true , 0x17),
                 ("ppt-limit",true, 0x3e), // Use MP1 address
                 ("ppt-limit",false, 0x56), // Use RSMU address
                 ("tdc-limit",true , 0x3c),
