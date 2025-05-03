@@ -170,7 +170,6 @@ namespace RyzenSmu
                 ("fast-limit", false, 0x32),
                 ("slow-limit", true, 0x16),
                 ("slow-limit", false, 0x33),
-                ("slow-limit", false, 0x34),
                 ("slow-time", true, 0x17),
                 ("tctl-temp", true, 0x19),
                 ("cHTC-temp", false, 0x37),
@@ -198,9 +197,9 @@ namespace RyzenSmu
 
         private static void Socket_FF3()
         {
-            RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10528;
-            RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10578;
-            RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
+            RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10530;
+            RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B1057C;
+            RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B109C4;
 
             RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10a20;
             RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10a80;
@@ -219,10 +218,10 @@ namespace RyzenSmu
                 ("cHTC-temp",false , 0x37),
                 ("apu-skin-temp",true , 0x33),
                 ("vrm-current",true , 0x1a),
-                ("vrmmax-current",true , 0x1e),
+                ("vrmmax-current",true , 0x1c),
                 ("vrmsoc-current",true , 0x1b),
                 ("vrmsocmax-current",true , 0x1d),
-                ("vrmgfx-current",true , 0x1c),
+                ("vrmgfx-current",true , 0x1e),
                 ("vrmgfxmax-current",true , 0x1f),
                 ("prochot-deassertion-ramp",true , 0x22),
                 ("gfx-clk",false , 0x89),
