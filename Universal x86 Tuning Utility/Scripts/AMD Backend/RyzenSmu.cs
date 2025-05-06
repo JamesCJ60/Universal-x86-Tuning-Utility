@@ -33,7 +33,7 @@ namespace RyzenSmu
             if (Family.FAM == Family.RyzenFamily.Renoir || Family.FAM == Family.RyzenFamily.Lucienne || Family.FAM == Family.RyzenFamily.Cezanne_Barcelo) Socket_FP6_AM4();
             if (Family.FAM == Family.RyzenFamily.VanGogh) Socket_FF3();
             if (Family.FAM == Family.RyzenFamily.Mendocino || Family.FAM == Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.PhoenixPoint || Family.FAM == Family.RyzenFamily.PhoenixPoint2 || Family.FAM == Family.RyzenFamily.HawkPoint || Family.FAM == Family.RyzenFamily.StrixPoint || Family.FAM == Family.RyzenFamily.StrixPoint2 || Family.FAM == Family.RyzenFamily.StrixHalo) Socket_FT6_FP7_FP8();
-            if (Family.FAM == Family.RyzenFamily.Raphael || Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.GraniteRidge) Socket_AM5_V1();
+            if (Family.FAM == Family.RyzenFamily.Raphael || Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.GraniteRidge || Family.FAM == Family.RyzenFamily.FireRange) Socket_AM5_V1();
 
             SMUCommands.RyzenAccess.Initialize();
         }
@@ -197,9 +197,9 @@ namespace RyzenSmu
 
         private static void Socket_FF3()
         {
-            RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10530;
-            RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B1057C;
-            RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B109C4;
+            RyzenSmu.Smu.MP1_ADDR_MSG = 0x3B10528;
+            RyzenSmu.Smu.MP1_ADDR_RSP = 0x3B10578;
+            RyzenSmu.Smu.MP1_ADDR_ARG = 0x3B10998;
 
             RyzenSmu.Smu.PSMU_ADDR_MSG = 0x03B10a20;
             RyzenSmu.Smu.PSMU_ADDR_RSP = 0x03B10a80;
@@ -312,11 +312,13 @@ namespace RyzenSmu
             SMUCommands.commands = new List<(string, bool, uint)>
             {
                 // Store the commands
-                ("stapm-limit",true, 0x14),
-                ("stapm-time",true , 0x18),
-                ("fast-limit",true , 0x15),
-                ("slow-limit",true , 0x16),
-                ("slow-time",true , 0x17),
+                ("stapm-limit",true, 0x4f),
+                ("stapm-time",true , 0x53),
+                ("fast-limit",true , 0x3e),
+                ("slow-limit",true , 0x5f),
+                ("slow-time",true , 0x60),
+                ("vrm-current",true , 0x3c),
+                ("vrm-current",false , 0x57),
                 ("ppt-limit",true, 0x3e), // Use MP1 address
                 ("ppt-limit",false, 0x56), // Use RSMU address
                 ("tdc-limit",true , 0x3c),

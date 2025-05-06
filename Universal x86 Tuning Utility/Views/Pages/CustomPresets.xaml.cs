@@ -128,7 +128,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     sdAmdCO.Visibility = Visibility.Collapsed;
                 }
 
-                if (Family.FAM == Family.RyzenFamily.DragonRange) if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
+                if (Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.FireRange || Family.FAM == Family.RyzenFamily.StrixHalo || Family.FAM == Family.RyzenFamily.StrixPoint2) if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();

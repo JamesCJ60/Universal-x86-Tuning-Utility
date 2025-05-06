@@ -153,13 +153,14 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 // Zen5 - Zen6
                 if (CPUFamily == 26)
                 {
-                    if (CPUModel == 68) FAM = RyzenFamily.GraniteRidge;
+                    if (CPUModel == 68 && CPUName.Contains("HX")) FAM = RyzenFamily.FireRange;
+                    else if (CPUModel == 68) FAM = RyzenFamily.GraniteRidge;
                     else FAM = RyzenFamily.StrixPoint2;
                     if (CPUModel == 32 || CPUModel == 36) FAM = RyzenFamily.StrixPoint;
                     if (CPUModel == 112) FAM = RyzenFamily.StrixHalo;
                 }
 
-                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.DragonRange || FAM == RyzenFamily.GraniteRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
+                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
                 else TYPE = ProcessorType.Amd_Apu;
 
                 Addresses.setAddresses();

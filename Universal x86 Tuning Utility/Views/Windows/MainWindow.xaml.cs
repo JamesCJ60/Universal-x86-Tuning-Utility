@@ -44,12 +44,13 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
     {
         public ViewModels.MainWindowViewModel ViewModel { get; set; }
 
+        DispatcherTimer GC = new DispatcherTimer();
+        DispatcherTimer Misc = new DispatcherTimer();
+        public DispatcherTimer autoReapply = new DispatcherTimer();
+        public DispatcherTimer autoRestore = new DispatcherTimer();
+
         public static bool isMini { get; private set; }
         public static NavigationStore _mainWindowNav;
-        private static DispatcherTimer _gcTimer;
-        private static DispatcherTimer _miscTimer;
-        private static DispatcherTimer _autoReapplyTimer;
-        private static DispatcherTimer _autoRestoreTimer;
         private static INavigationService _navigationService;
         private static bool _firstRun = true;
         private static List<GameLauncherItem> _gamesList;
@@ -64,10 +65,26 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             _navigationService = navigationService;
             _mainWindowNav = RootNavigation;
 
+            GC.Interval = TimeSpan.FromSeconds(2);
+            GC.Tick += GC_Tick;
+            GC.Start();
+
+            Misc.Interval = TimeSpan.FromSeconds(1);
+            Misc.Tick += Misc_Tick;
+            Misc.Start();
+
+            autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
+            autoReapply.Tick += AutoReapply_Tick;
+            autoReapply.Start();
+
+            autoRestore.Interval = TimeSpan.FromSeconds(1);
+            autoRestore.Tick += Controller.AutoRestore_Tick;
+            autoRestore.Start();
+
             SetupNavigationService(pageService);
-            SetupTimers();
+
             SetupUI();
-            ApplyStartupSettings();
+            ApplyOnStart();
 
             SystemEvents.PowerModeChanged += HandlePowerModeChange;
         }
@@ -78,14 +95,6 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             RootNavigation.PageService = pageService;
         }
 
-        private void SetupTimers()
-        {
-            _gcTimer = CreateTimer(12, (s, e) => PerformGarbageCollection(s, e));
-            _miscTimer = CreateTimer(1, (s, e) => HandleMiscellaneousTasks(s, e));
-            _autoReapplyTimer = CreateTimer((int)Settings.Default.AutoReapplyTime, (s, e) => AutoReapplySettings(s, e));
-            _autoRestoreTimer = CreateTimer(1, (s, e) => Controller.AutoRestore_Tick(s, e));
-        }
-
         private void SetupUI()
         {
             tbMain.Title = $"Universal x86 Tuning Utility - {Family.CPUName}";
@@ -93,76 +102,159 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
         }
 
-        private DispatcherTimer CreateTimer(int intervalInSeconds, EventHandler tickHandler)
+        private async void ApplyOnStart()
         {
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(intervalInSeconds) };
-            timer.Tick += tickHandler;
-            timer.Start();
-            return timer;
+            if (Settings.Default.ApplyOnStart)
+                if (Settings.Default.CommandString != null && Settings.Default.CommandString != "")
+                {
+
+                    await Task.Run(() => GetBatteryStatus());
+                    await Task.Run(() => GetBatteryStatus());
+
+                    if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
+                    {
+                        if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "")
+                        {
+                            Settings.Default.CommandString = Settings.Default.acCommandString;
+                            Settings.Default.Save();
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.acCommandString));
+                            ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
+                        }
+                        else
+                        {
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
+                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
+                        }
+                    }
+                    else
+                    {
+                        if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "")
+                        {
+                            Settings.Default.CommandString = Settings.Default.dcCommandString;
+                            Settings.Default.Save();
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.dcCommandString));
+                            ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
+                        }
+                        else
+                        {
+                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
+                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
+                        }
+                    }
+                }
         }
 
-        private async void ApplyStartupSettings()
+
+        static bool firstTime = true;
+        private static List<GameLauncherItem> listOfGames = null;
+        int garbage = -1;
+        private async void Misc_Tick(object sender, EventArgs e)
         {
             try
             {
-                if (Settings.Default.ApplyOnStart == false) return;
-
-                if (Settings.Default.CommandString == "" || Settings.Default.CommandString == null) return;
-
-                await Task.Run(GetBatteryStatus);
-
-                var isCharging = statuscode is 2 or 6 or 7 or 8;
-                var commandString = isCharging ? Settings.Default.acCommandString : Settings.Default.dcCommandString;
-
-                if (commandString != null && commandString != "") commandString = Settings.Default.CommandString;
-
-
-                if (Settings.Default.acPreset != "None" && Settings.Default.acPreset != null && Settings.Default.acPreset != "" || Settings.Default.dcPreset != "None" && Settings.Default.dcPreset != null && Settings.Default.dcPreset != "")
+                if (File.Exists(Settings.Default.Path + "\\gameData.json") && Settings.Default.isTrack == true)
                 {
-                    Settings.Default.CommandString = commandString;
-                    Settings.Default.Save();
-                    await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));
-                    var presetType = isCharging ? "Charge" : "Discharge";
-                    ToastNotification.ShowToastNotification($"{presetType} Preset Applied!", $"Your {presetType.ToLower()} preset settings have been applied!");
+                    if (RTSS.RTSSRunning())
+                    {
+                        var osd = new OSD("RTSSDemo");
+                        var appEntries = OSD.GetAppEntries().Where(x => (x.Flags & AppFlags.MASK) != AppFlags.None).ToArray();
+                        if (!firstTime)
+                        {
+                            foreach (Game_Manager.GameLauncherItem item in listOfGames)
+                            {
+                                foreach (var app in appEntries)
+                                {
+                                    if (item.path != null && app.Name.ToLower().Contains(item.path.ToLower()) || app.Name.ToLower().Contains(GetImages.CleanFileName(item.gameName.ToLower())) || item.exe != null && app.Name.ToLower().Contains(item.exe))
+                                    {
+                                        GameDataManager gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
+                                        //string graphAPI = "";
+                                        //if (Convert.ToInt32(app.Flags) == 196616) graphAPI = "D3D12";
+                                        //else if (app.Flags == AppFlags.Direct3D11 || Convert.ToInt32(app.Flags) == 65543) graphAPI = "D3D11";
+                                        //else if (app.Flags == AppFlags.Direct3D10) graphAPI = "D3D10";
+                                        //else if (app.Flags == AppFlags.Direct3D9 || app.Flags == AppFlags.Direct3D9Ex) graphAPI = "D3D9";
+                                        //else if (app.Flags == AppFlags.Direct3D8) graphAPI = "D3D8";
+                                        //else if (app.Flags == AppFlags.OpenGL) graphAPI = "OpenGL";
+                                        //else if (Convert.ToInt32(app.Flags) == 65546) graphAPI = "Vulkan";
+
+                                        GameData gameData = gameDataManager.GetPreset(item.gameName);
+                                        uint fps = app.InstantaneousFrames;
+
+                                        string fpsString = gameData.fpsAvData;
+
+                                        uint[] fpsArray = fpsString.Split(',').Select(uint.Parse).ToArray();
+
+                                        Array.Resize(ref fpsArray, fpsArray.Length + 1);
+                                        fpsArray[fpsArray.Length - 1] = fps;
+
+                                        for (int i = 0; i < fpsArray.Length - 1; i++)
+                                        {
+                                            fpsArray[i] = fpsArray[i + 1];
+                                        }
+
+                                        uint totalFps = fpsArray.Aggregate((uint)0, (sum, fps) => sum + fps);
+                                        uint averageFps = (uint)(totalFps / (uint)fpsArray.Length);
+
+                                        fpsString = string.Join(",", fpsArray);
+
+                                        string timeSpanString = gameData.msAvData;
+
+                                        string[] timeSpanArray = timeSpanString.Split(',');
+
+                                        TimeSpan[] timeSpans = timeSpanArray.Select(TimeSpan.Parse).ToArray();
+                                        TimeSpan newTimeSpan = app.InstantaneousFrameTime;
+
+                                        Array.Resize(ref timeSpans, timeSpans.Length + 1);
+                                        timeSpans[timeSpans.Length - 1] = newTimeSpan;
+
+                                        for (int i = 0; i < timeSpans.Length - 1; i++)
+                                        {
+                                            timeSpans[i] = timeSpans[i + 1];
+                                        }
+
+                                        TimeSpan totalTimeSpan = new TimeSpan(timeSpans.Select(ts => ts.Ticks).Sum());
+                                        TimeSpan averageTimeSpan = TimeSpan.FromTicks(totalTimeSpan.Ticks / timeSpans.Length);
+
+                                        timeSpanString = string.Join(",", timeSpans);
+
+                                        GameData preset = new GameData
+                                        {
+                                            fpsData = averageFps.ToString(),
+                                            fpsAvData = fpsString,
+                                            msData = string.Format("{0:0.##}", averageTimeSpan.TotalMilliseconds),
+                                            msAvData = timeSpanString,
+                                        };
+                                        gameDataManager.SavePreset(item.gameName, preset);
+
+                                        garbage++;
+
+                                        if (garbage >= 20)
+                                        {
+                                            await Task.Run(() => {
+                                                Garbage.Garbage_Collect();
+                                            });
+
+                                            garbage = -1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Misc.Stop();
+                            await Task.Run(() => {
+                                listOfGames = Game_Manager.syncGame_Library();
+                                Garbage.Garbage_Collect();
+                            });
+                            firstTime = false;
+                            Misc.Start();
+                        }
+                    }
+                    else RTSS.startRTSS();
                 }
-            }
-            catch (Exception ex)
-            {
-                Log.Logger.Error($"Error applying startup settings: {ex.Message}");
-            }
-        }
 
-        private async void HandleMiscellaneousTasks(object sender, EventArgs e)
-        {
-            if (!File.Exists(Settings.Default.Path + "\\gameData.json") || !Settings.Default.isTrack) return;
-
-            if (!RTSS.RTSSRunning())
-            {
-                RTSS.startRTSS();
-                return;
             }
-
-            if (!_firstRun)
-            {
-                foreach (var game in _gamesList)
-                {
-                    await ProcessGamePerformanceData(game);
-                }
-
-                if (++_garbageCounter >= 20)
-                {
-                    await Task.Run(Garbage.Garbage_Collect);
-                    _garbageCounter = 0;
-                }
-            }
-            else
-            {
-                _miscTimer.Stop();
-                _gamesList = Game_Manager.syncGame_Library();
-                await Task.Run(Garbage.Garbage_Collect);
-                _firstRun = false;
-                _miscTimer.Start();
-            }
+            catch (Exception ex) { }
         }
 
         private async Task ProcessGamePerformanceData(GameLauncherItem game)
@@ -235,16 +327,38 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             if (!isMini) Task.Run(Garbage.Garbage_Collect);
         }
 
-        private async void AutoReapplySettings(object sender, EventArgs e)
+        private async void AutoReapply_Tick(object sender, EventArgs e)
         {
-            if (!Settings.Default.AutoReapply || Settings.Default.isAdaptiveModeRunning) return;
-
-            if (Settings.Default.CommandString != null && Settings.Default.CommandString != "")
+            try
             {
-                await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
-            }
+                if (niTray.Visibility == Visibility.Hidden && this.Visibility == Visibility.Hidden) niTray.Visibility = Visibility.Visible;
 
-            UpdateTimerInterval(_autoReapplyTimer, (int)Settings.Default.AutoReapplyTime);
+                if ((bool)Settings.Default.AutoReapply == true && (bool)Settings.Default.isAdaptiveModeRunning == false)
+                {
+                    string commands = (string)Settings.Default.CommandString;
+                    //Check if RyzenAdjArguments is populated
+                    if (commands != null && commands != "")
+                    {
+                        await Task.Run(() => RyzenAdj_To_UXTU.Translate(commands));
+                    }
+
+                    if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))
+                    {
+                        autoReapply.Stop();
+                        autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
+                        autoReapply.Start();
+                    }
+                }
+            }
+            catch { }
+        }
+        int i = 0;
+        async void GC_Tick(object sender, EventArgs e)
+        {
+            await Task.Run(() => Garbage.Garbage_Collect());
+            if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false;
+            if (i > 8) GC.Stop();
+            i++;
         }
 
         private static void UpdateTimerInterval(DispatcherTimer timer, int newInterval)
