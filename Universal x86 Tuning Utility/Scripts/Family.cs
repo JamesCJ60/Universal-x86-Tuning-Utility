@@ -43,7 +43,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
             FireRange,
             StrixHalo,
             StrixPoint,
-            StrixPoint2,
+            KrackanPoint,
         }
 
         public static RyzenFamily FAM = RyzenFamily.Unknown;
@@ -155,7 +155,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 {
                     if (CPUModel == 68 && CPUName.Contains("HX")) FAM = RyzenFamily.FireRange;
                     else if (CPUModel == 68) FAM = RyzenFamily.GraniteRidge;
-                    else FAM = RyzenFamily.StrixPoint2;
+                    if (CPUModel == 96) FAM = RyzenFamily.KrackanPoint;
                     if (CPUModel == 32 || CPUModel == 36) FAM = RyzenFamily.StrixPoint;
                     if (CPUModel == 112) FAM = RyzenFamily.StrixHalo;
                 }

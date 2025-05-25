@@ -696,8 +696,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         return "Fire Range";
                     case RyzenFamily.StrixPoint:
                         return "Strix Point";
-                    case RyzenFamily.StrixPoint2:
-                        return "Strix Point 2 / Kraken";
+                    case RyzenFamily.KrackanPoint:
+                        return "Krackan Point";
                     case RyzenFamily.StrixHalo:
                         return "Strix Halo";
                     default:
