@@ -1876,6 +1876,36 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
+                    <ui:CardControl Name="sdCcdAffinity"
+IsEnabled="True"
+Icon="Grid20" Margin="0,8,15,0">
+                        <ui:CardControl.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock
+                FontSize="14"
+                FontWeight="Medium"
+                Text="CCD Affinity Mode" />
+                                    <TextBlock
+                FontSize="12"
+                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                Text="Directs threads to selected CCDs, trimming cross-die traffic and fine-tuning performance."/>
+                                </StackPanel>
+                                <ComboBox
+            Grid.Column="1"
+            VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxCcdAffinity" Height="37">
+                                    <ComboBoxItem>All CCDs</ComboBoxItem>
+                                    <ComboBoxItem>CCD 0</ComboBoxItem>
+                                    <ComboBoxItem>CCD 1</ComboBoxItem>
+                                </ComboBox>
+
+                            </Grid>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
                     <ui:CardControl Name="sdAmdPowerProfile"
             IsEnabled="True"
             Icon="FastAcceleration20" Margin="0,8,15,0">

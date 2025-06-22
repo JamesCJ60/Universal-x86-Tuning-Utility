@@ -14,6 +14,7 @@ using Universal_x86_Tuning_Utility.Scripts.ASUS;
 using Universal_x86_Tuning_Utility.Scripts.GPUs.AMD;
 using Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
+using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Scripts
 {
@@ -58,6 +59,11 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             if (ryzenAdjCommandString.Contains("UXTUSR"))
                             {
                                 UXTUSR(ryzenAdjCommandString, ryzenAdjCommandValueString);
+                                Task.Delay(50);
+                            }
+                            else if (ryzenAdjCommandString.Contains("CCD-Affinity"))
+                            {
+                                CpuAffinityManager.SetGlobalAffinity(Convert.ToInt32(ryzenAdjCommandValueString));
                                 Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("Win-Power"))

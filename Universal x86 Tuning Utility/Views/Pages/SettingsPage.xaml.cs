@@ -234,5 +234,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             Settings.Default.isTrack = (bool)cbTrack.IsChecked;
             Settings.Default.Save();
         }
+
+        private void nudAutoReapply_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.AutoReapplyTime = (int)nudAutoReapply.Value;
+            Settings.Default.Save();
+        }
     }
 }

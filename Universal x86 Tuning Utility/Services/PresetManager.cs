@@ -175,6 +175,7 @@ namespace Universal_x86_Tuning_Utility.Services
 
         public int displayHz { get; set; }
 
+        public int ccdAffinity { get; set; }
         public int powerMode { get; set; }
 
         public bool isMag { get; set; }

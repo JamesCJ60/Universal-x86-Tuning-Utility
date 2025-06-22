@@ -45,7 +45,7 @@
         <CheckBox Name="cbApplyStart" Click="cbApplyStart_Click">Reapply On Start</CheckBox>
         <StackPanel Orientation="Horizontal">
             <CheckBox Name="cbAutoReapply" Click="cbAutoReapply_Click">Auto Reapply (s)</CheckBox>
-            <ui:NumberBox Name="nudAutoReapply" Minimum="1" Value="3" Maximum="60" Margin="9,0,0,0" TextChanged="nudAutoReapply_TextChanged" MaxDecimalPlaces="0"></ui:NumberBox>
+            <ui:NumberBox Name="nudAutoReapply" Minimum="1" Value="3" Maximum="60" Margin="9,0,0,0" TextChanged="nudAutoReapply_TextChanged" MaxDecimalPlaces="0" ValueChanged="nudAutoReapply_ValueChanged"></ui:NumberBox>
         </StackPanel>
         <CheckBox Name="cbAutoCheck" Click="cbAutoCheck_Click">Auto Update Check</CheckBox>
         <CheckBox Name="cbAdaptive" Click="cbAdaptive_Click">Auto Start Adaptive Mode</CheckBox>

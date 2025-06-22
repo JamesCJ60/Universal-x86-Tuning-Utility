@@ -78,9 +78,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudIntelCpuBal.Value = 9;
             nudIntelGpuBal.Value = 13;
 
+
             apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
             amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
             intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+
+            sdCcdAffinity.Visibility = Visibility.Collapsed;
 
             if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
             if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
@@ -138,6 +141,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     cbxPowerPreset.Items.Add(presetName);
                 }
+
+                if (Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.FireRange || Family.FAM == Family.RyzenFamily.StrixHalo)
+                {
+                   if(Environment.ProcessorCount > 16) sdCcdAffinity.Visibility = Visibility.Visible;
+                }
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
@@ -165,6 +173,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     cbxPowerPreset.Items.Add(presetName);
                 }
+
+                if (Environment.ProcessorCount > 16) sdCcdAffinity.Visibility = Visibility.Visible;
             }
 
             if (Family.TYPE == Family.ProcessorType.Intel)
@@ -440,7 +450,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
                             powerMode = (int)cbxPowerMode.SelectedIndex,
-
+                            ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
                         };
                         apuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -563,6 +573,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
                             powerMode = (int)cbxPowerMode.SelectedIndex,
+                            ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
                         };
                         amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
 
@@ -637,6 +648,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
                             powerMode = (int)cbxPowerMode.SelectedIndex,
+                            ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
 
                             isIntelClockRatio = (bool)tsIntelRatioCore.IsChecked,
                             intelClockRatioC1 = (int)nudIntelRatioC1.Value,
@@ -904,6 +916,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
                         cbxPowerMode.SelectedIndex = myPreset.powerMode;
+                        cbxCcdAffinity.SelectedIndex = myPreset.ccdAffinity;
 
                         tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
@@ -1001,6 +1014,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
                         cbxPowerMode.SelectedIndex = myPreset.powerMode;
+                        cbxCcdAffinity.SelectedIndex = myPreset.ccdAffinity;
 
                         tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
@@ -1049,6 +1063,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
                         cbxPowerMode.SelectedIndex = myPreset.powerMode;
+                        cbxCcdAffinity.SelectedIndex = myPreset.ccdAffinity;
 
                         tsUXTUSR.IsChecked = myPreset.isMag;
                         cbVSync.IsChecked = myPreset.isVsync;
@@ -1313,6 +1328,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (tsNV.IsChecked == true) commandValues = commandValues + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
 
+            if (sdCcdAffinity.Visibility == Visibility.Visible) commandValues = commandValues + $"--CCD-Affinity={cbxCcdAffinity.SelectedIndex} ";
 
             return commandValues;
         }
