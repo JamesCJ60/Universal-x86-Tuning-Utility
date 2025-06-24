@@ -1,4 +1,5 @@
-﻿using RyzenSmu;
+﻿using CpuAffinityUtility;
+using RyzenSmu;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -144,7 +145,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.FireRange || Family.FAM == Family.RyzenFamily.StrixHalo)
                 {
-                   if(Environment.ProcessorCount > 16) sdCcdAffinity.Visibility = Visibility.Visible;
+                   if((int)CpuAffinityManager.GetActiveProcessorCount(0xFFFF) > 16) sdCcdAffinity.Visibility = Visibility.Visible;
                 }
             }
 

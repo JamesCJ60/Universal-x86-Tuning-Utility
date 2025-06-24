@@ -1,4 +1,5 @@
-﻿using GameLib.Plugin.RiotGames.Model;
+﻿using CpuAffinityUtility;
+using GameLib.Plugin.RiotGames.Model;
 using NvAPIWrapper.Display;
 using RyzenSmu;
 using System;

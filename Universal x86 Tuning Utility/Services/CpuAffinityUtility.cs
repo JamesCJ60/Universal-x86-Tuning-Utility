@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Management;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
-namespace Universal_x86_Tuning_Utility.Services
+namespace CpuAffinityUtility
 {
+    /// <summary>
+    /// CCD Affinity Manager
+    /// Mode 0 = all CCDs, 1 = primary CCD, 2 = secondary CCD.
+    /// Will be updated for big.LITTLE APUs/CPUs in the future.
+    /// </summary>
     public static class CpuAffinityManager
     {
         private static readonly object _syncRoot = new();
@@ -19,35 +21,27 @@ namespace Universal_x86_Tuning_Utility.Services
 
         public static void SetGlobalAffinity(int mode)
         {
-            try
+            if (mode == _currentMode) return;
+
+            var newMask = BuildMask(mode);
+
+            lock (_syncRoot)
             {
-                if (mode == _currentMode)           // nothing to do
-                    return;
+                if (mode == _currentMode) return;
 
-                var newMask = BuildMask(mode);
+                _currentMode = mode;
+                _mask = newMask;
 
-                lock (_syncRoot)
+                foreach (var p in Process.GetProcesses())
+                    TrySetAffinity(p, _mask);
+
+                if (_watcher == null)
                 {
-                    if (mode == _currentMode)       // double-check inside lock
-                        return;
-
-                    _currentMode = mode;
-                    _mask = newMask;
-
-                    foreach (var p in Process.GetProcesses())
-                        TrySetAffinity(p, _mask);
-
-                    if (_watcher == null)
-                    {
-                        _watcher = new ManagementEventWatcher(
-                            new WqlEventQuery("SELECT ProcessID FROM Win32_ProcessStartTrace"));
-                        _watcher.EventArrived += OnProcessStarted;
-                        _watcher.Start();
-                    }
+                    _watcher = new ManagementEventWatcher(
+                        new WqlEventQuery("SELECT ProcessID FROM Win32_ProcessStartTrace"));
+                    _watcher.EventArrived += OnProcessStarted;
+                    _watcher.Start();
                 }
-            } catch
-            {
-                /* permission or race; ignore */
             }
         }
 
@@ -69,9 +63,9 @@ namespace Universal_x86_Tuning_Utility.Services
                 try
                 {
                     using var np = Process.GetProcessById(pid);
-                    TrySetAffinity(np, _mask);   // always latest mask
+                    TrySetAffinity(np, _mask);
                 }
-                catch { /* access denied or process gone */ }
+                catch { /* permission or race; ignore */ }
             }
         }
 
@@ -79,13 +73,14 @@ namespace Universal_x86_Tuning_Utility.Services
         private static void TrySetAffinity(Process proc, ulong mask)
         {
             try { proc.ProcessorAffinity = (IntPtr)mask; }
-            catch { /* permission or race; ignore */       }
+            catch { /* safe to ignore */ }
         }
 
         private static ulong BuildMask(int mode)
         {
-            int logical = Environment.ProcessorCount;
-            if (logical < 2) throw new NotSupportedException("Needs multiple logical processors.");
+            int logical = (int)GetActiveProcessorCount(ALL_GROUPS);
+
+            if (logical < 2) throw new NotSupportedException("Needs more than one logical processor.");
             if (logical > 64) throw new NotSupportedException("Only one processor group supported.");
 
             int half = logical / 2;
@@ -94,9 +89,12 @@ namespace Universal_x86_Tuning_Utility.Services
             {
                 0 => (1UL << logical) - 1,                               // all cores
                 1 => (1UL << half) - 1,                                  // lower half
-                2 => (1UL << logical) - 1 ^ (1UL << half) - 1,       // upper half
+                2 => ((1UL << logical) - 1) ^ ((1UL << half) - 1),       // upper half
                 _ => throw new ArgumentOutOfRangeException(nameof(mode), "Mode must be 0, 1, or 2.")
             };
         }
+
+        private const uint ALL_GROUPS = 0xFFFF;
+        [DllImport("kernel32.dll")] public static extern uint GetActiveProcessorCount(uint groupNumber);
     }
 }
