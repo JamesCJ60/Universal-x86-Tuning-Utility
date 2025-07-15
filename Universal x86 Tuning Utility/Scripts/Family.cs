@@ -38,12 +38,14 @@ namespace Universal_x86_Tuning_Utility.Scripts
             PhoenixPoint,
             PhoenixPoint2,
             HawkPoint,
+            HawkPoint2,
             SonomaValley,
             GraniteRidge,
             FireRange,
             StrixHalo,
             StrixPoint,
             KrackanPoint,
+            KrackanPoint2,
         }
 
         public static RyzenFamily FAM = RyzenFamily.Unknown;
@@ -148,6 +150,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     if (CPUModel == 120) FAM = RyzenFamily.PhoenixPoint2;
 
                     if (CPUModel == 117) FAM = RyzenFamily.HawkPoint;
+
+                    if (CPUModel == 124) FAM = RyzenFamily.HawkPoint2;
                 }
 
                 // Zen5 - Zen6
@@ -155,8 +159,13 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 {
                     if (CPUModel == 68 && CPUName.Contains("HX")) FAM = RyzenFamily.FireRange;
                     else if (CPUModel == 68) FAM = RyzenFamily.GraniteRidge;
+
                     if (CPUModel == 96) FAM = RyzenFamily.KrackanPoint;
+
+                    if (CPUModel == 104) FAM = RyzenFamily.KrackanPoint2;
+
                     if (CPUModel == 32 || CPUModel == 36) FAM = RyzenFamily.StrixPoint;
+
                     if (CPUModel == 112) FAM = RyzenFamily.StrixHalo;
                 }
 

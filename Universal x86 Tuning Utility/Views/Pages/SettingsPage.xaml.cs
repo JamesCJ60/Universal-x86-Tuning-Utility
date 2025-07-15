@@ -38,6 +38,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             cbApplyStart.IsChecked = Settings.Default.ApplyOnStart;
             cbAutoReapply.IsChecked = Settings.Default.AutoReapply;
             nudAutoReapply.Value = Settings.Default.AutoReapplyTime;
+            nudAutoReapply.Text = Convert.ToString(Settings.Default.AutoReapplyTime);
             cbAutoCheck.IsChecked = Settings.Default.UpdateCheck;
             cbAdaptive.IsChecked = Settings.Default.isStartAdpative;
             cbTrack.IsChecked = Settings.Default.isTrack;

@@ -688,6 +688,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         return "Phoenix Point 2";
                     case RyzenFamily.HawkPoint:
                         return "Hawk Point";
+                    case RyzenFamily.HawkPoint2:
+                        return "Hawk Point 2";
                     case RyzenFamily.SonomaValley:
                         return "Sonoma Valley";
                     case RyzenFamily.GraniteRidge:
@@ -698,6 +700,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         return "Strix Point";
                     case RyzenFamily.KrackanPoint:
                         return "Krackan Point";
+                    case RyzenFamily.KrackanPoint2:
+                        return "Krackan Point 2";
                     case RyzenFamily.StrixHalo:
                         return "Strix Halo";
                     default:
