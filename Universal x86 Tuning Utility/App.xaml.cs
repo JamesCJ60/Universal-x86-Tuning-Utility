@@ -244,8 +244,6 @@ namespace Universal_x86_Tuning_Utility
                 {
                     Settings.Default.Path = path;
                     Settings.Default.FirstBoot = false;
-                    if (Family.FAM > Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.Mendocino)
-                        Settings.Default.polling = 3;
                     Settings.Default.Save();
 
                     //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, true);

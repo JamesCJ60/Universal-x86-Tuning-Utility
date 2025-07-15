@@ -105,7 +105,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void cbAutoReapply_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Settings.Default.AutoReapply = (bool)cbAutoReapply.IsChecked; 
+            Settings.Default.AutoReapply = (bool)cbAutoReapply.IsChecked;
+            Settings.Default.AutoReapplyTime = (int)nudAutoReapply.Value;
             Settings.Default.Save();
         }
 
@@ -238,8 +239,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void nudAutoReapply_ValueChanged(object sender, RoutedEventArgs e)
         {
-            Settings.Default.AutoReapplyTime = (int)nudAutoReapply.Value;
-            Settings.Default.Save();
+
         }
     }
 }
