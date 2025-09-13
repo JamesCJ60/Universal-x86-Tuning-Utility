@@ -1,4 +1,4 @@
-﻿<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.Automations"
+<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.Automations"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,14 +10,14 @@
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Automations" Loaded="Page_Loaded">
+      Title="Автоматизация" Loaded="Page_Loaded">
 
     <Grid>
         <DockPanel LastChildFill="False" Margin="15,0,15,0">
             <TextBlock
             FontSize="26"
             FontWeight="Medium"
-            Text="Automations" DockPanel.Dock="Top" Margin="3,10,0,0"/>
+            Text="Автоматизация" DockPanel.Dock="Top" Margin="3,10,0,0"/>
 
             <ui:CardControl
             IsEnabled="True"
@@ -32,17 +32,17 @@
                             <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Preset on Battery Charge" />
+                            Text="Пресет при зарядке батареи" />
                             <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a preset to apply when the battery is charging."/>
+                            Text="Позволяет установить пресет, который будет применяться во время зарядки батареи."/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <ComboBox VerticalAlignment="Center" SelectedIndex="0" MinWidth="134" Name="cbxCharge" SelectionChanged="cbxCharge_SelectionChanged" Height="37">
-                                <ComboBoxItem>None</ComboBoxItem>
+                                <ComboBoxItem>Нет</ComboBoxItem>
                             </ComboBox>
-                            <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnChargeLoad" ToolTip="Updates dropdown list with current presets" Click="btnChargeLoad_Click" Margin="9,0,0,0">
+                            <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnChargeLoad" ToolTip="Обновить выпадающий список с текущими пресетами" Click="btnChargeLoad_Click" Margin="9,0,0,0">
                                 <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
                             </ui:Button>
                         </StackPanel>
@@ -63,17 +63,17 @@
                             <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Preset on Battery Discharge" />
+                            Text="Пресет при разрядке батареи" />
                             <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a preset to apply when the battery is discharging."/>
+                            Text="Позволяет установить пресет, который будет применяться во время разрядки батареи."/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <ComboBox VerticalAlignment="Center" SelectedIndex="0" MinWidth="134" Name="cbxDischarge" SelectionChanged="cbxDischarge_SelectionChanged" Height="37">
-                                <ComboBoxItem>None</ComboBoxItem>
+                                <ComboBoxItem>Нет</ComboBoxItem>
                             </ComboBox>
-                            <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnDischargeLoad" ToolTip="Updates dropdown list with current presets" Click="btnDischargeLoad_Click" Margin="9,0,0,0">
+                            <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnDischargeLoad" ToolTip="Обновить выпадающий список с текущими пресетами" Click="btnDischargeLoad_Click" Margin="9,0,0,0">
                                 <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
                             </ui:Button>
                         </StackPanel>
@@ -94,17 +94,17 @@
                             <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Preset on System Resume" />
+                            Text="Пресет при выходе из сна" />
                             <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a preset to apply on system resume from sleep/hibernation."/>
+                            Text="Позволяет установить пресет, который будет применяться при выходе системы из режима сна/гибернации."/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <ComboBox VerticalAlignment="Center" SelectedIndex="0" MinWidth="134" Name="cbxResume" SelectionChanged="cbxResume_SelectionChanged" Height="37">
-                                <ComboBoxItem>None</ComboBoxItem>
+                                <ComboBoxItem>Нет</ComboBoxItem>
                             </ComboBox>
-                            <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnResumeLoad" ToolTip="Updates dropdown list with current presets" Click="btnResume_Click" Margin="9,0,0,0">
+                            <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnResumeLoad" ToolTip="Обновить выпадающий список с текущими пресетами" Click="btnResume_Click" Margin="9,0,0,0">
                                 <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
                             </ui:Button>
                         </StackPanel>

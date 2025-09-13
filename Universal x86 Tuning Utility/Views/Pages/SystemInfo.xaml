@@ -1,4 +1,4 @@
-﻿<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.SystemInfo"
+<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.SystemInfo"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,14 +10,14 @@
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d" 
       d:DesignHeight="3000" d:DesignWidth="800"
-      Title="SystemInfo">
+      Title="Информация о системе">
 
     <Grid>
         <DockPanel Margin="15,0,0,0">
             <TextBlock
             FontSize="26"
             FontWeight="Medium"
-            Text="System Info" DockPanel.Dock="Top" Margin="3,10,0,0"/>
+            Text="Информация о системе" DockPanel.Dock="Top" Margin="3,10,0,0"/>
             
             <ScrollViewer Name="mainScroll" Margin="0,12,0,0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="False" PanningMode="VerticalFirst" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" IsDeferredScrollingEnabled="False" DockPanel.Dock="Top" ScrollChanged="mainScroll_ScrollChanged">
                 <StackPanel Name="mainCon">
@@ -35,7 +35,7 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Device Information"  />
+                            Text="Информация об устройстве"  />
 
                                 </StackPanel>
                             </Grid>
@@ -44,9 +44,9 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Margin="24,0,12,0" Width="80">
-                                    <TextBlock FontWeight="DemiBold">Name</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Producer</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Model</TextBlock>
+                                    <TextBlock FontWeight="DemiBold">Имя</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Производитель</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Модель</TextBlock>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbDeviceName"></TextBlock>
@@ -70,7 +70,7 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Processor Information" />
+                            Text="Информация о процессоре" />
                                    
                                 </StackPanel>
                             </Grid>
@@ -79,17 +79,17 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Margin="24,0,12,0" Width="80">
-                                    <TextBlock FontWeight="DemiBold">Processor</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Producer</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0" Name="tbCode">Codename</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Caption</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Cores</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Threads</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Base Clock</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">L1 Cache</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">L2 Cache</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">L3 Cache</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Instructions</TextBlock>
+                                    <TextBlock FontWeight="DemiBold">Процессор</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Производитель</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0" Name="tbCode">Кодовое имя</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Описание</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Ядра</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Потоки</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Базовая частота</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Кэш L1</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Кэш L2</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Кэш L3</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Инструкции</TextBlock>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbProcessor"></TextBlock>
@@ -121,7 +121,7 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Memory Information" />
+                            Text="Информация о памяти" />
 
                                 </StackPanel>
                             </Grid>
@@ -130,11 +130,11 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Margin="24,0,12,0" Width="80">
-                                    <TextBlock FontWeight="DemiBold">Memory</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Producer</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Model</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Width</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Modules</TextBlock>
+                                    <TextBlock FontWeight="DemiBold">Память</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Производитель</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Модель</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Ширина</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Модули</TextBlock>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbRAM"></TextBlock>
@@ -145,7 +145,7 @@
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Name="spRAMTime" Margin="24,8,12,0">
-                            <TextBlock  FontWeight="DemiBold">RAM Timings:</TextBlock>
+                            <TextBlock  FontWeight="DemiBold">Тайминги ОЗУ:</TextBlock>
                                 <Grid Margin="-5,8,0,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*" />
@@ -393,7 +393,7 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Battery Information"  />
+                            Text="Информация о батарее"  />
 
                                 </StackPanel>
                             </Grid>
@@ -402,10 +402,10 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel Margin="24,0,12,0" Width="80">
-                                    <TextBlock FontWeight="DemiBold">Health</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Cycles</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Capacity</TextBlock>
-                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Charge Rate</TextBlock>
+                                    <TextBlock FontWeight="DemiBold">Здоровье</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Циклы</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Емкость</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" Margin="0,8,0,0">Скорость зарядки</TextBlock>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Foreground="{DynamicResource TextFillColorTertiaryBrush}" Name="tbHealth"></TextBlock>

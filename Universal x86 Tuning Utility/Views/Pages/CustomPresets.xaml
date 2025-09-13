@@ -1,4 +1,4 @@
-﻿<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.CustomPresets"
+<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.CustomPresets"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,40 +10,40 @@
           d:Background="{DynamicResource ApplicationBackgroundBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       d:DesignHeight="2500" d:DesignWidth="800"
-      Title="CustomPresets" Loaded="Page_Loaded">
+      Title="Пользовательские пресеты" Loaded="Page_Loaded">
 
     <Grid>
         <DockPanel>
             <TextBlock
             FontSize="26"
             FontWeight="Medium"
-            Text="Custom Presets" DockPanel.Dock="Top" Margin="18,10,0,0"/>
+            Text="Пользовательские пресеты" DockPanel.Dock="Top" Margin="18,10,0,0"/>
 
             <DockPanel DockPanel.Dock="Top" Margin="18,9,18,0">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" HorizontalAlignment="Left">
-                    <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Saved Presets:</TextBlock>
+                    <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Сохраненные пресеты:</TextBlock>
                     <ComboBox Width="225" Name="cbxPowerPreset" SelectionChanged="cbxPowerPreset_SelectionChanged" Height="37"></ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                    <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">New Preset Name:</TextBlock>
+                    <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Имя нового пресета:</TextBlock>
                     <ui:TextBox Width="225" Name="tbxPresetName" Margin="0,0,-2,0" Height="35"></ui:TextBox>
                 </StackPanel>
             </DockPanel>
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,9,9,6">
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnUndo" Visibility="Collapsed" ToolTip="Undo overclock settings" Click="btnUndo_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnUndo" Visibility="Collapsed" ToolTip="Отменить настройки разгона" Click="btnUndo_Click">
                     <ui:SymbolIcon Symbol="ArrowUndo24" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload settings of current preset values" Click="btnLoad_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Перезагрузить значения текущего пресета" Click="btnLoad_Click">
                     <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnDelete" ToolTip="Delete current settings preset" Click="btnDelete_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnDelete" ToolTip="Удалить текущий пресет" Click="btnDelete_Click">
                     <ui:SymbolIcon Symbol="Delete20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings as new preset" Click="btnSave_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Сохранить текущие настройки как новый пресет" Click="btnSave_Click">
                     <ui:SymbolIcon Symbol="Save20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnApply" ToolTip="Apply current settings" Click="btnApply_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnApply" ToolTip="Применить текущие настройки" Click="btnApply_Click">
                     <ui:SymbolIcon Symbol="DocumentCheckmark20" FontSize="24"/>
                 </ui:Button>
             </StackPanel>
@@ -64,11 +64,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="APU Temperature Tuning" />
+                            Text="Настройка температуры APU" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set APU thermal targets."/>
+                            Text="Позволяет устанавливать целевые температуры APU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -76,8 +76,8 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Temperature Limit (°C)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the temperature limit at which the APU starts soft throttling" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит температуры (°C)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит температуры, при котором APU начинает плавный троттлинг" VerticalAlignment="Bottom" />
                                 </StackPanel>
                                 
                                 <Grid Margin="0,8,0,0">
@@ -93,8 +93,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Skin Temperature Limit (°C)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the laptop chassis temperature limit at which the APU starts throttling" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит температуры корпуса (°C)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит температуры корпуса ноутбука, при котором APU начинает троттлинг" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -125,11 +125,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="CPU Temperature Tuning" />
+                            Text="Настройка температуры CPU" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set CPU thermal targets."/>
+                            Text="Позволяет устанавливать целевые температуры CPU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -137,8 +137,8 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Temperature Limit (°C)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the temperature limit at which the CPU starts hard throttling" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит температуры (°C)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит температуры, при котором CPU начинает жесткий троттлинг" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -171,11 +171,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="APU Power Tuning"/>
+                            Text="Настройка мощности APU"/>
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set APU power targets."/>
+                            Text="Позволяет устанавливать целевые значения мощности APU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -183,8 +183,8 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">STAPM Power Limit (W)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the APU's Skin Temperature Aware Power Management power limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит мощности STAPM (Вт)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит мощности APU с учетом температуры корпуса (STAPM)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -199,8 +199,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Slow Power Limit (W)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the APU's slow boost duration power limit. Within SmartShift enabled systems, this options controls the total power shared between the AMD CPU and AMD dGPU" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Медленный лимит мощности (Вт)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит мощности APU для медленного буста. В системах с SmartShift эта опция контролирует общую мощность, распределяемую между AMD CPU и AMD dGPU" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -215,8 +215,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Slow Boost Duration (s)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls how long the APU stays within the slow boost power limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Длительность медленного буста (с)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет, как долго APU будет оставаться в пределах медленного лимита мощности" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -232,8 +232,8 @@
 
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Fast Power Limit (W)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the APU's fast boost duration power limit. Within SmartShift enabled systems, this options controls the total power shared between the AMD CPU and AMD dGPU" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Быстрый лимит мощности (Вт)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит мощности APU для быстрого буста. В системах с SmartShift эта опция контролирует общую мощность, распределяемую между AMD CPU и AMD dGPU" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -248,8 +248,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Fast Boost Duration (s)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls how long the APU stays within the fast boost power limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Длительность быстрого буста (с)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет, как долго APU будет оставаться в пределах быстрого лимита мощности" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -280,11 +280,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="CPU Power Tuning"/>
+                            Text="Настройка мощности CPU"/>
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set CPU power targets."/>
+                            Text="Позволяет устанавливать целевые значения мощности CPU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -292,8 +292,8 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">PPT Limit (W)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the CPU's Package Power Tracking power limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит PPT (Вт)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит мощности пакета CPU (PPT)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -308,8 +308,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">EDC Limit (A)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the CPU's Electrical Design Current limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит EDC (А)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит тока CPU по электрическому дизайну (EDC)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -324,8 +324,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">TDC Limit (A)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the CPU's Thermal Design Current limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит TDC (А)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит тока CPU по тепловому дизайну (TDC)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -356,11 +356,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="CPU Power Tuning"/>
+                            Text="Настройка мощности CPU"/>
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set CPU power targets."/>
+                            Text="Позволяет устанавливать целевые значения мощности CPU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -368,8 +368,8 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Power Limit (W)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the CPU's total power limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит мощности (Вт)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет общий лимит мощности CPU" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -384,8 +384,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0" Visibility="Collapsed">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Power Limit 2 (W)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the CPU's short boost power limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит мощности 2 (Вт)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит мощности CPU для короткого буста" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -416,11 +416,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="APU VRM Tuning"/>
+                            Text="Настройка VRM APU"/>
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set APU VRM current targets."/>
+                            Text="Позволяет устанавливать целевые токи VRM для APU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -428,7 +428,7 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">CPU TDC Limit (A)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит TDC CPU (А)</TextBlock>
                                     <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the CPU's Thermal Design Current limit" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
@@ -444,7 +444,7 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">CPU EDC Limit (A)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит EDC CPU (А)</TextBlock>
                                     <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the CPU's Electrical Design Current limit" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
@@ -460,8 +460,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">SoC TDC Limit (A)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the SoC's Thermal Design Current limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит TDC SoC (А)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит тока SoC по тепловому дизайну (TDC)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -476,8 +476,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">SoC EDC Limit (A)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the SoC's Electrical Design Current limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит EDC SoC (А)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит тока SoC по электрическому дизайну (EDC)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -492,8 +492,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GFX TDC Limit (A)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the iGPU's Thermal Design Current limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит TDC GFX (А)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит тока iGPU по тепловому дизайну (TDC)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -508,8 +508,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GFX EDC Limit (A)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the iGPU's Electrical Design Current limit" VerticalAlignment="Bottom"/>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит EDC GFX (А)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет лимит тока iGPU по электрическому дизайну (EDC)" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -539,11 +539,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="iGPU Tuning" />
+                            Text="Настройка iGPU" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a static iGPU boost clock on select APUs/CPUs."/>
+                            Text="Позволяет установить статическую частоту буста iGPU на некоторых APU/CPU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -551,8 +551,8 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">iGPU Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the static boost clock speed of the iGPU, requires either a system reboot or system sleep to revert back to normal." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Частота iGPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Управляет статической частотой буста iGPU, требует перезагрузки или сна системы для возврата к нормальному состоянию." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -582,11 +582,11 @@
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="APU Soft Clock Limit Tuning" />
+                            Text="Настройка программных лимитов частот APU" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set various soft clock speed targets on select APUs."/>
+                            Text="Позволяет устанавливать различные программные целевые частоты на некоторых APU."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -594,8 +594,8 @@
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum iGPU Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the iGPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный мин. частоты iGPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный минимальный целевой уровень частоты iGPU. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -611,8 +611,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum iGPU Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the iGPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный макс. частоты iGPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный максимальный целевой уровень частоты iGPU. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -628,8 +628,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum CPU Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the CPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный мин. частоты CPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный минимальный целевой уровень частоты CPU. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -645,8 +645,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum CPU Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the CPU. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный макс. частоты CPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный максимальный целевой уровень частоты CPU. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -662,8 +662,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum Data Launch Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the Data Launch Clock. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный мин. частоты Data Launch (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный минимальный целевой уровень частоты Data Launch. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -679,8 +679,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum Data Launch Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the Data Launch Clock. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный макс. частоты Data Launch (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный максимальный целевой уровень частоты Data Launch. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -696,8 +696,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum Infinity Fabric Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the Infinity Fabric. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный мин. частоты Infinity Fabric (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный минимальный целевой уровень частоты Infinity Fabric. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -713,8 +713,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum Infinity Fabric Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the Infinity Fabric. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный макс. частоты Infinity Fabric (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный максимальный целевой уровень частоты Infinity Fabric. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -730,8 +730,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum SoC Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the SoC. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный мин. частоты SoC (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный минимальный целевой уровень частоты SoC. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -747,8 +747,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum SoC Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the SoC. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный макс. частоты SoC (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный максимальный целевой уровень частоты SoC. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -764,8 +764,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Minimum VCN Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the minimum soft clock target of the Video Core Next. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный мин. частоты VCN (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный минимальный целевой уровень частоты Video Core Next. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -781,8 +781,8 @@
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Soft Maximum VCN Clock (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum soft clock target of the Video Core Next. This only works when within your APUs specification." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Программный макс. частоты VCN (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет программный максимальный целевой уровень частоты Video Core Next. Работает только в пределах спецификаций вашего APU." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -817,7 +817,7 @@ Icon="Image24" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Powered by a customised version of Magpie. Use Alt+F to toggle."/>
+                Text="Работает на модифицированной версии Magpie. Используйте Alt+F для переключения."/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
                                     <ui:ToggleSwitch Name="tsUXTUSR" Margin="0,0,9,0"/>
@@ -833,8 +833,8 @@ Icon="Image24" Margin="0,8,15,0">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox Name="cbVSync" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Enable VSync" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Synchronises capture frame rate to display refresh rate." VerticalAlignment="Center" />
+                                        <CheckBox Name="cbVSync" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Включить VSync" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Синхронизирует частоту кадров захвата с частотой обновления дисплея." VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>
@@ -845,16 +845,16 @@ Icon="Image24" Margin="0,8,15,0">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox Width="130" Name="cbAutoCap" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Auto Recapture" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Auto recaptures the previous capture window after focus was lost and restored." VerticalAlignment="Center" />
+                                        <CheckBox Width="130" Name="cbAutoCap" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Автоперезахват" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Автоматически перезаватывает предыдущее окно после потери и восстановления фокуса." VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>
                             
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Capture Sharpness (%)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls UXTU Super Resolution capture image sharpness." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Резкость захвата (%)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Управляет резкостью изображения захвата UXTU Super Resolution." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -869,8 +869,8 @@ Icon="Image24" Margin="0,8,15,0">
 
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Resolution Scale</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the resolution of the window being captured. Use application controlled if you do not want UXTU to override the window resolution. Not all applications will be compatible with this mode!" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Масштаб разрешения</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Управляет разрешением захватываемого окна. Используйте 'Управляется приложением', если вы не хотите, чтобы UXTU переопределял разрешение окна. Не все приложения совместимы с этим режимом!" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -880,12 +880,12 @@ Icon="Image24" Margin="0,8,15,0">
                                     <ComboBox
 Grid.Column="1"
 VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" Height="37">
-                                        <ComboBoxItem>Application Controlled</ComboBoxItem>
-                                        <ComboBoxItem>Ultra Quality (77%)</ComboBoxItem>
-                                        <ComboBoxItem>Quality (67%)</ComboBoxItem>
-                                        <ComboBoxItem>Balanced (59%)</ComboBoxItem>
-                                        <ComboBoxItem>Performance (50%)</ComboBoxItem>
-                                        <ComboBoxItem>Ultra Performance (33%)</ComboBoxItem>
+                                        <ComboBoxItem>Управляется приложением</ComboBoxItem>
+                                        <ComboBoxItem>Ультра качество (77%)</ComboBoxItem>
+                                        <ComboBoxItem>Качество (67%)</ComboBoxItem>
+                                        <ComboBoxItem>Сбалансированный (59%)</ComboBoxItem>
+                                        <ComboBoxItem>Производительность (50%)</ComboBoxItem>
+                                        <ComboBoxItem>Ультра производительность (33%)</ComboBoxItem>
                                     </ComboBox>
                                 </Grid>
                             </StackPanel>
@@ -906,11 +906,11 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="Radeon™ Graphics Options" />
+                            Text="Настройки графики Radeon™" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to customise driver graphics options"/>
+                            Text="Позволяет настраивать параметры графического драйвера"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
                                     <ui:ToggleSwitch Name="tsRadeonGraph" Margin="0,0,9,0"/>
@@ -927,7 +927,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox Name="cbAntiLag" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Radeon™ Anti-Lag" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Enables AMD Radeon™ Anti-Lag within drivers on supported hardware." VerticalAlignment="Center" />
+                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Включает AMD Radeon™ Anti-Lag в драйверах на поддерживаемом оборудовании." VerticalAlignment="Center" />
                                     </StackPanel>
 
                                 </Grid>
@@ -935,7 +935,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Radeon™ Super Resolution (%)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Enables AMD Radeon™ Super Resolution within drivers on supported hardware. Also allows you to set a custom sharpness effect." VerticalAlignment="Bottom" />
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Включает AMD Radeon™ Super Resolution в драйверах на поддерживаемом оборудовании. Также позволяет установить пользовательский эффект резкости." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -952,7 +952,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Radeon™ Boost (%)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Enables AMD Radeon™ Boost within drivers on supported hardware. Also allows you to set a minimum resolution in %." VerticalAlignment="Bottom" />
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Включает AMD Radeon™ Boost в драйверах на поддерживаемом оборудовании. Также позволяет установить минимальное разрешение в %." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -969,7 +969,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Radeon™ Image Sharpening (%)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Enables AMD Radeon™ Image Sharpening within drivers on supported hardware. Allows you to set a custom sharpness effect." VerticalAlignment="Bottom" />
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Включает AMD Radeon™ Image Sharpening в драйверах на поддерживаемом оборудовании. Позволяет установить пользовательский эффект резкости." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -992,7 +992,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox Name="cbSync" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Enhanced Sync" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Enables AMD Enhanced Sync within drivers on supported hardware." VerticalAlignment="Center" />
+                                        <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Включает AMD Enhanced Sync в драйверах на поддерживаемом оборудовании." VerticalAlignment="Center" />
                                     </StackPanel>
 
                                 </Grid>
@@ -1014,11 +1014,11 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="NVIDIA GPU Tuning" />
+                            Text="Настройка NVIDIA GPU" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to tune your NVIDIA GPU."/>
+                            Text="Позволяет настроить ваш графический процессор NVIDIA."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -1030,8 +1030,8 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Frequency-Adjusted Voltage Limit (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Лимит напряжения с коррекцией частоты (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Определяет максимальное напряжение, при котором будет работать ваш GPU в пределах кривой Частота/Напряжение. Вы можете сделать андервольтинг, понизив эту тактовую частоту ниже стандартной и увеличив смещение частоты ядра. Начните с номинальной частоты вашего GPU и двигайтесь вниз. Чтобы сбросить, установите максимально возможную частоту, которую позволяет ползунок." VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1045,8 +1045,8 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Core Clock Offset (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение частоты ядра GPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Управляет смещением тактовой частоты ядра вашего графического процессора NVIDIA" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1060,8 +1060,8 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Memory Clock Offset (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's VRAM clock" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение частоты памяти GPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Управляет смещением тактовой частоты видеопамяти вашего графического процессора NVIDIA" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1077,7 +1077,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             <TextBlock 
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
+                            Text="Внимание: Мы не несем ответственности за любые повреждения оборудования или возникшую нестабильность в результате изменения частот и напряжений." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
                         </StackPanel>
                     </ui:CardExpander>
                     <ui:CardExpander Name="sdIntelBal"
@@ -1094,11 +1094,11 @@ Icon="Scales20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="Intel Power Balance" />
+                Text="Баланс мощности Intel" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to tune the power balance of your Intel CPU."/>
+                Text="Позволяет настраивать баланс мощности вашего процессора Intel."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -1110,7 +1110,7 @@ Icon="Scales20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">CPU Balance</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Баланс CPU</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1125,7 +1125,7 @@ Icon="Scales20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">GPU Balance</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Баланс GPU</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1154,11 +1154,11 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="Intel Clock Ratio Control" />
+                Text="Управление множителем частоты Intel" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to tune the clock ratios of your Intel CPU based the number of cores actively in use."/>
+                Text="Позволяет настраивать множители частоты вашего процессора Intel в зависимости от количества активных ядер."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -1170,7 +1170,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 1</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 1</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1185,7 +1185,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 2</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 2</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1200,7 +1200,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 3</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 3</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1215,7 +1215,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 4</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 4</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1230,7 +1230,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 5</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 5</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1245,7 +1245,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 6</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 6</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1260,7 +1260,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 7</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 7</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1275,7 +1275,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Group 8</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Группа ядер 8</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1304,11 +1304,11 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="Intel FIVR Tuning" />
+                Text="Настройка Intel FIVR" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to tune the voltages of your Intel CPU."/>
+                Text="Позволяет настраивать напряжения вашего процессора Intel."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -1320,7 +1320,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core Offset (mV)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра (мВ)</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the maximum voltage your GPU will run within the Frequency/Voltage curve based on clock speed. You can undervolt your NVIDIA GPU by lowering this clock speed below stock and increasing the core clock offset. Start at your GPU's rated boost clock and work down. To reset it, set it to the maximum possible clock the slider allows." VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1335,7 +1335,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">iGPU Offset (mV)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение iGPU (мВ)</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1350,7 +1350,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Cache Offset (mV)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение кэша (мВ)</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1365,7 +1365,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">System Agent Offset (mV)</TextBlock>
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение системного агента (мВ)</TextBlock>
                                     <!--<ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the clock offset for your NVIDIA GPU's core clock" VerticalAlignment="Bottom" />-->
                                 </StackPanel>
 
@@ -1381,7 +1381,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                             <TextBlock 
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
+                Text="Внимание: Мы не несем ответственности за любые повреждения оборудования или возникшую нестабильность в результате изменения частот и напряжений." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
                         </StackPanel>
                     </ui:CardExpander>
                     <ui:CardExpander Name="sdAmdCpuTune" Visibility="Collapsed"
@@ -1398,11 +1398,11 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="AMD Ryzen™ CPU Tuning" />
+                            Text="Настройка AMD Ryzen™ CPU" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set tune your AMD Ryzen™ CPU."/>
+                            Text="Позволяет настроить ваш процессор AMD Ryzen™."/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -1414,8 +1414,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">CPU Clocks (MHz)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Provides the ability to set a static CPU clock" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Частоты CPU (МГц)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет установить статическую частоту CPU" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1429,8 +1429,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">CPU VID (mV)</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the set voltage for the CPU" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">VID CPU (мВ)</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Управляет установленным напряжением для CPU" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1445,7 +1445,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                                 <TextBlock 
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
+                            Text="Внимание: Мы не несем ответственности за любые повреждения оборудования или возникшую нестабильность в результате изменения частот и напряжений." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
@@ -1467,7 +1467,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to customise PBO options."/>
+                            Text="Позволяет настраивать параметры PBO."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -1475,8 +1475,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">PBO Scalar</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the PBO Scalar which adjusts the FIT/FITness/FailuresInTime limit by the set amount" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Скаляр PBO</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять скаляр PBO, который регулирует лимит FIT/FITness/FailuresInTime на заданную величину" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1511,7 +1511,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to customise Curve Optimiser options."/>
+                            Text="Позволяет настраивать параметры Curve Optimiser."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -1519,8 +1519,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">All Core Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the all core Curve Optimiser Frequency/Voltage curve offset" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение для всех ядер</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для всех ядер" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1535,8 +1535,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                                 </Grid>
                                 <StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                                        <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">iGPU Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the iGPU Curve Optimiser Frequency/Voltage curve offset" VerticalAlignment="Bottom" />
+                                        <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение iGPU</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для iGPU" VerticalAlignment="Bottom" />
                                 </StackPanel>
                                 <Grid Margin="0,8,0,0">
                                     <Grid.ColumnDefinitions>
@@ -1570,7 +1570,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to customise per-core Curve Optimiser options."/>
+                            Text="Позволяет настраивать параметры Curve Optimiser для каждого ядра."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -1578,8 +1578,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 1 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 1" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 1</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 1" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1595,8 +1595,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 2 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 2" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 2</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 2" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1612,8 +1612,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 3 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 3" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 3</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 3" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1629,8 +1629,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 4 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 4" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 4</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 4" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1646,8 +1646,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 5 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 5" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 5</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 5" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1663,8 +1663,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 6 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 6" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 6</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 6" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1680,8 +1680,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 7 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 7" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 7</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 7" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1697,8 +1697,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 8 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 8" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 8</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 8" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1732,7 +1732,7 @@ Icon="Pulse20" Margin="0,8,15,0">
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to customise per-core Curve Optimiser options."/>
+                            Text="Позволяет настраивать параметры Curve Optimiser для каждого ядра."/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -1740,8 +1740,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                         <StackPanel>
                             <StackPanel Margin="0,-8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 1 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 1" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 1</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 1" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1757,8 +1757,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 2 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 2" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 2</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 2" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1774,8 +1774,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 3 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 3" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 3</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 3" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1791,8 +1791,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 4 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 4" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 4</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 4" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1808,8 +1808,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 5 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 5" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 5</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 5" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1825,8 +1825,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 6 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 6" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 6</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 6" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1842,8 +1842,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 7 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 7" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 7</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 7" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1859,8 +1859,8 @@ Icon="Pulse20" Margin="0,8,15,0">
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Core 8 Offset</TextBlock>
-                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Allows control to change the Curve Optimiser Frequency/Voltage curve offset for core 8" VerticalAlignment="Bottom" />
+                                    <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Смещение ядра 8</TextBlock>
+                                    <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Позволяет изменять смещение кривой Частота/Напряжение Curve Optimiser для ядра 8" VerticalAlignment="Bottom" />
                                 </StackPanel>
 
                                 <Grid Margin="0,8,0,0">
@@ -1889,16 +1889,16 @@ Icon="Grid20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="CCD Affinity Mode" />
+                Text="Режим привязки к CCD" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Directs threads to selected CCDs, trimming cross-die traffic and fine-tuning performance."/>
+                Text="Направляет потоки на выбранные CCD, уменьшая трафик между кристаллами и тонко настраивая производительность."/>
                                 </StackPanel>
                                 <ComboBox
             Grid.Column="1"
             VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxCcdAffinity" Height="37">
-                                    <ComboBoxItem>All CCDs</ComboBoxItem>
+                                    <ComboBoxItem>Все CCD</ComboBoxItem>
                                     <ComboBoxItem>CCD 0</ComboBoxItem>
                                     <ComboBoxItem>CCD 1</ComboBoxItem>
                                 </ComboBox>
@@ -1919,18 +1919,18 @@ Icon="Grid20" Margin="0,8,15,0">
                                     <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Text="AMD Boost Profile" />
+                            Text="Профиль буста AMD" />
                                     <TextBlock
                             FontSize="12"
                             Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                            Text="Provides the ability to set a manual boost profile which impact on boost delay."/>
+                            Text="Позволяет установить ручной профиль буста, который влияет на задержку буста."/>
                                 </StackPanel>
                                 <ComboBox
                         Grid.Column="1"
                         VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxBoost" Height="37">
-                                    <ComboBoxItem>Auto</ComboBoxItem>
-                                    <ComboBoxItem>Power Saving</ComboBoxItem>
-                                    <ComboBoxItem>Performance</ComboBoxItem>
+                                    <ComboBoxItem>Авто</ComboBoxItem>
+                                    <ComboBoxItem>Энергосбережение</ComboBoxItem>
+                                    <ComboBoxItem>Производительность</ComboBoxItem>
                                 </ComboBox>
 
                             </Grid>
@@ -1949,11 +1949,11 @@ Icon="Desktop20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="Display Refresh Rate" />
+                Text="Частота обновления дисплея" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to set a custom supported display refresh rate. May not work for everyone!"/>
+                Text="Позволяет установить пользовательскую поддерживаемую частоту обновления дисплея. Может работать не у всех!"/>
                                 </StackPanel>
                                 <ComboBox
             Grid.Column="1"
@@ -1976,26 +1976,26 @@ Icon="Power20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="Windows Power Mode" />
+                Text="Режим электропитания Windows" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to change the Windows power mode from a preset."/>
+                Text="Позволяет изменять режим электропитания Windows из пресета."/>
                                 </StackPanel>
                                 <ComboBox
             Grid.Column="1"
             VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxPowerMode" Height="37">
                                     <ComboBoxItem>
-                                        System Controlled
+                                        Управляется системой
                                     </ComboBoxItem>
                                     <ComboBoxItem>
-                                        Best Power Effciency
+                                        Лучшая энергоэффективность
                                     </ComboBoxItem>
                                     <ComboBoxItem>
-                                        Balanced
+                                        Сбалансированный
                                     </ComboBoxItem>
                                     <ComboBoxItem>
-                                        Best Performance
+                                        Максимальная производительность
                                     </ComboBoxItem>
                                 </ComboBox>
 
@@ -2015,19 +2015,19 @@ Icon="Power20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="ASUS Power Profile" />
+                Text="Профиль питания ASUS" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to set an ASUS power profile. This will override Armoury Crate!"/>
+                Text="Позволяет установить профиль питания ASUS. Это переопределит настройки Armoury Crate!"/>
                                 </StackPanel>
                                 <ComboBox
             Grid.Column="1"
             VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxAsusPower" Height="37">
-                                    <ComboBoxItem>AC Controlled</ComboBoxItem>
-                                    <ComboBoxItem>Silent</ComboBoxItem>
-                                    <ComboBoxItem>Performance</ComboBoxItem>
-                                    <ComboBoxItem>Turbo</ComboBoxItem>
+                                    <ComboBoxItem>Управляется AC</ComboBoxItem>
+                                    <ComboBoxItem>Тихий</ComboBoxItem>
+                                    <ComboBoxItem>Производительность</ComboBoxItem>
+                                    <ComboBoxItem>Турбо</ComboBoxItem>
                                 </ComboBox>
 
                             </Grid>
@@ -2050,7 +2050,7 @@ Icon="FastAcceleration20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to manually toggle MUX switch on/off. This will override Armoury Crate!"/>
+                Text="Позволяет вручную включать/выключать переключатель MUX. Это переопределит настройки Armoury Crate!"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -2073,11 +2073,11 @@ Icon="LeafTwo20" Margin="0,8,15,0">
                                     <TextBlock
                 FontSize="14"
                 FontWeight="Medium"
-                Text="ASUS iGPU Only Mode" />
+                Text="Режим 'Только iGPU' от ASUS" />
                                     <TextBlock
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                Text="Provides the ability to toggle iGPU only mode on/off. This will override Armoury Crate!"/>
+                Text="Позволяет включать/выключать режим 'только iGPU'. Это переопределит настройки Armoury Crate!"/>
                                 </StackPanel>
                                 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
