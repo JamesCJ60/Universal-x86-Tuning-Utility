@@ -1,4 +1,4 @@
-﻿<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.FanControl"
+<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.FanControl"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,36 +9,36 @@
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="FanControl" Loaded="Page_Loaded">
+      Title="Управление вентиляторами" Loaded="Page_Loaded">
 
     <Grid Margin="18,10,0,0">
         <DockPanel LastChildFill="False">
             <TextBlock
             FontSize="26"
             FontWeight="Medium"
-            Text="Fan Control Test" DockPanel.Dock="Top"/>
+            Text="Тест управления вентиляторами" DockPanel.Dock="Top"/>
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="0,9,9,9" HorizontalAlignment="Right" >
-                <ui:Button Width="145" Name="btnReload" Click="btnReload_Click">Reload Config</ui:Button>
-                <ui:Button Width="145" Name="btnFanCurve" Click="btnFanCurve_Click" Margin="9,0,0,0">Test Fan Curve</ui:Button>
-                <ui:Button Width="145" Name="btnFanSpeed" Click="btnFanSpeed_Click" Margin="9,0,0,0" >Update Fan Speed</ui:Button>
-                <ui:Button Width="145" Name="btnEn" Click="btnEn_Click" Margin="9,0,0,0">Enable Fan Control</ui:Button>
-                <ui:Button Margin="9,0,0,0" Width="145" Name="btnDis" Click="btnDis_Click">Disable Fan Control</ui:Button>
+                <ui:Button Width="145" Name="btnReload" Click="btnReload_Click">Перезагрузить конфиг</ui:Button>
+                <ui:Button Width="145" Name="btnFanCurve" Click="btnFanCurve_Click" Margin="9,0,0,0">Тест кривой вентиляторов</ui:Button>
+                <ui:Button Width="145" Name="btnFanSpeed" Click="btnFanSpeed_Click" Margin="9,0,0,0" >Обновить скорость вентиляторов</ui:Button>
+                <ui:Button Width="145" Name="btnEn" Click="btnEn_Click" Margin="9,0,0,0">Включить управление вентиляторами</ui:Button>
+                <ui:Button Margin="9,0,0,0" Width="145" Name="btnDis" Click="btnDis_Click">Отключить управление вентиляторами</ui:Button>
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top" Margin="0,12,18,0" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold">Fan Config Name:</TextBlock>
+                <TextBlock VerticalAlignment="Center" FontSize="16" FontWeight="DemiBold">Имя конфига вентиляторов:</TextBlock>
                 <TextBlock VerticalAlignment="Center" FontSize="16" Margin="9,0,0,0" Name="tbConfigName"></TextBlock>
-                <ui:Button Name="btnCopy" Click="btnCopy_Click" Margin="9,0,0,0">Copy</ui:Button>
+                <ui:Button Name="btnCopy" Click="btnCopy_Click" Margin="9,0,0,0">Копировать</ui:Button>
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top" Margin="0,12,18,0" Orientation="Horizontal">
-                <TextBlock FontSize="16" FontWeight="DemiBold">Fan Curve Test:</TextBlock>
+                <TextBlock FontSize="16" FontWeight="DemiBold">Тест кривой вентиляторов:</TextBlock>
                 <TextBlock FontSize="16" Margin="9,0,0,0" Name="tbFanSpeed"></TextBlock>
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top" Margin="0,12,18,0">
-                <TextBlock FontSize="16">Fan Speed (%)</TextBlock>
+                <TextBlock FontSize="16">Скорость вентиляторов (%)</TextBlock>
                 <ui:NumberBox  Maximum="100" Minimum="0" Value="50" Margin="0,9,0,0" Name="nudFanSpeed"></ui:NumberBox>
             </StackPanel>
         </DockPanel>

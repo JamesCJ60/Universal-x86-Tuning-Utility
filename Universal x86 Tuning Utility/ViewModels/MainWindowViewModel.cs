@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
@@ -29,7 +29,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private ObservableCollection<MenuItem> _trayMenuItems = new();
 
         [ObservableProperty]
-        private string _downloads = "Downloads: ";
+        private string _downloads = "Загрузки: ";
 
         [ObservableProperty]
         private bool _isDownloads = false;
@@ -49,42 +49,42 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 {
                 new NavigationItem()
                 {
-                    Content = "Home",
+                    Content = "Главная",
                     PageTag = "dashboard",
                     Icon = SymbolRegular.Home20,
                     PageType = typeof(Views.Pages.DashboardPage)
                 },
                 //new NavigationItem()
                 //{
-                //    Content = "Premade",
+                //    Content = "Готовые",
                 //    PageTag = "premade",
                 //    Icon = SymbolRegular.Predictions20,
                 //    PageType = typeof(Views.Pages.Premade)
                 //},
                 new NavigationItem()
                 {
-                    Content = "Custom",
+                    Content = "Настройка",
                     PageTag = "custom",
                     Icon = SymbolRegular.Book20,
                     PageType = typeof(Views.Pages.CustomPresets)
                 },
                 new NavigationItem()
                 {
-                    Content = "Adaptive",
+                    Content = "Адаптивный",
                     PageTag = "adaptive",
                     Icon = SymbolRegular.Radar20,
                     PageType = typeof(Views.Pages.Adaptive)
                 },
                 new NavigationItem()
                 {
-                    Content = "Games",
+                    Content = "Игры",
                     PageTag = "games",
                     Icon = SymbolRegular.Games20,
                     PageType = typeof(Views.Pages.Games)
                 },
                 new NavigationItem()
                 {
-                    Content = "Auto",
+                    Content = "Автоматизация",
                     PageTag = "auto",
                     Icon = SymbolRegular.Transmission20,
                     PageType = typeof(Views.Pages.Automations)
@@ -105,7 +105,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 //},
                 new NavigationItem()
                 {
-                    Content = "Info",
+                    Content = "Инфо",
                     PageTag = "info",
                     Icon = SymbolRegular.Info20,
                     PageType = typeof(Views.Pages.SystemInfo)
@@ -116,7 +116,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
             {
                 new NavigationItem()
                 {
-                    Content = "Settings",
+                    Content = "Настройки",
                     PageTag = "settings",
                     Icon = SymbolRegular.Settings20,
                     PageType = typeof(Views.Pages.SettingsPage)
@@ -127,7 +127,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
             {
                 new MenuItem
                 {
-                    Header = "Home",
+                    Header = "Главная",
                     Tag = "tray_home"
                 }
             };
@@ -138,42 +138,42 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 {
                 new NavigationItem()
                 {
-                    Content = "Home",
+                    Content = "Главная",
                     PageTag = "dashboard",
                     Icon = SymbolRegular.Home20,
                     PageType = typeof(Views.Pages.DashboardPage)
                 },
                 new NavigationItem()
                 {
-                    Content = "Premade",
+                    Content = "Готовые",
                     PageTag = "premade",
                     Icon = SymbolRegular.Predictions20,
                     PageType = typeof(Views.Pages.Premade)
                 },
                 new NavigationItem()
                 {
-                    Content = "Custom",
+                    Content = "Настройка",
                     PageTag = "custom",
                     Icon = SymbolRegular.Book20,
                     PageType = typeof(Views.Pages.CustomPresets)
                 },
                 new NavigationItem()
                 {
-                    Content = "Adaptive",
+                    Content = "Адаптивный",
                     PageTag = "adaptive",
                     Icon = SymbolRegular.Radar20,
                     PageType = typeof(Views.Pages.Adaptive)
                 },
                 new NavigationItem()
                 {
-                    Content = "Games",
+                    Content = "Игры",
                     PageTag = "games",
                     Icon = SymbolRegular.Games20,
                     PageType = typeof(Views.Pages.Games)
                 },
                 new NavigationItem()
                 {
-                    Content = "Auto",
+                    Content = "Автоматизация",
                     PageTag = "auto",
                     Icon = SymbolRegular.Transmission20,
                     PageType = typeof(Views.Pages.Automations)
@@ -194,7 +194,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 //},
                 new NavigationItem()
                 {
-                    Content = "Info",
+                    Content = "Инфо",
                     PageTag = "info",
                     Icon = SymbolRegular.Info20,
                     PageType = typeof(Views.Pages.SystemInfo)
@@ -205,7 +205,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
             {
                 new NavigationItem()
                 {
-                    Content = "Settings",
+                    Content = "Настройки",
                     PageTag = "settings",
                     Icon = SymbolRegular.Settings20,
                     PageType = typeof(Views.Pages.SettingsPage)
@@ -216,7 +216,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
             {
                 new MenuItem
                 {
-                    Header = "Home",
+                    Header = "Главная",
                     Tag = "tray_home"
                 }
             };

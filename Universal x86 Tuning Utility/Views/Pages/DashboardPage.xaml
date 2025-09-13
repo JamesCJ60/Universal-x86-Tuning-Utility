@@ -1,11 +1,11 @@
-﻿<ui:UiPage x:Class="Universal_x86_Tuning_Utility.Views.Pages.DashboardPage"
+<ui:UiPage x:Class="Universal_x86_Tuning_Utility.Views.Pages.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="DashboardPage"
+    Title="Главная панель"
     d:DataContext="{d:DesignInstance local:DashboardPage, IsDesignTimeCreatable=False}"
     d:DesignHeight="1000"
     d:DesignWidth="800"
@@ -51,7 +51,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="Welcome To" />
+                            Text="Добро пожаловать в" />
                             <TextBlock
                             FontSize="28"
                             FontWeight="Bold"
@@ -60,7 +60,7 @@
                             <TextBlock
                             FontSize="18"
                             Foreground="#B7FFFFFF"
-                            Text="V2.5.4 Stable" />
+                            Text="V2.5.4 Стабильная" />
                             <ui:Button
                                 Name="btnPremade"
                             Height="36"
@@ -70,7 +70,7 @@
                             Appearance="Transparent"
                             Command="{Binding ViewModel.NavigateCommand}"
                             CommandParameter="premade"
-                            Content="Try Out The Premade Presets"
+                            Content="Попробуйте готовые пресеты"
                             Foreground="{DynamicResource TextFillColorLightPrimaryBrush}" />
                         </StackPanel>
                         </Border>
@@ -80,7 +80,7 @@
                         VerticalAlignment="Bottom"
                         FontSize="10"
                         Foreground="#57FFFFFF"
-                        Text="Created by JamesCJ, sbski, ProjectSBC, and you!" />
+                        Text="Создано JamesCJ, sbski, ProjectSBC и вами!" />
 
                     <Border Width="320" Height="120" HorizontalAlignment="Left" VerticalAlignment="Bottom" CornerRadius="0,4,0,0">
                         <Border.Background>
@@ -120,7 +120,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Premade Presets" />
+                        Text="Готовые пресеты" />
                 </StackPanel>
             </ui:CardAction>
 
@@ -136,7 +136,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Custom Presets" />
+                        Text="Пользовательские пресеты" />
                 </StackPanel>
             </ui:CardAction>
 
@@ -152,7 +152,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Adaptive Mode" />
+                        Text="Адаптивный режим" />
                 </StackPanel>
             </ui:CardAction>
 
@@ -168,7 +168,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Automations" />
+                        Text="Автоматизация" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction
@@ -183,7 +183,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="System Info" />
+                        Text="Информация о системе" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction
@@ -199,7 +199,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Game Library" />
+                        Text="Библиотека игр" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction
@@ -214,7 +214,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Need Help?" />
+                        Text="Нужна помощь?" />
                 </StackPanel>
             </ui:CardAction>
             <ui:CardAction
@@ -229,7 +229,7 @@
                         Margin="0"
                         FontSize="13"
                         FontWeight="Medium"
-                        Text="Support Us" />
+                        Text="Поддержите нас" />
                 </StackPanel>
             </ui:CardAction>
         </Grid>

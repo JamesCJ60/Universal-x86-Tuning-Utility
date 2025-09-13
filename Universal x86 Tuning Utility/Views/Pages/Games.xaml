@@ -1,4 +1,4 @@
-﻿<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.Games"
+<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.Games"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,14 +10,14 @@
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Games" Loaded="Page_Loaded">
+      Title="Игры" Loaded="Page_Loaded">
 
     <Grid>
         <Grid Panel.ZIndex="1">
             <ui:Card Name="ccLoading" HorizontalAlignment="Center" Padding="80,40,80,40" HorizontalContentAlignment="Center">
                 <StackPanel HorizontalAlignment="Center">
-                    <TextBlock FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center">Locating Games</TextBlock>
-                    <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorTertiaryBrush}">This should only take a few moments!</TextBlock>
+                    <TextBlock FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center">Поиск игр</TextBlock>
+                    <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorTertiaryBrush}">Это должно занять всего несколько секунд!</TextBlock>
                     <ui:LoadingScreen VerticalAlignment="Center" Background="Transparent" HorizontalAlignment="Center" Margin="0,15,0,0"></ui:LoadingScreen>
                 </StackPanel>
             </ui:Card>
@@ -26,13 +26,13 @@
             <TextBlock
             FontSize="26"
             FontWeight="Medium"
-            Text="Game Library" DockPanel.Dock="Top" Margin="18,10,0,0"/>
+            Text="Библиотека игр" DockPanel.Dock="Top" Margin="18,10,0,0"/>
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,9,9,6" Name="ActionsPanel">
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload list of games" Click="btnLoad_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Перезагрузить список игр" Click="btnLoad_Click">
                     <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" ToolTip="Add a game manually" Click="addGameBtn_Click">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" ToolTip="Добавить игру вручную" Click="addGameBtn_Click">
                     <ui:SymbolIcon Symbol="Add20" FontSize="24"/>
                 </ui:Button>
             </StackPanel>
@@ -71,11 +71,11 @@
                                     <ui:SymbolIcon Symbol="Toolbox20" FontSize="24" Margin="0,1,0,0"/>
                                 </ui:Button>
                                 <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
-                                    <TextBlock HorizontalAlignment="Center" Text="Average Frametime" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
+                                    <TextBlock HorizontalAlignment="Center" Text="Среднее время кадра" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
                                     <TextBlock HorizontalAlignment="Center" Text="{Binding msData}" FontSize="18"/>
                                 </StackPanel>
                                 <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
-                                    <TextBlock HorizontalAlignment="Center" Text="Average FPS" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
+                                    <TextBlock HorizontalAlignment="Center" Text="Средний FPS" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
                                     <TextBlock HorizontalAlignment="Center" Text="{Binding fpsData}" FontSize="18"/>
                                 </StackPanel>
                             </DockPanel>

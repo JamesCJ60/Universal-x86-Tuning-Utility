@@ -1,4 +1,4 @@
-﻿<ui:UiPage
+<ui:UiPage
     x:Class="Universal_x86_Tuning_Utility.Views.Pages.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -39,45 +39,45 @@
             Content="Dark"
             GroupName="themeSelect"
             IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />-->
-        <CheckBox Name="cbStartBoot" Click="cbStartBoot_Click">Start on System Boot</CheckBox>
-        <CheckBox Name="cbStartMini" Click="cbStartMini_Click">Start Minimised</CheckBox>
-        <CheckBox Name="cbMinimizeClose" Click="cbMinimizeClose_Click">Minimize on close</CheckBox>
-        <CheckBox Name="cbApplyStart" Click="cbApplyStart_Click">Reapply On Start</CheckBox>
+        <CheckBox Name="cbStartBoot" Click="cbStartBoot_Click">Запускать при загрузке системы</CheckBox>
+        <CheckBox Name="cbStartMini" Click="cbStartMini_Click">Запускать свернутым</CheckBox>
+        <CheckBox Name="cbMinimizeClose" Click="cbMinimizeClose_Click">Сворачивать при закрытии</CheckBox>
+        <CheckBox Name="cbApplyStart" Click="cbApplyStart_Click">Применять при запуске</CheckBox>
         <StackPanel Orientation="Horizontal">
-            <CheckBox Name="cbAutoReapply" Click="cbAutoReapply_Click">Auto Reapply (s)</CheckBox>
+            <CheckBox Name="cbAutoReapply" Click="cbAutoReapply_Click">Автопереприменение (с)</CheckBox>
             <ui:NumberBox Name="nudAutoReapply" Minimum="1" Value="3" Maximum="60" Margin="9,0,0,0" TextChanged="nudAutoReapply_TextChanged" MaxDecimalPlaces="0" ValueChanged="nudAutoReapply_ValueChanged"></ui:NumberBox>
         </StackPanel>
-        <CheckBox Name="cbAutoCheck" Click="cbAutoCheck_Click">Auto Update Check</CheckBox>
-        <CheckBox Name="cbAdaptive" Click="cbAdaptive_Click">Auto Start Adaptive Mode</CheckBox>
-        <CheckBox Name="cbTrack" Click="cbTrack_Click">Track Games</CheckBox>
+        <CheckBox Name="cbAutoCheck" Click="cbAutoCheck_Click">Проверять обновления автоматически</CheckBox>
+        <CheckBox Name="cbAdaptive" Click="cbAdaptive_Click">Автозапуск адаптивного режима</CheckBox>
+        <CheckBox Name="cbTrack" Click="cbTrack_Click">Отслеживать игры</CheckBox>
         <ui:Button Name="btnStressTest" Width="178" Click="btnStressTest_Click" Margin="0,9,0,0">
             <StackPanel Orientation="Horizontal">
                 <ui:SymbolIcon Symbol="Fire20" FontSize="24" Margin="0,0,9,0"/>
-                <TextBlock VerticalAlignment="Center">Start Stress Test</TextBlock>
+                <TextBlock VerticalAlignment="Center">Начать стресс-тест</TextBlock>
             </StackPanel>
         </ui:Button>
 
-        <TextBlock Foreground="DarkRed" Margin="0,4.5,0,0" Text="WARNING: This will put extreme stress on your CPU. Use at your own risk!" />
+        <TextBlock Foreground="DarkRed" Margin="0,4.5,0,0" Text="ВНИМАНИЕ: Это создаст экстремальную нагрузку на ваш процессор. Используйте на свой страх и риск!" />
 
         <TextBlock
             Margin="0,24,0,0"
             FontSize="20"
             FontWeight="Medium"
-            Text="About Universal x86 Tuning Utility" />
+            Text="О программе Universal x86 Tuning Utility" />
         <TextBlock Margin="0,12,0,9" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
 
         <StackPanel Orientation="Horizontal">
             <ui:Button Name="btnCheck" Width="178" Click="btnCheck_Click">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24" Margin="0,0,9,0"/>
-                    <TextBlock VerticalAlignment="Center">Check for Updates</TextBlock>
+                    <TextBlock VerticalAlignment="Center">Проверить обновления</TextBlock>
                 </StackPanel>
             </ui:Button>
 
             <ui:Button Name="btnDownload" Margin="9,0,0,0" Width="178" Visibility="Collapsed" Click="btnDownload_Click">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="ArrowDownload20" FontSize="24" Margin="0,0,9,0"/>
-                    <TextBlock VerticalAlignment="Center">Download Update</TextBlock>
+                    <TextBlock VerticalAlignment="Center">Скачать обновление</TextBlock>
                 </StackPanel>
             </ui:Button>
         </StackPanel>
