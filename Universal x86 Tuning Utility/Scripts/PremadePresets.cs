@@ -95,7 +95,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             if (Family.FAM > Family.RyzenFamily.Matisse)
                             {
 
-                                if (cpuName.Contains("U"))
+                                if (cpuName.Contains("U") || cpuName.Contains("AI") && !cpuName.Contains("HX"))
                                 {
                                     EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=6000  --fast-limit=8000 --stapm-time=64 --slow-limit=6000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
                                     BalPreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=45 --stapm-limit=22000  --fast-limit=24000 --stapm-time=64 --slow-limit=22000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
