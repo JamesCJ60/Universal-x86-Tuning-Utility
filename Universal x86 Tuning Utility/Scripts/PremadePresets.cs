@@ -46,7 +46,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 ExtremePreset = "--tctl-temp=100 --cHTC-temp=100 --apu-skin-temp=50 --stapm-limit=55000 --fast-limit=70000 --slow-limit=65000 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 --Win-Power=2 ";
                             }
                         }
-                        else if (GetSystemInfo.Product.ToLower().Contains("laptop 13 (amd ryzen 7040") && GetSystemInfo.Manufacturer.ToLower().Contains("framework"))
+                        else if (GetSystemInfo.Product.ToLower().Contains("laptop 13 (amd ryzen 7040") && GetSystemInfo.Manufacturer.ToLower().Contains("framework") || GetSystemInfo.Product.ToLower().Contains("laptop 13 (amd ryzen ai 300") && GetSystemInfo.Manufacturer.ToLower().Contains("framework"))
                         {
                             uri = new Uri("pack://application:,,,/Assets/Laptops/Framework/framework-laptop-13.png");
 
@@ -151,6 +151,22 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                         PerformancePreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=95 --stapm-limit=18000  --fast-limit=20000 --stapm-time=64 --slow-limit=19000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
                                         ExtremePreset = "--tctl-temp=95 --cHTC-temp=95 --apu-skin-temp=95 --stapm-limit=28000  --fast-limit=28000 --stapm-time=64 --slow-limit=28000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
                                     }
+                                }
+
+                                if (Family.FAM == Family.RyzenFamily.StrixHalo)
+                                {
+                                    EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=18000  --fast-limit=25000 --stapm-time=64 --slow-limit=18000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
+                                    BalPreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=55000  --fast-limit=65000 --stapm-time=64 --slow-limit=55000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
+                                    PerformancePreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=100000  --fast-limit=120000 --stapm-time=64 --slow-limit=100000 --slow-time=128 --vrm-current=240000 --vrmmax-current=240000 --vrmsoc-current=240000 --vrmsocmax-current=240000 --vrmgfx-current=240000 ";
+                                    ExtremePreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=145000  --fast-limit=165000 --stapm-time=64 --slow-limit=145000 --slow-time=128 --vrm-current=240000 --vrmmax-current=240000 --vrmsoc-current=240000 --vrmsocmax-current=240000 --vrmgfx-current=240000 ";
+                                }
+
+                                if (Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.FireRange)
+                                {
+                                    EcoPreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=35000  --fast-limit=45000 --stapm-time=64 --slow-limit=35000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
+                                    BalPreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=65000  --fast-limit=75000 --stapm-time=64 --slow-limit=65000 --slow-time=128 --vrm-current=180000 --vrmmax-current=180000 --vrmsoc-current=180000 --vrmsocmax-current=180000 --vrmgfx-current=180000 ";
+                                    PerformancePreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=100000  --fast-limit=120000 --stapm-time=64 --slow-limit=100000 --slow-time=128 --vrm-current=240000 --vrmmax-current=240000 --vrmsoc-current=240000 --vrmsocmax-current=240000 --vrmgfx-current=240000 ";
+                                    ExtremePreset = "--tctl-temp=95 --cHTC-temp=95 --stapm-limit=125000  --fast-limit=145000 --stapm-time=64 --slow-limit=125000 --slow-time=128 --vrm-current=240000 --vrmmax-current=240000 --vrmsoc-current=240000 --vrmsocmax-current=240000 --vrmgfx-current=240000 ";
                                 }
                             }
                         }
