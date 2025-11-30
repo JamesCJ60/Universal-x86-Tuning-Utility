@@ -45,7 +45,22 @@ namespace Universal_x86_Tuning_Utility.Properties {
                 this["StartMini"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cstmPreset
+        {
+            get
+            {
+                return ((string)(this["cstmPreset"]));
+            }
+            set
+            {
+                this["cstmPreset"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]

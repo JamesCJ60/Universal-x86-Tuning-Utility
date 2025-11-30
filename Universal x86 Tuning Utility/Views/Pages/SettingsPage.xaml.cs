@@ -239,7 +239,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void nudAutoReapply_ValueChanged(object sender, RoutedEventArgs e)
         {
-
+            if (nudAutoReapply != null && nudAutoReapply.Value != null)
+            {
+                Settings.Default.AutoReapplyTime = (int)nudAutoReapply.Value;
+                Settings.Default.Save();
+            }
         }
     }
 }
