@@ -22,7 +22,7 @@ using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Models;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
-using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
+//using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.ASUS;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
@@ -47,7 +47,7 @@ namespace Universal_x86_Tuning_Utility
         public static ASUSWmi wmi;
         public static XgMobileConnectionService xgMobileConnectionService;
         private static ILogger<App>? _logger;
-        public static Mem_Timings memTimings = new Mem_Timings();
+        //public static Mem_Timings memTimings = new Mem_Timings();
 
         /// <summary>
         /// Gets registered service.
@@ -60,7 +60,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "2.5.6";
+        public static string version = "26.0.0";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 

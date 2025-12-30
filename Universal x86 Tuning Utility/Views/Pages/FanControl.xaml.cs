@@ -34,7 +34,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             InitializeComponent();
             _ = Tablet.TabletDevices;
-            Fan_Control.UpdateAddresses();
+            //Fan_Control.UpdateAddresses();
 
             string fanConfig = $"{GetSystemInfo.Manufacturer.ToUpper()}_{GetSystemInfo.Product.ToUpper()}.json";
             tbConfigName.Text = fanConfig;
@@ -46,12 +46,12 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         void updateFanSpeed()
         {
-            Fan_Control.setFanSpeed((int)nudFanSpeed.Value);
+            //Fan_Control.setFanSpeed((int)nudFanSpeed.Value);
         }
 
         private void btnEn_Click(object sender, RoutedEventArgs e)
         {
-            Fan_Control.enableFanControl();
+            //Fan_Control.enableFanControl();
         }
 
         private void btnDis_Click(object sender, RoutedEventArgs e)
@@ -63,7 +63,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 isTimerRunning = false;
                 tbFanSpeed.Text = $"Disabled";
             }
-            Fan_Control.disableFanControl();
+            //Fan_Control.disableFanControl();
         }
 
         private void btnFanSpeed_Click(object sender, RoutedEventArgs e)
@@ -125,7 +125,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 var fanSpeed = Interpolate(speeds, temps, cpuTemperature);
 
-                if (Fan_Control.fanControlEnabled) Fan_Control.setFanSpeed(fanSpeed);
+                //if (Fan_Control.fanControlEnabled) Fan_Control.setFanSpeed(fanSpeed);
 
                 tbFanSpeed.Text = $"Enabled - {fanSpeed}% - {cpuTemperature}°C";
             }
@@ -166,7 +166,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void btnReload_Click(object sender, RoutedEventArgs e)
         {
-            Fan_Control.UpdateAddresses();
+            //Fan_Control.UpdateAddresses();
         }
 
         private void btnCopy_Click(object sender, RoutedEventArgs e)

@@ -103,7 +103,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
             {
                 try
                 {
-                    App.memTimings = Mem_Timings.RetrieveTimings();
+                    //App.memTimings = Mem_Timings.RetrieveTimings();
                 } catch { }
 
                 //Zen1 - Zen2

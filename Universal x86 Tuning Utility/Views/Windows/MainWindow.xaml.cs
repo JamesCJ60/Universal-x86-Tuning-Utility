@@ -561,7 +561,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             Settings.Default.isAdaptiveModeRunning = false;
             Settings.Default.Save();
             Controller.magWindow?.Dispose();
-            Fan_Control.disableFanControl();
+            //Fan_Control.disableFanControl();
         }
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
