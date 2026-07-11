@@ -1,0 +1,265 @@
+<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.OverlaySettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+      xmlns:helpers="clr-namespace:Universal_x86_Tuning_Utility.Helpers"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance local:OverlaySettingsPage, IsDesignTimeCreatable=False}"
+      d:Background="{DynamicResource ApplicationBackgroundBrush}"
+      d:DesignHeight="1000"
+      d:DesignWidth="800"
+      Title="Overlay"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      ScrollViewer.CanContentScroll="False"
+      SnapsToDevicePixels="True"
+      UseLayoutRounding="True"
+      helpers:MouseWheelScrollBehavior.IsEnabled="True">
+
+    <Page.Resources>
+        <Style TargetType="{x:Type CheckBox}"
+               BasedOn="{StaticResource DefaultCheckBoxStyle}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Style.Triggers>
+                <Trigger Property="Content" Value="{x:Null}">
+                    <Setter Property="Width" Value="20" />
+                    <Setter Property="Height" Value="20" />
+                    <Setter Property="MinWidth" Value="20" />
+                    <Setter Property="MinHeight" Value="20" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="18,10,18,0" Panel.ZIndex="10">
+                <TextBlock FontSize="26"
+                           FontWeight="Medium"
+                           Text="Game Overlay" />
+                <TextBlock Margin="0,4,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="Configure the click-through performance overlay and its global shortcuts."
+                           TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="2"
+                        Panel.ZIndex="10"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,9,9,6">
+                <ui:Button HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0,0,9,9"
+                           Height="40"
+                           Width="50"
+                           ToolTip="Show overlay"
+                           Click="PreviewButton_Click">
+                    <ui:SymbolIcon Symbol="Eye20" FontSize="24" />
+                </ui:Button>
+                <ui:Button HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0,0,9,9"
+                           Height="40"
+                           Width="50"
+                           ToolTip="Hide overlay"
+                           Click="HideButton_Click">
+                    <ui:SymbolIcon Symbol="EyeOff20" FontSize="24" />
+                </ui:Button>
+                <ui:Button HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0,0,9,9"
+                           Height="40"
+                           Width="50"
+                           ToolTip="Save overlay settings"
+                           Click="ApplyButton_Click">
+                    <ui:SymbolIcon Symbol="Save20" FontSize="24" />
+                </ui:Button>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1"
+                          x:Name="mainScroll"
+                          Margin="0,9,0,0"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto"
+                          CanContentScroll="False"
+                          PanningMode="VerticalOnly"
+                          IsDeferredScrollingEnabled="False">
+
+                <StackPanel x:Name="mainCon" Margin="15,0,0,0">
+                    <ui:Card Padding="18" Margin="0,0,15,0">
+                        <StackPanel>
+                            <TextBlock FontSize="17"
+                                       FontWeight="Medium"
+                                       Text="Overlay behaviour" />
+
+                            <CheckBox x:Name="EnabledCheckBox"
+                                      Margin="0,10,0,0"
+                                      Content="Enable the game overlay and global shortcuts" />
+
+                            <CheckBox x:Name="StartupCheckBox"
+                                      Margin="0,5,0,0"
+                                      Content="Show the overlay when UXTU starts" />
+
+                            <Grid Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="240" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock FontWeight="SemiBold"
+                                               Text="Show or hide overlay" />
+                                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="Click the box and press the shortcut you want."
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <TextBox x:Name="ToggleOverlayHotkeyTextBox"
+                                         Grid.Column="1"
+                                         PreviewKeyDown="HotkeyTextBox_PreviewKeyDown"
+                                         IsReadOnly="True"
+                                         VerticalContentAlignment="Center" />
+                            </Grid>
+
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="240" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock FontWeight="SemiBold"
+                                               Text="Show or hide contents" />
+                                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="Keeps the overlay window ready without polling sensors."
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <TextBox x:Name="ToggleContentsHotkeyTextBox"
+                                         Grid.Column="1"
+                                         PreviewKeyDown="HotkeyTextBox_PreviewKeyDown"
+                                         IsReadOnly="True"
+                                         VerticalContentAlignment="Center" />
+                            </Grid>
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Margin="0,8,15,0" Padding="18">
+                        <StackPanel>
+                            <TextBlock FontSize="17"
+                                       FontWeight="Medium"
+                                       Text="Visible information" />
+
+                            <UniformGrid Margin="0,10,0,0" Columns="2">
+                                <CheckBox x:Name="ShowFpsCheckBox"
+                                          Margin="0,4"
+                                          Content="FPS and low FPS values" />
+                                <CheckBox x:Name="ShowFrameTimesCheckBox"
+                                          Margin="0,4"
+                                          Content="Frame-time values" />
+                                <CheckBox x:Name="ShowGpuCheckBox"
+                                          Margin="0,4"
+                                          Content="GPU sensors"
+                                          ToolTip="GPU polling is completely disabled when this is off." />
+                                <CheckBox x:Name="ShowCpuCheckBox"
+                                          Margin="0,4"
+                                          Content="CPU sensors" />
+                                <CheckBox x:Name="ShowMemoryCheckBox"
+                                          Margin="0,4"
+                                          Content="Memory usage" />
+                                <CheckBox x:Name="ShowBatteryCheckBox"
+                                          Margin="0,4"
+                                          Content="Battery tile" />
+                                <CheckBox x:Name="ShowGraphsCheckBox"
+                                          Margin="0,4"
+                                          Content="Rolling graphs" />
+                            </UniformGrid>
+                        </StackPanel>
+                    </ui:Card>
+
+                    <ui:Card Margin="0,8,15,9" Padding="18">
+                        <StackPanel>
+                            <TextBlock FontSize="17"
+                                       FontWeight="Medium"
+                                       Text="Size and refresh rate" />
+
+                            <Grid Margin="0,12,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="90" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock VerticalAlignment="Center"
+                                           Text="Overlay scale" />
+                                <Slider x:Name="ScaleSlider"
+                                        Grid.Column="1"
+                                        Minimum="0.5"
+                                        Maximum="2"
+                                        TickFrequency="0.1"
+                                        IsSnapToTickEnabled="True" />
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Text="50–200%" />
+                            </Grid>
+
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="90" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock VerticalAlignment="Center"
+                                           Text="Panel opacity" />
+                                <Slider x:Name="OpacitySlider"
+                                        Grid.Column="1"
+                                        Minimum="0.25"
+                                        Maximum="1"
+                                        TickFrequency="0.05"
+                                        IsSnapToTickEnabled="True" />
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Text="25–100%" />
+                            </Grid>
+
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="160" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel>
+                                    <TextBlock Text="Refresh interval" />
+                                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="Longer intervals reduce monitoring overhead."
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <ui:NumberBox x:Name="RefreshIntervalNumberBox"
+                                              Grid.Column="1"
+                                              Minimum="100"
+                                              Maximum="5000"
+                                              SmallChange="100"
+                                              MaxDecimalPlaces="0" />
+                            </Grid>
+                        </StackPanel>
+                    </ui:Card>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Page>

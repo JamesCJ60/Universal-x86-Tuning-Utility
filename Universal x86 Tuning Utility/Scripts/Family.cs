@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Management;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
 using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 
@@ -64,7 +63,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
         public static string CPUName = "";
         public static int CPUFamily = 0, CPUModel = 0, CPUStepping = 0;
-        public static async void setCpuFamily()
+        public static void setCpuFamily()
         {
             try
             {
@@ -83,13 +82,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 CPUModel = int.Parse(words[modelIndex]);
                 CPUStepping = int.Parse(words[steppingIndex].TrimEnd(','));
 
-                ManagementObjectSearcher mos = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
-                foreach (ManagementObject mo in mos.Get())
-                {
-                   CPUName = mo["Name"].ToString();
-                }
+                using RegistryKey? processorKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+                CPUName = processorKey?.GetValue("ProcessorNameString")?.ToString()?.Trim() ?? processorIdentifier;
             }
-            catch (ManagementException e)
+            catch (Exception e)
             {
                 Debug.WriteLine("Error: " + e.Message);
             }
@@ -97,7 +93,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
             if (CPUName.Contains("Intel"))
             {
                 TYPE = ProcessorType.Intel;
-                Intel_Management.determineCPU();
             }
             else
             {

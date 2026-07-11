@@ -21,9 +21,6 @@ using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for Automations.xaml
-    /// </summary>
     public partial class Automations : Page
     {
         private PresetManager apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
@@ -120,7 +117,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 ccAutoOcIgpuUv.Visibility = Visibility.Collapsed;
             }
 
-            Garbage.Garbage_Collect();
 
             getAcPreset(Settings.Default.acPreset);
             getDcPreset(Settings.Default.dcPreset);

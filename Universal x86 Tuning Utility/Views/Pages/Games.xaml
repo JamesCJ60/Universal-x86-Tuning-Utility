@@ -1,49 +1,64 @@
-﻿<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.Games"
+<Page x:Class="Universal_x86_Tuning_Utility.Views.Pages.Games"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       d:DataContext="{d:DesignInstance local:Games, IsDesignTimeCreatable=False}"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Games" Loaded="Page_Loaded">
+      mc:Ignorable="d"
+      d:DesignHeight="650"
+      d:DesignWidth="900"
+      Title="Games"
+      Loaded="Page_Loaded"
+      ScrollViewer.CanContentScroll="False"
+      SnapsToDevicePixels="True"
+      UseLayoutRounding="True">
 
     <Grid>
-        <Grid Panel.ZIndex="1">
-            <ui:Card Name="ccLoading" HorizontalAlignment="Center" Padding="80,40,80,40" HorizontalContentAlignment="Center">
-                <StackPanel HorizontalAlignment="Center">
-                    <TextBlock FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center">Locating Games</TextBlock>
-                    <TextBlock FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorTertiaryBrush}">This should only take a few moments!</TextBlock>
-                    <ui:LoadingScreen VerticalAlignment="Center" Background="Transparent" HorizontalAlignment="Center" Margin="0,15,0,0"></ui:LoadingScreen>
-                </StackPanel>
-            </ui:Card>
-        </Grid>
-        <DockPanel Margin="0,0,0,0" LastChildFill="true">
-            <TextBlock
-            FontSize="26"
-            FontWeight="Medium"
-            Text="Game Library" DockPanel.Dock="Top" Margin="18,10,0,0"/>
+        <Grid Margin="18,10,18,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,9,9,6" Name="ActionsPanel">
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnLoad" ToolTip="Reload list of games" Click="btnLoad_Click">
-                    <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
-                </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" ToolTip="Add a game manually" Click="addGameBtn_Click">
-                    <ui:SymbolIcon Symbol="Add20" FontSize="24"/>
-                </ui:Button>
+            <StackPanel>
+                <TextBlock FontSize="26" FontWeight="Medium" Text="Game Library" />
+                <TextBlock Margin="0,4,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="Launch tracked games and review their recorded performance data."
+                           TextWrapping="Wrap" />
             </StackPanel>
 
-            <ListBox DockPanel.Dock="Left" Name="lbGames" Margin="0,8,0,0" Width="Auto" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" BorderBrush="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="False" ScrollViewer.PanningMode="VerticalFirst" Stylus.IsFlicksEnabled="False" Stylus.IsTouchFeedbackEnabled="True" ScrollViewer.IsDeferredScrollingEnabled="False" >
+            <ListBox x:Name="lbGames"
+                     Grid.Row="1"
+                     Margin="0,10,0,0"
+                     HorizontalAlignment="Stretch"
+                     HorizontalContentAlignment="Stretch"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.CanContentScroll="True"
+                     ScrollViewer.PanningMode="VerticalOnly"
+                     ScrollViewer.IsDeferredScrollingEnabled="False"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.VirtualizationMode="Recycling">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <ContentPresenter />
+                                    <ContentPresenter HorizontalAlignment="Stretch" />
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -51,38 +66,141 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ui:Card x:Name="ccMain" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="15,8,8,0" Padding="16,14,16,14">
-
-                            <DockPanel HorizontalAlignment="Stretch" LastChildFill="False" Margin="0,4,0,0">
-                                <Border DockPanel.Dock="Left" VerticalAlignment="Center" Width="64" Height="64" Margin="0,0,0,0" BorderBrush="Transparent" CornerRadius="8">
+                        <ui:Card x:Name="ccMain"
+                                 Margin="0,0,0,8"
+                                 Padding="14"
+                                 HorizontalAlignment="Stretch"
+                                 HorizontalContentAlignment="Stretch">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="64" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border Width="64"
+                                        Height="64"
+                                        VerticalAlignment="Center"
+                                        CornerRadius="8"
+                                        ClipToBounds="True">
                                     <Border.Background>
-                                        <ImageBrush ImageSource="{Binding iconPath}" Stretch="UniformToFill"/>
+                                        <ImageBrush ImageSource="{Binding iconPath}" Stretch="UniformToFill" />
                                     </Border.Background>
                                 </Border>
-                                <StackPanel DockPanel.Dock="Left" Margin="18,0,0,0" VerticalAlignment="Center">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding gameName}" FontSize="18"/>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding appType}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding path}" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="12"/>
+                                <StackPanel Grid.Column="1" Margin="16,0,20,0" VerticalAlignment="Center">
+                                    <TextBlock FontSize="18"
+                                               FontWeight="Medium"
+                                               Text="{Binding gameName}"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Margin="0,2,0,0"
+                                               FontSize="13"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="{Binding appType}"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Margin="0,2,0,0"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                               Text="{Binding path}"
+                                               TextTrimming="CharacterEllipsis" />
                                 </StackPanel>
-                                <ui:Button Appearance="Primary" Width="48" Height="40" DockPanel.Dock="Right" HorizontalAlignment="Right" Tag="{Binding launchCommand}" Click="Button_Click">
-                                    <ui:SymbolIcon Symbol="Play20" FontSize="24" Margin="0,1,0,0"/>
-                                </ui:Button>
-                                <ui:Button Visibility="Collapsed" Appearance="Caution" Width="48" Height="40" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,9,0" IsEnabled="False">
-                                    <ui:SymbolIcon Symbol="Toolbox20" FontSize="24" Margin="0,1,0,0"/>
-                                </ui:Button>
-                                <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
-                                    <TextBlock HorizontalAlignment="Center" Text="Average Frametime" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
-                                    <TextBlock HorizontalAlignment="Center" Text="{Binding msData}" FontSize="18"/>
+                                <StackPanel Grid.Column="2" MinWidth="100" Margin="0,0,18,0" VerticalAlignment="Center">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                               Text="Average FPS" />
+                                    <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{Binding fpsData}" />
                                 </StackPanel>
-                                <StackPanel DockPanel.Dock="Right" Margin="0,0,18,0" VerticalAlignment="Center">
-                                    <TextBlock HorizontalAlignment="Center" Text="Average FPS" Foreground="{DynamicResource TextFillColorTertiaryBrush}" FontSize="14"/>
-                                    <TextBlock HorizontalAlignment="Center" Text="{Binding fpsData}" FontSize="18"/>
+                                <StackPanel Grid.Column="3" MinWidth="118" Margin="0,0,18,0" VerticalAlignment="Center">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                               Text="Average Frametime" />
+                                    <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{Binding msData}" />
                                 </StackPanel>
-                            </DockPanel>
+                                <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <ui:Button Width="44"
+                                               Height="40"
+                                               Margin="0,0,8,0"
+                                               Appearance="Caution"
+                                               Visibility="Collapsed"
+                                               IsEnabled="False"
+                                               ToolTip="Game configuration">
+                                        <ui:SymbolIcon Symbol="Toolbox20" FontSize="22" />
+                                    </ui:Button>
+                                    <ui:Button Width="48"
+                                               Height="40"
+                                               Appearance="Primary"
+                                               Tag="{Binding launchCommand}"
+                                               ToolTip="Launch game"
+                                               Click="Button_Click">
+                                        <ui:SymbolIcon Symbol="Play20" FontSize="22" />
+                                    </ui:Button>
+                                </StackPanel>
+                            </Grid>
                         </ui:Card>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </DockPanel>
+
+            <StackPanel x:Name="NoGamesPanel"
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Visibility="Collapsed">
+                <ui:SymbolIcon Symbol="Games24" FontSize="42" HorizontalAlignment="Center" />
+                <TextBlock Margin="0,12,0,0"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center"
+                           Text="No games found" />
+                <TextBlock Margin="0,4,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           HorizontalAlignment="Center"
+                           Text="Add a game manually or reload the library." />
+            </StackPanel>
+
+            <StackPanel x:Name="ActionsPanel"
+                        Grid.Row="2"
+                        Margin="0,4,0,0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <ui:Button x:Name="btnLoad"
+                           Width="48"
+                           Height="40"
+                           Margin="0,0,8,0"
+                           ToolTip="Reload the game library"
+                           Click="btnLoad_Click">
+                    <ui:SymbolIcon Symbol="ArrowSync20" FontSize="22" />
+                </ui:Button>
+                <ui:Button Width="48"
+                           Height="40"
+                           Appearance="Primary"
+                           ToolTip="Add a game manually"
+                           Click="addGameBtn_Click">
+                    <ui:SymbolIcon Symbol="Add20" FontSize="22" />
+                </ui:Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Panel.ZIndex="10">
+            <ui:Card x:Name="ccLoading"
+                     Padding="56,34"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     HorizontalContentAlignment="Center">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock FontSize="22" FontWeight="Medium" HorizontalAlignment="Center" Text="Locating games" />
+                    <TextBlock Margin="0,4,0,0"
+                               FontSize="13"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                               Text="This should only take a few moments." />
+                    <ui:LoadingScreen Margin="0,14,0,0"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Center" />
+                </StackPanel>
+            </ui:Card>
+        </Grid>
     </Grid>
 </Page>

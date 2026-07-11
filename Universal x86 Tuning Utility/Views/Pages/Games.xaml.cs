@@ -29,7 +29,7 @@ using Universal_x86_Tuning_Utility.Services;
 using Universal_x86_Tuning_Utility.Views.Windows;
 using Windows.Gaming.Preview.GamesEnumeration;
 using Microsoft.Extensions.Logging;
-using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Abstractions.Controls;
 using YamlDotNet.Core;
 using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -38,9 +38,6 @@ using Settings = Universal_x86_Tuning_Utility.Properties.Settings;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for Automations.xaml
-    /// </summary>
     public partial class Games : INavigableView<ViewModels.GamesViewModel>
     {
         public ViewModels.GamesViewModel ViewModel
@@ -108,7 +105,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             _ = Tablet.TabletDevices;
             ViewModel = viewModel;
             setUp();
-            Garbage.Garbage_Collect();
             updateFPS.Interval = TimeSpan.FromSeconds(2);
             updateFPS.Tick += UpdateFPS_Tick;
             updateFPS.Start();
@@ -118,7 +114,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             try
             {
-                if (!MainWindow.isMini && Family.TYPE == Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 3 || Family.TYPE != Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 4)
+                if (!MainWindow.isMini && MainWindow.IsPageSelected(typeof(Games)))
                 {
                     gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
                     IEnumerable<string> presetNames = gameDataManager.GetPresetNames();
@@ -186,6 +182,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 GameList.Add(game);
                 lbGames.ItemsSource = null;
                 lbGames.ItemsSource = GameList;
+                UpdateEmptyState();
             }
         }
 
@@ -247,6 +244,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             ccLoading.Visibility = Visibility.Collapsed;
             ActionsPanel.IsEnabled = true;
             lbGames.ItemsSource = GameList;
+            UpdateEmptyState();
+        }
+
+        private void UpdateEmptyState()
+        {
+            var hasGames = GameList is { Count: > 0 };
+            lbGames.Visibility = hasGames ? Visibility.Visible : Visibility.Collapsed;
+            NoGamesPanel.Visibility = hasGames ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)

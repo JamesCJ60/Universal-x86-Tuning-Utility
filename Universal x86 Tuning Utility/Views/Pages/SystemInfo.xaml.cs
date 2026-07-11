@@ -24,9 +24,6 @@ using static Universal_x86_Tuning_Utility.Scripts.Misc.GetSystemInfo;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for SystemInfo.xaml
-    /// </summary>
     public partial class SystemInfo : Page
     {
         public SystemInfo()
@@ -215,7 +212,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private async void Bat_Tick(object sender, EventArgs e)
         {
-            if (Family.TYPE == Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 5 || Family.TYPE != Family.ProcessorType.Intel && MainWindow._mainWindowNav.SelectedPageIndex == 6)
+            if (MainWindow.IsPageSelected(typeof(SystemInfo)))
             {
                 decimal batRate = 0;
                 await Task.Run(() => batRate = GetSystemInfo.GetBatteryRate() / 1000);

@@ -32,56 +32,53 @@ namespace Universal_x86_Tuning_Utility.Scripts
         static string highPerformancePowerScheme = "DED574B5-45A0-4F42-8737-46345C09C238";
         static string powerSaverPowerScheme = "961CC777-2547-4F9D-8174-7D86181b8A7A";
 
-        //Translate RyzenAdj like cli arguments to UXTU
-        public static async void Translate(string _ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false)
+        public static void Translate(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false) =>
+            _ = TranslateAsync(ryzenAdjString, isAutoReapply, isAutoOC);
+
+        public static Task TranslateAsync(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false) =>
+            Task.Run(() => TranslateCore(ryzenAdjString, isAutoReapply, isAutoOC));
+
+        private static void TranslateCore(string ryzenAdjString, bool isAutoReapply, bool isAutoOC)
         {
             try
             {
-                //Remove last space off cli arguments 
-                _ryzenAdjString = _ryzenAdjString.Substring(0, _ryzenAdjString.Length - 1);
-                //Split cli arguments into array
-                string[] ryzenAdjCommands = _ryzenAdjString.Split(' ');
-                ryzenAdjCommands = ryzenAdjCommands.Distinct().ToArray();
+                if (string.IsNullOrWhiteSpace(ryzenAdjString))
+                    return;
 
-                DiagnosticLogger.LogDebug($"Translate string: {_ryzenAdjString}");
-                //MessageBox.Show(_ryzenAdjString);
-                //Run through array
+                string normalizedCommands = ryzenAdjString.Trim();
+                string[] ryzenAdjCommands = normalizedCommands
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Distinct(StringComparer.Ordinal)
+                    .ToArray();
+
+                DiagnosticLogger.LogDebug($"Translate string: {normalizedCommands}");
                 foreach (string ryzenAdjCommand in ryzenAdjCommands)
                 {
-                    await Task.Run(() =>
-                    {
                         try
                         {
-                            string command = ryzenAdjCommand;
-                            if (!command.Contains("=")) command = ryzenAdjCommand + "=0";
-                            // Extract the command string before the "=" sign
-                            string ryzenAdjCommandString = command.Split('=')[0].Replace("=", null).Replace("--", null);
-                            // Extract the command string after the "=" sign
-                            string ryzenAdjCommandValueString = command.Substring(ryzenAdjCommand.IndexOf('=') + 1);
+                            int separatorIndex = ryzenAdjCommand.IndexOf('=');
+                            string ryzenAdjCommandString = (separatorIndex >= 0 ? ryzenAdjCommand[..separatorIndex] : ryzenAdjCommand).TrimStart('-');
+                            string ryzenAdjCommandValueString = separatorIndex >= 0 ? ryzenAdjCommand[(separatorIndex + 1)..] : "0";
 
                             DiagnosticLogger.LogDebug($"Processing: {ryzenAdjCommandString}={ryzenAdjCommandValueString}");
 
                             if (ryzenAdjCommandString.Contains("UXTUSR"))
                             {
                                 UXTUSR(ryzenAdjCommandString, ryzenAdjCommandValueString);
-                                Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("CCD-Affinity"))
                             {
                                 CpuAffinityManager.SetGlobalAffinity(Convert.ToInt32(ryzenAdjCommandValueString));
-                                Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("Win-Power"))
                             {
                                 if(ryzenAdjCommandValueString == "0") PowerSetActiveOverlayScheme(new Guid(powerSaverPowerScheme.ToLower()));
                                 else if (ryzenAdjCommandValueString == "1") PowerSetActiveOverlayScheme(new Guid(balancedPowerScheme.ToLower()));
                                 else if (ryzenAdjCommandValueString == "2") PowerSetActiveOverlayScheme(new Guid(highPerformancePowerScheme.ToLower()));
-                                Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("ASUS"))
                             {
                                 AsusWmi(ryzenAdjCommandString, ryzenAdjCommandValueString);
-                                Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("Refresh-Rate"))
                             {
@@ -90,12 +87,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             else if (ryzenAdjCommandString.Contains("ADLX"))
                             {
                                 ADLX(ryzenAdjCommandString, ryzenAdjCommandValueString);
-                                Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("NVIDIA"))
                             {
                                 NVIDIA(ryzenAdjCommandString, ryzenAdjCommandValueString);
-                                Task.Delay(50);
                             }
                             else if (ryzenAdjCommandString.Contains("intel"))
                             {
@@ -111,44 +106,38 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 }
                                 else
                                 {
-                                    //Convert value of select cli argument to int
                                     int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 
                                     if (ryzenAdjCommandString == "intel-pl") Intel_Management.changeTDPAll(ryzenAdjCommandValue);
-                                    else if (ryzenAdjCommandString == "intel-volt-cpu") Intel_Management.changeVoltageOffset(0, ryzenAdjCommandValue);
-                                    else if (ryzenAdjCommandString == "intel-volt-gpu") Intel_Management.changeVoltageOffset(1, ryzenAdjCommandValue);
-                                    else if (ryzenAdjCommandString == "intel-volt-cache") Intel_Management.changeVoltageOffset(2, ryzenAdjCommandValue);
-                                    else if (ryzenAdjCommandString == "intel-volt-sa") Intel_Management.changeVoltageOffset(3, ryzenAdjCommandValue);
-                                    else if (ryzenAdjCommandString == "intel-bal-cpu") Intel_Management.changePowerBalance(0, ryzenAdjCommandValue);
-                                    else if (ryzenAdjCommandString == "intel-bal-gpu") Intel_Management.changePowerBalance(1, ryzenAdjCommandValue);
+                                    else if (ryzenAdjCommandString == "intel-volt-cpu") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 0);
+                                    else if (ryzenAdjCommandString == "intel-volt-gpu") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 1);
+                                    else if (ryzenAdjCommandString == "intel-volt-cache") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 2);
+                                    else if (ryzenAdjCommandString == "intel-volt-sa") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 3);
+                                    else if (ryzenAdjCommandString == "intel-bal-cpu") Intel_Management.changePowerBalance(ryzenAdjCommandValue, 0);
+                                    else if (ryzenAdjCommandString == "intel-bal-gpu") Intel_Management.changePowerBalance(ryzenAdjCommandValue, 1);
                                     else if (ryzenAdjCommandString == "intel-gpu") Intel_Management.changeGpuClock(ryzenAdjCommandValue);
-                                    //else if (ryzenAdjCommandString == "power-limit-1") TDP_Management.changePL1(ryzenAdjCommandValue);
-                                    //else if (ryzenAdjCommandString == "power-limit-2") TDP_Management.changePL2(ryzenAdjCommandValue);
                                 }
                             }
                             else
                             {
-                                //Convert value of select cli argument to uint
                                 uint ryzenAdjCommandValue = Convert.ToUInt32(ryzenAdjCommandValueString);
 
                                 if (ryzenAdjCommand.Contains("skin")) ryzenAdjCommandValue *= 256;
 
-                                if (ryzenAdjCommand.Contains("coall") && Settings.Default.isAutoUvCPU == true && isAutoOC == false) return;
-                                if (ryzenAdjCommand.Contains("coper") && Settings.Default.isAutoUvCPU == true && isAutoOC == false) return;
-                                if (ryzenAdjCommand.Contains("cogfx") && Settings.Default.isAutoUviGPU == true && isAutoOC == false) return;
+                                if (ryzenAdjCommand.Contains("coall") && Settings.Default.isAutoUvCPU == true && isAutoOC == false) continue;
+                                if (ryzenAdjCommand.Contains("coper") && Settings.Default.isAutoUvCPU == true && isAutoOC == false) continue;
+                                if (ryzenAdjCommand.Contains("cogfx") && Settings.Default.isAutoUviGPU == true && isAutoOC == false) continue;
 
                                 if (ryzenAdjCommandValue <= 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
                                 else SMUCommands.applySettings(ryzenAdjCommandString, ryzenAdjCommandValue);
 
                                 DiagnosticLogger.LogDebug($"SMU applied: {ryzenAdjCommandString}=0x{ryzenAdjCommandValue:X}");
-                                Task.Delay(50);
                             }
                         }
                         catch (Exception ex)
                         {
                             DiagnosticLogger.LogError(ex, $"Failed to process command: {ryzenAdjCommand}");
                         }
-                    });
                 }
             }
             catch (Exception ex)
@@ -232,7 +221,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
         }
 
         static bool isMessageBoxOpen = false, isUpdatingUltiMode = false;
-        private static void AsusWmi(string command, string value)
+        private static async void AsusWmi(string command, string value)
         {
             try
             {
@@ -269,13 +258,15 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                             var messageBox = new Wpf.Ui.Controls.MessageBox();
 
-                            messageBox.ButtonLeftName = "Restart";
-                            messageBox.ButtonRightName = "Cancel";
+                            messageBox.Title = "GPU Ultimate Mode";
+                            messageBox.Content = "Switching the GPU to Ultimate Mode requires a restart to take effect!";
+                            messageBox.PrimaryButtonText = "Restart";
+                            messageBox.CloseButtonText = "Cancel";
 
-                            messageBox.ButtonLeftClick += MessageBox_Enable;
-                            messageBox.ButtonRightClick += MessageBox_Close;
-
-                            messageBox.Show("GPU Ultimate Mode", "Switching the GPU to Ultimate Mode requires a restart to take\naffect!");
+                            if (await messageBox.ShowDialogAsync() == Wpf.Ui.Controls.MessageBoxResult.Primary)
+                                RestartWithMuxMode(id, 0);
+                            else
+                                isMessageBoxOpen = false;
 
 
                         }
@@ -285,13 +276,15 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                             var messageBox = new Wpf.Ui.Controls.MessageBox();
 
-                            messageBox.ButtonLeftName = "Restart";
-                            messageBox.ButtonRightName = "Cancel";
+                            messageBox.Title = "GPU Ultimate Mode";
+                            messageBox.Content = "Disabling GPU Ultimate Mode requires a restart to take effect!";
+                            messageBox.PrimaryButtonText = "Restart";
+                            messageBox.CloseButtonText = "Cancel";
 
-                            messageBox.ButtonLeftClick += MessageBox_Disable;
-                            messageBox.ButtonRightClick += MessageBox_Close;
-
-                            messageBox.Show("GPU Ultimate Mode", "Disabling GPU Ultimate Mode requires a restart to take\naffect!");
+                            if (await messageBox.ShowDialogAsync() == Wpf.Ui.Controls.MessageBoxResult.Primary)
+                                RestartWithMuxMode(id, 1);
+                            else
+                                isMessageBoxOpen = false;
                         }
                     }
                 }
@@ -302,38 +295,13 @@ namespace Universal_x86_Tuning_Utility.Scripts
             }
         }
 
-        private static void MessageBox_Enable(object sender, System.Windows.RoutedEventArgs e)
+        private static void RestartWithMuxMode(uint id, int mode)
         {
-            uint id = 0;
-            if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.GPUMux;
-            else id = ASUSWmi.GPUMuxVivo;
-            App.wmi.DeviceSet(id, 0, "MUX");
-            Thread.Sleep(250);
-            Process.Start("shutdown", "/r /t 1");
-
-            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
+            App.wmi.DeviceSet(id, mode, "MUX");
             isMessageBoxOpen = false;
             isUpdatingUltiMode = true;
-        }
-
-        private static void MessageBox_Disable(object sender, System.Windows.RoutedEventArgs e)
-        {
-            uint id = 0;
-            if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.GPUMux;
-            else id = ASUSWmi.GPUMuxVivo;
-            App.wmi.DeviceSet(id, 1, "MUX");
-            Thread.Sleep(250);
             Process.Start("shutdown", "/r /t 1");
-
-            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
-            isMessageBoxOpen = false;
-            isUpdatingUltiMode = true;
         }
 
-        private static void MessageBox_Close(object sender, System.Windows.RoutedEventArgs e)
-        {
-            (sender as Wpf.Ui.Controls.MessageBox)?.Close();
-            isMessageBoxOpen = false;
-        }
     }
 }

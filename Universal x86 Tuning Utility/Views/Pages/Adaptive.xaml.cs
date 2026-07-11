@@ -41,16 +41,18 @@ using System.ComponentModel;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for Automations.xaml
-    /// </summary>
     public partial class Adaptive : Page
     {
         System.Windows.Threading.DispatcherTimer adaptiveMode = new System.Windows.Threading.DispatcherTimer();
         System.Windows.Threading.DispatcherTimer sensors = new System.Windows.Threading.DispatcherTimer();
         private static int coreCount = 0;
-        public Adaptive()
+        private readonly GpuInventoryService gpuInventory;
+        private int radeonGpuCount;
+        private int nvidiaGpuCount;
+
+        public Adaptive(GpuInventoryService gpuInventory)
         {
+            this.gpuInventory = gpuInventory;
             InitializeComponent();
 
             _ = Tablet.TabletDevices;
@@ -75,13 +77,17 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             try
             {
-                if (GetRadeonGPUCount() <= 0)
+                GpuInventorySnapshot inventory = await gpuInventory.GetSnapshotAsync();
+                radeonGpuCount = inventory.RadeonCount;
+                nvidiaGpuCount = inventory.NvidiaCount;
+
+                if (radeonGpuCount <= 0)
                 {
                     sdTBOiGPU.Visibility = Visibility.Collapsed;
                     sdADLX.Visibility = Visibility.Collapsed;
                 }
 
-                if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
+                if (nvidiaGpuCount < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
 
                 if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu || Family.FAM == Family.RyzenFamily.DragonRange) nudPowerLimit.Value = 86;
                 else nudPowerLimit.Value = 28;
@@ -195,7 +201,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (start)
                 {
                     start = false;
-                    siStartIcon.Symbol = Wpf.Ui.Common.SymbolRegular.Play20;
+                    siStartIcon.Symbol = Wpf.Ui.Controls.SymbolRegular.Play20;
                     tbxStartText.Text = "Start Adaptive Mode";
                     GetSensor.CloseSensor();
                     Settings.Default.isAdaptiveModeRunning = false;
@@ -205,7 +211,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 else
                 {
                     start = true;
-                    siStartIcon.Symbol = Wpf.Ui.Common.SymbolRegular.Stop20;
+                    siStartIcon.Symbol = Wpf.Ui.Controls.SymbolRegular.Stop20;
                     tbxStartText.Text = "Stop Adaptive Mode";
                     await Task.Run(() => GetSensor.OpenSensor());
                     Settings.Default.isAdaptiveModeRunning = true;
@@ -392,19 +398,22 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         else CPUTemp = (int)GetSensor.GetCPUInfo(SensorType.Temperature, "Core");
                         CPULoad = (int)GetSensor.GetCPUInfo(SensorType.Load, "Total");
 
-                        int i = 1;
-                        do
+                        int clockTotal = 0;
+                        int clockSamples = 0;
+                        for (int core = 1; core <= coreCount; core++)
                         {
-                            if (i <= i) CPUClock = CPUClock + (int)GetSensor.GetCPUInfo(SensorType.Clock, $"Core #{i}");
-                            i++;
+                            int clock = (int)GetSensor.GetCPUInfo(SensorType.Clock, $"Core #{core}");
+                            if (clock <= 0)
+                                continue;
+                            clockTotal += clock;
+                            clockSamples++;
                         }
-                        while (i <= coreCount);
 
-                        CPUClock = (int)(CPUClock / i);
+                        CPUClock = clockSamples > 0 ? clockTotal / clockSamples : 0;
 
                         //CPUPower = (int)GetSensor.getCPUInfo(SensorType.Power, "Package");
 
-                        if (GetRadeonGPUCount() <= 0)
+                        if (radeonGpuCount > 0)
                         {
                             GPULoad = ADLXBackend.GetGPUMetrics(0, 7);
                             GPUClock = ADLXBackend.GetGPUMetrics(0, 0);
@@ -414,7 +423,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         isGameRunning();
                     });
 
-                    if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
+                    if (nvidiaGpuCount < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
 
                     minCPUClock = Convert.ToInt32(nudMinCpuClk.Value);
                     if (CPULoad < (100 / coreCount) + 5) newMinCPUClock = minCPUClock + 500;
@@ -447,39 +456,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
         }
 
-        public static int GetRadeonGPUCount()
-        {
-            int count = 0;
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    string name = obj["Name"] as string;
-                    if (name != null && name.Contains("Radeon"))
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
-
-        public static int GetNVIDIAGPUCount()
-        {
-            int count = 0;
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    string name = obj["Name"] as string;
-                    if (name != null && name.Contains("NVIDIA"))
-                    {
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
         string lastCPU = "";
         string lastCO = "";
         string lastiGPU = "";
@@ -554,7 +530,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             commandString = commandString + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
                         }
 
-                        if (commandString != null && commandString != "") await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandString));
+                        if (commandString != null && commandString != "") await RyzenAdj_To_UXTU.TranslateAsync(commandString);
                     }
 
                     if (RTSS.RTSSRunning() && tsRTSS.IsChecked == true) RTSS.setRTSSFPSLimit((int)nudRTSS.Value);
@@ -601,7 +577,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Garbage.Garbage_Collect();
         }
 
 

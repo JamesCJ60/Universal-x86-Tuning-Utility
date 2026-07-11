@@ -8,14 +8,11 @@ using System.Windows;
 using Microsoft.Extensions.Logging;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
-using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Abstractions.Controls;
 using System.Diagnostics.Eventing.Reader;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for SettingsPage.xaml
-    /// </summary>
     public partial class SettingsPage : INavigableView<ViewModels.SettingsViewModel>
     {
         private readonly ILogger<SettingsPage> _logger;
@@ -45,7 +42,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             cbxLogLevel.SelectedIndex = Settings.Default.DiagnosticLogLevel;
 
+            tbAppVerion.Text = $"Universal x86 Tuning Utility - {GetAssemblyVersion()}";
+
             checkUpdate();
+        }
+        private string GetAssemblyVersion()
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? String.Empty;
         }
 
         private void cbStartBoot_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -211,7 +214,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void UiPage_Loaded(object sender, RoutedEventArgs e)
         {
-            Garbage.Garbage_Collect();
         }
 
         private void btnStressTest_Click(object sender, RoutedEventArgs e)

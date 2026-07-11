@@ -1,46 +1,24 @@
-﻿using RyzenSmu;
-using System.Windows;
-using System.Windows.Input;
-using Universal_x86_Tuning_Utility.Scripts;
-using Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA;
-using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
-using Universal_x86_Tuning_Utility.Scripts.Misc;
-using Wpf.Ui.Common.Interfaces;
+﻿using System;
+using System.Windows.Controls;
+using Universal_x86_Tuning_Utility.ViewModels;
+using Wpf.Ui.Abstractions.Controls;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for DashboardPage.xaml
-    /// </summary>
-    public partial class DashboardPage : INavigableView<ViewModels.DashboardViewModel>
+    public partial class DashboardPage :
+        Page,
+        INavigableView<DashboardViewModel>
     {
-        public ViewModels.DashboardViewModel ViewModel
-        {
-            get;
-        }
+        public DashboardViewModel ViewModel { get; }
 
-        public DashboardPage(ViewModels.DashboardViewModel viewModel)
+        public DashboardPage(DashboardViewModel viewModel)
         {
-            ViewModel = viewModel;
+            ViewModel = viewModel
+                ?? throw new ArgumentNullException(nameof(viewModel));
+
+            DataContext = this;
+
             InitializeComponent();
-            _ = Tablet.TabletDevices;
-
-            Garbage.Garbage_Collect();
-
-            if (Family.TYPE == Family.ProcessorType.Intel)
-            {
-                caPremade.IsEnabled = false;
-                btnPremade.IsEnabled = false;
-            }
-
-            try
-            {
-                NvHwCheck.CheckROPCount();
-            }
-            catch
-            {
-               
-            }
         }
     }
 }

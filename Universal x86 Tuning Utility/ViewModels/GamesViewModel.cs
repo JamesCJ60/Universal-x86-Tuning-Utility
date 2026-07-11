@@ -12,8 +12,8 @@ using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution;
 using Windows.System;
-using Wpf.Ui.Common.Interfaces;
-using Wpf.Ui.Mvvm.Contracts;
+using Wpf.Ui.Abstractions.Controls;
+using Wpf.Ui;
 using Settings = Universal_x86_Tuning_Utility.Properties.Settings;
 
 namespace Universal_x86_Tuning_Utility.ViewModels

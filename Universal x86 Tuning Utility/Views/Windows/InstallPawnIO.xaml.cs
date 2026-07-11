@@ -10,10 +10,7 @@ using Wpf.Ui.Controls;
 
 namespace Universal_x86_Tuning_Utility.Views.Windows
 {
-    /// <summary>
-    /// Interaction logic for InstallpawnIo.xaml
-    /// </summary>
-    public partial class InstallpawnIo : UiWindow
+    public partial class InstallpawnIo : FluentWindow
     {
         private const string PawnIoInstallerUrl = "https://github.com/namazso/PawnIO.Setup/releases/latest/download/PawnIO_setup.exe";
 

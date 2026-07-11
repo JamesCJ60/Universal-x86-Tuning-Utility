@@ -10,7 +10,6 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
@@ -41,7 +40,6 @@ namespace RyzenSmu
             if (Family.FAM == Family.RyzenFamily.Mendocino || Family.FAM == Family.RyzenFamily.Rembrandt || Family.FAM == Family.RyzenFamily.PhoenixPoint || Family.FAM == Family.RyzenFamily.PhoenixPoint2 || Family.FAM == Family.RyzenFamily.HawkPoint || Family.FAM == Family.RyzenFamily.HawkPoint2 || Family.FAM == Family.RyzenFamily.StrixPoint || Family.FAM == Family.RyzenFamily.KrackanPoint || Family.FAM == Family.RyzenFamily.KrackanPoint2 || Family.FAM == Family.RyzenFamily.StrixHalo) Socket_FT6_FP7_FP8();
             if (Family.FAM == Family.RyzenFamily.Raphael || Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.GraniteRidge || Family.FAM == Family.RyzenFamily.FireRange) Socket_AM5_V1();
 
-            SMUCommands.RyzenAccess.Initialise();
         }
 
         private static void Socket_FT5_FP5_AM4()
@@ -504,109 +502,113 @@ namespace RyzenSmu
 
     static class SMUCommands
     {
-        public static List<(string, bool, uint)> commands;
+        private static List<(string Name, bool IsMp1, uint Address)> _commands = new();
+        private static Dictionary<string, (bool IsMp1, uint Address)[]> _commandIndex = new(StringComparer.Ordinal);
+
+        public static List<(string, bool, uint)> commands
+        {
+            get => _commands;
+            set
+            {
+                _commands = value ?? new List<(string, bool, uint)>();
+                _commandIndex = _commands
+                    .GroupBy(command => command.Name, StringComparer.Ordinal)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group.Select(command => (command.IsMp1, command.Address)).ToArray(),
+                        StringComparer.Ordinal);
+            }
+        }
 
         public static Smu RyzenAccess = new Smu();
 
         public static void applySettings(string commandName, uint value)
         {
-            uint[] Args = new uint[6];
-            Args[0] = value;
-
-            // Find the command by name
-            var matchingCommands = commands.Where(c => c.Item1 == commandName);
-            if (matchingCommands.Count() > 0)
-            {
-                List<Task> tasks = new List<Task>();
-                foreach (var command in matchingCommands)
-                {
-                    tasks.Add(Task.Run(async () =>
-                    {
-                        // Apply the command based on its address
-                        if (command.Item2 == true) RyzenAccess.SendMp1(command.Item3, ref Args);
-                        else RyzenAccess.SendRsmu(command.Item3, ref Args);
-                    }));
-                }
-
-                Task.WaitAll(tasks.ToArray());
-            }
-            else throw new ArgumentException($"Command '{commandName}' not found");
+            uint[] args = new uint[6];
+            args[0] = value;
+            Execute(commandName, args);
         }
 
-
-        public static void disableFeature(uint[] Args)
+        public static void disableFeature(uint[] args)
         {
-            var matchingCommands = commands.Where(c => c.Item1 == "disable-feature");
-            if (matchingCommands.Count() > 0)
-            {
-                List<Task> tasks = new List<Task>();
-                foreach (var command in matchingCommands)
-                {
-                    tasks.Add(Task.Run(async () =>
-                    {
-                        if (command.Item2 == true) RyzenAccess.SendMp1(command.Item3, ref Args);
-                        else RyzenAccess.SendRsmu(command.Item3, ref Args);
-                    }));
-                }
-
-                Task.WaitAll(tasks.ToArray());
-            }
-            else throw new ArgumentException($"Command not found");
+            Execute("disable-feature", args);
         }
 
-        public static void enableFeature(uint[] Args)
+        public static void enableFeature(uint[] args)
         {
-            var matchingCommands = commands.Where(c => c.Item1 == "enable-feature");
-            if (matchingCommands.Count() > 0)
-            {
-                List<Task> tasks = new List<Task>();
-                foreach (var command in matchingCommands)
-                {
-                    tasks.Add(Task.Run(async () =>
-                    {
-                        if (command.Item2 == true) RyzenAccess.SendMp1(command.Item3, ref Args);
-                        else RyzenAccess.SendRsmu(command.Item3, ref Args);
-                    }));
-                }
+            Execute("enable-feature", args);
+        }
 
-                Task.WaitAll(tasks.ToArray());
+        private static void Execute(string commandName, uint[] args)
+        {
+            if (!_commandIndex.TryGetValue(commandName, out (bool IsMp1, uint Address)[]? matchingCommands))
+                throw new ArgumentException($"Command '{commandName}' not found");
+
+            if (!RyzenAccess.EnsureInitialised())
+                throw new InvalidOperationException("AMD PawnIO failed to initialise.");
+
+            foreach ((bool isMp1, uint address) in matchingCommands)
+            {
+                if (isMp1) RyzenAccess.SendMp1(address, ref args);
+                else RyzenAccess.SendRsmu(address, ref args);
             }
-            else throw new ArgumentException($"Command not found");
         }
     }
 
     class Smu
     {
-        public static RyzenSMU ryzenSMU;
-        public static AMDPawnIo pawnIo;
+        private static readonly object initializationLock = new();
+        public static RyzenSMU? ryzenSMU;
+        public static AMDPawnIo? pawnIo;
+        private RyzenSMU.Mailbox? mp1Mailbox;
+        private RyzenSMU.Mailbox? rsmuMailbox;
 
         public void Initialise()
         {
-            string modulePath = Path.Combine(
-                Settings.Default.Path,
-                "Assets",
-                "AMD",
-                "PawnIO",
-                "RyzenSMU.bin");
+            EnsureInitialised();
+        }
 
-            pawnIo = AMDPawnIo.LoadModuleFromFile(modulePath);
-
-            if (!pawnIo.IsLoaded)
+        public bool EnsureInitialised()
+        {
+            lock (initializationLock)
             {
-                Console.WriteLine("PawnIo failed to load.");
-                return;
-            }
+                if (pawnIo?.IsLoaded == true && ryzenSMU != null)
+                    return true;
 
-            ryzenSMU = new RyzenSMU(pawnIo);
-            ryzenSMU.Open();
+                string modulePath = Path.Combine(
+                    Settings.Default.Path,
+                    "Assets",
+                    "AMD",
+                    "PawnIO",
+                    "RyzenSMU.bin");
+
+                pawnIo = AMDPawnIo.LoadModuleFromFile(modulePath);
+
+                if (!pawnIo.IsLoaded)
+                    return false;
+
+                ryzenSMU = new RyzenSMU(pawnIo);
+                ryzenSMU.Open();
+                mp1Mailbox = ryzenSMU.RegisterMailbox("MP1", MP1_ADDR_MSG, MP1_ADDR_RSP, MP1_ADDR_ARG, 6);
+                rsmuMailbox = ryzenSMU.RegisterMailbox("RSMU", PSMU_ADDR_MSG, PSMU_ADDR_RSP, PSMU_ADDR_ARG, 6);
+                return true;
+            }
         }
 
         public void Deinitialize()
         {
-            if (pawnIo != null && pawnIo.IsLoaded)
+            lock (initializationLock)
             {
-                ryzenSMU?.Close();
-                pawnIo.Close();
+                if (pawnIo != null && pawnIo.IsLoaded)
+                {
+                    ryzenSMU?.Close();
+                    pawnIo.Close();
+                }
+
+                mp1Mailbox = null;
+                rsmuMailbox = null;
+                ryzenSMU = null;
+                pawnIo = null;
             }
         }
 
@@ -625,28 +627,18 @@ namespace RyzenSmu
 
         public Status SendMp1(uint message, ref uint[] arguments)
         {
-            var mp1 = ryzenSMU.RegisterMailbox(
-                 name: "MP1",
-                 msgAddr: MP1_ADDR_MSG,
-                 rspAddr: MP1_ADDR_RSP,
-                 argAddr: MP1_ADDR_ARG,
-                 maxArgs: 6
-             );
+            if (!EnsureInitialised() || ryzenSMU == null || mp1Mailbox == null)
+                return Status.FAILED;
 
-            return ryzenSMU.SendSmuCommand(mp1, message, ref arguments);
+            return ryzenSMU.SendSmuCommand(mp1Mailbox, message, ref arguments);
         }
 
         public Status SendRsmu(uint message, ref uint[] arguments)
         {
-            var rsmu = ryzenSMU.RegisterMailbox(
-                  name: "RSMU",
-                  msgAddr: PSMU_ADDR_MSG,
-                  rspAddr: PSMU_ADDR_RSP,
-                  argAddr: PSMU_ADDR_ARG,
-                  maxArgs: 6
-              );
+            if (!EnsureInitialised() || ryzenSMU == null || rsmuMailbox == null)
+                return Status.FAILED;
 
-            return ryzenSMU.SendSmuCommand(rsmu, message, ref arguments);
+            return ryzenSMU.SendSmuCommand(rsmuMailbox, message, ref arguments);
         }
 
     }

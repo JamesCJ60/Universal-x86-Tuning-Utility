@@ -1,29 +1,25 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using Universal_x86_Tuning_Utility.Scripts;
-using Wpf.Ui.Common;
+using Wpf.Ui;
 using Wpf.Ui.Controls;
-using Wpf.Ui.Controls.Interfaces;
-using Wpf.Ui.Mvvm.Contracts;
 
 namespace Universal_x86_Tuning_Utility.ViewModels
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        private bool _isInitialized = false;
+        [ObservableProperty]
+        private string _applicationTitle = string.Empty;
 
         [ObservableProperty]
-        private string _applicationTitle = String.Empty;
+        private ObservableCollection<object> _navigationItems = new();
 
         [ObservableProperty]
-        private ObservableCollection<INavigationControl> _navigationItems = new();
-
-        [ObservableProperty]
-        private ObservableCollection<INavigationControl> _navigationFooter = new();
+        private ObservableCollection<object> _navigationFooter = new();
 
         [ObservableProperty]
         private ObservableCollection<MenuItem> _trayMenuItems = new();
@@ -32,218 +28,68 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private string _downloads = "Downloads: ";
 
         [ObservableProperty]
-        private bool _isDownloads = false;
+        private bool _isDownloads;
+
+        private ICommand? _navigateCommand;
 
         public MainWindowViewModel(INavigationService navigationService)
         {
-            if (!_isInitialized)
-                InitializeViewModel();
+            InitializeViewModel();
         }
+
+        public ICommand NavigateCommand => _navigateCommand ??= new RelayCommand<string>(OnNavigate);
 
         private void InitializeViewModel()
         {
             ApplicationTitle = "Universal x86 Tuning Utility";
-            if (Family.TYPE == Family.ProcessorType.Intel)
+
+            NavigationItems = new ObservableCollection<object>
             {
-                NavigationItems = new ObservableCollection<INavigationControl>
-                {
-                new NavigationItem()
-                {
-                    Content = "Home",
-                    PageTag = "dashboard",
-                    Icon = SymbolRegular.Home20,
-                    PageType = typeof(Views.Pages.DashboardPage)
-                },
-                //new NavigationItem()
-                //{
-                //    Content = "Premade",
-                //    PageTag = "premade",
-                //    Icon = SymbolRegular.Predictions20,
-                //    PageType = typeof(Views.Pages.Premade)
-                //},
-                new NavigationItem()
-                {
-                    Content = "Custom",
-                    PageTag = "custom",
-                    Icon = SymbolRegular.Book20,
-                    PageType = typeof(Views.Pages.CustomPresets)
-                },
-                new NavigationItem()
-                {
-                    Content = "Adaptive",
-                    PageTag = "adaptive",
-                    Icon = SymbolRegular.Radar20,
-                    PageType = typeof(Views.Pages.Adaptive)
-                },
-                new NavigationItem()
-                {
-                    Content = "Games",
-                    PageTag = "games",
-                    Icon = SymbolRegular.Games20,
-                    PageType = typeof(Views.Pages.Games)
-                },
-                new NavigationItem()
-                {
-                    Content = "Auto",
-                    PageTag = "auto",
-                    Icon = SymbolRegular.Transmission20,
-                    PageType = typeof(Views.Pages.Automations)
-                },
-                //new NavigationItem()
-                //{
-                //    Content = "Fan",
-                //    PageTag = "fan",
-                //    Icon = SymbolRegular.WeatherDuststorm20,
-                //    PageType = typeof(Views.Pages.FanControl)
-                //},
-                // new NavigationItem()
-                //{
-                //    Content = "Magpie",
-                //    PageTag = "magpie",
-                //    Icon = SymbolRegular.FullScreenMaximize20,
-                //    PageType = typeof(Views.Pages.DataPage)
-                //},
-                new NavigationItem()
-                {
-                    Content = "Info",
-                    PageTag = "info",
-                    Icon = SymbolRegular.Info20,
-                    PageType = typeof(Views.Pages.SystemInfo)
-                }
+                CreateNavigationItem("Home", "dashboard", SymbolRegular.Home24, typeof(Views.Pages.DashboardPage))
             };
 
-                NavigationFooter = new ObservableCollection<INavigationControl>
+            if (Family.TYPE != Family.ProcessorType.Intel)
+                NavigationItems.Add(CreateNavigationItem("Premade", "premade", SymbolRegular.Predictions24, typeof(Views.Pages.Premade)));
+
+            NavigationItems.Add(CreateNavigationItem("Custom", "custom", SymbolRegular.Book24, typeof(Views.Pages.CustomPresets)));
+            NavigationItems.Add(CreateNavigationItem("Adaptive", "adaptive", SymbolRegular.Radar20, typeof(Views.Pages.Adaptive)));
+            NavigationItems.Add(CreateNavigationItem("Games", "games", SymbolRegular.Games24, typeof(Views.Pages.Games)));
+            NavigationItems.Add(CreateNavigationItem("Overlay", "overlay", SymbolRegular.DesktopPulse24, typeof(Views.Pages.OverlaySettingsPage)));
+            NavigationItems.Add(CreateNavigationItem("Auto", "auto", SymbolRegular.Transmission24, typeof(Views.Pages.Automations)));
+            NavigationItems.Add(CreateNavigationItem("Info", "info", SymbolRegular.Info24, typeof(Views.Pages.SystemInfo)));
+
+            NavigationFooter = new ObservableCollection<object>
             {
-                new NavigationItem()
-                {
-                    Content = "Settings",
-                    PageTag = "settings",
-                    Icon = SymbolRegular.Settings20,
-                    PageType = typeof(Views.Pages.SettingsPage)
-                }
+                CreateNavigationItem("Settings", "settings", SymbolRegular.Settings24, typeof(Views.Pages.SettingsPage))
             };
 
-                TrayMenuItems = new ObservableCollection<MenuItem>
+            TrayMenuItems = new ObservableCollection<MenuItem>
             {
-                new MenuItem
-                {
-                    Header = "Home",
-                    Tag = "tray_home"
-                }
+                new() { Header = "Home", Tag = "tray_home" }
             };
-            }
-            else
-            {
-                NavigationItems = new ObservableCollection<INavigationControl>
-                {
-                new NavigationItem()
-                {
-                    Content = "Home",
-                    PageTag = "dashboard",
-                    Icon = SymbolRegular.Home20,
-                    PageType = typeof(Views.Pages.DashboardPage)
-                },
-                new NavigationItem()
-                {
-                    Content = "Premade",
-                    PageTag = "premade",
-                    Icon = SymbolRegular.Predictions20,
-                    PageType = typeof(Views.Pages.Premade)
-                },
-                new NavigationItem()
-                {
-                    Content = "Custom",
-                    PageTag = "custom",
-                    Icon = SymbolRegular.Book20,
-                    PageType = typeof(Views.Pages.CustomPresets)
-                },
-                new NavigationItem()
-                {
-                    Content = "Adaptive",
-                    PageTag = "adaptive",
-                    Icon = SymbolRegular.Radar20,
-                    PageType = typeof(Views.Pages.Adaptive)
-                },
-                new NavigationItem()
-                {
-                    Content = "Games",
-                    PageTag = "games",
-                    Icon = SymbolRegular.Games20,
-                    PageType = typeof(Views.Pages.Games)
-                },
-                new NavigationItem()
-                {
-                    Content = "Auto",
-                    PageTag = "auto",
-                    Icon = SymbolRegular.Transmission20,
-                    PageType = typeof(Views.Pages.Automations)
-                },
-                //new NavigationItem()
-                //{
-                //    Content = "Fan",
-                //    PageTag = "fan",
-                //    Icon = SymbolRegular.WeatherDuststorm20,
-                //    PageType = typeof(Views.Pages.FanControl)
-                //},
-                // new NavigationItem()
-                //{
-                //    Content = "Magpie",
-                //    PageTag = "magpie",
-                //    Icon = SymbolRegular.FullScreenMaximize20,
-                //    PageType = typeof(Views.Pages.DataPage)
-                //},
-                new NavigationItem()
-                {
-                    Content = "Info",
-                    PageTag = "info",
-                    Icon = SymbolRegular.Info20,
-                    PageType = typeof(Views.Pages.SystemInfo)
-                }
-            };
-
-                NavigationFooter = new ObservableCollection<INavigationControl>
-            {
-                new NavigationItem()
-                {
-                    Content = "Settings",
-                    PageTag = "settings",
-                    Icon = SymbolRegular.Settings20,
-                    PageType = typeof(Views.Pages.SettingsPage)
-                }
-            };
-
-                TrayMenuItems = new ObservableCollection<MenuItem>
-            {
-                new MenuItem
-                {
-                    Header = "Home",
-                    Tag = "tray_home"
-                }
-            };
-            }
-
-            _isInitialized = true;
         }
-        private ICommand _navigateCommand;
-        public ICommand NavigateCommand => _navigateCommand ??= new RelayCommand<string>(OnNavigate);
 
-        private void OnNavigate(string parameter)
+        private static NavigationViewItem CreateNavigationItem(string content, string tag, SymbolRegular icon, Type pageType) =>
+            new(content, icon, pageType) { TargetPageTag = tag };
+
+        private void OnNavigate(string? parameter)
         {
             switch (parameter)
             {
                 case "download":
-                    Process.Start(new ProcessStartInfo("https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases") { UseShellExecute = true });
-                    return;
-
+                    OpenUrl("https://github.com/JamesCJ60/Universal-x86-Tuning-Utility/releases");
+                    break;
                 case "discord":
-                    Process.Start(new ProcessStartInfo("http://www.discord.gg/3EkYMZGJwq") { UseShellExecute = true });
-                    return;
-
+                    OpenUrl("http://www.discord.gg/3EkYMZGJwq");
+                    break;
                 case "support":
-                    Process.Start(new ProcessStartInfo("https://www.paypal.com/paypalme/JamesCJ60") { UseShellExecute = true });
-                    Process.Start(new ProcessStartInfo("https://patreon.com/uxtusoftware") { UseShellExecute = true });
-                    return;
+                    OpenUrl("https://www.paypal.com/paypalme/JamesCJ60");
+                    OpenUrl("https://patreon.com/uxtusoftware");
+                    break;
             }
         }
+
+        private static void OpenUrl(string url) =>
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 }

@@ -16,22 +16,22 @@ using System.Windows.Shapes;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using LibreHardwareMonitor.Hardware;
 using Windows.Devices.Sensors;
-using Computer = LibreHardwareMonitor.Hardware.Computer;
 using SensorType = LibreHardwareMonitor.Hardware.SensorType;
 using System.Windows.Threading;
+using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for FanControl.xaml
-    /// </summary>
     public partial class FanControl : Page
     {
         private DispatcherTimer timer;
         private bool isTimerRunning = false;
+        private readonly IHardwareMonitoringService _hardwareMonitoring;
+        private IDisposable? _cpuMonitoringLease;
 
-        public FanControl()
+        public FanControl(IHardwareMonitoringService hardwareMonitoring)
         {
+            _hardwareMonitoring = hardwareMonitoring;
             InitializeComponent();
             _ = Tablet.TabletDevices;
             //Fan_Control.UpdateAddresses();
@@ -61,6 +61,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 // Stop timer
                 timer.Stop();
                 isTimerRunning = false;
+                _cpuMonitoringLease?.Dispose();
+                _cpuMonitoringLease = null;
                 tbFanSpeed.Text = $"Disabled";
             }
             //Fan_Control.disableFanControl();
@@ -105,11 +107,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 // Stop timer
                 timer.Stop();
                 isTimerRunning = false;
+                _cpuMonitoringLease?.Dispose();
+                _cpuMonitoringLease = null;
                 tbFanSpeed.Text = $"Disabled";
             }
             else if (isTimerRunning == false)
             {
                 isTimerRunning = true;
+                _cpuMonitoringLease ??= _hardwareMonitoring.Acquire(HardwareMonitoringCategory.Cpu);
                 timer.Start();
             }
         }
@@ -139,22 +144,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             try
             {
-                Computer computer = new Computer
-                {
-                    IsCpuEnabled = true,
-                };
-                computer.Open();
-                var cpu = computer.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu);
-                cpu.Update();
-                var temperature = cpu.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature);
-                if (temperature != null)
-                {
-                    return (int)temperature.Value;
-                }
-                else
-                {
-                    return 0;
-                }
+                HardwareMetricsSnapshot snapshot = _hardwareMonitoring.ReadSnapshot();
+                return snapshot.CpuTemperature;
             }
             catch (Exception ex)
             {
@@ -177,7 +168,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Garbage.Garbage_Collect();
         }
     }
 }

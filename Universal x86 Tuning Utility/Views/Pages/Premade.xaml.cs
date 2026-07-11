@@ -24,9 +24,6 @@ using Uri = System.Uri;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for Premade.xaml
-    /// </summary>
     public partial class Premade : Page
     {
         private readonly ILogger<Premade> _logger;
@@ -148,7 +145,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Garbage.Garbage_Collect();
         }
 
         private async void exPreset()

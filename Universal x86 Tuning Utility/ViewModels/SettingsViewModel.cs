@@ -2,23 +2,21 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Windows.Input;
-using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Abstractions.Controls;
 
 namespace Universal_x86_Tuning_Utility.ViewModels
 {
     public partial class SettingsViewModel : ObservableObject, INavigationAware
     {
-        private bool _isInitialized = false;
 
         [ObservableProperty]
         private string _appVersion = String.Empty;
 
         [ObservableProperty]
-        private Wpf.Ui.Appearance.ThemeType _currentTheme = Wpf.Ui.Appearance.ThemeType.Unknown;
+        private Wpf.Ui.Appearance.ApplicationTheme _currentTheme = Wpf.Ui.Appearance.ApplicationTheme.Unknown;
 
         public void OnNavigatedTo()
         {
-            if (!_isInitialized)
                 InitializeViewModel();
         }
 
@@ -28,10 +26,8 @@ namespace Universal_x86_Tuning_Utility.ViewModels
 
         private void InitializeViewModel()
         {
-            CurrentTheme = Wpf.Ui.Appearance.Theme.GetAppTheme();
+            CurrentTheme = Wpf.Ui.Appearance.ApplicationThemeManager.GetAppTheme();
             AppVersion = $"Universal x86 Tuning Utility - {GetAssemblyVersion()}";
-
-            _isInitialized = true;
         }
 
         private string GetAssemblyVersion()
@@ -45,20 +41,20 @@ namespace Universal_x86_Tuning_Utility.ViewModels
             switch (parameter)
             {
                 case "theme_light":
-                    if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Light)
+                    if (CurrentTheme == Wpf.Ui.Appearance.ApplicationTheme.Light)
                         break;
 
-                    Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Light);
-                    CurrentTheme = Wpf.Ui.Appearance.ThemeType.Light;
+                    Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Light);
+                    CurrentTheme = Wpf.Ui.Appearance.ApplicationTheme.Light;
 
                     break;
 
                 default:
-                    if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Dark)
+                    if (CurrentTheme == Wpf.Ui.Appearance.ApplicationTheme.Dark)
                         break;
 
-                    Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Dark);
-                    CurrentTheme = Wpf.Ui.Appearance.ThemeType.Dark;
+                    Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Dark);
+                    CurrentTheme = Wpf.Ui.Appearance.ApplicationTheme.Dark;
 
                     break;
             }

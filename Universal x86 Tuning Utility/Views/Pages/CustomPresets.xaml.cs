@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,16 +26,13 @@ using Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
-using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Abstractions.Controls;
 using Wpf.Ui.Controls;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
-    /// <summary>
-    /// Interaction logic for CustomPresets.xaml
-    /// </summary>
     public partial class CustomPresets : INavigableView<ViewModels.CustomPresetsViewModel>
     {
         public ViewModels.CustomPresetsViewModel ViewModel
@@ -88,52 +84,34 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nvMaxCoreClk = 4000
         };
 
-        private PresetManager apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
-        private PresetManager amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
-        private PresetManager intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+        private PresetManager presetManager;
+        private readonly GpuInventoryService gpuInventory;
+        private bool deferredSetupComplete;
+        private int radeonGpuCount;
+        private int nvidiaGpuCount;
 
         int[] clockRatio = null;
         NumberBox[] intelRatioControls = null;
-        public CustomPresets()
+        public CustomPresets(GpuInventoryService gpuInventory)
         {
+            this.gpuInventory = gpuInventory;
             InitializeComponent();
             _ = Tablet.TabletDevices;
 
-            apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
-            amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
-            intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+            string presetFile = Family.TYPE switch
+            {
+                Family.ProcessorType.Amd_Apu => "apuPresets.json",
+                Family.ProcessorType.Amd_Desktop_Cpu => "amdDtCpuPresets.json",
+                Family.ProcessorType.Intel => "intelPresets.json",
+                _ => "apuPresets.json"
+            };
+            presetManager = new PresetManager(Settings.Default.Path + presetFile);
 
             sdCcdAffinity.Visibility = Visibility.Collapsed;
 
-            if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
-            if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
-            else {
-                if (!NvTuning.TryGetGpuInfo(out var info))
-                {
-                    Debug.WriteLine("Could not read GPU info.");
-                }
-                sdNVPower.Maximum = info.MaxPowerWatts;
-                nudNVPower.Maximum = info.MaxPowerWatts;
-                sdNVPower.Minimum = info.MinPowerWatts;
-                nudNVPower.Minimum = info.MinPowerWatts;
-                sdNVPower.Value = info.CurrentPowerWatts;
-            }
-            try
-            {
-                if (Display.uniqueRefreshRates.Count > 1)
-                {
-                    cbxRefreshRate.Items.Add($"System Controlled");
-                    foreach (var rate in Display.uniqueRefreshRates)
-                    {
-                        cbxRefreshRate.Items.Add($"{rate} Hz");
-                    }
-                }
-                else sdRefreshRate.Visibility = Visibility.Collapsed;
-            }
-            catch
-            {
-                sdRefreshRate.Visibility = Visibility.Collapsed;
-            }
+            sdADLX.Visibility = Visibility.Collapsed;
+            sdNVIDIA.Visibility = Visibility.Collapsed;
+            sdRefreshRate.Visibility = Visibility.Collapsed;
 
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
@@ -150,7 +128,17 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     sdAmdCCD2CO.Visibility = Visibility.Collapsed;
                 }
                 
-                if (Family.FAM != Family.RyzenFamily.StrixHalo || Family.FAM != Family.RyzenFamily.StrixPoint || Family.FAM != Family.RyzenFamily.KrackanPoint || Family.FAM != Family.RyzenFamily.PhoenixPoint || Family.FAM != Family.RyzenFamily.PhoenixPoint2 && Family.FAM != Family.RyzenFamily.Mendocino && Family.FAM != Family.RyzenFamily.Rembrandt && Family.FAM != Family.RyzenFamily.Lucienne && Family.FAM != Family.RyzenFamily.Renoir) sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
+                if (Family.FAM is not (
+                    Family.RyzenFamily.StrixHalo or
+                    Family.RyzenFamily.StrixPoint or
+                    Family.RyzenFamily.KrackanPoint or
+                    Family.RyzenFamily.PhoenixPoint or
+                    Family.RyzenFamily.PhoenixPoint2 or
+                    Family.RyzenFamily.Mendocino or
+                    Family.RyzenFamily.Rembrandt or
+                    Family.RyzenFamily.Lucienne or
+                    Family.RyzenFamily.Renoir))
+                    sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
                 if (SystemInformation.PowerStatus.BatteryChargeStatus != BatteryChargeStatus.NoSystemBattery) sdAmdCpuTune.Visibility = Visibility.Collapsed;
 
                 if (Family.FAM < Family.RyzenFamily.Renoir) sdAmdSoftClk.Visibility = Visibility.Visible;
@@ -162,7 +150,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.FireRange || Family.FAM == Family.RyzenFamily.StrixHalo || Family.FAM == Family.RyzenFamily.KrackanPoint) if (Family.CPUName.Contains("Ryzen 9") || Family.CPUName.Contains("395") || Family.CPUName.Contains("390")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
-                IEnumerable<string> presetNames = apuPresetManager.GetPresetNames();
+                IEnumerable<string> presetNames = presetManager.GetPresetNames();
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -194,7 +182,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (Family.CPUName.Contains("Ryzen 9")) sdAmdCCD2CO.Visibility = sdAmdCO.Visibility;
 
                 // Get the names of all the stored presets
-                IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
+                IEnumerable<string> presetNames = presetManager.GetPresetNames();
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -223,7 +211,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 sdAmdCpuTune.Visibility = Visibility.Collapsed;
                 sdAmdCO.Visibility = Visibility.Collapsed;
 
-                clockRatio = Intel_Management.readClockRatios();
+                clockRatio = new int[8];
 
                 intelRatioControls = new NumberBox[]
                 {
@@ -248,7 +236,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     }
                 }
                 // Get the names of all the stored presets
-                IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
+                IEnumerable<string> presetNames = presetManager.GetPresetNames();
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -260,32 +248,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             if (IsScrollBarVisible(mainScroll)) mainCon.Margin = new Thickness(15, 0, 0, 0);
             else mainCon.Margin = new Thickness(15, 0, -12, 0);
 
-            if (Settings.Default.isASUS)
-            {
-                uint id = 0;
-                if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.GPUMux;
-                else id = ASUSWmi.GPUMuxVivo;
-                int mux = App.wmi.DeviceGet(id);
-
-                if (mux > 0) tsASUSUlti.IsChecked = false;
-                else if (mux > -1) tsASUSUlti.IsChecked = true;
-                else sdAsusUlti.Visibility = Visibility.Collapsed;
-
-                id = ASUSWmi.GPUEco;
-                int eco = App.wmi.DeviceGet(id);
-
-                if (eco > -1 && eco < 1) tsASUSEco.IsChecked = false;
-                else if (eco > 0) tsASUSEco.IsChecked = true;
-                else sdAsusEco.Visibility = Visibility.Collapsed;
-
-                if (App.product.Contains("ROG") || App.product.Contains("TUF")) id = ASUSWmi.PerformanceMode;
-                else id = ASUSWmi.VivoBookMode;
-                int perfMode = App.wmi.DeviceGet(id);
-                if (perfMode == (int)ASUSWmi.AsusMode.Silent) cbxAsusPower.SelectedIndex = 1;
-                else if (perfMode == (int)ASUSWmi.AsusMode.Balanced) cbxAsusPower.SelectedIndex = 2;
-                else if (perfMode == (int)ASUSWmi.AsusMode.Turbo) cbxAsusPower.SelectedIndex = 3;
-            }
-            else
+            if (!Settings.Default.isASUS)
             {
                 sdAsusPower.Visibility = Visibility.Collapsed;
                 sdAsusUlti.Visibility = Visibility.Collapsed;
@@ -311,17 +274,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (commandValues != "" && commandValues != null)
             {
-                await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandValues));
+                await RyzenAdj_To_UXTU.TranslateAsync(commandValues);
                 ToastNotification.ShowToastNotification("Preset Applied", $"Your custom preset settings have been applied!");
             }
 
             Settings.Default.CommandString = commandValues;
             Settings.Default.Save();
 
-            if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
-            else sdADLX.Visibility = Visibility.Visible;
-            if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
-            else sdNVIDIA.Visibility = Visibility.Visible;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -481,7 +440,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             powerMode = (int)cbxPowerMode.SelectedIndex,
                             ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
                         };
-                        apuPresetManager.SavePreset(tbxPresetName.Text, preset);
+                        presetManager.SavePreset(tbxPresetName.Text, preset);
                         if ( !cbxPowerPreset.Items.Contains(tbxPresetName.Text) )
                             cbxPowerPreset.Items.Add(tbxPresetName.Text);
 
@@ -490,10 +449,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         Settings.Default.Save();
                         ToastNotification.ShowToastNotification("Preset Saved", $"Your preset {tbxPresetName.Text} has been saved successfully!");
 
-                        if (GetRadeonGPUCount() < 1) sdADLX.Visibility = Visibility.Collapsed;
-                        else sdADLX.Visibility = Visibility.Visible;
-                        if (GetNVIDIAGPUCount() < 1) sdNVIDIA.Visibility = Visibility.Collapsed;
-                        else sdNVIDIA.Visibility = Visibility.Visible;
                     }
                 }
 
@@ -597,7 +552,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             powerMode = (int)cbxPowerMode.SelectedIndex,
                             ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
                         };
-                        amdDtCpuPresetManager.SavePreset(tbxPresetName.Text, preset);
+                        presetManager.SavePreset(tbxPresetName.Text, preset);
                         if (!cbxPowerPreset.Items.Contains(tbxPresetName.Text))
                             cbxPowerPreset.Items.Add(tbxPresetName.Text);
 
@@ -675,7 +630,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             intelClockRatioC7 = (int)nudIntelRatioC7.Value,
                             intelClockRatioC8 = (int)nudIntelRatioC8.Value,
                         };
-                        intelPresetManager.SavePreset(tbxPresetName.Text, preset);
+                        presetManager.SavePreset(tbxPresetName.Text, preset);
                         if (!cbxPowerPreset.Items.Contains(tbxPresetName.Text))
                             cbxPowerPreset.Items.Add(tbxPresetName.Text);
 
@@ -702,7 +657,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (cbxPowerPreset.Text != "" && cbxPowerPreset.Text != null)
                     {
                         string deletePresetName = cbxPowerPreset.Text;
-                        apuPresetManager.DeletePreset(deletePresetName);
+                        presetManager.DeletePreset(deletePresetName);
                         cbxPowerPreset.Items.Remove(deletePresetName);
 
                         updateValues("");
@@ -715,10 +670,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (cbxPowerPreset.Text != "" && cbxPowerPreset.Text != null)
                     {
                         string deletePresetName = cbxPowerPreset.Text;
-                        amdDtCpuPresetManager.DeletePreset(deletePresetName);
+                        presetManager.DeletePreset(deletePresetName);
 
                         // Get the names of all the stored presets
-                        IEnumerable<string> presetNames = amdDtCpuPresetManager.GetPresetNames();
+                        IEnumerable<string> presetNames = presetManager.GetPresetNames();
                         cbxPowerPreset.Items.Remove(deletePresetName);
 
                         updateValues("");
@@ -731,7 +686,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (cbxPowerPreset.Text != "" && cbxPowerPreset.Text != null)
                     {
                         string deletePresetName = cbxPowerPreset.Text;
-                        intelPresetManager.DeletePreset(deletePresetName);
+                        presetManager.DeletePreset(deletePresetName);
                         cbxPowerPreset.Items.Remove(deletePresetName);
 
                         updateValues("");
@@ -748,9 +703,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            apuPresetManager = new PresetManager(Settings.Default.Path + "apuPresets.json");
-            amdDtCpuPresetManager = new PresetManager(Settings.Default.Path + "amdDtCpuPresets.json");
-            intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
+            string presetFile = Family.TYPE switch
+            {
+                Family.ProcessorType.Amd_Apu => "apuPresets.json",
+                Family.ProcessorType.Amd_Desktop_Cpu => "amdDtCpuPresets.json",
+                Family.ProcessorType.Intel => "intelPresets.json",
+                _ => "apuPresets.json"
+            };
+            presetManager = new PresetManager(Settings.Default.Path + presetFile);
             if (cbxPowerPreset.Text != null && cbxPowerPreset.Text != "") updateValues(cbxPowerPreset.SelectedItem.ToString());
         }
 
@@ -769,7 +729,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 if (Family.TYPE == Family.ProcessorType.Amd_Apu)
                 {
                     // Get the "myPreset" preset
-                    Preset myPreset = apuPresetManager.GetPreset(preset) ?? DefaultAPUPreset;
+                    Preset myPreset = presetManager.GetPreset(preset) ?? DefaultAPUPreset;
 
                     // Read the values from the preset
                     nudAPUSkinTemp.Value = myPreset.apuSkinTemp;
@@ -913,7 +873,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 } else if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
                 {
                     // Get the "myPreset" preset
-                    Preset myPreset = amdDtCpuPresetManager.GetPreset(preset) ?? DefaultAMDDtCPUPreset;
+                    Preset myPreset = presetManager.GetPreset(preset) ?? DefaultAMDDtCPUPreset;
 
                     // Read the values from the preset
                     nudCPUTemp.Value = myPreset.dtCpuTemp;
@@ -1007,7 +967,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 } else if (Family.TYPE == Family.ProcessorType.Intel)
                 {
                     // Get the "myPreset" preset
-                    Preset myPreset = intelPresetManager.GetPreset(preset) ?? DefaultIntelPreset;
+                    Preset myPreset = presetManager.GetPreset(preset) ?? DefaultIntelPreset;
 
                     // Read the values from the preset
                     nudIntelPL1.Value = myPreset.IntelPL1;
@@ -1071,7 +1031,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudIntelRatioC7.Value = myPreset.intelClockRatioC7;
                     nudIntelRatioC8.Value = myPreset.intelClockRatioC8;
                 }
-                Garbage.Garbage_Collect();
             }
             catch (Exception ex)
             {
@@ -1099,7 +1058,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
                 if (cbAPUTemp.IsChecked == true) commandValues = commandValues + $"--tctl-temp={nudAPUTemp.Value} --cHTC-temp={nudAPUTemp.Value} ";
-                if (cbAPUSkinTemp.IsChecked == true) commandValues = commandValues + $"--apu-skin-temp={nudAPUSkinTemp.Value *= 256} ";
+                if (cbAPUSkinTemp.IsChecked == true) commandValues = commandValues + $"--apu-skin-temp={nudAPUSkinTemp.Value} ";
                 if (cbSTAPMPow.IsChecked == true) commandValues = commandValues + $"--stapm-limit={nudSTAPMPow.Value * 1000}  ";
                 if (cbFastPow.IsChecked == true) commandValues = commandValues + $"--fast-limit={nudFastPow.Value * 1000} ";
                 if (cbFastTime.IsChecked == true) commandValues = commandValues + $"--stapm-time={nudFastTime.Value} ";
@@ -1220,7 +1179,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     commandValues = commandValues + $"--enable-oc --enable-oc ";
                 }
 
-                Garbage.Garbage_Collect();
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
@@ -1308,7 +1266,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     }
                 }
                 if (cbIntelPL1.IsChecked == true) commandValues = commandValues + $"--intel-pl={nudIntelPL1.Value} ";
-                if (tsIntelUV.IsChecked == true) commandValues = commandValues + $"--intel-volt-cpu={nudIntelCoreUV.Value} --intel-volt-gpu={nudIntelGfxUV.Value} --intel-volt-cache={nudIntelCacheUV.Value} --intel-volt-cpu={nudIntelSAUV.Value} ";
+                if (tsIntelUV.IsChecked == true) commandValues = commandValues + $"--intel-volt-cpu={nudIntelCoreUV.Value} --intel-volt-gpu={nudIntelGfxUV.Value} --intel-volt-cache={nudIntelCacheUV.Value} --intel-volt-sa={nudIntelSAUV.Value} ";
                 if (tsIntelBal.IsChecked == true) commandValues = commandValues + $"--intel-bal-cpu={nudIntelCpuBal.Value} --intel-bal-gpu={nudIntelGpuBal.Value} ";
                 if (cbAPUiGPUClk.IsChecked == true) commandValues = commandValues + $"--intel-gpu={nudAPUiGPUClk.Value} ";
 
@@ -1388,45 +1346,6 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (checkBox == cbImageSharp) cbRSR.IsChecked = false;
 
-            Garbage.Garbage_Collect();
-        }
-
-        public static int GetRadeonGPUCount()
-        {
-            int count = 0;
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    string name = obj["Name"] as string;
-                    if (name != null && name.Contains("Radeon"))
-                    {
-                        count++;
-                    }
-                }
-
-                Garbage.Garbage_Collect();
-            }
-            return count;
-        }
-
-        public static int GetNVIDIAGPUCount()
-        {
-            int count = 0;
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    string name = obj["Name"] as string;
-                    if (name != null && name.Contains("NVIDIA"))
-                    {
-                        count++;
-                    }
-                }
-
-                Garbage.Garbage_Collect();
-            }
-            return count;
         }
 
         private void btnUndo_Click(object sender, RoutedEventArgs e)
@@ -1450,9 +1369,75 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             btnUndo.Visibility = Visibility.Collapsed;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Garbage.Garbage_Collect();
+            if (deferredSetupComplete)
+                return;
+
+            deferredSetupComplete = true;
+            await App.DisplaySetupTask;
+
+            if (Display.uniqueRefreshRates.Count > 1)
+            {
+                cbxRefreshRate.Items.Clear();
+                cbxRefreshRate.Items.Add("System Controlled");
+                foreach (int rate in Display.uniqueRefreshRates)
+                    cbxRefreshRate.Items.Add($"{rate} Hz");
+                sdRefreshRate.Visibility = Visibility.Visible;
+            }
+
+            GpuInventorySnapshot inventory = await gpuInventory.GetSnapshotAsync();
+            radeonGpuCount = inventory.RadeonCount;
+            nvidiaGpuCount = inventory.NvidiaCount;
+            sdADLX.Visibility = radeonGpuCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+            sdNVIDIA.Visibility = nvidiaGpuCount > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+            if (nvidiaGpuCount > 0)
+            {
+                NvTuning.GpuInfo? info = await Task.Run<NvTuning.GpuInfo?>(() =>
+                    NvTuning.TryGetGpuInfo(out NvTuning.GpuInfo value) ? value : null);
+                if (info.HasValue)
+                {
+                    sdNVPower.Maximum = info.Value.MaxPowerWatts;
+                    nudNVPower.Maximum = info.Value.MaxPowerWatts;
+                    sdNVPower.Minimum = info.Value.MinPowerWatts;
+                    nudNVPower.Minimum = info.Value.MinPowerWatts;
+                    sdNVPower.Value = info.Value.CurrentPowerWatts;
+                }
+            }
+
+            if (Settings.Default.isASUS)
+            {
+                (int mux, int eco, int performanceMode) = await Task.Run(() =>
+                {
+                    try
+                    {
+                        uint muxId = App.product.Contains("ROG") || App.product.Contains("TUF") ? ASUSWmi.GPUMux : ASUSWmi.GPUMuxVivo;
+                        uint performanceId = App.product.Contains("ROG") || App.product.Contains("TUF") ? ASUSWmi.PerformanceMode : ASUSWmi.VivoBookMode;
+                        return (App.wmi.DeviceGet(muxId), App.wmi.DeviceGet(ASUSWmi.GPUEco), App.wmi.DeviceGet(performanceId));
+                    }
+                    catch
+                    {
+                        return (-1, -1, -1);
+                    }
+                });
+
+                if (mux > 0) tsASUSUlti.IsChecked = false;
+                else if (mux > -1) tsASUSUlti.IsChecked = true;
+                else sdAsusUlti.Visibility = Visibility.Collapsed;
+
+                if (eco is >= 0 and < 1) tsASUSEco.IsChecked = false;
+                else if (eco > 0) tsASUSEco.IsChecked = true;
+                else sdAsusEco.Visibility = Visibility.Collapsed;
+
+                if (performanceMode == (int)ASUSWmi.AsusMode.Silent) cbxAsusPower.SelectedIndex = 1;
+                else if (performanceMode == (int)ASUSWmi.AsusMode.Balanced) cbxAsusPower.SelectedIndex = 2;
+                else if (performanceMode == (int)ASUSWmi.AsusMode.Turbo) cbxAsusPower.SelectedIndex = 3;
+            }
+
+            Preset? selectedPreset = presetManager.GetPreset(Settings.Default.cstmPreset);
+            if (selectedPreset != null && selectedPreset.displayHz >= 0 && selectedPreset.displayHz < cbxRefreshRate.Items.Count)
+                cbxRefreshRate.SelectedIndex = selectedPreset.displayHz;
         }
     }
 }

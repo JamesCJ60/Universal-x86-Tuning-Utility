@@ -29,16 +29,14 @@ using Universal_x86_Tuning_Utility.Scripts.ASUS;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
+using Universal_x86_Tuning_Utility.Services.Performance;
 using Universal_x86_Tuning_Utility.Views.Pages;
 using Universal_x86_Tuning_Utility.Views.Windows;
-using Wpf.Ui.Mvvm.Contracts;
-using Wpf.Ui.Mvvm.Services;
+using Wpf.Ui;
+using Wpf.Ui.Abstractions;
 
 namespace Universal_x86_Tuning_Utility
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
         // The.NET Generic Host provides dependency injection, configuration, logging, and other services.
@@ -64,7 +62,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "26.2.0";
+        public static string version = "26.2.1";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -72,6 +70,7 @@ namespace Universal_x86_Tuning_Utility
         public static readonly string LOGS_FOLDER = ".\\logs\\";
 
         public static string product = "";
+        public static Task DisplaySetupTask { get; private set; } = Task.CompletedTask;
 
         /// <summary>
         /// Occurs when the application is loading.
@@ -113,8 +112,18 @@ namespace Universal_x86_Tuning_Utility
             {
                 try
                 {
-                    await Task.Run(() => product = GetSystemInfo.Product);
-                    Display.setUpLists();
+                    product = GetSystemInfo.Product;
+                    DisplaySetupTask = Task.Run(() =>
+                    {
+                        try
+                        {
+                            Display.setUpLists();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Logger.Error(ex, "Failed to setup display refresh rates");
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -138,7 +147,7 @@ namespace Universal_x86_Tuning_Utility
                         services.AddHostedService<ApplicationHostService>();
 
                         // Page resolver service
-                        services.AddSingleton<IPageService, PageService>();
+                        services.AddSingleton<INavigationViewPageProvider, PageService>();
 
                         try
                         {
@@ -172,6 +181,14 @@ namespace Universal_x86_Tuning_Utility
                         // Service containing navigation, same as INavigationWindow... but without window
                         services.AddSingleton<INavigationService, NavigationService>();
 
+                        services.AddSingleton<IHardwareMonitoringService, HardwareMonitoringService>();
+                        services.AddSingleton<GpuInventoryService>();
+                        services.AddSingleton<IFpsMonitoringService, FpsMonitoringService>();
+                        services.AddSingleton<OverlaySettingsStore>();
+                        services.AddSingleton<OverlayManagerService>();
+                        services.AddHostedService(provider => provider.GetRequiredService<OverlayManagerService>());
+                        services.AddHostedService<GamePerformanceTrackingService>();
+
                         // Main window with navigation
                         services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
                         services.AddScoped<ViewModels.MainWindowViewModel>();
@@ -192,6 +209,7 @@ namespace Universal_x86_Tuning_Utility
                         services.AddScoped<ViewModels.DataViewModel>();
                         services.AddScoped<Views.Pages.SettingsPage>();
                         services.AddScoped<ViewModels.SettingsViewModel>();
+                        services.AddScoped<Views.Pages.OverlaySettingsPage>();
 
                         // Configuration
                         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
@@ -264,13 +282,6 @@ namespace Universal_x86_Tuning_Utility
                     Settings.Default.FirstBoot = false;
                     Settings.Default.Save();
 
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, false);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, false);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, false);
-
                     try
                     {
                         Task.Run(() => UnblockFilesInDirectory(path));
@@ -281,47 +292,40 @@ namespace Universal_x86_Tuning_Utility
                     }
                 }
 
-                try
-                {
-                    if (IsInternetAvailable())
-                        if (Settings.Default.UpdateCheck)
-                            CheckForUpdate();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to check for updates");
-                }
-
-                try
-                {
-                    if (IsInternetAvailable())
-                        if (PawnIoDetectionService.ShouldOpenInstaller())
-                        {
-                            InstallpawnIo installerWindow = new InstallpawnIo();
-
-                            installerWindow.Show();
-                        }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to check for PawnIO");
-                }
-
                 await _host.StartAsync();
-
-                try
-                {
-                    await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to sync game library");
-                }
+                _ = RunPostStartupTasksAsync();
             }
             catch (Exception ex)
             {
                 Log.Logger.Fatal(ex, "Failed to build and start a host");
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async Task RunPostStartupTasksAsync()
+        {
+            try
+            {
+                var isInternetAvailable = await Task.Run(IsInternetAvailable);
+
+                if (isInternetAvailable && Settings.Default.UpdateCheck)
+                    CheckForUpdate();
+
+                if (isInternetAvailable && PawnIoDetectionService.ShouldOpenInstaller())
+                    new InstallpawnIo().Show();
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed during deferred update and PawnIO checks");
+            }
+
+            try
+            {
+                Game_Manager.installedGames = await Task.Run(() => Game_Manager.syncGame_Library());
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to sync game library");
             }
         }
 

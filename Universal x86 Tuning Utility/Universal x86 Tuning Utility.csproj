@@ -15,11 +15,11 @@
     <UseWindowsForms>True</UseWindowsForms>
     <SignAssembly>False</SignAssembly>
     <Copyright>© UXTU Team 2020 - 2026</Copyright>
-    <AssemblyVersion>26.2.0</AssemblyVersion>
-    <FileVersion>26.2.0</FileVersion>
+    <AssemblyVersion>26.2.1</AssemblyVersion>
+    <FileVersion>26.2.1</FileVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <SupportedOSPlatformVersion>10.0.22621.0</SupportedOSPlatformVersion>
-    <Version>26.2.0</Version>
+    <Version>26.2.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,6 +38,7 @@
     <PackageReference Include="hidlibrary" Version="3.3.40" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.2.3" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
@@ -50,7 +51,8 @@
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.9" />
     <PackageReference Include="System.Management" Version="10.0.9" />
     <PackageReference Include="TaskScheduler" Version="2.12.2" />
-    <PackageReference Include="WPF-UI" Version="2.1.0" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+    <PackageReference Include="WPF-UI.Tray" Version="4.3.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
   </ItemGroup>
@@ -147,7 +149,7 @@
 
   <ItemGroup>
     <Reference Include="AutoOC">
-      <HintPath>..\..\AutoOC\AutoOC\bin\Release\net10.0\publish\AutoOC.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\JamesCJ60\Universal x86 Tuning Utility\AutoOC.dll</HintPath>
     </Reference>
     <Reference Include="RTSSSharedMemoryNET">
       <HintPath>Assets\RTSS\RTSSSharedMemoryNET.dll</HintPath>

@@ -251,6 +251,11 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             {
                 try
                 {
+                    using RegistryKey? biosKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\BIOS");
+                    string? productName = biosKey?.GetValue("SystemProductName")?.ToString();
+                    if (!string.IsNullOrWhiteSpace(productName))
+                        return productName;
+
                     foreach (ManagementObject queryObj in ComputerSsystemInfo.Get())
                     {
                         return queryObj["Name"].ToString();
