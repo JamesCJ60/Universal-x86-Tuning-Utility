@@ -3,8 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 using Universal_x86_Tuning_Utility.Scripts;
+using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
@@ -35,6 +37,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         public MainWindowViewModel(INavigationService navigationService)
         {
             InitializeViewModel();
+            LocalizationService.CultureChanged += OnCultureChanged;
         }
 
         public ICommand NavigateCommand => _navigateCommand ??= new RelayCommand<string>(OnNavigate);
@@ -71,6 +74,31 @@ namespace Universal_x86_Tuning_Utility.ViewModels
 
         private static NavigationViewItem CreateNavigationItem(string content, string tag, SymbolRegular icon, Type pageType) =>
             new(content, icon, pageType) { TargetPageTag = tag };
+
+        private void OnCultureChanged(object? sender, EventArgs e)
+        {
+            foreach (var item in NavigationItems.Concat(NavigationFooter).OfType<NavigationViewItem>())
+            {
+                var symbol = item.TargetPageTag switch
+                {
+                    "dashboard" => SymbolRegular.Home24,
+                    "premade" => SymbolRegular.Predictions24,
+                    "custom" => SymbolRegular.Book24,
+                    "adaptive" => SymbolRegular.Radar20,
+                    "games" => SymbolRegular.Games24,
+                    "overlay" => SymbolRegular.DesktopPulse24,
+                    "auto" => SymbolRegular.Transmission24,
+                    "info" => SymbolRegular.Info24,
+                    "settings" => SymbolRegular.Settings24,
+                    _ => SymbolRegular.Empty
+                };
+
+                if (symbol != SymbolRegular.Empty)
+                {
+                    item.Icon = new SymbolIcon { Symbol = symbol };
+                }
+            }
+        }
 
         private void OnNavigate(string? parameter)
         {

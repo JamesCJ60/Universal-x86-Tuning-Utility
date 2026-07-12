@@ -63,10 +63,10 @@ namespace Universal_x86_Tuning_Utility.Services
             Thread.CurrentThread.CurrentUICulture = culture;
             LoadCatalogue("en-GB");
             LoadCatalogue(CurrentCultureName);
-            CultureChanged?.Invoke(null, EventArgs.Empty);
 
             if (!refreshWindows || Application.Current == null)
             {
+                CultureChanged?.Invoke(null, EventArgs.Empty);
                 return;
             }
 
@@ -76,6 +76,8 @@ namespace Universal_x86_Tuning_Utility.Services
             {
                 ApplyTree(window, new HashSet<object>(ReferenceEqualityComparer.Instance));
             }
+
+            CultureChanged?.Invoke(null, EventArgs.Empty);
         }
 
         public static string Get(string source)
@@ -205,6 +207,11 @@ namespace Universal_x86_Tuning_Utility.Services
 
         private static void ApplyElement(object element)
         {
+            if (element is FrameworkElement { TemplatedParent: not null })
+            {
+                return;
+            }
+
             foreach (var propertyName in StringProperties)
             {
                 ApplyProperty(element, propertyName);
