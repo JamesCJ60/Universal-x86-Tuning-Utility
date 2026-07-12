@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
+using Universal_x86_Tuning_Utility.Services;
 using Universal_x86_Tuning_Utility.Views.Windows;
 using static Universal_x86_Tuning_Utility.Scripts.Misc.GetSystemInfo;
 
@@ -197,7 +198,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 tbHealth.Text = $"{(GetSystemInfo.GetBatteryHealth() * 100).ToString("0.##")}%";
                 tbCycle.Text = $"{GetSystemInfo.GetBatteryCycle()}";
-                tbCapcity.Text = $"Full Charge: {GetSystemInfo.ReadFullChargeCapacity()} mAh | Design: {GetSystemInfo.ReadDesignCapacity()} mAh";
+                tbCapcity.Text = LocalizationService.Format("Full Charge: {0} mAh | Design: {1} mAh", GetSystemInfo.ReadFullChargeCapacity(), GetSystemInfo.ReadDesignCapacity());
 
                 tbChargeRate.Text = $"{(GetSystemInfo.GetBatteryRate() / 1000).ToString("0.##")}W";
                 DispatcherTimer bat = new DispatcherTimer();

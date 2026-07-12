@@ -1,0 +1,22 @@
+{
+  "STAPM Power Limit (W)": "Skin Temperature Aware Power Management (STAPM) Limit (W)",
+  "PPT Limit (W)": "Package Power Tracking (PPT) Limit (W)",
+  "EDC Limit (A)": "Electrical Design Current (EDC) Limit (A)",
+  "TDC Limit (A)": "Thermal Design Current (TDC) Limit (A)",
+  "CPU TDC Limit (A)": "CPU Thermal Design Current (TDC) Limit (A)",
+  "CPU EDC Limit (A)": "CPU Electrical Design Current (EDC) Limit (A)",
+  "SoC TDC Limit (A)": "System-on-Chip Thermal Design Current (TDC) Limit (A)",
+  "SoC EDC Limit (A)": "System-on-Chip Electrical Design Current (EDC) Limit (A)",
+  "iGPU TDC Limit (A)": "Integrated GPU Thermal Design Current (TDC) Limit (A)",
+  "iGPU EDC Limit (A)": "Integrated GPU Electrical Design Current (EDC) Limit (A)",
+  "GFX TDC Limit (A)": "Graphics Thermal Design Current (TDC) Limit (A)",
+  "GFX EDC Limit (A)": "Graphics Electrical Design Current (EDC) Limit (A)",
+  "APU VRM Tuning": "APU Voltage Regulator Module (VRM) Tuning",
+  "Intel FIVR Tuning": "Intel Fully Integrated Voltage Regulator (FIVR) Tuning",
+  "PBO Scalar": "Precision Boost Overdrive (PBO) Scalar",
+  "CCD Affinity Mode": "Core Complex Die (CCD) Affinity Mode",
+  "Average FPS": "Average Frames Per Second (FPS)",
+  "FPS and low FPS values": "Frames Per Second (FPS) and low FPS values",
+  "Static RTSS Frame Rate": "Static RivaTuner Statistics Server (RTSS) Frame Rate",
+  "RTSS Frame Limit (FPS)": "RivaTuner Statistics Server (RTSS) Frame Limit (FPS)"
+}

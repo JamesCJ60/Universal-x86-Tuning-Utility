@@ -78,6 +78,7 @@ namespace Universal_x86_Tuning_Utility
         private async void OnStartup(object sender, StartupEventArgs e)
         {
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            LocalizationService.Initialize(Settings.Default.Language);
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(Scripts.Misc.DiagnosticLogger.LevelSwitch)
@@ -92,9 +93,8 @@ namespace Universal_x86_Tuning_Utility
 
             if (!IsVcRedistInstalled("x64") && !IsVcRedistInstalled("x86"))
             {
-                var downloadVcRedist = MessageBox.Show("Microsoft Visual C++ Redistributable is not installed.\n" +
-                                                       "Would you like to download it now?",
-                    "Missing VC Redistributable",
+                var downloadVcRedist = MessageBox.Show(LocalizationService.Get("Microsoft Visual C++ Redistributable is not installed.\nWould you like to download it now?"),
+                    LocalizationService.Get("Missing VC Redistributable"),
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
                 if (downloadVcRedist == MessageBoxResult.Yes)

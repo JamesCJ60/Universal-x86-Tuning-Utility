@@ -202,7 +202,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     start = false;
                     siStartIcon.Symbol = Wpf.Ui.Controls.SymbolRegular.Play20;
-                    tbxStartText.Text = "Start Adaptive Mode";
+                    tbxStartText.Text = LocalizationService.Get("Start Adaptive Mode");
                     GetSensor.CloseSensor();
                     Settings.Default.isAdaptiveModeRunning = false;
                     Settings.Default.Save();
@@ -212,7 +212,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     start = true;
                     siStartIcon.Symbol = Wpf.Ui.Controls.SymbolRegular.Stop20;
-                    tbxStartText.Text = "Stop Adaptive Mode";
+                    tbxStartText.Text = LocalizationService.Get("Stop Adaptive Mode");
                     await Task.Run(() => GetSensor.OpenSensor());
                     Settings.Default.isAdaptiveModeRunning = true;
                     Settings.Default.Save();

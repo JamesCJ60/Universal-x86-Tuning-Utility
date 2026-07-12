@@ -258,10 +258,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                             var messageBox = new Wpf.Ui.Controls.MessageBox();
 
-                            messageBox.Title = "GPU Ultimate Mode";
-                            messageBox.Content = "Switching the GPU to Ultimate Mode requires a restart to take effect!";
-                            messageBox.PrimaryButtonText = "Restart";
-                            messageBox.CloseButtonText = "Cancel";
+                            messageBox.Title = LocalizationService.Get("GPU Ultimate Mode");
+                            messageBox.Content = LocalizationService.Get("Switching the GPU to Ultimate Mode requires a restart to take effect!");
+                            messageBox.PrimaryButtonText = LocalizationService.Get("Restart");
+                            messageBox.CloseButtonText = LocalizationService.Get("Cancel");
 
                             if (await messageBox.ShowDialogAsync() == Wpf.Ui.Controls.MessageBoxResult.Primary)
                                 RestartWithMuxMode(id, 0);
@@ -276,10 +276,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                             var messageBox = new Wpf.Ui.Controls.MessageBox();
 
-                            messageBox.Title = "GPU Ultimate Mode";
-                            messageBox.Content = "Disabling GPU Ultimate Mode requires a restart to take effect!";
-                            messageBox.PrimaryButtonText = "Restart";
-                            messageBox.CloseButtonText = "Cancel";
+                            messageBox.Title = LocalizationService.Get("GPU Ultimate Mode");
+                            messageBox.Content = LocalizationService.Get("Disabling GPU Ultimate Mode requires a restart to take effect!");
+                            messageBox.PrimaryButtonText = LocalizationService.Get("Restart");
+                            messageBox.CloseButtonText = LocalizationService.Get("Cancel");
 
                             if (await messageBox.ShowDialogAsync() == Wpf.Ui.Controls.MessageBoxResult.Primary)
                                 RestartWithMuxMode(id, 1);

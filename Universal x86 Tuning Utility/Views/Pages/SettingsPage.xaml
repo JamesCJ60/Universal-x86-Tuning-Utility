@@ -59,6 +59,16 @@
                                    FontWeight="Medium"
                                    Text="Application behaviour" />
 
+                        <TextBlock Margin="0,10,0,5"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="Language" />
+
+                        <ComboBox x:Name="cbxLanguage"
+                                  Width="220"
+                                  HorizontalAlignment="Left"
+                                  DisplayMemberPath="DisplayName"
+                                  SelectionChanged="cbxLanguage_SelectionChanged" />
+
                         <CheckBox x:Name="cbStartBoot"
                                   Margin="0,10,0,0"
                                   Click="cbStartBoot_Click"

@@ -63,7 +63,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 isTimerRunning = false;
                 _cpuMonitoringLease?.Dispose();
                 _cpuMonitoringLease = null;
-                tbFanSpeed.Text = $"Disabled";
+                tbFanSpeed.Text = LocalizationService.Get("Disabled");
             }
             //Fan_Control.disableFanControl();
         }
@@ -109,7 +109,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 isTimerRunning = false;
                 _cpuMonitoringLease?.Dispose();
                 _cpuMonitoringLease = null;
-                tbFanSpeed.Text = $"Disabled";
+                tbFanSpeed.Text = LocalizationService.Get("Disabled");
             }
             else if (isTimerRunning == false)
             {
@@ -132,7 +132,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 //if (Fan_Control.fanControlEnabled) Fan_Control.setFanSpeed(fanSpeed);
 
-                tbFanSpeed.Text = $"Enabled - {fanSpeed}% - {cpuTemperature}°C";
+                tbFanSpeed.Text = LocalizationService.Format("Enabled - {0}% - {1}°C", fanSpeed, cpuTemperature);
             }
             catch (Exception ex)
             {

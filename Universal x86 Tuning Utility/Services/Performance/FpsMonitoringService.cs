@@ -39,6 +39,9 @@ namespace Universal_x86_Tuning_Utility.Services.Performance
         private FpsMetricsSnapshot _latest = FpsMetricsSnapshot.Empty;
         private int _cachedApiPid;
         private string _cachedApi = "N/A";
+        private int _cachedDetailsPid;
+        private string _cachedProcessName = string.Empty;
+        private string _cachedExecutablePath = string.Empty;
 
         public FpsMetricsSnapshot Latest => Volatile.Read(ref _latest);
 
@@ -72,7 +75,7 @@ namespace Universal_x86_Tuning_Utility.Services.Performance
 
         private async Task SampleAsync(CancellationToken cancellationToken)
         {
-            using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(250));
+            using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
             while (await timer.WaitForNextTickAsync(cancellationToken).ConfigureAwait(false))
             {
                 int processId = GetForegroundProcessId();
@@ -82,7 +85,7 @@ namespace Universal_x86_Tuning_Utility.Services.Performance
 
                 processor.TargetProcessId = processId;
                 FrameStatistics statistics = processor.GetStatistics(processId);
-                if (statistics.Fps <= 0 || !TryGetProcessDetails(processId, out string name, out string path))
+                if (statistics.Fps <= 0 || !TryGetProcessDetailsCached(processId, out string name, out string path))
                 {
                     Volatile.Write(ref _latest, FpsMetricsSnapshot.Empty);
                     continue;
@@ -113,6 +116,31 @@ namespace Universal_x86_Tuning_Utility.Services.Performance
             _cachedApiPid = processId;
             _cachedApi = DetectGraphicsApi(processId);
             return _cachedApi;
+        }
+
+        private bool TryGetProcessDetailsCached(int processId, out string name, out string path)
+        {
+            if (_cachedDetailsPid == processId)
+            {
+                name = _cachedProcessName;
+                path = _cachedExecutablePath;
+                return !string.IsNullOrEmpty(name);
+            }
+
+            bool found = TryGetProcessDetails(processId, out name, out path);
+            if (found)
+            {
+                _cachedDetailsPid = processId;
+                _cachedProcessName = name;
+                _cachedExecutablePath = path;
+            }
+            else
+            {
+                _cachedDetailsPid = 0;
+                _cachedProcessName = string.Empty;
+                _cachedExecutablePath = string.Empty;
+            }
+            return found;
         }
 
         private static string DetectGraphicsApi(int processId)
@@ -181,6 +209,9 @@ namespace Universal_x86_Tuning_Utility.Services.Performance
                 _latest = FpsMetricsSnapshot.Empty;
                 _cachedApiPid = 0;
                 _cachedApi = "N/A";
+                _cachedDetailsPid = 0;
+                _cachedProcessName = string.Empty;
+                _cachedExecutablePath = string.Empty;
             }
         }
 

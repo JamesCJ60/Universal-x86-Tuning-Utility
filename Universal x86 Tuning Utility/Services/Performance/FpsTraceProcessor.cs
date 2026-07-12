@@ -108,7 +108,9 @@ namespace Universal_x86_Tuning_Utility.Services.Performance
 
             session.Source.AllEvents -= OnEvent;
             session.Dispose();
-            _traceThread = null;
+            Thread? traceThread = Interlocked.Exchange(ref _traceThread, null);
+            if (traceThread is not null && traceThread != Thread.CurrentThread)
+                traceThread.Join(TimeSpan.FromSeconds(1));
             _frames.Clear();
             _lastTimestamp.Clear();
             TargetProcessId = 0;

@@ -55,7 +55,6 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private void OnNavigate(string parameter)
         {
             string[] parts = parameter.Split('-');
-            MessageBox.Show("Worked!");
             if (!parts[0].Contains("Microsoft Store")) Game_Manager.LaunchApp(parts[2], parts[0], parts[1], parts[1]);
             else Game_Manager.LaunchApp(parts[1], parts[0], parts[1], parts[1]);
         }

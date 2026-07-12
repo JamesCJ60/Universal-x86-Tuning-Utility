@@ -148,8 +148,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             catch (Exception exception)
             {
                 MessageBox.Show(
-                    "The overlay settings could not be saved.\n\n" + exception.Message,
-                    "Overlay settings error",
+                    LocalizationService.Format("The overlay settings could not be saved.\n\n{0}", exception.Message),
+                    LocalizationService.Get("Overlay settings error"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
 
@@ -182,8 +182,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
 
             MessageBox.Show(
-                "Choose two different shortcuts that each include a non-modifier key.",
-                "Invalid overlay shortcut",
+                LocalizationService.Get("Choose two different shortcuts that each include a non-modifier key."),
+                LocalizationService.Get("Invalid overlay shortcut"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
 

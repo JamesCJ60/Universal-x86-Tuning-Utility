@@ -32,6 +32,9 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private readonly Queue<double> _cpuPower = new();
         private IDisposable? _hardwareLease;
         private IDisposable? _fpsLease;
+        private HardwareMetricsSnapshot _lastHardware = new();
+        private DateTime _nextHardwareUpdateUtc = DateTime.MinValue;
+        private DateTime _nextGraphUpdateUtc = DateTime.MinValue;
         private OverlayOptions _options = new();
         private int _isUpdating;
         private bool _disposed;
@@ -124,10 +127,10 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         public PointCollection ZeroPointOnePercentFrameTimePoints => PointOnePercentFrameTimePoints;
         public string GpuMemoryText => $"{GpuMemoryUsedGb:0.0} / {GpuMemoryTotalGb:0.0} GB";
         public string SystemMemoryText => $"{SystemMemoryUsedGb:0.0} / {SystemMemoryTotalGb:0.0} GB";
-        public string BatteryText => HasBattery ? $"{BatteryPercent}%{(IsBatteryCharging ? " charging" : string.Empty)}" : "No battery";
+        public string BatteryText => HasBattery ? IsBatteryCharging ? LocalizationService.Format("{0}% charging", BatteryPercent) : $"{BatteryPercent}%" : LocalizationService.Get("No battery");
         public string BatteryTimeText => BatteryTimeRemainingMinutes > 0 ? $"{BatteryTimeRemainingMinutes / 60}h {BatteryTimeRemainingMinutes % 60:00}m" : "N/A";
         public string BatteryPercentText => HasBattery ? $"{Math.Clamp(BatteryPercent, 0, 100)}%" : "N/A";
-        public string BatteryStatusText => !HasBattery ? "No battery" : IsBatteryCharging ? "Charging" : "Discharging";
+        public string BatteryStatusText => !HasBattery ? LocalizationService.Get("No battery") : IsBatteryCharging ? LocalizationService.Get("Charging") : LocalizationService.Get("Discharging");
         public string BatteryTimeRemainingText => BatteryTimeText;
         public string BatteryPowerText => HasBattery ? $"{BatteryPowerWatts:0.0} W" : "N/A";
         public double GpuMemoryUsageBarWidth => CalculateUsageWidth(GpuMemoryUsedGb, GpuMemoryTotalGb);
@@ -162,6 +165,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
             _fps = fps ?? throw new ArgumentNullException(nameof(fps));
             _timer = new DispatcherTimer(DispatcherPriority.Background);
             _timer.Tick += UpdateMetrics;
+            LocalizationService.CultureChanged += OnCultureChanged;
+        }
+
+        private void OnCultureChanged(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(BatteryText));
+            OnPropertyChanged(nameof(BatteryStatusText));
         }
 
         public void ApplyOptions(OverlayOptions options)
@@ -218,7 +228,10 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 categories |= HardwareMonitoringCategory.Battery;
 
             _hardwareLease = _hardware.Acquire(categories);
-            _fpsLease = _fps.Acquire();
+            if (_options.ShowFps || _options.ShowFrameTimes)
+                _fpsLease = _fps.Acquire();
+            _nextHardwareUpdateUtc = DateTime.MinValue;
+            _nextGraphUpdateUtc = DateTime.MinValue;
             UpdateMetrics(this, EventArgs.Empty);
             _timer.Start();
         }
@@ -252,7 +265,14 @@ namespace Universal_x86_Tuning_Utility.ViewModels
 
             try
             {
-                HardwareMetricsSnapshot hardware = await Task.Run(_hardware.ReadSnapshot);
+                DateTime now = DateTime.UtcNow;
+                if (now >= _nextHardwareUpdateUtc)
+                {
+                    _lastHardware = await Task.Run(_hardware.ReadSnapshot);
+                    _nextHardwareUpdateUtc = now.AddSeconds(1);
+                }
+
+                HardwareMetricsSnapshot hardware = _lastHardware;
                 FpsMetricsSnapshot fps = _fps.Latest;
 
                 CurrentFps = fps.Fps;
@@ -282,14 +302,25 @@ namespace Universal_x86_Tuning_Utility.ViewModels
 
                 NotifyMetricProperties();
 
-                Add(_frameTimes, FrameTimeMs);
-                Add(_onePercentFrameTimes, OnePercentFrameTimeMs);
-                Add(_pointOnePercentFrameTimes, PointOnePercentFrameTimeMs);
-                Add(_gpuPower, GpuPowerWatts);
-                Add(_cpuPower, CpuPowerWatts);
+                if (ShowGraphs && now >= _nextGraphUpdateUtc)
+                {
+                    if (ShowFrameTimes)
+                    {
+                        Add(_frameTimes, FrameTimeMs);
+                        Add(_onePercentFrameTimes, OnePercentFrameTimeMs);
+                        Add(_pointOnePercentFrameTimes, PointOnePercentFrameTimeMs);
+                        UpdateFrameTimeGraph();
+                    }
 
-                UpdateFrameTimeGraph();
-                UpdatePowerGraph();
+                    if (ShowGpu || ShowCpu)
+                    {
+                        Add(_gpuPower, GpuPowerWatts);
+                        Add(_cpuPower, CpuPowerWatts);
+                        UpdatePowerGraph();
+                    }
+
+                    _nextGraphUpdateUtc = now.AddSeconds(1);
+                }
             }
             catch
             {
@@ -507,6 +538,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 return;
 
             _disposed = true;
+            LocalizationService.CultureChanged -= OnCultureChanged;
             _timer.Tick -= UpdateMetrics;
             StopMonitoring();
             GC.SuppressFinalize(this);

@@ -194,5 +194,8 @@
     <Setting Name="DiagnosticLogLevel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="Language" Type="System.String" Scope="User">
+      <Value Profile="(Default)">en-GB</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

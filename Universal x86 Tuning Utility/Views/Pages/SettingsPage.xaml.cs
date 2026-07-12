@@ -10,12 +10,14 @@ using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Wpf.Ui.Abstractions.Controls;
 using System.Diagnostics.Eventing.Reader;
+using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Views.Pages
 {
     public partial class SettingsPage : INavigableView<ViewModels.SettingsViewModel>
     {
         private readonly ILogger<SettingsPage> _logger;
+        private bool _languageSelectionReady;
 
         public ViewModels.SettingsViewModel ViewModel
         {
@@ -28,6 +30,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             _logger = logger;
 
             InitializeComponent();
+
+            cbxLanguage.ItemsSource = LocalizationService.SupportedLanguages;
+            cbxLanguage.SelectedItem = LocalizationService.SupportedLanguages.First(language => language.CultureName == LocalizationService.CurrentCultureName);
+            _languageSelectionReady = true;
 
             cbStartBoot.IsChecked = Settings.Default.StartOnBoot;
             cbStartMini.IsChecked = Settings.Default.StartMini;
@@ -142,15 +148,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 if (isUpdateAvailable)
                 {
-                    if (updateManager._newVersion.StartsWith("3.")) tbDownloadMsg.Text = "Head to the Phantom Control Centre GitHub releases page to easily download the latest build!";
+                    if (updateManager._newVersion.StartsWith("3.")) tbDownloadMsg.Text = LocalizationService.Get("Head to the Phantom Control Centre GitHub releases page to easily download the latest build!");
                     else {
-                        tbDownloadMsg.Text = "An update for Universal x86 Tuning Utility has been found!";
+                        tbDownloadMsg.Text = LocalizationService.Get("An update for Universal x86 Tuning Utility has been found!");
                         btnDownload.Visibility = System.Windows.Visibility.Visible;
                     }
                 }
-                else if(isUserCheck) tbDownloadMsg.Text = "Universal x86 Tuning Utility is up to date!";
+                else if(isUserCheck) tbDownloadMsg.Text = LocalizationService.Get("Universal x86 Tuning Utility is up to date!");
             }
-            else if (isUserCheck) tbDownloadMsg.Text = "No internet connection!";
+            else if (isUserCheck) tbDownloadMsg.Text = LocalizationService.Get("No internet connection!");
         }
 
         private async void btnDownload_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -161,7 +167,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (isUpdateAvailable)
             {
-                tbDownloadMsg.Text = "Universal x86 Tuning Utility will close and the installer will open when the download is complete";
+                tbDownloadMsg.Text = LocalizationService.Get("Universal x86 Tuning Utility will close and the installer will open when the download is complete");
 
                 await updateManager.DownloadAndInstallUpdate();
 
@@ -180,7 +186,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 {
                     // log error or display error message to user
                     _logger.LogError(ex, "Failed to launch MSI");
-                    MessageBox.Show("Failed to launch MSI: " + ex.Message);
+                    MessageBox.Show(LocalizationService.Format("Failed to launch MSI: {0}", ex.Message));
                 }
             }
         }
@@ -251,6 +257,18 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             Settings.Default.DiagnosticLogLevel = cbxLogLevel.SelectedIndex;
             Settings.Default.Save();
             DiagnosticLogger.ApplySettingsLevel();
+        }
+
+        private void cbxLanguage_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (!_languageSelectionReady || cbxLanguage.SelectedItem is not LanguageOption language)
+            {
+                return;
+            }
+
+            Settings.Default.Language = language.CultureName;
+            Settings.Default.Save();
+            LocalizationService.SetCulture(language.CultureName);
         }
 
         private void nudAutoReapply_ValueChanged(object sender, RoutedEventArgs e)
