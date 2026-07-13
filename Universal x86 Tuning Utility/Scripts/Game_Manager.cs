@@ -349,7 +349,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     Process.Start(new ProcessStartInfo()
                     {
                         UseShellExecute = true,
-                        FileName = Path.GetFileName(command),
+                        FileName = Path.GetFullPath(command),
                         WorkingDirectory = Path.GetDirectoryName(command)
                     });
                 }

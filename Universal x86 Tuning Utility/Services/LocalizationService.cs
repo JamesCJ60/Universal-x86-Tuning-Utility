@@ -39,7 +39,12 @@ namespace Universal_x86_Tuning_Utility.Services
             new("pt-PT", "Português"),
             new("ru-RU", "Русский"),
             new("it-IT", "Italiano"),
-            new("pl-PL", "Polski")
+            new("pl-PL", "Polski"),
+            new("hi-IN", "हिन्दी"),
+            new("fil-PH", "Filipino"),
+            new("ms-MY", "Bahasa Melayu"),
+            new("th-TH", "ไทย"),
+            new("ar-SA", "العربية (السعودية)")
         };
 
         private static readonly Dictionary<string, Dictionary<string, string>> Catalogues = new(StringComparer.OrdinalIgnoreCase);
