@@ -102,6 +102,19 @@ namespace Universal_x86_Tuning_Utility.Scripts.Intel_Backend
             }
         }
 
+        public static void changeTDP(int pl1, int pl2)
+        {
+            try
+            {
+                EnsureInitialised();
+                runIntelTDPChangeMSR(pl1, Math.Max(pl1 + 2, pl2));
+            }
+            catch (Exception ex)
+            {
+                Misc.DiagnosticLogger.LogError(ex, "Failed to change Intel PL1 and PL2 MSRs.");
+            }
+        }
+
         public static void changePowerBalance(int value, int cpuOrGpu)
         {
             if (value < 0 || value > 31)

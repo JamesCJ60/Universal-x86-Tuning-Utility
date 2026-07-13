@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Text.RegularExpressions;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 
@@ -259,11 +260,78 @@ namespace Universal_x86_Tuning_Utility.Scripts
                         }
                     }
                 }
+                else if (Family.TYPE == Family.ProcessorType.Intel)
+                {
+                    SetIntelPremadePresets();
+                }
             }
             catch (Exception ex)
             {
                 Misc.DiagnosticLogger.LogError(ex, "Failed to set premade presets");
             }
+        }
+
+        private static void SetIntelPremadePresets()
+        {
+            uri = new Uri("pack://application:,,,/Assets/config.png");
+            var limits = GetIntelPowerLimits(Family.CPUName);
+            var ecoPl1 = Math.Max(4, (int)Math.Round(limits.Pl1 * 0.55));
+            var ecoPl2 = Math.Max(ecoPl1 + 2, (int)Math.Round(limits.Pl1 * 0.8));
+            var balancedPl1 = Math.Max(4, (int)Math.Round(limits.Pl1 * 0.8));
+            var balancedPl2 = Math.Max(balancedPl1 + 2, (int)Math.Round(limits.Pl2 * 0.5));
+            var performancePl1 = limits.Pl1;
+            var performancePl2 = Math.Max(performancePl1 + 2, (int)Math.Round(limits.Pl2 * 0.75));
+
+            EcoPreset = BuildIntelPreset(ecoPl1, ecoPl2, 3, 75, 0);
+            BalPreset = BuildIntelPreset(balancedPl1, balancedPl2, 1, 45, 1);
+            PerformancePreset = BuildIntelPreset(performancePl1, performancePl2, 2, 20, 2);
+            ExtremePreset = BuildIntelPreset(limits.Pl1, limits.Pl2, 2, 0, 2);
+        }
+
+        private static string BuildIntelPreset(int pl1, int pl2, int boostMode, int energyPreference, int powerMode)
+        {
+            pl2 = Math.Max(pl1 + 2, pl2);
+            return $"--intel-pl={pl1},{pl2} --Win-CPU={boostMode},-1,-1,{energyPreference} --Win-Power={powerMode} ";
+        }
+
+        private static (int Pl1, int Pl2) GetIntelPowerLimits(string processorName)
+        {
+            var name = processorName.ToUpperInvariant();
+            var match = Regex.Match(name, @"(?:I[3579]-|ULTRA\s+[3579]\s+)(?<model>\d{3,5})(?<suffix>[A-Z0-9]*)");
+            var model = match.Success ? match.Groups["model"].Value : string.Empty;
+            var suffix = match.Success ? match.Groups["suffix"].Value : string.Empty;
+            var generation = 0;
+            if (model.Length == 5 && int.TryParse(model[..2], out var twoDigitGeneration)) generation = twoDigitGeneration;
+            else if (model.Length == 4 && (model.StartsWith("10") || model.StartsWith("11")) && int.TryParse(model[..2], out var laterFourDigitGeneration)) generation = laterFourDigitGeneration;
+            else if (model.Length >= 4 && int.TryParse(model[..1], out var oneDigitGeneration)) generation = oneDigitGeneration;
+
+            if (name.Contains("ULTRA"))
+            {
+                if (suffix.StartsWith("H")) return (28, 115);
+                if (suffix.StartsWith("U")) return (15, 57);
+                if (suffix.StartsWith("V")) return (17, 37);
+            }
+
+            if (suffix.Contains("HX")) return (55, 157);
+            if (suffix.StartsWith("H") || suffix.Contains("HK") || suffix.Contains("HQ")) return generation >= 12 ? (45, 115) : (45, 90);
+            if (suffix.StartsWith("P")) return (28, 64);
+            if (suffix.StartsWith("Y")) return (7, 15);
+            if (suffix.StartsWith("U") || suffix.Contains("G")) return generation >= 11 ? (15, 55) : (15, 25);
+            if (suffix.StartsWith("T")) return (35, 65);
+            if (suffix.Contains("K") || suffix.Contains("X")) return generation >= 12 ? (125, 241) : (95, 119);
+            if (generation >= 12)
+            {
+                if (name.Contains("I3-")) return (60, 89);
+                if (name.Contains("I5-")) return (65, 117);
+                if (name.Contains("I7-")) return (65, 180);
+                return (65, 219);
+            }
+
+            if (name.Contains("I3-")) return (65, 75);
+            if (name.Contains("I5-")) return (65, 95);
+            if (name.Contains("I7-")) return (65, 125);
+            if (name.Contains("I9-")) return (65, 165);
+            return (35, 65);
         }
     }
 }

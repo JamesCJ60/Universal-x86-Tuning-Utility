@@ -96,6 +96,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 nudTemp.Value = 95;
                 nudMinCpuClk.Value = 1500;
                 nudNVMaxCore.Value = 4000;
+                nudWindowsMinState.Value = 5;
+                nudWindowsMaxState.Value = 100;
+                nudWindowsMaxFrequency.Value = 5000;
+                nudWindowsEpp.Value = 50;
+                nudWindowsCoreParking.Value = 100;
+                nudWindowsMaxUnparkedCores.Value = 100;
+                cbxWindowsBoostMode.SelectedIndex = 0;
                 tsAutoSwitch.IsChecked = true;
 
                 await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library(true));
@@ -142,6 +149,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             nvCoreClk = (int)nudNVCore.Value,
                             nvMemClk = (int)nudNVMem.Value,
                             asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
+                            windowsBoostMode = cbxWindowsBoostMode.SelectedIndex,
+                            isWindowsMinState = (bool)cbWindowsMinState.IsChecked,
+                            windowsMinState = (int)nudWindowsMinState.Value,
+                            isWindowsMaxState = (bool)cbWindowsMaxState.IsChecked,
+                            windowsMaxState = (int)nudWindowsMaxState.Value,
+                            isWindowsMaxFrequency = (bool)cbWindowsMaxFrequency.IsChecked,
+                            windowsMaxFrequency = (int)nudWindowsMaxFrequency.Value,
+                            isWindowsEpp = (bool)cbWindowsEpp.IsChecked,
+                            windowsEpp = (int)nudWindowsEpp.Value,
+                            isWindowsCoreParking = (bool)cbWindowsCoreParking.IsChecked,
+                            windowsCoreParking = (int)nudWindowsCoreParking.Value,
+                            isWindowsMaxUnparkedCores = (bool)cbWindowsMaxUnparkedCores.IsChecked,
+                            windowsMaxUnparkedCores = (int)nudWindowsMaxUnparkedCores.Value,
                             isMag = (bool)tsUXTUSR.IsChecked,
                             isVsync = (bool)cbVSync.IsChecked,
                             isRecap = (bool)cbAutoCap.IsChecked,
@@ -302,6 +322,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudNVMem.Value = myPreset.nvMemClk;
 
                     cbxAsusPower.SelectedIndex = myPreset.asusPowerProfile;
+                    cbxWindowsBoostMode.SelectedIndex = myPreset.windowsBoostMode;
+                    cbWindowsMinState.IsChecked = myPreset.isWindowsMinState;
+                    nudWindowsMinState.Value = myPreset.windowsMinState;
+                    cbWindowsMaxState.IsChecked = myPreset.isWindowsMaxState;
+                    nudWindowsMaxState.Value = myPreset.windowsMaxState;
+                    cbWindowsMaxFrequency.IsChecked = myPreset.isWindowsMaxFrequency;
+                    nudWindowsMaxFrequency.Value = myPreset.windowsMaxFrequency;
+                    cbWindowsEpp.IsChecked = myPreset.isWindowsEpp;
+                    nudWindowsEpp.Value = myPreset.windowsEpp;
+                    cbWindowsCoreParking.IsChecked = myPreset.isWindowsCoreParking;
+                    nudWindowsCoreParking.Value = myPreset.windowsCoreParking;
+                    cbWindowsMaxUnparkedCores.IsChecked = myPreset.isWindowsMaxUnparkedCores;
+                    nudWindowsMaxUnparkedCores.Value = myPreset.windowsMaxUnparkedCores;
 
                     tsUXTUSR.IsChecked = myPreset.isMag;
                     cbVSync.IsChecked = myPreset.isVsync;
@@ -344,6 +377,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nvCoreClk = (int)nudNVCore.Value,
                     nvMemClk = (int)nudNVMem.Value,
                     asusPowerProfile = (int)cbxAsusPower.SelectedIndex,
+                    windowsBoostMode = cbxWindowsBoostMode.SelectedIndex,
+                    isWindowsMinState = (bool)cbWindowsMinState.IsChecked,
+                    windowsMinState = (int)nudWindowsMinState.Value,
+                    isWindowsMaxState = (bool)cbWindowsMaxState.IsChecked,
+                    windowsMaxState = (int)nudWindowsMaxState.Value,
+                    isWindowsMaxFrequency = (bool)cbWindowsMaxFrequency.IsChecked,
+                    windowsMaxFrequency = (int)nudWindowsMaxFrequency.Value,
+                    isWindowsEpp = (bool)cbWindowsEpp.IsChecked,
+                    windowsEpp = (int)nudWindowsEpp.Value,
+                    isWindowsCoreParking = (bool)cbWindowsCoreParking.IsChecked,
+                    windowsCoreParking = (int)nudWindowsCoreParking.Value,
+                    isWindowsMaxUnparkedCores = (bool)cbWindowsMaxUnparkedCores.IsChecked,
+                    windowsMaxUnparkedCores = (int)nudWindowsMaxUnparkedCores.Value,
                     isMag = (bool)tsUXTUSR.IsChecked,
                     isVsync = (bool)cbVSync.IsChecked,
                     isRecap = (bool)cbAutoCap.IsChecked,
@@ -459,6 +505,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         string lastCPU = "";
         string lastCO = "";
         string lastiGPU = "";
+        string lastWindowsProcessorPower = "";
         private async void update()
         {
             try
@@ -487,6 +534,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         if (Settings.Default.isASUS)
                         {
                             if (cbxAsusPower.SelectedIndex > 0) commandString = commandString + $"--ASUS-Power={cbxAsusPower.SelectedIndex} ";
+                        }
+
+                        var windowsProcessorPower = GetWindowsProcessorPowerCommand();
+                        if (windowsProcessorPower != lastWindowsProcessorPower)
+                        {
+                            commandString = commandString + windowsProcessorPower;
+                            lastWindowsProcessorPower = windowsProcessorPower;
                         }
 
                         if (CPUControl.cpuCommand != lastCPU)
@@ -530,7 +584,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             commandString = commandString + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
                         }
 
-                        if (commandString != null && commandString != "") await RyzenAdj_To_UXTU.TranslateAsync(commandString);
+                        if (commandString != null && commandString != "") await RyzenAdj_To_UXTU.TranslateAsync(commandString, appliedName: "Adaptive Mode", localizeAppliedName: true);
                     }
 
                     if (RTSS.RTSSRunning() && tsRTSS.IsChecked == true) RTSS.setRTSSFPSLimit((int)nudRTSS.Value);
@@ -560,6 +614,20 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             }
         }
 
+        private string GetWindowsProcessorPowerCommand()
+        {
+            var boostMode = cbxWindowsBoostMode.SelectedIndex > 0 ? cbxWindowsBoostMode.SelectedIndex - 1 : -1;
+            var minimumState = cbWindowsMinState.IsChecked == true ? (int)nudWindowsMinState.Value : -1;
+            var maximumState = cbWindowsMaxState.IsChecked == true ? (int)nudWindowsMaxState.Value : -1;
+            var maximumFrequency = cbWindowsMaxFrequency.IsChecked == true ? (int)nudWindowsMaxFrequency.Value : -1;
+            var energyPreference = cbWindowsEpp.IsChecked == true ? (int)nudWindowsEpp.Value : -1;
+            var minimumUnparkedCores = cbWindowsCoreParking.IsChecked == true ? (int)nudWindowsCoreParking.Value : -1;
+            var maximumUnparkedCores = cbWindowsMaxUnparkedCores.IsChecked == true ? (int)nudWindowsMaxUnparkedCores.Value : -1;
+            return boostMode >= 0 || minimumState >= 0 || maximumState >= 0 || maximumFrequency >= 0 || energyPreference >= 0 || minimumUnparkedCores >= 0 || maximumUnparkedCores >= 0
+                ? $"--Win-CPU={boostMode},{maximumState},{maximumFrequency},{energyPreference},{minimumState},{minimumUnparkedCores},{maximumUnparkedCores} "
+                : string.Empty;
+        }
+
         public bool IsScrollBarVisible(ScrollViewer scrollViewer)
         {
             if (scrollViewer == null) throw new ArgumentNullException(nameof(scrollViewer));
@@ -577,6 +645,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            adaptivePresetManager = new AdaptivePresetManager(Settings.Default.Path + "adaptivePresets.json");
+            if (cbxPowerPreset.SelectedItem is string presetName)
+            {
+                loadPreset(presetName);
+            }
         }
 
 

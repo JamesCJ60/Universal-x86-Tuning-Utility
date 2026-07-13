@@ -51,6 +51,19 @@
                                CommandParameter="download"
                                Content="{Binding ViewModel.Downloads}"
                                Visibility="{Binding ViewModel.IsDownloads, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <ui:SymbolIcon Margin="0,0,10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="18"
+                                   Symbol="Info24"
+                                   Visibility="{Binding ViewModel.HasLastAppliedSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ui:SymbolIcon.ToolTip>
+                            <ToolTip Placement="Bottom">
+                                <TextBlock MaxWidth="520"
+                                           Text="{Binding ViewModel.LastAppliedSettingsToolTip}"
+                                           TextWrapping="Wrap" />
+                            </ToolTip>
+                        </ui:SymbolIcon.ToolTip>
+                    </ui:SymbolIcon>
                     <ui:Button Margin="0,0,6,0"
                                Padding="10,4"
                                Appearance="Transparent"
@@ -148,7 +161,34 @@
                          MenuOnRightClick="True"
                          TooltipText="Universal x86 Tuning Utility">
             <tray:NotifyIcon.Menu>
-                <ContextMenu>
+                <ContextMenu Opened="TrayMenu_Opened">
+                    <MenuItem x:Name="miPremadePresets"
+                              Header="Premade Presets"
+                              SubmenuOpened="TrayPremadePresets_SubmenuOpened">
+                        <MenuItem x:Name="miTrayEcoPreset"
+                                  Header="Eco Preset"
+                                  Tag="eco"
+                                  IsCheckable="True"
+                                  Click="TrayPremadePreset_Click" />
+                        <MenuItem x:Name="miTrayBalancedPreset"
+                                  Header="Balanced Preset"
+                                  Tag="balanced"
+                                  IsCheckable="True"
+                                  Click="TrayPremadePreset_Click" />
+                        <MenuItem x:Name="miTrayPerformancePreset"
+                                  Header="Performance Preset"
+                                  Tag="performance"
+                                  IsCheckable="True"
+                                  Click="TrayPremadePreset_Click" />
+                        <MenuItem x:Name="miTrayExtremePreset"
+                                  Header="Extreme Preset"
+                                  Tag="extreme"
+                                  IsCheckable="True"
+                                  Click="TrayPremadePreset_Click" />
+                    </MenuItem>
+                    <MenuItem x:Name="miCustomPresets"
+                              Header="Custom Presets" />
+                    <Separator />
                     <MenuItem x:Name="miClose"
                               Header="Close Application"
                               Tag="close"

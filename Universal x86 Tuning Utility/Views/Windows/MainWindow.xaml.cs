@@ -52,6 +52,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         public static bool isMini { get; private set; }
         public static NavigationView _mainWindowNav;
         private static INavigationService _navigationService;
+        private bool _isTrayPresetApplying;
         public static bool IsPageSelected(Type pageType) =>
             _mainWindowNav?.SelectedItem is INavigationViewItem item && item.TargetPageType == pageType;
 
@@ -93,6 +94,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         private void SetupUI()
         {
             tbMain.Title = $"Universal x86 Tuning Utility - {Family.CPUName}";
+            miPremadePresets.Visibility = Visibility.Visible;
             Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this, WindowBackdropType.Mica, true);
         }
 
@@ -110,7 +112,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         {
                             Settings.Default.CommandString = Settings.Default.acCommandString;
                             Settings.Default.Save();
-                            await RyzenAdj_To_UXTU.TranslateAsync(Settings.Default.acCommandString);
+                            await TranslatePresetAsync(Settings.Default.acCommandString, Settings.Default.acPreset);
                             ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
                         }
                         else
@@ -125,7 +127,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                         {
                             Settings.Default.CommandString = Settings.Default.dcCommandString;
                             Settings.Default.Save();
-                            await RyzenAdj_To_UXTU.TranslateAsync(Settings.Default.dcCommandString);
+                            await TranslatePresetAsync(Settings.Default.dcCommandString, Settings.Default.dcPreset);
                             ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
                         }
                         else
@@ -330,7 +332,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
                                 Settings.Default.CommandString = Settings.Default.acCommandString;
                                 Settings.Default.Save();
-                                await RyzenAdj_To_UXTU.TranslateAsync(Settings.Default.acCommandString);
+                                await TranslatePresetAsync(Settings.Default.acCommandString, Settings.Default.acPreset);
 
                                 if (lastAppliedState != "ac") ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
                                 lastAppliedState = "ac";
@@ -362,7 +364,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                                 }
                                 Settings.Default.CommandString = Settings.Default.dcCommandString;
                                 Settings.Default.Save();
-                                await RyzenAdj_To_UXTU.TranslateAsync(Settings.Default.dcCommandString);
+                                await TranslatePresetAsync(Settings.Default.dcCommandString, Settings.Default.dcPreset);
 
                                 if (lastAppliedState != "dc") ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
                                 lastAppliedState = "dc";
@@ -396,7 +398,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                             }
                             Settings.Default.CommandString = Settings.Default.resumeCommandString;
                             Settings.Default.Save();
-                            _ = RyzenAdj_To_UXTU.TranslateAsync(Settings.Default.resumeCommandString);
+                            _ = TranslatePresetAsync(Settings.Default.resumeCommandString, Settings.Default.resumePreset);
 
                             if (lastAppliedState != "resume") ToastNotification.ShowToastNotification("Resume Preset Applied!", $"Your resume preset settings have been applied!");
                             lastAppliedState = "resume";
@@ -465,6 +467,173 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 this.Activate();
             }
 
+        }
+
+        private async void TrayPremadePresets_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(PremadePresets.SetPremadePresets);
+            RefreshTrayPremadePresetChecks();
+        }
+
+        private async void TrayPremadePreset_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isTrayPresetApplying || sender is not System.Windows.Controls.MenuItem { Tag: string presetId })
+            {
+                return;
+            }
+
+            _isTrayPresetApplying = true;
+            try
+            {
+                await Task.Run(PremadePresets.SetPremadePresets);
+
+                var selection = presetId switch
+                {
+                    "eco" => (0, PremadePresets.EcoPreset, "Eco Preset", "Eco Preset Applied!", "The eco premade power preset has been applied!"),
+                    "balanced" => (1, PremadePresets.BalPreset, "Balanced Preset", "Balanced Preset Applied!", "The balanced premade power preset has been applied!"),
+                    "performance" => (2, PremadePresets.PerformancePreset, "Performance Preset", "Performance Preset Applied!", "The performance premade power preset has been applied!"),
+                    "extreme" => (3, PremadePresets.ExtremePreset, "Extreme Preset", "Extreme Preset Applied!", "The extreme premade power preset has been applied!"),
+                    _ => (-1, string.Empty, string.Empty, string.Empty, string.Empty)
+                };
+
+                if (selection.Item1 < 0 || string.IsNullOrWhiteSpace(selection.Item2))
+                {
+                    return;
+                }
+
+                await RyzenAdj_To_UXTU.TranslateAsync(selection.Item2, appliedName: selection.Item3, localizeAppliedName: true);
+                Settings.Default.CommandString = selection.Item2;
+                Settings.Default.premadePreset = selection.Item1;
+                Settings.Default.Save();
+                ToastNotification.ShowToastNotification(selection.Item4, selection.Item5);
+            }
+            catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to apply a premade preset from the tray menu");
+            }
+            finally
+            {
+                RefreshTrayPremadePresetChecks();
+                _isTrayPresetApplying = false;
+            }
+        }
+
+        private void TrayMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            miCustomPresets.Items.Clear();
+            try
+            {
+                var manager = CreateCustomPresetManager();
+                var names = manager.GetPresetNames()
+                    .Where(name => !string.IsNullOrWhiteSpace(name))
+                    .OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase)
+                    .ToArray();
+
+                if (names.Length == 0)
+                {
+                    miCustomPresets.Items.Add(new System.Windows.Controls.MenuItem
+                    {
+                        Header = LocalizationService.Get("No custom presets found"),
+                        IsEnabled = false
+                    });
+                    return;
+                }
+
+                foreach (var name in names)
+                {
+                    var item = new System.Windows.Controls.MenuItem
+                    {
+                        Header = name,
+                        Tag = name
+                    };
+                    item.Click += TrayCustomPreset_Click;
+                    miCustomPresets.Items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to populate custom presets in the tray menu");
+                miCustomPresets.Items.Add(new System.Windows.Controls.MenuItem
+                {
+                    Header = LocalizationService.Get("No custom presets found"),
+                    IsEnabled = false
+                });
+            }
+        }
+
+        private async void TrayCustomPreset_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isTrayPresetApplying || sender is not System.Windows.Controls.MenuItem { Tag: string presetName })
+            {
+                return;
+            }
+
+            _isTrayPresetApplying = true;
+            try
+            {
+                var preset = CreateCustomPresetManager().GetPreset(presetName);
+                if (preset == null)
+                {
+                    return;
+                }
+
+                var command = preset.commandValue ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(command))
+                {
+                    await RyzenAdj_To_UXTU.TranslateAsync(command, appliedName: presetName);
+                    ToastNotification.ShowToastNotification("Preset Applied", "Your custom preset settings have been applied!");
+                }
+
+                Settings.Default.cstmPreset = presetName;
+                Settings.Default.CommandString = command;
+                Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to apply a custom preset from the tray menu");
+            }
+            finally
+            {
+                RefreshTrayPremadePresetChecks();
+                _isTrayPresetApplying = false;
+            }
+        }
+
+        private static PresetManager CreateCustomPresetManager()
+        {
+            var fileName = Family.TYPE switch
+            {
+                Family.ProcessorType.Amd_Apu => "apuPresets.json",
+                Family.ProcessorType.Amd_Desktop_Cpu => "amdDtCpuPresets.json",
+                Family.ProcessorType.Intel => "intelPresets.json",
+                _ => "apuPresets.json"
+            };
+
+            return new PresetManager(Settings.Default.Path + fileName);
+        }
+
+        private static Task TranslatePresetAsync(string commands, string? configuredName)
+        {
+            var context = configuredName switch
+            {
+                string value when value.Contains("PM - Eco", StringComparison.Ordinal) => ("Eco Preset", true),
+                string value when value.Contains("PM - Bal", StringComparison.Ordinal) => ("Balanced Preset", true),
+                string value when value.Contains("PM - Perf", StringComparison.Ordinal) => ("Performance Preset", true),
+                string value when value.Contains("PM - Ext", StringComparison.Ordinal) => ("Extreme Preset", true),
+                string value when !string.IsNullOrWhiteSpace(value) && !string.Equals(value, "None", StringComparison.OrdinalIgnoreCase) => (value, false),
+                _ => ((string?)null, false)
+            };
+
+            return RyzenAdj_To_UXTU.TranslateAsync(commands, appliedName: context.Item1, localizeAppliedName: context.Item2);
+        }
+
+        private void RefreshTrayPremadePresetChecks()
+        {
+            var command = Settings.Default.CommandString;
+            miTrayEcoPreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.EcoPreset) && string.Equals(command, PremadePresets.EcoPreset, StringComparison.Ordinal);
+            miTrayBalancedPreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.BalPreset) && string.Equals(command, PremadePresets.BalPreset, StringComparison.Ordinal);
+            miTrayPerformancePreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.PerformancePreset) && string.Equals(command, PremadePresets.PerformancePreset, StringComparison.Ordinal);
+            miTrayExtremePreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.ExtremePreset) && string.Equals(command, PremadePresets.ExtremePreset, StringComparison.Ordinal);
         }
 
         private void miClose_Click(object sender, RoutedEventArgs e)

@@ -39,6 +39,20 @@ namespace Universal_x86_Tuning_Utility.Services
 
         public int asusPowerProfile { get; set; }
 
+        public int windowsBoostMode { get; set; }
+        public bool isWindowsMinState { get; set; }
+        public int windowsMinState { get; set; } = 5;
+        public bool isWindowsMaxState { get; set; }
+        public int windowsMaxState { get; set; } = 100;
+        public bool isWindowsMaxFrequency { get; set; }
+        public int windowsMaxFrequency { get; set; } = 5000;
+        public bool isWindowsEpp { get; set; }
+        public int windowsEpp { get; set; } = 50;
+        public bool isWindowsCoreParking { get; set; }
+        public int windowsCoreParking { get; set; } = 100;
+        public bool isWindowsMaxUnparkedCores { get; set; }
+        public int windowsMaxUnparkedCores { get; set; } = 100;
+
         public bool isMag { get; set; }
         public bool isVsync { get; set; }
         public bool isRecap { get; set; }

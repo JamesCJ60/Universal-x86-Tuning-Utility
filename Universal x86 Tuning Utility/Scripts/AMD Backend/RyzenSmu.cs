@@ -164,7 +164,6 @@ namespace RyzenSmu
                 ("tctl-temp",true , 0x19),
                 ("cHTC-temp",false , 0x37),
                 ("apu-skin-temp",true , 0x38),
-                ("apu-skin-temp",false , 0x91),
                 ("dgpu-skin-temp",true , 0x39),
                 ("dgpu-skin-temp",false , 0x92),
                 ("vrm-current",true , 0x1a),
@@ -278,7 +277,6 @@ namespace RyzenSmu
                 ("apu-slow-limit", true, 0x23),
                 ("apu-slow-limit", false, 0x34),
                 ("apu-skin-temp", true, 0x33),
-                ("apu-skin-temp", false, 0x91),
                 ("dgpu-skin-temp", true, 0x34),
                 ("dgpu-skin-temp", false, 0x92),
                 ("max-performance", true, 0x11),
@@ -547,11 +545,19 @@ namespace RyzenSmu
             if (!RyzenAccess.EnsureInitialised())
                 throw new InvalidOperationException("AMD PawnIO failed to initialise.");
 
+            var originalArguments = (uint[])args.Clone();
+            Status lastStatus = Status.FAILED;
             foreach ((bool isMp1, uint address) in matchingCommands)
             {
-                if (isMp1) RyzenAccess.SendMp1(address, ref args);
-                else RyzenAccess.SendRsmu(address, ref args);
+                Array.Copy(originalArguments, args, originalArguments.Length);
+                lastStatus = isMp1
+                    ? RyzenAccess.SendMp1(address, ref args)
+                    : RyzenAccess.SendRsmu(address, ref args);
+                if (lastStatus == Status.OK)
+                    return;
             }
+
+            throw new InvalidOperationException($"SMU command '{commandName}' failed with status {lastStatus}.");
         }
     }
 

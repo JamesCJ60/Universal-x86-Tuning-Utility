@@ -87,6 +87,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private PresetManager presetManager;
         private readonly GpuInventoryService gpuInventory;
         private bool deferredSetupComplete;
+        private bool isUpdatingPresetValues;
         private int radeonGpuCount;
         private int nvidiaGpuCount;
 
@@ -98,14 +99,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             InitializeComponent();
             _ = Tablet.TabletDevices;
 
-            string presetFile = Family.TYPE switch
-            {
-                Family.ProcessorType.Amd_Apu => "apuPresets.json",
-                Family.ProcessorType.Amd_Desktop_Cpu => "amdDtCpuPresets.json",
-                Family.ProcessorType.Intel => "intelPresets.json",
-                _ => "apuPresets.json"
-            };
-            presetManager = new PresetManager(Settings.Default.Path + presetFile);
+            presetManager = new PresetManager(Settings.Default.Path + GetPresetFileName());
 
             sdCcdAffinity.Visibility = Visibility.Collapsed;
 
@@ -274,7 +268,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (commandValues != "" && commandValues != null)
             {
-                await RyzenAdj_To_UXTU.TranslateAsync(commandValues);
+                await RyzenAdj_To_UXTU.TranslateAsync(commandValues, appliedName: GetSelectedPresetName());
                 ToastNotification.ShowToastNotification("Preset Applied", $"Your custom preset settings have been applied!");
             }
 
@@ -438,6 +432,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
                             powerMode = (int)cbxPowerMode.SelectedIndex,
+                            windowsBoostMode = cbxWindowsBoostMode.SelectedIndex,
+                            isWindowsMinState = (bool)cbWindowsMinState.IsChecked,
+                            windowsMinState = (int)nudWindowsMinState.Value,
+                            isWindowsMaxState = (bool)cbWindowsMaxState.IsChecked,
+                            windowsMaxState = (int)nudWindowsMaxState.Value,
+                            isWindowsMaxFrequency = (bool)cbWindowsMaxFrequency.IsChecked,
+                            windowsMaxFrequency = (int)nudWindowsMaxFrequency.Value,
+                            isWindowsEpp = (bool)cbWindowsEpp.IsChecked,
+                            windowsEpp = (int)nudWindowsEpp.Value,
+                            isWindowsCoreParking = (bool)cbWindowsCoreParking.IsChecked,
+                            windowsCoreParking = (int)nudWindowsCoreParking.Value,
+                            isWindowsMaxUnparkedCores = (bool)cbWindowsMaxUnparkedCores.IsChecked,
+                            windowsMaxUnparkedCores = (int)nudWindowsMaxUnparkedCores.Value,
                             ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
                         };
                         presetManager.SavePreset(tbxPresetName.Text, preset);
@@ -550,6 +557,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
                             powerMode = (int)cbxPowerMode.SelectedIndex,
+                            windowsBoostMode = cbxWindowsBoostMode.SelectedIndex,
+                            isWindowsMinState = (bool)cbWindowsMinState.IsChecked,
+                            windowsMinState = (int)nudWindowsMinState.Value,
+                            isWindowsMaxState = (bool)cbWindowsMaxState.IsChecked,
+                            windowsMaxState = (int)nudWindowsMaxState.Value,
+                            isWindowsMaxFrequency = (bool)cbWindowsMaxFrequency.IsChecked,
+                            windowsMaxFrequency = (int)nudWindowsMaxFrequency.Value,
+                            isWindowsEpp = (bool)cbWindowsEpp.IsChecked,
+                            windowsEpp = (int)nudWindowsEpp.Value,
+                            isWindowsCoreParking = (bool)cbWindowsCoreParking.IsChecked,
+                            windowsCoreParking = (int)nudWindowsCoreParking.Value,
+                            isWindowsMaxUnparkedCores = (bool)cbWindowsMaxUnparkedCores.IsChecked,
+                            windowsMaxUnparkedCores = (int)nudWindowsMaxUnparkedCores.Value,
                             ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
                         };
                         presetManager.SavePreset(tbxPresetName.Text, preset);
@@ -618,6 +638,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ResScaleIndex = (int)cbxResScale.SelectedIndex,
 
                             powerMode = (int)cbxPowerMode.SelectedIndex,
+                            windowsBoostMode = cbxWindowsBoostMode.SelectedIndex,
+                            isWindowsMinState = (bool)cbWindowsMinState.IsChecked,
+                            windowsMinState = (int)nudWindowsMinState.Value,
+                            isWindowsMaxState = (bool)cbWindowsMaxState.IsChecked,
+                            windowsMaxState = (int)nudWindowsMaxState.Value,
+                            isWindowsMaxFrequency = (bool)cbWindowsMaxFrequency.IsChecked,
+                            windowsMaxFrequency = (int)nudWindowsMaxFrequency.Value,
+                            isWindowsEpp = (bool)cbWindowsEpp.IsChecked,
+                            windowsEpp = (int)nudWindowsEpp.Value,
+                            isWindowsCoreParking = (bool)cbWindowsCoreParking.IsChecked,
+                            windowsCoreParking = (int)nudWindowsCoreParking.Value,
+                            isWindowsMaxUnparkedCores = (bool)cbWindowsMaxUnparkedCores.IsChecked,
+                            windowsMaxUnparkedCores = (int)nudWindowsMaxUnparkedCores.Value,
                             ccdAffinity = (int)cbxCcdAffinity.SelectedIndex,
 
                             isIntelClockRatio = (bool)tsIntelRatioCore.IsChecked,
@@ -703,33 +736,66 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            string presetFile = Family.TYPE switch
+            ReloadPresetValues(cbxPowerPreset.SelectedItem as string ?? cbxPowerPreset.Text);
+        }
+
+        private string? GetSelectedPresetName()
+        {
+            var name = cbxPowerPreset.SelectedItem as string ?? cbxPowerPreset.Text;
+            return string.IsNullOrWhiteSpace(name) ? null : name;
+        }
+
+        private static string GetPresetFileName() => Family.TYPE switch
+        {
+            Family.ProcessorType.Amd_Apu => "apuPresets.json",
+            Family.ProcessorType.Amd_Desktop_Cpu => "amdDtCpuPresets.json",
+            Family.ProcessorType.Intel => "intelPresets.json",
+            _ => "apuPresets.json"
+        };
+
+        private void ReloadPresetList()
+        {
+            var selectedPreset = GetSelectedPresetName() ?? Settings.Default.cstmPreset;
+            presetManager = new PresetManager(Settings.Default.Path + GetPresetFileName());
+            var presetNames = presetManager.GetPresetNames()
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase)
+                .ToArray();
+
+            cbxPowerPreset.Items.Clear();
+            foreach (var presetName in presetNames)
             {
-                Family.ProcessorType.Amd_Apu => "apuPresets.json",
-                Family.ProcessorType.Amd_Desktop_Cpu => "amdDtCpuPresets.json",
-                Family.ProcessorType.Intel => "intelPresets.json",
-                _ => "apuPresets.json"
-            };
-            presetManager = new PresetManager(Settings.Default.Path + presetFile);
-            if (cbxPowerPreset.Text != null && cbxPowerPreset.Text != "") updateValues(cbxPowerPreset.SelectedItem.ToString());
+                cbxPowerPreset.Items.Add(presetName);
+            }
+
+            cbxPowerPreset.Text = selectedPreset ?? string.Empty;
+        }
+
+        private void ReloadPresetValues(string? presetName)
+        {
+            presetManager = new PresetManager(Settings.Default.Path + GetPresetFileName());
+            updateValues(presetName);
         }
 
         public void updateValues(string? preset)
         {
-            if (preset == null || (preset != "" && cbxPowerPreset.Text == preset))
+            if (isUpdatingPresetValues)
             {
                 return;
             }
 
-            cbxPowerPreset.Text = preset;
-            Settings.Default.cstmPreset = preset;
-            Settings.Default.Save();
+            isUpdatingPresetValues = true;
+            var presetName = preset ?? string.Empty;
             try
             {
+                cbxPowerPreset.Text = presetName;
+                Settings.Default.cstmPreset = presetName;
+                Settings.Default.Save();
+
                 if (Family.TYPE == Family.ProcessorType.Amd_Apu)
                 {
                     // Get the "myPreset" preset
-                    Preset myPreset = presetManager.GetPreset(preset) ?? DefaultAPUPreset;
+                    Preset myPreset = string.IsNullOrWhiteSpace(presetName) ? DefaultAPUPreset : presetManager.GetPreset(presetName) ?? DefaultAPUPreset;
 
                     // Read the values from the preset
                     nudAPUSkinTemp.Value = myPreset.apuSkinTemp;
@@ -863,6 +929,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
                     cbxPowerMode.SelectedIndex = myPreset.powerMode;
+                    cbxWindowsBoostMode.SelectedIndex = myPreset.windowsBoostMode;
+                    cbWindowsMinState.IsChecked = myPreset.isWindowsMinState;
+                    nudWindowsMinState.Value = myPreset.windowsMinState;
+                    cbWindowsMaxState.IsChecked = myPreset.isWindowsMaxState;
+                    nudWindowsMaxState.Value = myPreset.windowsMaxState;
+                    cbWindowsMaxFrequency.IsChecked = myPreset.isWindowsMaxFrequency;
+                    nudWindowsMaxFrequency.Value = myPreset.windowsMaxFrequency;
+                    cbWindowsEpp.IsChecked = myPreset.isWindowsEpp;
+                    nudWindowsEpp.Value = myPreset.windowsEpp;
+                    cbWindowsCoreParking.IsChecked = myPreset.isWindowsCoreParking;
+                    nudWindowsCoreParking.Value = myPreset.windowsCoreParking;
+                    cbWindowsMaxUnparkedCores.IsChecked = myPreset.isWindowsMaxUnparkedCores;
+                    nudWindowsMaxUnparkedCores.Value = myPreset.windowsMaxUnparkedCores;
                     cbxCcdAffinity.SelectedIndex = myPreset.ccdAffinity;
 
                     tsUXTUSR.IsChecked = myPreset.isMag;
@@ -873,7 +952,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 } else if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
                 {
                     // Get the "myPreset" preset
-                    Preset myPreset = presetManager.GetPreset(preset) ?? DefaultAMDDtCPUPreset;
+                    Preset myPreset = string.IsNullOrWhiteSpace(presetName) ? DefaultAMDDtCPUPreset : presetManager.GetPreset(presetName) ?? DefaultAMDDtCPUPreset;
 
                     // Read the values from the preset
                     nudCPUTemp.Value = myPreset.dtCpuTemp;
@@ -957,6 +1036,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
                     cbxPowerMode.SelectedIndex = myPreset.powerMode;
+                    cbxWindowsBoostMode.SelectedIndex = myPreset.windowsBoostMode;
+                    cbWindowsMinState.IsChecked = myPreset.isWindowsMinState;
+                    nudWindowsMinState.Value = myPreset.windowsMinState;
+                    cbWindowsMaxState.IsChecked = myPreset.isWindowsMaxState;
+                    nudWindowsMaxState.Value = myPreset.windowsMaxState;
+                    cbWindowsMaxFrequency.IsChecked = myPreset.isWindowsMaxFrequency;
+                    nudWindowsMaxFrequency.Value = myPreset.windowsMaxFrequency;
+                    cbWindowsEpp.IsChecked = myPreset.isWindowsEpp;
+                    nudWindowsEpp.Value = myPreset.windowsEpp;
+                    cbWindowsCoreParking.IsChecked = myPreset.isWindowsCoreParking;
+                    nudWindowsCoreParking.Value = myPreset.windowsCoreParking;
+                    cbWindowsMaxUnparkedCores.IsChecked = myPreset.isWindowsMaxUnparkedCores;
+                    nudWindowsMaxUnparkedCores.Value = myPreset.windowsMaxUnparkedCores;
                     cbxCcdAffinity.SelectedIndex = myPreset.ccdAffinity;
 
                     tsUXTUSR.IsChecked = myPreset.isMag;
@@ -967,7 +1059,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 } else if (Family.TYPE == Family.ProcessorType.Intel)
                 {
                     // Get the "myPreset" preset
-                    Preset myPreset = presetManager.GetPreset(preset) ?? DefaultIntelPreset;
+                    Preset myPreset = string.IsNullOrWhiteSpace(presetName) ? DefaultIntelPreset : presetManager.GetPreset(presetName) ?? DefaultIntelPreset;
 
                     // Read the values from the preset
                     nudIntelPL1.Value = myPreset.IntelPL1;
@@ -1003,6 +1095,19 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (myPreset.displayHz <= cbxRefreshRate.Items.Count) cbxRefreshRate.SelectedIndex = myPreset.displayHz;
 
                     cbxPowerMode.SelectedIndex = myPreset.powerMode;
+                    cbxWindowsBoostMode.SelectedIndex = myPreset.windowsBoostMode;
+                    cbWindowsMinState.IsChecked = myPreset.isWindowsMinState;
+                    nudWindowsMinState.Value = myPreset.windowsMinState;
+                    cbWindowsMaxState.IsChecked = myPreset.isWindowsMaxState;
+                    nudWindowsMaxState.Value = myPreset.windowsMaxState;
+                    cbWindowsMaxFrequency.IsChecked = myPreset.isWindowsMaxFrequency;
+                    nudWindowsMaxFrequency.Value = myPreset.windowsMaxFrequency;
+                    cbWindowsEpp.IsChecked = myPreset.isWindowsEpp;
+                    nudWindowsEpp.Value = myPreset.windowsEpp;
+                    cbWindowsCoreParking.IsChecked = myPreset.isWindowsCoreParking;
+                    nudWindowsCoreParking.Value = myPreset.windowsCoreParking;
+                    cbWindowsMaxUnparkedCores.IsChecked = myPreset.isWindowsMaxUnparkedCores;
+                    nudWindowsMaxUnparkedCores.Value = myPreset.windowsMaxUnparkedCores;
                     cbxCcdAffinity.SelectedIndex = myPreset.ccdAffinity;
 
                     tsUXTUSR.IsChecked = myPreset.isMag;
@@ -1036,6 +1141,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 DiagnosticLogger.LogError(ex, "Failed to update preset values");
             }
+            finally
+            {
+                isUpdatingPresetValues = false;
+            }
         }
 
         public string getCommandValues()
@@ -1055,11 +1164,21 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (sdPowerMode.Visibility == Visibility.Visible && cbxPowerMode.SelectedIndex > 0) commandValues = commandValues + $"--Win-Power={cbxPowerMode.SelectedIndex - 1} ";
 
+            var windowsBoostMode = cbxWindowsBoostMode.SelectedIndex > 0 ? cbxWindowsBoostMode.SelectedIndex - 1 : -1;
+            var windowsMinState = cbWindowsMinState.IsChecked == true ? (int)nudWindowsMinState.Value : -1;
+            var windowsMaxState = cbWindowsMaxState.IsChecked == true ? (int)nudWindowsMaxState.Value : -1;
+            var windowsMaxFrequency = cbWindowsMaxFrequency.IsChecked == true ? (int)nudWindowsMaxFrequency.Value : -1;
+            var windowsEpp = cbWindowsEpp.IsChecked == true ? (int)nudWindowsEpp.Value : -1;
+            var windowsCoreParking = cbWindowsCoreParking.IsChecked == true ? (int)nudWindowsCoreParking.Value : -1;
+            var windowsMaxUnparkedCores = cbWindowsMaxUnparkedCores.IsChecked == true ? (int)nudWindowsMaxUnparkedCores.Value : -1;
+            if (windowsBoostMode >= 0 || windowsMinState >= 0 || windowsMaxState >= 0 || windowsMaxFrequency >= 0 || windowsEpp >= 0 || windowsCoreParking >= 0 || windowsMaxUnparkedCores >= 0)
+                commandValues = commandValues + $"--Win-CPU={windowsBoostMode},{windowsMaxState},{windowsMaxFrequency},{windowsEpp},{windowsMinState},{windowsCoreParking},{windowsMaxUnparkedCores} ";
+
             if (Family.TYPE == Family.ProcessorType.Amd_Apu)
             {
                 if (cbAPUTemp.IsChecked == true) commandValues = commandValues + $"--tctl-temp={nudAPUTemp.Value} --cHTC-temp={nudAPUTemp.Value} ";
                 if (cbAPUSkinTemp.IsChecked == true) commandValues = commandValues + $"--apu-skin-temp={nudAPUSkinTemp.Value} ";
-                if (cbSTAPMPow.IsChecked == true) commandValues = commandValues + $"--stapm-limit={nudSTAPMPow.Value * 1000}  ";
+                if (cbSTAPMPow.IsChecked == true) commandValues = commandValues + $"--stapm-limit={nudSTAPMPow.Value * 1000} ";
                 if (cbFastPow.IsChecked == true) commandValues = commandValues + $"--fast-limit={nudFastPow.Value * 1000} ";
                 if (cbFastTime.IsChecked == true) commandValues = commandValues + $"--stapm-time={nudFastTime.Value} ";
                 if (cbSlowPow.IsChecked == true) commandValues = commandValues + $"--slow-limit={nudSlowPow.Value * 1000} ";
@@ -1265,7 +1384,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         core++;
                     }
                 }
-                if (cbIntelPL1.IsChecked == true) commandValues = commandValues + $"--intel-pl={nudIntelPL1.Value} ";
+                if (cbIntelPL1.IsChecked == true || cbIntelPL2.IsChecked == true)
+                    commandValues = commandValues + $"--intel-pl={(int)nudIntelPL1.Value},{Math.Max((int)nudIntelPL1.Value + 2, (int)nudIntelPL2.Value)} ";
                 if (tsIntelUV.IsChecked == true) commandValues = commandValues + $"--intel-volt-cpu={nudIntelCoreUV.Value} --intel-volt-gpu={nudIntelGfxUV.Value} --intel-volt-cache={nudIntelCacheUV.Value} --intel-volt-sa={nudIntelSAUV.Value} ";
                 if (tsIntelBal.IsChecked == true) commandValues = commandValues + $"--intel-bal-cpu={nudIntelCpuBal.Value} --intel-bal-gpu={nudIntelGpuBal.Value} ";
                 if (cbAPUiGPUClk.IsChecked == true) commandValues = commandValues + $"--intel-gpu={nudAPUiGPUClk.Value} ";
@@ -1352,7 +1472,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         {
             tsAmdOC.IsChecked = false;
             RyzenAdj_To_UXTU.Translate("--disable-oc ");
-            RyzenAdj_To_UXTU.Translate(getCommandValues());
+            RyzenAdj_To_UXTU.Translate(getCommandValues(), appliedName: GetSelectedPresetName());
             Settings.Default.CommandString = getCommandValues();
             Settings.Default.Save();
             btnUndo.Visibility = Visibility.Collapsed;
@@ -1371,8 +1491,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            ReloadPresetList();
+
             if (deferredSetupComplete)
+            {
+                ReloadPresetValues(Settings.Default.cstmPreset);
                 return;
+            }
 
             deferredSetupComplete = true;
             await App.DisplaySetupTask;
@@ -1435,9 +1560,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 else if (performanceMode == (int)ASUSWmi.AsusMode.Turbo) cbxAsusPower.SelectedIndex = 3;
             }
 
-            Preset? selectedPreset = presetManager.GetPreset(Settings.Default.cstmPreset);
-            if (selectedPreset != null && selectedPreset.displayHz >= 0 && selectedPreset.displayHz < cbxRefreshRate.Items.Count)
-                cbxRefreshRate.SelectedIndex = selectedPreset.displayHz;
+            ReloadPresetValues(Settings.Default.cstmPreset);
         }
     }
 }

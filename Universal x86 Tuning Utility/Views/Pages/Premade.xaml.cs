@@ -109,6 +109,23 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     if (selectedPreset == 2) perfPreset();
                     if (selectedPreset == 3) exPreset();
                 }
+                else if (Family.TYPE == Family.ProcessorType.Intel)
+                {
+                    bdgCertified.Visibility = Visibility.Collapsed;
+                    tbxMessage.Text = LocalizationService.Get("Generic Intel presets based on processor power tier");
+                    PremadePresets.SetPremadePresets();
+                    EcoPreset = PremadePresets.EcoPreset;
+                    BalPreset = PremadePresets.BalPreset;
+                    PerformancePreset = PremadePresets.PerformancePreset;
+                    ExtremePreset = PremadePresets.ExtremePreset;
+                    imgPackage.Source = new BitmapImage(PremadePresets.uri);
+
+                    int selectedPreset = Settings.Default.premadePreset;
+                    if (selectedPreset == 0) ecoPreset();
+                    if (selectedPreset == 1) balPreset();
+                    if (selectedPreset == 2) perfPreset();
+                    if (selectedPreset == 3) exPreset();
+                }
             }
             catch (Exception ex)
             {
@@ -130,7 +147,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 tbPresetDesc.Text = LocalizationService.Get("This preset is optimized for maximum performance by increasing the power limits of the APU/CPU, which allows it to run at higher clock speeds for longer periods of time. This can result in improved system responsiveness and faster load times in applications that require high levels of processing power.");
                 tbUXTUPreset.Text = PerformancePreset;
 
-                RyzenAdj_To_UXTU.Translate(PerformancePreset);
+                RyzenAdj_To_UXTU.Translate(PerformancePreset, appliedName: "Performance Preset", localizeAppliedName: true);
 
                 ToastNotification.ShowToastNotification("Performance Preset Applied!", $"The performance premade power preset has been applied!");
 
@@ -163,7 +180,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 tbUXTUPreset.Text = ExtremePreset;
                 Settings.Default.CommandString = ExtremePreset;
 
-                RyzenAdj_To_UXTU.Translate(ExtremePreset);
+                RyzenAdj_To_UXTU.Translate(ExtremePreset, appliedName: "Extreme Preset", localizeAppliedName: true);
 
                 ToastNotification.ShowToastNotification("Extreme Preset Applied!", $"The extreme premade power preset has been applied!");
 
@@ -190,7 +207,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 tbPresetDesc.Text = LocalizationService.Get("This preset is designed to prioritize energy efficiency over performance. It sets power limits to conservative levels to reduce power consumption and heat generation, making it ideal for prolonged use in situations where maximizing battery life or minimizing energy usage is critical.");
                 tbUXTUPreset.Text = EcoPreset;
 
-                RyzenAdj_To_UXTU.Translate(EcoPreset);
+                RyzenAdj_To_UXTU.Translate(EcoPreset, appliedName: "Eco Preset", localizeAppliedName: true);
 
                 ToastNotification.ShowToastNotification("Eco Preset Applied!", $"The eco premade power preset has been applied!");
 
@@ -218,7 +235,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 tbPresetDesc.Text = LocalizationService.Get("This preset aims to find a balance between performance and power consumption, providing a stable and efficient experience. This preset sets the power limits to a level that balances performance and power usage, without sacrificing too much of either.");
                 tbUXTUPreset.Text = BalPreset;
 
-                RyzenAdj_To_UXTU.Translate(BalPreset);
+                RyzenAdj_To_UXTU.Translate(BalPreset, appliedName: "Balanced Preset", localizeAppliedName: true);
 
                 ToastNotification.ShowToastNotification("Balanced Preset Applied!", $"The balanced premade power preset has been applied!");
 

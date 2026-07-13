@@ -27,7 +27,19 @@ namespace Universal_x86_Tuning_Utility.Services
             new("en-GB", "English"),
             new("cy-GB", "Cymraeg"),
             new("zh-CN", "简体中文"),
-            new("ja-JP", "日本語")
+            new("ja-JP", "日本語"),
+            new("uk-UA", "Українська"),
+            new("de-DE", "Deutsch"),
+            new("tr-TR", "Türkçe"),
+            new("id-ID", "Bahasa Indonesia"),
+            new("pt-BR", "Português (Brasil)"),
+            new("fr-FR", "Français"),
+            new("es-ES", "Español"),
+            new("nl-NL", "Nederlands"),
+            new("pt-PT", "Português"),
+            new("ru-RU", "Русский"),
+            new("it-IT", "Italiano"),
+            new("pl-PL", "Polski")
         };
 
         private static readonly Dictionary<string, Dictionary<string, string>> Catalogues = new(StringComparer.OrdinalIgnoreCase);
@@ -102,17 +114,17 @@ namespace Universal_x86_Tuning_Utility.Services
                 return englishText;
             }
 
-            if (source.StartsWith("Your preset ", StringComparison.Ordinal) && source.EndsWith(" has been saved successfully!", StringComparison.Ordinal))
+            if (!source.Contains("{0}", StringComparison.Ordinal) && source.StartsWith("Your preset ", StringComparison.Ordinal) && source.EndsWith(" has been saved successfully!", StringComparison.Ordinal))
             {
                 return Format("Your preset {0} has been saved successfully!", source[12..^29]);
             }
 
-            if (source.StartsWith("Your preset ", StringComparison.Ordinal) && source.EndsWith(" has been deleted successfully!", StringComparison.Ordinal))
+            if (!source.Contains("{0}", StringComparison.Ordinal) && source.StartsWith("Your preset ", StringComparison.Ordinal) && source.EndsWith(" has been deleted successfully!", StringComparison.Ordinal))
             {
                 return Format("Your preset {0} has been deleted successfully!", source[12..^31]);
             }
 
-            if (source.StartsWith("Launching ", StringComparison.Ordinal))
+            if (!source.Contains("{0}", StringComparison.Ordinal) && source.StartsWith("Launching ", StringComparison.Ordinal))
             {
                 return Format("Launching {0}", source[10..]);
             }

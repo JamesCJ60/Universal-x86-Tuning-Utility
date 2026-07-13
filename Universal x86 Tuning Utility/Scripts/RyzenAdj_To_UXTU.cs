@@ -32,13 +32,13 @@ namespace Universal_x86_Tuning_Utility.Scripts
         static string highPerformancePowerScheme = "DED574B5-45A0-4F42-8737-46345C09C238";
         static string powerSaverPowerScheme = "961CC777-2547-4F9D-8174-7D86181b8A7A";
 
-        public static void Translate(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false) =>
-            _ = TranslateAsync(ryzenAdjString, isAutoReapply, isAutoOC);
+        public static void Translate(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false, string? appliedName = null, bool localizeAppliedName = false) =>
+            _ = TranslateAsync(ryzenAdjString, isAutoReapply, isAutoOC, appliedName, localizeAppliedName);
 
-        public static Task TranslateAsync(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false) =>
-            Task.Run(() => TranslateCore(ryzenAdjString, isAutoReapply, isAutoOC));
+        public static Task TranslateAsync(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false, string? appliedName = null, bool localizeAppliedName = false) =>
+            Task.Run(() => TranslateCore(ryzenAdjString, isAutoReapply, isAutoOC, appliedName, localizeAppliedName));
 
-        private static void TranslateCore(string ryzenAdjString, bool isAutoReapply, bool isAutoOC)
+        private static void TranslateCore(string ryzenAdjString, bool isAutoReapply, bool isAutoOC, string? appliedName, bool localizeAppliedName)
         {
             try
             {
@@ -76,6 +76,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 else if (ryzenAdjCommandValueString == "1") PowerSetActiveOverlayScheme(new Guid(balancedPowerScheme.ToLower()));
                                 else if (ryzenAdjCommandValueString == "2") PowerSetActiveOverlayScheme(new Guid(highPerformancePowerScheme.ToLower()));
                             }
+                            else if (ryzenAdjCommandString.Contains("Win-CPU"))
+                            {
+                                WindowsProcessorPower.Apply(ryzenAdjCommandValueString);
+                            }
                             else if (ryzenAdjCommandString.Contains("ASUS"))
                             {
                                 AsusWmi(ryzenAdjCommandString, ryzenAdjCommandValueString);
@@ -94,7 +98,15 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             }
                             else if (ryzenAdjCommandString.Contains("intel"))
                             {
-                                if (ryzenAdjCommandValueString.Contains("-"))
+                                if (ryzenAdjCommandString == "intel-pl")
+                                {
+                                    string[] limits = ryzenAdjCommandValueString.Split(',');
+                                    if (limits.Length == 2)
+                                        Intel_Management.changeTDP(int.Parse(limits[0]), int.Parse(limits[1]));
+                                    else
+                                        Intel_Management.changeTDPAll(int.Parse(ryzenAdjCommandValueString));
+                                }
+                                else if (ryzenAdjCommandValueString.Contains("-"))
                                 {
                                     if (ryzenAdjCommandString == "intel-ratio")
                                     {
@@ -108,8 +120,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 {
                                     int ryzenAdjCommandValue = Convert.ToInt32(ryzenAdjCommandValueString);
 
-                                    if (ryzenAdjCommandString == "intel-pl") Intel_Management.changeTDPAll(ryzenAdjCommandValue);
-                                    else if (ryzenAdjCommandString == "intel-volt-cpu") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 0);
+                                    if (ryzenAdjCommandString == "intel-volt-cpu") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 0);
                                     else if (ryzenAdjCommandString == "intel-volt-gpu") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 1);
                                     else if (ryzenAdjCommandString == "intel-volt-cache") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 2);
                                     else if (ryzenAdjCommandString == "intel-volt-sa") Intel_Management.changeVoltageOffset(ryzenAdjCommandValue, 3);
@@ -120,6 +131,12 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             }
                             else
                             {
+                                if (ryzenAdjCommandString == "apu-skin-temp" && !SupportsApuSkinTemperatureLimit())
+                                {
+                                    DiagnosticLogger.LogDebug($"APU skin temperature limit is not supported on {Family.FAM}.");
+                                    continue;
+                                }
+
                                 uint ryzenAdjCommandValue = Convert.ToUInt32(ryzenAdjCommandValueString);
 
                                 if (ryzenAdjCommand.Contains("skin")) ryzenAdjCommandValue *= 256;
@@ -139,12 +156,29 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             DiagnosticLogger.LogError(ex, $"Failed to process command: {ryzenAdjCommand}");
                         }
                 }
+
+                if (!isAutoOC)
+                {
+                    LastAppliedSettingsService.Update(normalizedCommands, appliedName, localizeAppliedName);
+                }
             }
             catch (Exception ex)
             {
                 DiagnosticLogger.LogError(ex, "Failed to translate RyzenAdj command string");
             }
         }
+
+        private static bool SupportsApuSkinTemperatureLimit() =>
+            Family.FAM is Family.RyzenFamily.Renoir
+                or Family.RyzenFamily.Lucienne
+                or Family.RyzenFamily.Cezanne_Barcelo
+                or Family.RyzenFamily.VanGogh
+                or Family.RyzenFamily.Rembrandt
+                or Family.RyzenFamily.Mendocino
+                or Family.RyzenFamily.PhoenixPoint
+                or Family.RyzenFamily.PhoenixPoint2
+                or Family.RyzenFamily.HawkPoint
+                or Family.RyzenFamily.HawkPoint2;
 
         private static void ADLX(string command, string value)
         {

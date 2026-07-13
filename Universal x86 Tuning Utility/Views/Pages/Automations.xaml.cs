@@ -94,6 +94,9 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             {
                 // Get the names of all the stored presets
                 IEnumerable<string> presetNames = intelPresetManager.GetPresetNames();
+                AddPremadePresetItems(cbxCharge);
+                AddPremadePresetItems(cbxDischarge);
+                AddPremadePresetItems(cbxResume);
 
                 // Populate a combo box with the preset names
                 foreach (string presetName in presetNames)
@@ -186,6 +189,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 cbxCharge.Items.Clear();
                 cbxCharge.Items.Add("None");
+                AddPremadePresetItems(cbxCharge);
 
                 cbxCharge.Items.Add("PM - Eco Preset");
 
@@ -261,6 +265,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 cbxDischarge.Items.Clear();
                 cbxDischarge.Items.Add("None");
+                AddPremadePresetItems(cbxDischarge);
 
 
                 cbxDischarge.Items.Add("PM - Eco Preset");
@@ -337,6 +342,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 cbxResume.Items.Clear();
                 cbxResume.Items.Add("None");
+                AddPremadePresetItems(cbxResume);
 
                 cbxResume.Items.Add("PM - Eco Preset");
 
@@ -495,9 +501,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
                         if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                         {
-                            Preset myPreset = intelPresetManager.GetPreset(presetName);
                             Settings.Default.acPreset = presetName;
-                            Settings.Default.acCommandString = myPreset.commandValue;
+                            Settings.Default.acCommandString = ResolveIntelPresetCommand(presetName, intelPresetManager);
                         }
                         else
                         {
@@ -606,9 +611,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
                     if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                     {
-                        Preset myPreset = intelPresetManager.GetPreset(presetName);
                         Settings.Default.dcPreset = presetName;
-                        Settings.Default.dcCommandString = myPreset.commandValue;
+                        Settings.Default.dcCommandString = ResolveIntelPresetCommand(presetName, intelPresetManager);
                     }
                     else
                     {
@@ -711,9 +715,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                         intelPresetManager = new PresetManager(Settings.Default.Path + "intelPresets.json");
                         if ((sender as ComboBox).SelectedItem != (sender as ComboBox).Items[0])
                         {
-                            Preset myPreset = intelPresetManager.GetPreset(presetName);
                             Settings.Default.resumePreset = presetName;
-                            Settings.Default.resumeCommandString = myPreset.commandValue;
+                            Settings.Default.resumeCommandString = ResolveIntelPresetCommand(presetName, intelPresetManager);
                         }
                         else
                         {
@@ -731,6 +734,24 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private static void AddPremadePresetItems(ComboBox comboBox)
+        {
+            comboBox.Items.Add("PM - Eco Preset");
+            comboBox.Items.Add("PM - Balanced Preset");
+            comboBox.Items.Add("PM - Performance Preset");
+            comboBox.Items.Add("PM - Extreme Preset");
+        }
+
+        private static string ResolveIntelPresetCommand(string presetName, PresetManager manager)
+        {
+            PremadePresets.SetPremadePresets();
+            if (presetName.Contains("PM - Eco", StringComparison.Ordinal)) return PremadePresets.EcoPreset;
+            if (presetName.Contains("PM - Bal", StringComparison.Ordinal)) return PremadePresets.BalPreset;
+            if (presetName.Contains("PM - Perf", StringComparison.Ordinal)) return PremadePresets.PerformancePreset;
+            if (presetName.Contains("PM - Ext", StringComparison.Ordinal)) return PremadePresets.ExtremePreset;
+            return manager.GetPreset(presetName)?.commandValue ?? string.Empty;
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)

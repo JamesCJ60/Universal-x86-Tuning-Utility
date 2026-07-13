@@ -168,7 +168,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <ui:NumberBox Name="nudTemp" Value="{Binding ElementName=sdTemp, Path=Value}" Maximum="105" Minimum="10" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
+                                <ui:NumberBox Name="nudTemp" Value="{Binding ElementName=sdTemp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="105" Minimum="10" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
                                 <Slider Name="sdTemp" Maximum="105" Minimum="10" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                             </Grid>
                         </StackPanel>
@@ -184,7 +184,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <ui:NumberBox Name="nudPowerLimit" Value="{Binding ElementName=sdPowerLimit, Path=Value}" Maximum="300" Minimum="8" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
+                                <ui:NumberBox Name="nudPowerLimit" Value="{Binding ElementName=sdPowerLimit, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="300" Minimum="8" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
                                 <Slider Name="sdPowerLimit" Maximum="300" Minimum="8" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                             </Grid>
                         </StackPanel>
@@ -200,7 +200,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Name="cbCurve"/>
-                                <ui:NumberBox Name="nudCurve" Value="{Binding ElementName=sdCurve, Path=Value}" Maximum="50" Minimum="0" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
+                                <ui:NumberBox Name="nudCurve" Value="{Binding ElementName=sdCurve, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="50" Minimum="0" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
                                 <Slider Name="sdCurve" Maximum="50" Minimum="0" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                             </Grid>
                         </StackPanel>
@@ -247,7 +247,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                    <ui:NumberBox Name="nudMaxGfxClk" Value="{Binding ElementName=sdMaxGfxClk, Path=Value}" Maximum="3300" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0" />
+                                    <ui:NumberBox Name="nudMaxGfxClk" Value="{Binding ElementName=sdMaxGfxClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="3400" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0" />
                                     <Slider Name="sdMaxGfxClk" Maximum="3400" Minimum="200" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                             </Grid>
                         </StackPanel>
@@ -265,7 +265,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <ui:NumberBox Name="nudMinGfxClk" Value="{Binding ElementName=sdMinGfxClk, Path=Value}" Maximum="3300" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
+                                    <ui:NumberBox Name="nudMinGfxClk" Value="{Binding ElementName=sdMinGfxClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="3400" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
                                     <Slider Name="sdMinGfxClk" Maximum="3400" Minimum="200" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -282,7 +282,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <ui:NumberBox Name="nudMinCpuClk" Value="{Binding ElementName=sdMinCpuClk, Path=Value}" Maximum="4000" Minimum="1000" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
+                                    <ui:NumberBox Name="nudMinCpuClk" Value="{Binding ElementName=sdMinCpuClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="4000" Minimum="1000" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
                                     <Slider Name="sdMinCpuClk" Maximum="4000" Minimum="1000" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -352,7 +352,7 @@ Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudSharp" Value="{Binding ElementName=sdSharp, Path=Value}" Maximum="100" Minimum="5" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0"  />
+                                    <ui:NumberBox Name="nudSharp" Value="{Binding ElementName=sdSharp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="5" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0"  />
                                     <Slider Name="sdSharp" Maximum="100" Minimum="5" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -434,8 +434,8 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Name="cbRSR" Checked="cb_Checked"/>
-                                    <ui:NumberBox Name="nudRSR" Value="{Binding ElementName=sdRSR, Path=Value}" Minimum="100" Maximum="5" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
-                                    <Slider Name="sdRSR" Value="{Binding ElementName=nubRSR, Path=Value}" Maximum="100" Minimum="5" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudRSR" Value="{Binding ElementName=sdRSR, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="5" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdRSR" Maximum="100" Minimum="5" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -451,7 +451,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Name="cbBoost" Checked="cb_Checked"/>
-                                    <ui:NumberBox Name="nudBoost" Value="{Binding ElementName=sdBoost, Path=Value}" Maximum="83" Minimum="50" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
+                                    <ui:NumberBox Name="nudBoost" Value="{Binding ElementName=sdBoost, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="83" Minimum="50" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
                                     <Slider Name="sdBoost" Maximum="83" Minimum="50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -468,7 +468,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <CheckBox Name="cbImageSharp" Checked="cb_Checked"/>
-                                    <ui:NumberBox Name="nudImageSharp" Value="{Binding ElementName=sdImageSharp, Path=Value}" Maximum="100" Minimum="10" Grid.Column="1" SmallChange="5" MaxDecimalPlaces="0"/>
+                                    <ui:NumberBox Name="nudImageSharp" Value="{Binding ElementName=sdImageSharp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="10" Grid.Column="1" SmallChange="5" MaxDecimalPlaces="0"/>
                                     <Slider Name="sdImageSharp" Maximum="100" Minimum="10" Grid.Column="2" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -527,7 +527,7 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVMaxCore" Value="{Binding ElementName=sdNVMaxCore, Path=Value}" Maximum="4000" Minimum="400" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <ui:NumberBox Name="nudNVMaxCore" Value="{Binding ElementName=sdNVMaxCore, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="4000" Minimum="400" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
                                     <Slider Name="sdNVMaxCore" Maximum="4000" Minimum="400" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -542,7 +542,7 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVCore" Value="{Binding ElementName=sdNVCore, Path=Value}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
+                                    <ui:NumberBox Name="nudNVCore" Value="{Binding ElementName=sdNVCore, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
                                     <Slider Name="sdNVCore" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -557,7 +557,7 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVMem" Value="{Binding ElementName=sdNVMem, Path=Value}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
+                                    <ui:NumberBox Name="nudNVMem" Value="{Binding ElementName=sdNVMem, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
                                     <Slider Name="sdNVMem" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>
@@ -566,6 +566,136 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                 FontSize="12"
                 Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                 Text="Warning: We are not liable for any damages to hardware or resulting instabilities caused by adjustment of frequencies and voltages." TextWrapping="WrapWithOverflow" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </ui:CardExpander>
+                    <ui:CardExpander Name="sdWindowsProcessorPower"
+                                     Margin="0,8,15,0"
+                                     IsEnabled="True"
+                                     IsExpanded="False"
+                                     Icon="{ui:SymbolIcon Power20}">
+                        <ui:CardExpander.Header>
+                            <StackPanel>
+                                <TextBlock FontSize="14" FontWeight="Medium" Text="Windows Processor Power" />
+                                <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="Controls Windows processor boost, performance limits, core parking and energy preference." TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ui:CardExpander.Header>
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="200" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock FontSize="13" FontWeight="DemiBold" Text="Processor Boost Mode" />
+                                    <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="Selects how Windows requests processor boost performance." TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ComboBox x:Name="cbxWindowsBoostMode" Grid.Column="1" Height="37" SelectedIndex="0">
+                                    <ComboBoxItem>System Controlled</ComboBoxItem>
+                                    <ComboBoxItem>Disabled</ComboBoxItem>
+                                    <ComboBoxItem>Enabled</ComboBoxItem>
+                                    <ComboBoxItem>Aggressive</ComboBoxItem>
+                                    <ComboBoxItem>Efficient Enabled</ComboBoxItem>
+                                    <ComboBoxItem>Efficient Aggressive</ComboBoxItem>
+                                    <ComboBoxItem>Aggressive at Guaranteed Performance</ComboBoxItem>
+                                    <ComboBoxItem>Efficient Aggressive at Guaranteed Performance</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                            <StackPanel Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="13" FontWeight="DemiBold" Text="Minimum Processor State (%)" />
+                                    <ui:SymbolIcon Margin="6,0,0,-2" Symbol="Info20" ToolTip="Sets the minimum processor performance state as a percentage." />
+                                </StackPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="cbWindowsMinState" />
+                                    <ui:NumberBox x:Name="nudWindowsMinState" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMinState, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMinState" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="13" FontWeight="DemiBold" Text="Maximum Processor State (%)" />
+                                    <ui:SymbolIcon Margin="6,0,0,-2" Symbol="Info20" ToolTip="Limits the maximum processor performance state as a percentage." />
+                                </StackPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="cbWindowsMaxState" />
+                                    <ui:NumberBox x:Name="nudWindowsMaxState" Grid.Column="1" Minimum="1" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMaxState, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMaxState" Grid.Column="2" Margin="12,0,0,0" Minimum="1" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="13" FontWeight="DemiBold" Text="Maximum Processor Frequency (MHz)" />
+                                    <ui:SymbolIcon Margin="6,0,0,-2" Symbol="Info20" ToolTip="Limits the maximum processor frequency requested by Windows." />
+                                </StackPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="cbWindowsMaxFrequency" />
+                                    <ui:NumberBox x:Name="nudWindowsMaxFrequency" Grid.Column="1" Minimum="100" Maximum="8000" SmallChange="100" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMaxFrequency, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMaxFrequency" Grid.Column="2" Margin="12,0,0,0" Minimum="100" Maximum="8000" TickFrequency="100" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="13" FontWeight="DemiBold" Text="Energy Performance Preference (%)" />
+                                    <ui:SymbolIcon Margin="6,0,0,-2" Symbol="Info20" ToolTip="Lower values favour performance; higher values favour energy savings." />
+                                </StackPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="cbWindowsEpp" />
+                                    <ui:NumberBox x:Name="nudWindowsEpp" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsEpp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsEpp" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="13" FontWeight="DemiBold" Text="Minimum Unparked Cores (%)" />
+                                    <ui:SymbolIcon Margin="6,0,0,-2" Symbol="Info20" ToolTip="Sets the minimum percentage of processor cores that Windows keeps available instead of parked." />
+                                </StackPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="cbWindowsCoreParking" />
+                                    <ui:NumberBox x:Name="nudWindowsCoreParking" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsCoreParking, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsCoreParking" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="13" FontWeight="DemiBold" Text="Maximum Unparked Cores (%)" />
+                                    <ui:SymbolIcon Margin="6,0,0,-2" Symbol="Info20" ToolTip="Sets the maximum percentage of processor cores that Windows may keep unparked." />
+                                </StackPanel>
+                                <Grid Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="cbWindowsMaxUnparkedCores" />
+                                    <ui:NumberBox x:Name="nudWindowsMaxUnparkedCores" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMaxUnparkedCores, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMaxUnparkedCores" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                </Grid>
+                            </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
                     <ui:CardControl Name="sdAsusPower"
@@ -639,7 +769,7 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudRTSS" Value="{Binding ElementName=sdRTSSLim, Path=Value}" Maximum="999" Minimum="0" Grid.Column="0" SmallChange="2" MaxDecimalPlaces="0" />
+                                    <ui:NumberBox Name="nudRTSS" Value="{Binding ElementName=sdRTSSLim, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="999" Minimum="0" Grid.Column="0" SmallChange="2" MaxDecimalPlaces="0" />
                                     <Slider Name="sdRTSSLim" Maximum="999" Minimum="0" Grid.Column="1" Margin="12,0,0,0" TickFrequency="2" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
                                 </Grid>
                             </StackPanel>

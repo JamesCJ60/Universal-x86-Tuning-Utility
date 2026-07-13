@@ -140,6 +140,60 @@
                     <StackPanel>
                         <TextBlock FontSize="17"
                                    FontWeight="Medium"
+                                   Text="Preset backup" />
+
+                        <TextBlock Margin="0,5,0,0"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="Back up or import custom and adaptive mode presets."
+                                   TextWrapping="Wrap" />
+
+                        <TextBlock Margin="0,3,0,0"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="Existing presets with the same name will be replaced during import."
+                                   TextWrapping="Wrap" />
+
+                        <StackPanel Margin="0,14,0,0"
+                                    Orientation="Horizontal">
+                            <ui:Button x:Name="btnBackupPresets"
+                                       Width="190"
+                                       Click="btnBackupPresets_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Margin="0,0,8,0"
+                                                   FontSize="22"
+                                                   Symbol="ArrowDownload20" />
+                                    <TextBlock VerticalAlignment="Center"
+                                               Text="Back up presets" />
+                                </StackPanel>
+                            </ui:Button>
+
+                            <ui:Button x:Name="btnImportPresets"
+                                       Width="190"
+                                       Margin="9,0,0,0"
+                                       Appearance="Primary"
+                                       Click="btnImportPresets_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Margin="0,0,8,0"
+                                                   FontSize="22"
+                                                   Symbol="ArrowUpload20" />
+                                    <TextBlock VerticalAlignment="Center"
+                                               Text="Import presets" />
+                                </StackPanel>
+                            </ui:Button>
+                        </StackPanel>
+
+                        <ui:InfoBar x:Name="PresetBackupStatus"
+                                    Margin="0,10,0,0"
+                                    IsClosable="True"
+                                    IsOpen="False" />
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Margin="0,10,0,0"
+                         Padding="18">
+
+                    <StackPanel>
+                        <TextBlock FontSize="17"
+                                   FontWeight="Medium"
                                    Text="Diagnostics" />
 
                         <TextBlock Margin="0,10,0,5"

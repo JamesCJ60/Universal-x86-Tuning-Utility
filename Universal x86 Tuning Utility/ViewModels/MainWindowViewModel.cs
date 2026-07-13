@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
@@ -32,12 +33,19 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         [ObservableProperty]
         private bool _isDownloads;
 
+        [ObservableProperty]
+        private bool _hasLastAppliedSettings;
+
+        [ObservableProperty]
+        private string _lastAppliedSettingsToolTip = string.Empty;
+
         private ICommand? _navigateCommand;
 
         public MainWindowViewModel(INavigationService navigationService)
         {
             InitializeViewModel();
             LocalizationService.CultureChanged += OnCultureChanged;
+            LastAppliedSettingsService.Changed += OnLastAppliedSettingsChanged;
         }
 
         public ICommand NavigateCommand => _navigateCommand ??= new RelayCommand<string>(OnNavigate);
@@ -51,8 +59,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 CreateNavigationItem("Home", "dashboard", SymbolRegular.Home24, typeof(Views.Pages.DashboardPage))
             };
 
-            if (Family.TYPE != Family.ProcessorType.Intel)
-                NavigationItems.Add(CreateNavigationItem("Premade", "premade", SymbolRegular.Predictions24, typeof(Views.Pages.Premade)));
+            NavigationItems.Add(CreateNavigationItem("Premade", "premade", SymbolRegular.Predictions24, typeof(Views.Pages.Premade)));
 
             NavigationItems.Add(CreateNavigationItem("Custom", "custom", SymbolRegular.Book24, typeof(Views.Pages.CustomPresets)));
             NavigationItems.Add(CreateNavigationItem("Adaptive", "adaptive", SymbolRegular.Radar20, typeof(Views.Pages.Adaptive)));
@@ -98,6 +105,40 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     item.Icon = new SymbolIcon { Symbol = symbol };
                 }
             }
+
+            RefreshLastAppliedSettings();
+        }
+
+        private void OnLastAppliedSettingsChanged(object? sender, EventArgs e)
+        {
+            RefreshLastAppliedSettings();
+        }
+
+        private void RefreshLastAppliedSettings()
+        {
+            var current = LastAppliedSettingsService.Current;
+            HasLastAppliedSettings = current != null;
+            if (current == null)
+            {
+                LastAppliedSettingsToolTip = string.Empty;
+                return;
+            }
+
+            var lines = new List<string>
+            {
+                LocalizationService.Get("Last applied settings")
+            };
+
+            if (!string.IsNullOrWhiteSpace(current.PresetName))
+            {
+                var name = current.LocalizePresetName
+                    ? LocalizationService.Get(current.PresetName)
+                    : current.PresetName;
+                lines.Add(LocalizationService.Format("Preset: {0}", name));
+            }
+
+            lines.Add(LocalizationService.Format("Arguments: {0}", current.Arguments));
+            LastAppliedSettingsToolTip = string.Join(Environment.NewLine, lines);
         }
 
         private void OnNavigate(string? parameter)
