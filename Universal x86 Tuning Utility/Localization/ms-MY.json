@@ -613,5 +613,9 @@
   "Imported {0} custom presets and {1} adaptive mode presets.": "Terimport {0} praset suai dan praset mod adaptif {1}.",
   "Preset import failed": "Impor praset gagal",
   "The selected file is not a valid UXTU preset backup.": "Berkas yang dipilih bukan cadangan praset UXTU yang sah.",
-  "The presets could not be imported.\n\n{0}": "Pratetap tidak dapat diimport.\n\n{0}"
+  "The presets could not be imported.\n\n{0}": "Pratetap tidak dapat diimport.\n\n{0}",
+  "Start-up tuning delayed": "Penalaan permulaan ditangguhkan",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "Tekan dan tahan Shift dalam masa 10 saat untuk melangkau tetapan Pengoptimum Lengkung dan voltan rendah Intel yang disimpan bagi sesi ini.",
+  "Automatic tuning skipped": "Penalaan automatik dilangkau",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "Tetapan Pengoptimum Lengkung dan voltan rendah Intel yang disimpan tidak akan digunakan secara automatik sepanjang sesi ini."
 }

@@ -613,5 +613,9 @@
   "Imported {0} custom presets and {1} adaptive mode presets.": "{0} özel profil ve {1} uyarlamalı mod profili içe aktarıldı.",
   "Preset import failed": "Profil içe aktarma başarısız oldu",
   "The selected file is not a valid UXTU preset backup.": "Seçilen dosya geçerli bir UXTU profil yedeği değil.",
-  "The presets could not be imported.\n\n{0}": "Profiller içe aktarılamadı.\n\n{0}"
+  "The presets could not be imported.\n\n{0}": "Profiller içe aktarılamadı.\n\n{0}",
+  "Start-up tuning delayed": "Başlangıç ayarı geciktirildi",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "Bu oturumda kayıtlı Eğri İyileştirici ve Intel düşük voltaj ayarlarını atlamak için 10 saniye içinde Shift tuşunu basılı tutun.",
+  "Automatic tuning skipped": "Otomatik ayar atlandı",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "Kayıtlı Eğri İyileştirici ve Intel düşük voltaj ayarları bu oturum sırasında otomatik olarak uygulanmayacaktır."
 }

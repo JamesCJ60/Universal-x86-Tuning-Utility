@@ -16,6 +16,10 @@ namespace Universal_x86_Tuning_Utility.Views.Overlay
         private const int LayeredStyle = 0x80000;
         private const int ToolWindowStyle = 0x80;
         private const int NoActivateStyle = 0x08000000;
+        private const uint NoSize = 0x0001;
+        private const uint NoZOrder = 0x0004;
+        private const uint NoActivate = 0x0010;
+        private const uint NoOwnerZOrder = 0x0200;
 
         private readonly PerformanceOverlayViewModel _viewModel;
         private bool _allowClose;
@@ -56,6 +60,12 @@ namespace Universal_x86_Tuning_Utility.Views.Overlay
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == nameof(PerformanceOverlayViewModel.TargetProcessId))
+            {
+                MoveToTargetDisplay(_viewModel.TargetProcessId);
+                return;
+            }
+
             if (e.PropertyName != nameof(PerformanceOverlayViewModel.WindowWidth) && e.PropertyName != nameof(PerformanceOverlayViewModel.WindowHeight))
                 return;
 
@@ -110,12 +120,59 @@ namespace Universal_x86_Tuning_Utility.Views.Overlay
             if (!IsLoaded || !IsFinitePositive(ActualWidth) || !IsFinitePositive(ActualHeight))
                 return;
 
-            Rect area = SystemParameters.WorkArea;
-            double rightLimit = Math.Max(area.Left + 5, area.Right - ActualWidth - 5);
-            double bottomLimit = Math.Max(area.Top + 5, area.Bottom - ActualHeight - 5);
+            IntPtr handle = new WindowInteropHelper(this).Handle;
+            if (handle == IntPtr.Zero || !GetWindowRect(handle, out NativeRect bounds))
+                return;
 
-            Left = Math.Clamp(IsFinite(Left) ? Left : area.Left + 5, area.Left + 5, rightLimit);
-            Top = Math.Clamp(IsFinite(Top) ? Top : area.Top + 5, area.Top + 5, bottomLimit);
+            System.Drawing.Rectangle area = System.Windows.Forms.Screen.FromHandle(handle).WorkingArea;
+            int width = bounds.Right - bounds.Left;
+            int height = bounds.Bottom - bounds.Top;
+            int left = Math.Clamp(bounds.Left, area.Left + 5, Math.Max(area.Left + 5, area.Right - width - 5));
+            int top = Math.Clamp(bounds.Top, area.Top + 5, Math.Max(area.Top + 5, area.Bottom - height - 5));
+
+            if (left != bounds.Left || top != bounds.Top)
+                SetWindowPos(handle, IntPtr.Zero, left, top, 0, 0, NoSize | NoZOrder | NoActivate | NoOwnerZOrder);
+        }
+
+        private void MoveToTargetDisplay(int processId)
+        {
+            if (!IsLoaded || processId <= 0)
+                return;
+
+            IntPtr targetWindow = FindProcessWindow(processId);
+            IntPtr overlayWindow = new WindowInteropHelper(this).Handle;
+            if (targetWindow == IntPtr.Zero || overlayWindow == IntPtr.Zero || !GetWindowRect(overlayWindow, out NativeRect bounds))
+                return;
+
+            System.Windows.Forms.Screen targetScreen = System.Windows.Forms.Screen.FromHandle(targetWindow);
+            System.Windows.Forms.Screen currentScreen = System.Windows.Forms.Screen.FromHandle(overlayWindow);
+            if (string.Equals(targetScreen.DeviceName, currentScreen.DeviceName, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            System.Drawing.Rectangle currentArea = currentScreen.WorkingArea;
+            System.Drawing.Rectangle targetArea = targetScreen.WorkingArea;
+            int width = bounds.Right - bounds.Left;
+            int height = bounds.Bottom - bounds.Top;
+            int relativeLeft = Math.Max(5, bounds.Left - currentArea.Left);
+            int relativeTop = Math.Max(5, bounds.Top - currentArea.Top);
+            int left = targetArea.Left + Math.Min(relativeLeft, Math.Max(5, targetArea.Width - width - 5));
+            int top = targetArea.Top + Math.Min(relativeTop, Math.Max(5, targetArea.Height - height - 5));
+            SetWindowPos(overlayWindow, IntPtr.Zero, left, top, 0, 0, NoSize | NoZOrder | NoActivate | NoOwnerZOrder);
+        }
+
+        private static IntPtr FindProcessWindow(int processId)
+        {
+            IntPtr result = IntPtr.Zero;
+            EnumWindows((window, _) =>
+            {
+                GetWindowThreadProcessId(window, out uint windowProcessId);
+                if (windowProcessId != processId || !IsWindowVisible(window))
+                    return true;
+
+                result = window;
+                return false;
+            }, IntPtr.Zero);
+            return result;
         }
 
         private void OnClosing(object? sender, CancelEventArgs e)
@@ -157,5 +214,31 @@ namespace Universal_x86_Tuning_Utility.Views.Overlay
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern int SetWindowLong(IntPtr window, int index, int newStyle);
+
+        [DllImport("user32.dll")]
+        private static extern bool EnumWindows(EnumWindowsCallback callback, IntPtr parameter);
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr window, out uint processId);
+
+        [DllImport("user32.dll")]
+        private static extern bool IsWindowVisible(IntPtr window);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetWindowRect(IntPtr window, out NativeRect rectangle);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool SetWindowPos(IntPtr window, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
+
+        private delegate bool EnumWindowsCallback(IntPtr window, IntPtr parameter);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NativeRect
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
     }
 }

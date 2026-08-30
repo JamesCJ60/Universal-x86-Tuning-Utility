@@ -130,6 +130,8 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     Family.RyzenFamily.PhoenixPoint2 or
                     Family.RyzenFamily.Mendocino or
                     Family.RyzenFamily.Rembrandt or
+                    Family.RyzenFamily.Medusa1 or
+                    Family.RyzenFamily.Medusa2 or
                     Family.RyzenFamily.Lucienne or
                     Family.RyzenFamily.Renoir))
                     sdAmdApuiGPUClk.Visibility = Visibility.Collapsed;
@@ -152,7 +154,14 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbxPowerPreset.Items.Add(presetName);
                 }
 
-                if (Family.FAM == Family.RyzenFamily.DragonRange || Family.FAM == Family.RyzenFamily.FireRange || Family.FAM == Family.RyzenFamily.StrixHalo)
+                if (Family.FAM is Family.RyzenFamily.DragonRange or
+                    Family.RyzenFamily.FireRange or
+                    Family.RyzenFamily.StrixHalo or
+                    Family.RyzenFamily.StrixPoint or
+                    Family.RyzenFamily.KrackanPoint or
+                    Family.RyzenFamily.KrackanPoint2 or
+                    Family.RyzenFamily.Medusa1 or
+                    Family.RyzenFamily.Medusa2)
                 {
                    if((int)CpuAffinityManager.GetActiveProcessorCount(0xFFFF) > 16) sdCcdAffinity.Visibility = Visibility.Visible;
                 }
@@ -331,6 +340,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ccd1Core6 = (int)nudCCD1Core6.Value,
                             ccd1Core7 = (int)nudCCD1Core7.Value,
                             ccd1Core8 = (int)nudCCD1Core8.Value,
+                            ccd1Core9 = (int)nudCCD1Core9.Value,
+                            ccd1Core10 = (int)nudCCD1Core10.Value,
+                            ccd1Core11 = (int)nudCCD1Core11.Value,
+                            ccd1Core12 = (int)nudCCD1Core12.Value,
 
                             ccd2Core1 = (int)nudCCD2Core1.Value,
                             ccd2Core2 = (int)nudCCD2Core2.Value,
@@ -340,6 +353,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ccd2Core6 = (int)nudCCD2Core6.Value,
                             ccd2Core7 = (int)nudCCD2Core7.Value,
                             ccd2Core8 = (int)nudCCD2Core8.Value,
+                            ccd2Core9 = (int)nudCCD2Core9.Value,
+                            ccd2Core10 = (int)nudCCD2Core10.Value,
+                            ccd2Core11 = (int)nudCCD2Core11.Value,
+                            ccd2Core12 = (int)nudCCD2Core12.Value,
 
                             commandValue = getCommandValues(),
 
@@ -371,6 +388,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
                             IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
                             IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
+                            IsCCD1Core9 = (bool)cbCCD1Core9.IsChecked,
+                            IsCCD1Core10 = (bool)cbCCD1Core10.IsChecked,
+                            IsCCD1Core11 = (bool)cbCCD1Core11.IsChecked,
+                            IsCCD1Core12 = (bool)cbCCD1Core12.IsChecked,
 
                             IsCCD2Core1 = (bool)cbCCD2Core1.IsChecked,
                             IsCCD2Core2 = (bool)cbCCD2Core2.IsChecked,
@@ -380,6 +401,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IsCCD2Core6 = (bool)cbCCD2Core6.IsChecked,
                             IsCCD2Core7 = (bool)cbCCD2Core7.IsChecked,
                             IsCCD2Core8 = (bool)cbCCD2Core8.IsChecked,
+                            IsCCD2Core9 = (bool)cbCCD2Core9.IsChecked,
+                            IsCCD2Core10 = (bool)cbCCD2Core10.IsChecked,
+                            IsCCD2Core11 = (bool)cbCCD2Core11.IsChecked,
+                            IsCCD2Core12 = (bool)cbCCD2Core12.IsChecked,
 
                             isNVIDIA = (bool)tsNV.IsChecked,
                             nvMaxCoreClk = (int)nudNVMaxCore.Value,
@@ -512,6 +537,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ccd1Core6 = (int)nudCCD1Core6.Value,
                             ccd1Core7 = (int)nudCCD1Core7.Value,
                             ccd1Core8 = (int)nudCCD1Core8.Value,
+                            ccd1Core9 = (int)nudCCD1Core9.Value,
+                            ccd1Core10 = (int)nudCCD1Core10.Value,
+                            ccd1Core11 = (int)nudCCD1Core11.Value,
+                            ccd1Core12 = (int)nudCCD1Core12.Value,
 
                             ccd2Core1 = (int)nudCCD2Core1.Value,
                             ccd2Core2 = (int)nudCCD2Core2.Value,
@@ -521,6 +550,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             ccd2Core6 = (int)nudCCD2Core6.Value,
                             ccd2Core7 = (int)nudCCD2Core7.Value,
                             ccd2Core8 = (int)nudCCD2Core8.Value,
+                            ccd2Core9 = (int)nudCCD2Core9.Value,
+                            ccd2Core10 = (int)nudCCD2Core10.Value,
+                            ccd2Core11 = (int)nudCCD2Core11.Value,
+                            ccd2Core12 = (int)nudCCD2Core12.Value,
 
                             IsCCD1Core1 = (bool)cbCCD1Core1.IsChecked,
                             IsCCD1Core2 = (bool)cbCCD1Core2.IsChecked,
@@ -530,6 +563,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IsCCD1Core6 = (bool)cbCCD1Core6.IsChecked,
                             IsCCD1Core7 = (bool)cbCCD1Core7.IsChecked,
                             IsCCD1Core8 = (bool)cbCCD1Core8.IsChecked,
+                            IsCCD1Core9 = (bool)cbCCD1Core9.IsChecked,
+                            IsCCD1Core10 = (bool)cbCCD1Core10.IsChecked,
+                            IsCCD1Core11 = (bool)cbCCD1Core11.IsChecked,
+                            IsCCD1Core12 = (bool)cbCCD1Core12.IsChecked,
 
                             IsCCD2Core1 = (bool)cbCCD2Core1.IsChecked,
                             IsCCD2Core2 = (bool)cbCCD2Core2.IsChecked,
@@ -539,6 +576,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             IsCCD2Core6 = (bool)cbCCD2Core6.IsChecked,
                             IsCCD2Core7 = (bool)cbCCD2Core7.IsChecked,
                             IsCCD2Core8 = (bool)cbCCD2Core8.IsChecked,
+                            IsCCD2Core9 = (bool)cbCCD2Core9.IsChecked,
+                            IsCCD2Core10 = (bool)cbCCD2Core10.IsChecked,
+                            IsCCD2Core11 = (bool)cbCCD2Core11.IsChecked,
+                            IsCCD2Core12 = (bool)cbCCD2Core12.IsChecked,
 
                             IsAmdOC = (bool)tsAmdOC.IsChecked,
                             amdClock = (int)nudAmdCpuClk.Value,
@@ -858,6 +899,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudCCD1Core6.Value = myPreset.ccd1Core6;
                     nudCCD1Core7.Value = myPreset.ccd1Core7;
                     nudCCD1Core8.Value = myPreset.ccd1Core8;
+                    nudCCD1Core9.Value = myPreset.ccd1Core9;
+                    nudCCD1Core10.Value = myPreset.ccd1Core10;
+                    nudCCD1Core11.Value = myPreset.ccd1Core11;
+                    nudCCD1Core12.Value = myPreset.ccd1Core12;
 
                     cbCCD1Core1.IsChecked = myPreset.IsCCD1Core1;
                     cbCCD1Core2.IsChecked = myPreset.IsCCD1Core2;
@@ -867,6 +912,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbCCD1Core6.IsChecked = myPreset.IsCCD1Core6;
                     cbCCD1Core7.IsChecked = myPreset.IsCCD1Core7;
                     cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
+                    cbCCD1Core9.IsChecked = myPreset.IsCCD1Core9;
+                    cbCCD1Core10.IsChecked = myPreset.IsCCD1Core10;
+                    cbCCD1Core11.IsChecked = myPreset.IsCCD1Core11;
+                    cbCCD1Core12.IsChecked = myPreset.IsCCD1Core12;
 
                     nudCCD2Core1.Value = myPreset.ccd2Core1;
                     nudCCD2Core2.Value = myPreset.ccd2Core2;
@@ -876,6 +925,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudCCD2Core6.Value = myPreset.ccd2Core6;
                     nudCCD2Core7.Value = myPreset.ccd2Core7;
                     nudCCD2Core8.Value = myPreset.ccd2Core8;
+                    nudCCD2Core9.Value = myPreset.ccd2Core9;
+                    nudCCD2Core10.Value = myPreset.ccd2Core10;
+                    nudCCD2Core11.Value = myPreset.ccd2Core11;
+                    nudCCD2Core12.Value = myPreset.ccd2Core12;
 
                     cbCCD2Core1.IsChecked = myPreset.IsCCD2Core1;
                     cbCCD2Core2.IsChecked = myPreset.IsCCD2Core2;
@@ -885,6 +938,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbCCD2Core6.IsChecked = myPreset.IsCCD2Core6;
                     cbCCD2Core7.IsChecked = myPreset.IsCCD2Core7;
                     cbCCD2Core8.IsChecked = myPreset.IsCCD2Core8;
+                    cbCCD2Core9.IsChecked = myPreset.IsCCD2Core9;
+                    cbCCD2Core10.IsChecked = myPreset.IsCCD2Core10;
+                    cbCCD2Core11.IsChecked = myPreset.IsCCD2Core11;
+                    cbCCD2Core12.IsChecked = myPreset.IsCCD2Core12;
 
                     cbxBoost.SelectedIndex = myPreset.boostProfile;
 
@@ -991,6 +1048,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudCCD1Core6.Value = myPreset.ccd1Core6;
                     nudCCD1Core7.Value = myPreset.ccd1Core7;
                     nudCCD1Core8.Value = myPreset.ccd1Core8;
+                    nudCCD1Core9.Value = myPreset.ccd1Core9;
+                    nudCCD1Core10.Value = myPreset.ccd1Core10;
+                    nudCCD1Core11.Value = myPreset.ccd1Core11;
+                    nudCCD1Core12.Value = myPreset.ccd1Core12;
 
                     cbCCD1Core1.IsChecked = myPreset.IsCCD1Core1;
                     cbCCD1Core2.IsChecked = myPreset.IsCCD1Core2;
@@ -1000,6 +1061,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbCCD1Core6.IsChecked = myPreset.IsCCD1Core6;
                     cbCCD1Core7.IsChecked = myPreset.IsCCD1Core7;
                     cbCCD1Core8.IsChecked = myPreset.IsCCD1Core8;
+                    cbCCD1Core9.IsChecked = myPreset.IsCCD1Core9;
+                    cbCCD1Core10.IsChecked = myPreset.IsCCD1Core10;
+                    cbCCD1Core11.IsChecked = myPreset.IsCCD1Core11;
+                    cbCCD1Core12.IsChecked = myPreset.IsCCD1Core12;
 
                     nudCCD2Core1.Value = myPreset.ccd2Core1;
                     nudCCD2Core2.Value = myPreset.ccd2Core2;
@@ -1009,6 +1074,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     nudCCD2Core6.Value = myPreset.ccd2Core6;
                     nudCCD2Core7.Value = myPreset.ccd2Core7;
                     nudCCD2Core8.Value = myPreset.ccd2Core8;
+                    nudCCD2Core9.Value = myPreset.ccd2Core9;
+                    nudCCD2Core10.Value = myPreset.ccd2Core10;
+                    nudCCD2Core11.Value = myPreset.ccd2Core11;
+                    nudCCD2Core12.Value = myPreset.ccd2Core12;
 
                     cbCCD2Core1.IsChecked = myPreset.IsCCD2Core1;
                     cbCCD2Core2.IsChecked = myPreset.IsCCD2Core2;
@@ -1018,6 +1087,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     cbCCD2Core6.IsChecked = myPreset.IsCCD2Core6;
                     cbCCD2Core7.IsChecked = myPreset.IsCCD2Core7;
                     cbCCD2Core8.IsChecked = myPreset.IsCCD2Core8;
+                    cbCCD2Core9.IsChecked = myPreset.IsCCD2Core9;
+                    cbCCD2Core10.IsChecked = myPreset.IsCCD2Core10;
+                    cbCCD2Core11.IsChecked = myPreset.IsCCD2Core11;
+                    cbCCD2Core12.IsChecked = myPreset.IsCCD2Core12;
 
                     tsNV.IsChecked = myPreset.isNVIDIA;
                     nudNVMaxCore.Value = myPreset.nvMaxCoreClk;
@@ -1263,46 +1336,48 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                 }
                 else
                 {
-                    if (cbCCD1Core1.IsChecked == true) commandValues = commandValues + $"--set-coper={(0 << 20) | ((int)nudCCD1Core1.Value & 0xFFFF)} ";
-                    if (cbCCD1Core2.IsChecked == true) commandValues = commandValues + $"--set-coper={(1 << 20) | ((int)nudCCD1Core2.Value & 0xFFFF)} ";
-                    if (cbCCD1Core3.IsChecked == true) commandValues = commandValues + $"--set-coper={(2 << 20) | ((int)nudCCD1Core3.Value & 0xFFFF)} ";
-                    if (cbCCD1Core4.IsChecked == true) commandValues = commandValues + $"--set-coper={(3 << 20) | ((int)nudCCD1Core4.Value & 0xFFFF)} ";
-                    if (cbCCD1Core5.IsChecked == true) commandValues = commandValues + $"--set-coper={(4 << 20) | ((int)nudCCD1Core5.Value & 0xFFFF)} ";
-                    if (cbCCD1Core6.IsChecked == true) commandValues = commandValues + $"--set-coper={(5 << 20) | ((int)nudCCD1Core6.Value & 0xFFFF)} ";
-                    if (cbCCD1Core7.IsChecked == true) commandValues = commandValues + $"--set-coper={(6 << 20) | ((int)nudCCD1Core7.Value & 0xFFFF)} ";
-                    if (cbCCD1Core8.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core8.Value & 0xFFFF)} ";
-                    if (cbCCD1Core9.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core9.Value & 0xFFFF)} ";
-                    if (cbCCD1Core10.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core10.Value & 0xFFFF)} ";
-                    if (cbCCD1Core11.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core11.Value & 0xFFFF)} ";
-                    if (cbCCD1Core12.IsChecked == true) commandValues = commandValues + $"--set-coper={(7 << 20) | ((int)nudCCD1Core12.Value & 0xFFFF)} ";
+                    if (cbCCD1Core1.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 0, (int)nudCCD1Core1.Value)} ";
+                    if (cbCCD1Core2.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 1, (int)nudCCD1Core2.Value)} ";
+                    if (cbCCD1Core3.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 2, (int)nudCCD1Core3.Value)} ";
+                    if (cbCCD1Core4.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 3, (int)nudCCD1Core4.Value)} ";
+                    if (cbCCD1Core5.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 4, (int)nudCCD1Core5.Value)} ";
+                    if (cbCCD1Core6.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 5, (int)nudCCD1Core6.Value)} ";
+                    if (cbCCD1Core7.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 6, (int)nudCCD1Core7.Value)} ";
+                    if (cbCCD1Core8.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 7, (int)nudCCD1Core8.Value)} ";
+                    if (cbCCD1Core9.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 8, (int)nudCCD1Core9.Value)} ";
+                    if (cbCCD1Core10.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 9, (int)nudCCD1Core10.Value)} ";
+                    if (cbCCD1Core11.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 10, (int)nudCCD1Core11.Value)} ";
+                    if (cbCCD1Core12.IsChecked == true) commandValues += $"--set-coper={BuildCoperArg(0, 11, (int)nudCCD1Core12.Value)} ";
                 }
 
-                if (tsAmdOC.IsChecked == true)
+                if (tsAmdOC.IsChecked == true && Family.FAM is
+                    Family.RyzenFamily.Renoir or
+                    Family.RyzenFamily.Lucienne or
+                    Family.RyzenFamily.Cezanne_Barcelo or
+                    Family.RyzenFamily.Rembrandt or
+                    Family.RyzenFamily.Medusa1 or
+                    Family.RyzenFamily.Medusa2)
                 {
-                    double vid = 0;
+                    commandValues = commandValues + $"--oc-clk={(int)nudAmdCpuClk.Value} ";
 
-                    vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
-                    commandValues = commandValues + $"--oc-clk={(int)nudAmdCpuClk.Value} --oc-clk={(int)nudAmdCpuClk.Value} ";
-
-                    if (Family.FAM >= Family.RyzenFamily.Rembrandt)
+                    if (Family.FAM is Family.RyzenFamily.Medusa1 or Family.RyzenFamily.Medusa2)
                     {
-                        vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
-                        commandValues = commandValues + $"--oc-volt={vid} --oc-volt={vid} ";
+                        commandValues = commandValues + $"--oc-volt={(uint)nudAmdVID.Value} ";
                     }
-                    else
+                    else if (Family.FAM != Family.RyzenFamily.Rembrandt)
                     {
-                        vid = Math.Round((double)nudAmdVID.Value / 1000, 2);
-                        commandValues = commandValues + $"--oc-volt={Convert.ToUInt32((1.55 - vid) / 0.00625)} --oc-volt={Convert.ToUInt32((1.55 - vid) / 0.00625)} ";
+                        double voltage = Math.Round((double)nudAmdVID.Value / 1000, 2);
+                        commandValues = commandValues + $"--oc-volt={Convert.ToUInt32((1.55 - voltage) / 0.00625)} ";
                     }
 
-                    commandValues = commandValues + $"--enable-oc --enable-oc ";
+                    commandValues = commandValues + "--enable-oc ";
                 }
 
             }
 
             if (Family.TYPE == Family.ProcessorType.Amd_Desktop_Cpu)
             {
-                if (cbCPUTemp.IsChecked == true) commandValues = commandValues + $"--tctl-limit={nudCPUTemp.Value * 1000} ";
+                if (cbCPUTemp.IsChecked == true) commandValues = commandValues + $"--tctl-temp={nudCPUTemp.Value} ";
                 if (cbPPT.IsChecked == true) commandValues = commandValues + $"--ppt-limit={nudPPT.Value * 1000} ";
                 if (cbTDC.IsChecked == true) commandValues = commandValues + $"--tdc-limit={nudTDC.Value * 1000} ";
                 if (cbEDC.IsChecked == true) commandValues = commandValues + $"--edc-limit={nudEDC.Value * 1000} ";
@@ -1353,7 +1428,11 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
                     commandValues = commandValues + $"--oc-clk={(int)nudAmdCpuClk.Value} --oc-clk={(int)nudAmdCpuClk.Value} ";
 
-                    if (Family.FAM >= Family.RyzenFamily.Rembrandt)
+                    if (Family.FAM == Family.RyzenFamily.OlympicRidge)
+                    {
+                        commandValues = commandValues + $"--oc-volt={(uint)nudAmdVID.Value} --oc-volt={(uint)nudAmdVID.Value} ";
+                    }
+                    else if (Family.FAM >= Family.RyzenFamily.Rembrandt)
                     {
                         vid = ((double)nudAmdVID.Value - 1125) / 5 + 1200;
                         commandValues = commandValues + $"--oc-volt={vid} --oc-volt={vid} ";
@@ -1419,6 +1498,13 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private static uint BuildCoperArg(int ccd, int core, int offset)
         {
+            if (SMUCommands.UseHsmp)
+            {
+                int apicId = ((ccd << 4) | core) << 1;
+                ushort margin = unchecked((ushort)(short)Math.Clamp(offset, short.MinValue, short.MaxValue));
+                return ((uint)apicId << 16) | margin;
+            }
+
             int magnitude = Math.Min(Math.Abs(offset), 0xFFFFF);
 
             uint encoded20 =
@@ -1426,7 +1512,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     ? (uint)((0x100000 - magnitude) & 0xFFFFF)
                     : (uint)(magnitude & 0xFFFFF);
 
-            uint prefix = (uint)((((ccd << 4) | (0 % 1 & 15)) << 4 | (core % 8 & 15)) << 20);
+            uint prefix = (uint)((((ccd << 4) | (core / 8 & 15)) << 4 | (core % 8 & 15)) << 20);
             return prefix | encoded20;
         }
 

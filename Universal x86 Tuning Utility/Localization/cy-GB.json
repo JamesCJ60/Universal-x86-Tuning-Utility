@@ -613,5 +613,9 @@
   "The selected file is not a valid UXTU preset backup.": "Nid yw'r ffeil a ddewiswyd yn gopi wrth gefn dilys o ragosodiadau UXTU.",
   "The presets could not be imported.\n\n{0}": "Ni ellid mewnforio'r rhagosodiadau.\n\n{0}",
   "iGPU TDC Limit (A)": "Terfyn cerrynt dylunio thermol (TDC) y GPU integredig (A)",
-  "iGPU EDC Limit (A)": "Terfyn cerrynt dylunio trydanol (EDC) y GPU integredig (A)"
+  "iGPU EDC Limit (A)": "Terfyn cerrynt dylunio trydanol (EDC) y GPU integredig (A)",
+  "Start-up tuning delayed": "Oedi tiwnio wrth gychwyn",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "Daliwch Shift o fewn 10 eiliad i hepgor gosodiadau Curve Optimiser a thanfoltio Intel sydd wedi'u cadw ar gyfer y sesiwn hon.",
+  "Automatic tuning skipped": "Hepgorwyd tiwnio awtomatig",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "Ni fydd gosodiadau Curve Optimiser a thanfoltio Intel sydd wedi'u cadw yn cael eu cymhwyso'n awtomatig yn ystod y sesiwn hon."
 }

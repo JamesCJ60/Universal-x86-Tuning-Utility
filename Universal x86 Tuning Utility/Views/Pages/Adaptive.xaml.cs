@@ -180,7 +180,16 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
                 }
 
-                foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get()) coreCount += int.Parse(item["NumberOfCores"].ToString());
+                coreCount = 0;
+                using (var searcher = new ManagementObjectSearcher("Select * from Win32_Processor"))
+                using (var processors = searcher.Get())
+                {
+                    foreach (ManagementObject processor in processors)
+                    {
+                        using (processor)
+                            coreCount += Convert.ToInt32(processor["NumberOfCores"]);
+                    }
+                }
 
                 btnStart.IsEnabled = true;
                 btnSave.IsEnabled = true;
@@ -656,49 +665,65 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
         string runningGameName = "Default";
         private void isGameRunning()
         {
-            foreach (GameLauncherItem item in installedGames)
+            Process[] processes = Process.GetProcesses();
+            try
             {
-                //var gamePath = game.Split("~");
-
-                int i = 0;
-                do
+                foreach (Process process in processes)
                 {
-                    Process[] processes = Process.GetProcesses();
-
-                    foreach (Process process in processes)
+                    try
                     {
-                        try
-                        {
-                            string executablePath = process.MainModule.FileName;
-                            string executableDirectory = System.IO.Path.GetDirectoryName(executablePath);
-                            string executableName = System.IO.Path.GetFileName(executablePath);
+                        string? executablePath = process.MainModule?.FileName;
+                        if (string.IsNullOrWhiteSpace(executablePath))
+                            continue;
 
-                            if (executablePath.Contains(item.path))
-                            {
-                                bool autoSwitch = true;
-                                AdaptivePreset preset = adaptivePresetManager.GetPreset(item.gameName);
-                                if (preset != null)
-                                {
-                                    autoSwitch = preset.isAutoSwitch;
-                                }
-                                if (!autoSwitch)
-                                {
-                                    continue;
-                                }
-
-                                runningGameName = item.gameName;
-                                return;
-                            }
-                        }
-                        catch (Exception ex)
+                        foreach (GameLauncherItem item in installedGames)
                         {
-                            DiagnosticLogger.LogError(ex, "Failed to check running game process");
+                            if (!MatchesExecutable(item, executablePath))
+                                continue;
+
+                            AdaptivePreset preset = adaptivePresetManager.GetPreset(item.gameName);
+                            if (preset?.isAutoSwitch == false)
+                                continue;
+
+                            runningGameName = item.gameName;
+                            return;
                         }
                     }
-                    i++;
-                } while (i < 2);
+                    catch
+                    {
+                    }
+                }
             }
+            finally
+            {
+                foreach (Process process in processes)
+                    process.Dispose();
+            }
+
             runningGameName = "Default";
+        }
+
+        private static bool MatchesExecutable(GameLauncherItem item, string executablePath)
+        {
+            if (!string.IsNullOrWhiteSpace(item.exe))
+            {
+                if (System.IO.Path.IsPathFullyQualified(item.exe))
+                    return string.Equals(System.IO.Path.GetFullPath(item.exe), System.IO.Path.GetFullPath(executablePath), StringComparison.OrdinalIgnoreCase);
+
+                if (string.Equals(System.IO.Path.GetFileNameWithoutExtension(item.exe), System.IO.Path.GetFileNameWithoutExtension(executablePath), StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(item.path))
+                return false;
+
+            if (!System.IO.Path.IsPathFullyQualified(item.path))
+                return string.Equals(System.IO.Path.GetFileNameWithoutExtension(item.path), System.IO.Path.GetFileNameWithoutExtension(executablePath), StringComparison.OrdinalIgnoreCase);
+
+            string gamePath = System.IO.Path.TrimEndingDirectorySeparator(System.IO.Path.GetFullPath(item.path));
+            string processPath = System.IO.Path.GetFullPath(executablePath);
+            return processPath.StartsWith(gamePath + System.IO.Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(processPath, gamePath, StringComparison.OrdinalIgnoreCase);
         }
 
 

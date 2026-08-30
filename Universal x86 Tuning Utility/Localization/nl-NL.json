@@ -613,5 +613,9 @@
   "Imported {0} custom presets and {1} adaptive mode presets.": "Er zijn {0} aangepaste profielen en {1} adaptieve profielen geïmporteerd.",
   "Preset import failed": "Importeren van profielen mislukt",
   "The selected file is not a valid UXTU preset backup.": "Het geselecteerde bestand is geen geldige UXTU-profielback-up.",
-  "The presets could not be imported.\n\n{0}": "De profielen konden niet worden geïmporteerd.\n\n{0}"
+  "The presets could not be imported.\n\n{0}": "De profielen konden niet worden geïmporteerd.\n\n{0}",
+  "Start-up tuning delayed": "Afstemming bij opstarten uitgesteld",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "Houd Shift binnen 10 seconden ingedrukt om opgeslagen Curve Optimiser- en Intel-undervoltinstellingen voor deze sessie over te slaan.",
+  "Automatic tuning skipped": "Automatische afstemming overgeslagen",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "Opgeslagen Curve Optimiser- en Intel-undervoltinstellingen worden tijdens deze sessie niet automatisch toegepast."
 }

@@ -613,5 +613,9 @@
   "The selected file is not a valid UXTU preset backup.": "選択したファイルは有効な UXTU プリセットバックアップではありません。",
   "The presets could not be imported.\n\n{0}": "プリセットをインポートできませんでした。\n\n{0}",
   "iGPU TDC Limit (A)": "統合 GPU 熱設計電流 (TDC) 制限 (A)",
-  "iGPU EDC Limit (A)": "統合 GPU 電気設計電流 (EDC) 制限 (A)"
+  "iGPU EDC Limit (A)": "統合 GPU 電気設計電流 (EDC) 制限 (A)",
+  "Start-up tuning delayed": "起動時のチューニングを遅延しています",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "10 秒以内に Shift キーを押し続けると、このセッションでは保存済みのカーブオプティマイザーと Intel 低電圧化設定をスキップします。",
+  "Automatic tuning skipped": "自動チューニングをスキップしました",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "このセッション中、保存済みのカーブオプティマイザーと Intel 低電圧化設定は自動的に適用されません。"
 }

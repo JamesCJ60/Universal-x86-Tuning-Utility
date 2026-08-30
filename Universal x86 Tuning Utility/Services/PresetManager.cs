@@ -72,6 +72,10 @@ namespace Universal_x86_Tuning_Utility.Services
         public int ccd1Core6 { get; set; }
         public int ccd1Core7 { get; set; }
         public int ccd1Core8 { get; set; }
+        public int ccd1Core9 { get; set; }
+        public int ccd1Core10 { get; set; }
+        public int ccd1Core11 { get; set; }
+        public int ccd1Core12 { get; set; }
 
         public int ccd2Core1 { get; set; }
         public int ccd2Core2 { get; set; }
@@ -81,6 +85,10 @@ namespace Universal_x86_Tuning_Utility.Services
         public int ccd2Core6 { get; set; }
         public int ccd2Core7 { get; set; }
         public int ccd2Core8 { get; set; }
+        public int ccd2Core9 { get; set; }
+        public int ccd2Core10 { get; set; }
+        public int ccd2Core11 { get; set; }
+        public int ccd2Core12 { get; set; }
 
         public int nvMaxCoreClk { get; set; } = 4000;
         public int nvCoreClk { get; set; }
@@ -144,6 +152,10 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool IsCCD1Core6 { get; set; }
         public bool IsCCD1Core7 { get; set; }
         public bool IsCCD1Core8 { get; set; }
+        public bool IsCCD1Core9 { get; set; }
+        public bool IsCCD1Core10 { get; set; }
+        public bool IsCCD1Core11 { get; set; }
+        public bool IsCCD1Core12 { get; set; }
 
         public bool IsCCD2Core1 { get; set; }
         public bool IsCCD2Core2 { get; set; }
@@ -153,6 +165,10 @@ namespace Universal_x86_Tuning_Utility.Services
         public bool IsCCD2Core6 { get; set; }
         public bool IsCCD2Core7 { get; set; }
         public bool IsCCD2Core8 { get; set; }
+        public bool IsCCD2Core9 { get; set; }
+        public bool IsCCD2Core10 { get; set; }
+        public bool IsCCD2Core11 { get; set; }
+        public bool IsCCD2Core12 { get; set; }
 
         public bool IsAmdOC { get; set; }
 

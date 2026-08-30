@@ -17,6 +17,7 @@ using System.Linq;
 using System.Management;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,6 +54,8 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         public static NavigationView _mainWindowNav;
         private static INavigationService _navigationService;
         private bool _isTrayPresetApplying;
+        private bool _startupApplyPending = true;
+        private bool _automaticTuningSuppressed;
         public static bool IsPageSelected(Type pageType) =>
             _mainWindowNav?.SelectedItem is INavigationViewItem item && item.TargetPageType == pageType;
 
@@ -100,44 +103,81 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         private async void ApplyOnStart()
         {
-            if (Settings.Default.ApplyOnStart)
-                if (Settings.Default.CommandString != null && Settings.Default.CommandString != "")
+            try
+            {
+                if (!Settings.Default.ApplyOnStart || string.IsNullOrWhiteSpace(Settings.Default.CommandString))
+                    return;
+
+                await Task.Run(GetBatteryStatus);
+
+                bool isCharging = statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8;
+                string commands = Settings.Default.CommandString;
+                string? preset = null;
+
+                if (isCharging && !string.IsNullOrWhiteSpace(Settings.Default.acCommandString))
                 {
+                    commands = Settings.Default.acCommandString;
+                    preset = Settings.Default.acPreset;
+                }
+                else if (!isCharging && !string.IsNullOrWhiteSpace(Settings.Default.dcCommandString))
+                {
+                    commands = Settings.Default.dcCommandString;
+                    preset = Settings.Default.dcPreset;
+                }
 
-                    await Task.Run(() => GetBatteryStatus());
+                if (ContainsRiskyUndervolt(commands))
+                {
+                    ToastNotification.ShowToastNotification(
+                        LocalizationService.Get("Start-up tuning delayed"),
+                        LocalizationService.Get("Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session."));
 
-                    if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
+                    for (int elapsed = 0; elapsed < 100; elapsed++)
                     {
-                        if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "")
+                        if (IsShiftPressed())
                         {
-                            Settings.Default.CommandString = Settings.Default.acCommandString;
-                            Settings.Default.Save();
-                            await TranslatePresetAsync(Settings.Default.acCommandString, Settings.Default.acPreset);
-                            ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
+                            _automaticTuningSuppressed = true;
+                            ToastNotification.ShowToastNotification(
+                                LocalizationService.Get("Automatic tuning skipped"),
+                                LocalizationService.Get("Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session."));
+                            return;
                         }
-                        else
-                        {
-                            await RyzenAdj_To_UXTU.TranslateAsync(Settings.Default.CommandString);
-                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
-                        }
-                    }
-                    else
-                    {
-                        if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "")
-                        {
-                            Settings.Default.CommandString = Settings.Default.dcCommandString;
-                            Settings.Default.Save();
-                            await TranslatePresetAsync(Settings.Default.dcCommandString, Settings.Default.dcPreset);
-                            ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
-                        }
-                        else
-                        {
-                            await RyzenAdj_To_UXTU.TranslateAsync(Settings.Default.CommandString);
-                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
-                        }
+
+                        await Task.Delay(100);
                     }
                 }
+
+                Settings.Default.CommandString = commands;
+                Settings.Default.Save();
+
+                if (!string.IsNullOrWhiteSpace(preset))
+                {
+                    await TranslatePresetAsync(commands, preset);
+                    ToastNotification.ShowToastNotification(
+                        isCharging ? "Charge Preset Applied!" : "Discharge Preset Applied!",
+                        isCharging ? "Your charge preset settings have been applied!" : "Your discharge preset settings have been applied!");
+                }
+                else
+                {
+                    await RyzenAdj_To_UXTU.TranslateAsync(commands);
+                    ToastNotification.ShowToastNotification("Settings Reapplied!", "Your last applied settings have been reapplied!");
+                }
+            }
+            finally
+            {
+                _startupApplyPending = false;
+            }
         }
+
+        private static bool ContainsRiskyUndervolt(string commands) =>
+            commands.Contains("--set-coall=", StringComparison.OrdinalIgnoreCase) ||
+            commands.Contains("--set-coper=", StringComparison.OrdinalIgnoreCase) ||
+            commands.Contains("--set-cogfx=", StringComparison.OrdinalIgnoreCase) ||
+            commands.Contains("--intel-volt-", StringComparison.OrdinalIgnoreCase);
+
+        private static bool IsShiftPressed() => (GetAsyncKeyState(0x10) & 0x8000) != 0;
+
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(int virtualKey);
 
 
         InstabilityMonitor monitor = null;
@@ -147,92 +187,182 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         int lastCPUUVOffset = 0;
         int lastiGPUUVOffset = 0;
+        private int miscTickRunning;
+
         private async void Misc_Tick(object sender, EventArgs e)
         {
+            if (Interlocked.Exchange(ref miscTickRunning, 1) != 0)
+                return;
+
             try
             {
-                if(Settings.Default.isAutoUvCPU == true)
+                try
                 {
-
-                    if(monitor == null) monitor = new InstabilityMonitor();
-
-                    if (cpuController == null) cpuController = new AdaptiveUndervoltController(
-                        monitor,
-                        minOffset: -50,
-                        stepSize: 1,
-                        stableThreshold: 8,
-                        cooldownThreshold: 4,
-                        isIgpu: false
-                    );
-
-                    var newOffset = cpuController.UpdateOffset();
-                    var commandValues = "";
-
-                    if (Family.FAM < Family.RyzenFamily.Renoir) commandValues = $"--set-coper={(0 << 20) | (newOffset & 0xFFFF)} ";
-                    else
-                    {
-                        if (newOffset >= 0) commandValues = commandValues + $"--set-coall={newOffset} ";
-                        if (newOffset < 0) commandValues = commandValues + $"--set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)newOffset))} ";
-                    }
-
-                    if (lastCPUUVOffset != newOffset)
-                    {
-                        await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
-                        lastCPUUVOffset = newOffset;
-                    }
-
-                    cpuController.RecordAppliedOffset(newOffset);
+                    await ProcessCpuUndervoltAsync();
                 }
-                else if (Settings.Default.isAutoUvCPU == false && cpuController != null)
+                catch (Exception ex)
                 {
-                    cpuController.Dispose();
-                    cpuController = null;
+                    DiagnosticLogger.LogError(ex, "Failed during adaptive CPU undervolt tick");
                 }
 
-
-                if (Settings.Default.isAutoUviGPU == true)
+                try
                 {
-                    if (monitor == null) monitor = new InstabilityMonitor();
-
-                    if(iGpuController == null) iGpuController = new AdaptiveUndervoltController(
-                        monitor,
-                        minOffset: -50,
-                        stepSize: 1,
-                        stableThreshold: 8,
-                        cooldownThreshold: 4,
-                        isIgpu : true
-                    );
-
-                    var newOffset = iGpuController.UpdateOffset();
-                    var commandValues = "";
-
-                    if (newOffset >= 0) commandValues = commandValues + $"--set-cogfx={newOffset} ";
-                    if (newOffset < 0) commandValues = commandValues + $"--set-cogfx={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)newOffset))} ";
-
-                    if (lastiGPUUVOffset != newOffset)
-                    {
-                        await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
-                        lastiGPUUVOffset = newOffset;
-                    }
-
-                    iGpuController.RecordAppliedOffset(newOffset);
+                    await ProcessIgpuUndervoltAsync();
                 }
-                else if (Settings.Default.isAutoUviGPU == false && iGpuController != null)
+                catch (Exception ex)
                 {
-                    iGpuController.Dispose();
-                    iGpuController = null;
+                    DiagnosticLogger.LogError(ex, "Failed during adaptive iGPU undervolt tick");
                 }
 
-                if(Settings.Default.isAutoUvCPU == false && Settings.Default.isAutoUviGPU == false && monitor != null)
+                if (!Settings.Default.isAutoUvCPU &&
+                    !Settings.Default.isAutoUviGPU &&
+                    cpuController == null &&
+                    iGpuController == null &&
+                    monitor != null)
                 {
-                    monitor.Stop();
+                    monitor.Dispose();
                     monitor = null;
                 }
             }
-            catch (Exception ex)
+            finally
             {
-                DiagnosticLogger.LogError(ex, "Failed during adaptive undervolt monitoring tick");
+                Volatile.Write(ref miscTickRunning, 0);
             }
+        }
+
+        private async Task ProcessCpuUndervoltAsync()
+        {
+            if (!Settings.Default.isAutoUvCPU)
+            {
+                await DisableCpuUndervoltAsync();
+                return;
+            }
+
+            monitor ??= new InstabilityMonitor();
+
+            cpuController ??= new AdaptiveUndervoltController(
+                monitor,
+                minOffset: -50,
+                stepSize: 1,
+                stableThreshold: 8,
+                cooldownThreshold: 4,
+                isIgpu: false,
+                minimumEvaluationIntervalMilliseconds: 1000,
+                idleEntrySamples: 3,
+                idleExitSamples: 2,
+                idleExitMarginPercent: 2f
+            );
+
+            int requestedOffset = cpuController.UpdateOffset();
+
+            if (lastCPUUVOffset != requestedOffset)
+            {
+                string commandValues = BuildCpuOffsetCommand(requestedOffset);
+                await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
+                lastCPUUVOffset = requestedOffset;
+            }
+
+            if (cpuController.GetLastAppliedOffset() != requestedOffset)
+                cpuController.RecordAppliedOffset(requestedOffset);
+        }
+
+        private async Task ProcessIgpuUndervoltAsync()
+        {
+            if (!Settings.Default.isAutoUviGPU)
+            {
+                await DisableIgpuUndervoltAsync();
+                return;
+            }
+
+            monitor ??= new InstabilityMonitor();
+
+            iGpuController ??= new AdaptiveUndervoltController(
+                monitor,
+                minOffset: -50,
+                stepSize: 1,
+                stableThreshold: 8,
+                cooldownThreshold: 4,
+                isIgpu: true,
+                minimumEvaluationIntervalMilliseconds: 1000
+            );
+
+            int requestedOffset = iGpuController.UpdateOffset();
+
+            if (lastiGPUUVOffset != requestedOffset)
+            {
+                string commandValues = BuildIgpuOffsetCommand(requestedOffset);
+                await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
+                lastiGPUUVOffset = requestedOffset;
+            }
+
+            if (iGpuController.GetLastAppliedOffset() != requestedOffset)
+                iGpuController.RecordAppliedOffset(requestedOffset);
+        }
+
+        private async Task DisableCpuUndervoltAsync()
+        {
+            int appliedOffset = cpuController?.GetLastAppliedOffset() ?? lastCPUUVOffset;
+
+            if (appliedOffset != 0 || lastCPUUVOffset != 0)
+            {
+                await RyzenAdj_To_UXTU.TranslateAsync(
+                    BuildCpuOffsetCommand(0),
+                    false,
+                    true
+                );
+
+                lastCPUUVOffset = 0;
+                cpuController?.RecordAppliedOffset(0);
+            }
+
+            cpuController?.Dispose();
+            cpuController = null;
+        }
+
+        private async Task DisableIgpuUndervoltAsync()
+        {
+            int appliedOffset = iGpuController?.GetLastAppliedOffset() ?? lastiGPUUVOffset;
+
+            if (appliedOffset != 0 || lastiGPUUVOffset != 0)
+            {
+                await RyzenAdj_To_UXTU.TranslateAsync(
+                    BuildIgpuOffsetCommand(0),
+                    false,
+                    true
+                );
+
+                lastiGPUUVOffset = 0;
+                iGpuController?.RecordAppliedOffset(0);
+            }
+
+            iGpuController?.Dispose();
+            iGpuController = null;
+        }
+
+        private string BuildCpuOffsetCommand(int offset)
+        {
+            if (Family.FAM < Family.RyzenFamily.Renoir)
+                return $"--set-coper={offset & 0xFFFF} ";
+
+            return $"--set-coall={EncodeCurveOptimiserOffset(offset)} ";
+        }
+
+        private static string BuildIgpuOffsetCommand(int offset)
+        {
+            return $"--set-cogfx={EncodeCurveOptimiserOffset(offset)} ";
+        }
+
+        private static uint EncodeCurveOptimiserOffset(int offset)
+        {
+            if (offset >= 0)
+                return (uint)offset;
+
+            long magnitude = -(long)offset;
+
+            if (magnitude > 0x100000)
+                throw new ArgumentOutOfRangeException(nameof(offset));
+
+            return 0x100000u - (uint)magnitude;
         }
 
         private static ushort statuscode;
@@ -241,12 +371,13 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             try
             {
-                var batteryClass = new ManagementClass("Win32_Battery");
-                var batteries = batteryClass.GetInstances();
+                using var batteryClass = new ManagementClass("Win32_Battery");
+                using var batteries = batteryClass.GetInstances();
 
-                foreach (var battery in batteries)
+                foreach (ManagementObject battery in batteries)
                 {
-                    statuscode = (ushort)battery["BatteryStatus"];
+                    using (battery)
+                        statuscode = (ushort)battery["BatteryStatus"];
                 }
             }
             catch (Exception ex)
@@ -261,6 +392,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             try
             {
                 if (niTray.Visibility == Visibility.Hidden && this.Visibility == Visibility.Hidden) niTray.Visibility = Visibility.Visible;
+
+                if (_startupApplyPending || _automaticTuningSuppressed)
+                    return;
 
                 if ((bool)Settings.Default.AutoReapply == true && (bool)Settings.Default.isAdaptiveModeRunning == false)
                 {
@@ -298,6 +432,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
         {
             try
             {
+                if (_automaticTuningSuppressed)
+                    return;
+
                 if ((bool)Settings.Default.isAdaptiveModeRunning == false)
                 {
                     if (e.Mode == PowerModes.StatusChange)

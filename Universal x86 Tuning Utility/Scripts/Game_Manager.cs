@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using static System.Net.Mime.MediaTypeNames;
 using GameLib;
 using GameLib.Core;
@@ -47,6 +48,59 @@ namespace Universal_x86_Tuning_Utility.Scripts
         }
 
         public static List<GameLauncherItem> installedGames = null;
+        private static readonly object ManualGamesLock = new();
+
+        public static void SaveManualGame(GameLauncherItem game)
+        {
+            if (game == null || string.IsNullOrWhiteSpace(game.exe))
+                return;
+
+            try
+            {
+                lock (ManualGamesLock)
+                {
+                    List<GameLauncherItem> games = LoadManualGames();
+                    games.RemoveAll(existing => string.Equals(existing.exe, game.exe, StringComparison.OrdinalIgnoreCase));
+                    games.Add(game);
+
+                    string path = GetManualGamesPath();
+                    string temporaryPath = path + ".tmp";
+                    Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                    File.WriteAllText(temporaryPath, JsonConvert.SerializeObject(games, Formatting.Indented));
+                    File.Move(temporaryPath, path, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Misc.DiagnosticLogger.LogError(ex, "Failed to save manually added game");
+            }
+
+            List<GameLauncherItem> updatedGames = installedGames?.ToList() ?? new List<GameLauncherItem>();
+            updatedGames.RemoveAll(existing => string.Equals(existing.exe, game.exe, StringComparison.OrdinalIgnoreCase));
+            updatedGames.Add(game);
+            installedGames = updatedGames;
+        }
+
+        private static List<GameLauncherItem> LoadManualGames()
+        {
+            try
+            {
+                string path = GetManualGamesPath();
+                if (!File.Exists(path))
+                    return new List<GameLauncherItem>();
+
+                return JsonConvert.DeserializeObject<List<GameLauncherItem>>(File.ReadAllText(path))
+                    ?.Where(game => !string.IsNullOrWhiteSpace(game.exe) && File.Exists(game.exe))
+                    .ToList() ?? new List<GameLauncherItem>();
+            }
+            catch (Exception ex)
+            {
+                Misc.DiagnosticLogger.LogError(ex, "Failed to load manually added games");
+                return new List<GameLauncherItem>();
+            }
+        }
+
+        private static string GetManualGamesPath() => Path.Combine(Universal_x86_Tuning_Utility.Properties.Settings.Default.Path, "manualGames.json");
 
         public static List<GameLauncherItem> syncGame_Library(bool isAdaptive = false)
         {
@@ -72,7 +126,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                         GameLauncherItem launcherItem = new GameLauncherItem();
                                         launcherItem.gameName = game.Name;
                                         launcherItem.gameID = game.Id;
-                                        launcherItem.launchCommand = $"{launcher.Name}-{game.LaunchString}-{game.Id}-{game.Name}";
+                                        launcherItem.launchCommand = game.LaunchString;
                                         //launcherItem.iconPath = game.ExecutableIcon;
 
                                         if (game.Executables.Count() == 1)
@@ -129,7 +183,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 GameLauncherItem launcherItem = new GameLauncherItem();
                                 launcherItem.gameName = game.Name;
                                 launcherItem.gameID = game.Id;
-                                launcherItem.launchCommand = $"{launcher.Name}-{game.LaunchString}-{game.Id}-{game.Name}";
+                                launcherItem.launchCommand = game.LaunchString;
                                 //launcherItem.iconPath = game.ExecutableIcon;
                                 switch (game.Name)
                                 {
@@ -157,7 +211,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 GameLauncherItem launcherItem = new GameLauncherItem();
                                 launcherItem.gameName = game.Name;
                                 launcherItem.gameID = game.Id;
-                                launcherItem.launchCommand = $"{launcher.Name}-{game.LaunchString}-{game.Id}-{game.Name}";
+                                launcherItem.launchCommand = game.LaunchString;
                                 launcherItem.path = game.InstallDir;
                                 //launcherItem.iconPath = game.ExecutableIcon;
                                 launcherItem.exe = Path.GetFileNameWithoutExtension(launcherItem.path);
@@ -173,7 +227,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 GameLauncherItem launcherItem = new GameLauncherItem();
                                 launcherItem.gameName = game.Name;
                                 launcherItem.gameID = game.Id;
-                                launcherItem.launchCommand = $"{launcher.Name}-{game.LaunchString}-{game.Id}-{game.Name}";
+                                launcherItem.launchCommand = game.LaunchString;
                                 launcherItem.path = game.InstallDir;
                                 launcherItem.exe = Path.GetFileNameWithoutExtension(launcherItem.path);
                                 launcherItem.appType = launcher.Name;
@@ -221,7 +275,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                                 GameLauncherItem launcherItem = new GameLauncherItem();
                                                 launcherItem.gameName = package.DisplayName;
                                                 launcherItem.gameID = package.Id.FullName;
-                                                launcherItem.launchCommand = $"Microsoft Store-{package.Id.FullName}-{package.DisplayName}";
+                                                launcherItem.launchCommand = package.Id.FullName;
                                                 launcherItem.path = package.InstalledPath;
                                                 //launcherItem.exe = Path.GetFileNameWithoutExtension(launcherItem.path);
                                                 launcherItem.appType = "Microsoft Store";
@@ -244,6 +298,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     }
                 }
 
+                list.AddRange(LoadManualGames());
                 list = list.OrderBy(item => item.gameName).ToList();
 
                 if (isAdaptive)
@@ -346,7 +401,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 if (File.Exists(command))
                 {
 
-                    Process.Start(new ProcessStartInfo()
+                    using Process? process = Process.Start(new ProcessStartInfo()
                     {
                         UseShellExecute = true,
                         FileName = Path.GetFullPath(command),
@@ -371,7 +426,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     UseShellExecute = true,
                     FileName = command
                 };
-                System.Diagnostics.Process.Start(psi);
+                using Process? process = Process.Start(psi);
 
             }
             catch (Exception ex)
@@ -383,13 +438,14 @@ namespace Universal_x86_Tuning_Utility.Scripts
         public static bool BattleNetRunning()
         {
             Process[] pname = Process.GetProcessesByName("Battle.net.exe");
-            if (pname.Length != 0)
+            try
             {
-                return true;
+                return pname.Length != 0;
             }
-            else
+            finally
             {
-                return false;
+                foreach (Process process in pname)
+                    process.Dispose();
             }
         }
 

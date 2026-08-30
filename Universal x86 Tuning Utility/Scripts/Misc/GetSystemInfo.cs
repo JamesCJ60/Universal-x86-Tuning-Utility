@@ -712,6 +712,12 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         return "Krackan Point 2";
                     case RyzenFamily.StrixHalo:
                         return "Strix Halo";
+                    case RyzenFamily.Medusa1:
+                        return "Medusa 1";
+                    case RyzenFamily.OlympicRidge:
+                        return "Olympic Ridge";
+                    case RyzenFamily.Medusa2:
+                        return "Medusa 2";
                     default:
                         return "";
                 }

@@ -613,5 +613,9 @@
   "Imported {0} custom presets and {1} adaptive mode presets.": "आयातित {0} कस्टम प्रीसेट और {1} अनुकूली मोड प्रीसेट।",
   "Preset import failed": "प्रीसेट आयात विफल",
   "The selected file is not a valid UXTU preset backup.": "चयनित फ़ाइल एक मान्य UXTU पूर्व निर्धारित बैकअप नहीं है।",
-  "The presets could not be imported.\n\n{0}": "प्रीसेट आयात नहीं किया जा सकता है।\n\n{0}"
+  "The presets could not be imported.\n\n{0}": "प्रीसेट आयात नहीं किया जा सकता है।\n\n{0}",
+  "Start-up tuning delayed": "स्टार्ट-अप ट्यूनिंग में देरी की गई",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "इस सत्र के लिए सहेजी गई कर्व ऑप्टिमाइज़र और Intel अंडरवोल्ट सेटिंग छोड़ने हेतु 10 सेकंड के भीतर Shift दबाए रखें।",
+  "Automatic tuning skipped": "स्वचालित ट्यूनिंग छोड़ी गई",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "इस सत्र के दौरान सहेजी गई कर्व ऑप्टिमाइज़र और Intel अंडरवोल्ट सेटिंग स्वचालित रूप से लागू नहीं होंगी।"
 }

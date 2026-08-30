@@ -143,7 +143,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         public static string? CustomGameIconsDirectoryPath;
 
-        public async void addCutomGame()
+        public void AddCustomGame()
         {
             var openFileDialog = new OpenFileDialog()
             {
@@ -153,25 +153,38 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
             if (openFileDialog.ShowDialog() == true)
             {
-                var icon = Icon.ExtractAssociatedIcon(openFileDialog.FileName);
-                CustomGameIconsDirectoryPath ??= Directory.CreateTempSubdirectory().FullName;
-                var iconPath = System.IO.Path.Combine(CustomGameIconsDirectoryPath, openFileDialog.SafeFileName + ".ico");
-                using (var fileStream = new FileStream(iconPath, System.IO.FileMode.Create))
+                CustomGameIconsDirectoryPath ??= Directory.CreateDirectory(Path.Combine(Settings.Default.Path, "Assets", "GameImages", "Manual")).FullName;
+                string iconPath = string.Empty;
+                using (Icon? icon = Icon.ExtractAssociatedIcon(openFileDialog.FileName))
                 {
-                    icon.Save(fileStream);
-                    icon.Dispose();
+                    if (icon != null)
+                    {
+                        iconPath = Path.Combine(CustomGameIconsDirectoryPath, GetImages.CleanFileName(openFileDialog.FileName) + ".ico");
+                        using var fileStream = new FileStream(iconPath, System.IO.FileMode.Create);
+                        icon.Save(fileStream);
+                    }
                 }
 
-                var gameName = openFileDialog.SafeFileName;
                 var game = new GameLauncherItem
                 {
                     gameName = Path.GetFileNameWithoutExtension(openFileDialog.FileName),
                     appType = "Manually added game",
                     path = Path.GetDirectoryName(openFileDialog.FileName)!,
-                    launchCommand = $"Exe-{openFileDialog.FileName}-0-{gameName}",
+                    launchCommand = openFileDialog.FileName,
                     exe = openFileDialog.FileName,
                     iconPath = iconPath
                 };
+
+                Game_Manager.SaveManualGame(new Game_Manager.GameLauncherItem
+                {
+                    gameID = "0",
+                    gameName = game.gameName,
+                    appType = game.appType,
+                    path = game.path,
+                    launchCommand = game.launchCommand,
+                    exe = game.exe,
+                    iconPath = game.iconPath
+                });
                 
                 var preset = new GameData
                 {
@@ -230,7 +243,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                     exe = game.exe,
                     gameID = game.gameID,
                     fpsData = fps,
-                    iconPath = await GetImages.GetIconImageUrl(game.gameName)
+                    iconPath = File.Exists(game.iconPath) ? game.iconPath : await GetImages.GetIconImageUrl(game.gameName)
                 };
 
                 lock (GameList)
@@ -266,28 +279,18 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void addGameBtn_Click(object sender, RoutedEventArgs e)
         {
-            addCutomGame();
+            AddCustomGame();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.Button button)
             {
-                if (button.Tag is string parameter)
+                if (button.Tag is GameLauncherItem game)
                 {
-                    string[] parts = parameter.Split('-');
-                    
-                    if (!parts[0].Contains("Microsoft Store"))
-                    {
-                        Game_Manager.LaunchApp(parts[2], parts[0], parts[1], parts[1]);
-                        ToastNotification.ShowToastNotification($"Launching {parts[3]}", $"This should only take a few moments!");
-                    }
-
-                    else
-                    {
-                        Game_Manager.LaunchApp(parts[1], parts[0], parts[1], parts[1]);
-                        ToastNotification.ShowToastNotification($"Launching {parts[2]}", $"This should only take a few moments!");
-                    }
+                    bool isManual = string.Equals(game.appType, "Manually added game", StringComparison.Ordinal);
+                    Game_Manager.LaunchApp(game.gameID ?? string.Empty, isManual ? "Exe" : game.appType, game.launchCommand, isManual ? game.exe : game.path);
+                    ToastNotification.ShowToastNotification($"Launching {game.gameName}", "This should only take a few moments!");
                 }
             }
         }

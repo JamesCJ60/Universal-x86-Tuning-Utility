@@ -131,6 +131,13 @@ namespace Universal_x86_Tuning_Utility.Scripts
                             }
                             else
                             {
+                                if (ryzenAdjCommandString == "tctl-limit")
+                                {
+                                    ryzenAdjCommandString = "tctl-temp";
+                                    if (ulong.TryParse(ryzenAdjCommandValueString, out ulong legacyTemperature) && legacyTemperature >= 1000)
+                                        ryzenAdjCommandValueString = (legacyTemperature / 1000).ToString();
+                                }
+
                                 if (ryzenAdjCommandString == "apu-skin-temp" && !SupportsApuSkinTemperatureLimit())
                                 {
                                     DiagnosticLogger.LogDebug($"APU skin temperature limit is not supported on {Family.FAM}.");
@@ -139,7 +146,17 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
                                 uint ryzenAdjCommandValue = Convert.ToUInt32(ryzenAdjCommandValueString);
 
-                                if (ryzenAdjCommand.Contains("skin")) ryzenAdjCommandValue *= 256;
+                                if (ryzenAdjCommandString is "apu-skin-temp" or "dgpu-skin-temp")
+                                    ryzenAdjCommandValue = checked(ryzenAdjCommandValue * 256);
+
+                                if (SMUCommands.UseHsmp)
+                                {
+                                    if (ryzenAdjCommandString == "pbo-scalar" && ryzenAdjCommandValue >= 100)
+                                        ryzenAdjCommandValue /= 10;
+
+                                    if (ryzenAdjCommandString is "set-coall" or "set-cogfx")
+                                        ryzenAdjCommandValue = ConvertHsmpPsmMargin(ryzenAdjCommandValue);
+                                }
 
                                 if (ryzenAdjCommand.Contains("coall") && Settings.Default.isAutoUvCPU == true && isAutoOC == false) continue;
                                 if (ryzenAdjCommand.Contains("coper") && Settings.Default.isAutoUvCPU == true && isAutoOC == false) continue;
@@ -179,6 +196,14 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 or Family.RyzenFamily.PhoenixPoint2
                 or Family.RyzenFamily.HawkPoint
                 or Family.RyzenFamily.HawkPoint2;
+
+        private static uint ConvertHsmpPsmMargin(uint value)
+        {
+            int margin = (value & 0x80000) != 0
+                ? (int)value - 0x100000
+                : (int)value;
+            return unchecked((ushort)(short)Math.Clamp(margin, short.MinValue, short.MaxValue));
+        }
 
         private static void ADLX(string command, string value)
         {

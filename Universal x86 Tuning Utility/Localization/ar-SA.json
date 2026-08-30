@@ -613,5 +613,9 @@
   "Imported {0} custom presets and {1} adaptive mode presets.": "تم استيراد {0} من ملفات التعريف المخصصة و{1} من ملفات الوضع التكيفي.",
   "Preset import failed": "فشل استيراد ملفات التعريف",
   "The selected file is not a valid UXTU preset backup.": "الملف المحدد ليس نسخة احتياطية صالحة لملفات تعريف UXTU.",
-  "The presets could not be imported.\n\n{0}": "تعذر استيراد ملفات التعريف.\n\n{0}"
+  "The presets could not be imported.\n\n{0}": "تعذر استيراد ملفات التعريف.\n\n{0}",
+  "Start-up tuning delayed": "تم تأخير الضبط عند بدء التشغيل",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "اضغط مع الاستمرار على Shift خلال 10 ثوانٍ لتخطي إعدادات محسّن المنحنى وخفض جهد Intel المحفوظة لهذه الجلسة.",
+  "Automatic tuning skipped": "تم تخطي الضبط التلقائي",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "لن يتم تطبيق إعدادات محسّن المنحنى وخفض جهد Intel المحفوظة تلقائياً خلال هذه الجلسة."
 }

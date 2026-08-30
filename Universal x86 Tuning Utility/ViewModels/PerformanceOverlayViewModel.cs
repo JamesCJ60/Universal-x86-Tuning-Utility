@@ -35,6 +35,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private HardwareMetricsSnapshot _lastHardware = new();
         private DateTime _nextHardwareUpdateUtc = DateTime.MinValue;
         private DateTime _nextGraphUpdateUtc = DateTime.MinValue;
+        private DateTime _nextDisplayUpdateUtc = DateTime.MinValue;
         private OverlayOptions _options = new();
         private int _isUpdating;
         private bool _disposed;
@@ -88,6 +89,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
 
         public double DesignWidth => BaseDesignWidth;
         public double DesignHeight => BaseDesignHeight;
+        public int TargetProcessId { get; private set; }
         public FontFamily OverlayFontFamily { get; } = new("Cascadia Mono");
         public Brush PrimaryTextBrush { get; } = CreateBrush("#F5F7F7");
         public Brush MutedTextBrush { get; } = CreateBrush("#D2D8D9");
@@ -274,6 +276,13 @@ namespace Universal_x86_Tuning_Utility.ViewModels
 
                 HardwareMetricsSnapshot hardware = _lastHardware;
                 FpsMetricsSnapshot fps = _fps.Latest;
+
+                if (now >= _nextDisplayUpdateUtc)
+                {
+                    TargetProcessId = fps.ProcessId;
+                    OnPropertyChanged(nameof(TargetProcessId));
+                    _nextDisplayUpdateUtc = now.AddSeconds(1);
+                }
 
                 CurrentFps = fps.Fps;
                 OnePercentLowFps = fps.OnePercentLowFps;

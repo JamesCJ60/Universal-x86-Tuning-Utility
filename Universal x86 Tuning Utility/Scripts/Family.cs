@@ -45,6 +45,9 @@ namespace Universal_x86_Tuning_Utility.Scripts
             StrixPoint,
             KrackanPoint,
             KrackanPoint2,
+            Medusa1,
+            Medusa2,
+            OlympicRidge,
         }
 
         public static RyzenFamily FAM = RyzenFamily.Unknown;
@@ -166,9 +169,15 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     if (CPUModel == 32 || CPUModel == 36) FAM = RyzenFamily.StrixPoint;
 
                     if (CPUModel == 112) FAM = RyzenFamily.StrixHalo;
+
+                    if (CPUModel >= 128 && CPUModel <= 135) FAM = RyzenFamily.Medusa1;
+
+                    if (CPUModel >= 136 && CPUModel <= 143) FAM = RyzenFamily.OlympicRidge;
+
+                    if (CPUModel >= 224 && CPUModel <= 227) FAM = RyzenFamily.Medusa2;
                 }
 
-                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
+                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge || FAM == RyzenFamily.OlympicRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
                 else TYPE = ProcessorType.Amd_Apu;
 
                 Addresses.setAddresses();

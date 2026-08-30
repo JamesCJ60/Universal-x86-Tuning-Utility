@@ -613,5 +613,9 @@
   "Imported {0} custom presets and {1} adaptive mode presets.": "Na-import ang {0} pasadyang preset at {1} preset ng adaptive na mode.",
   "Preset import failed": "Nabigo ang pag-import ng mga preset",
   "The selected file is not a valid UXTU preset backup.": "Ang napiling file ay hindi wastong backup ng mga UXTU preset.",
-  "The presets could not be imported.\n\n{0}": "Hindi ma-import ang mga preset.\n\n{0}"
+  "The presets could not be imported.\n\n{0}": "Hindi ma-import ang mga preset.\n\n{0}",
+  "Start-up tuning delayed": "Naantala ang pag-tune sa pagsisimula",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "Pindutin nang matagal ang Shift sa loob ng 10 segundo upang laktawan sa sesyong ito ang naka-save na Curve Optimiser at Intel undervolt na mga setting.",
+  "Automatic tuning skipped": "Nilaktawan ang awtomatikong pag-tune",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "Hindi awtomatikong ilalapat sa sesyong ito ang naka-save na Curve Optimiser at Intel undervolt na mga setting."
 }

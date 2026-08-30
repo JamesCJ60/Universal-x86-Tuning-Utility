@@ -613,5 +613,9 @@
   "The selected file is not a valid UXTU preset backup.": "所选文件不是有效的 UXTU 预设备份。",
   "The presets could not be imported.\n\n{0}": "无法导入预设。\n\n{0}",
   "iGPU TDC Limit (A)": "集成 GPU 热设计电流 (TDC) 限制 (A)",
-  "iGPU EDC Limit (A)": "集成 GPU 电气设计电流 (EDC) 限制 (A)"
+  "iGPU EDC Limit (A)": "集成 GPU 电气设计电流 (EDC) 限制 (A)",
+  "Start-up tuning delayed": "启动调校已延迟",
+  "Hold Shift within 10 seconds to skip saved Curve Optimiser and Intel undervolt settings for this session.": "请在 10 秒内按住 Shift，以在本次会话中跳过已保存的曲线优化器和 Intel 降压设置。",
+  "Automatic tuning skipped": "已跳过自动调校",
+  "Saved Curve Optimiser and Intel undervolt settings will not be applied automatically during this session.": "本次会话期间不会自动应用已保存的曲线优化器和 Intel 降压设置。"
 }
