@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "Isama ang mga update na paunang bersyon",
+  "Unable to check for updates. Please try again later.": "Hindi masuri kung may mga update. Pakisubukang muli sa ibang pagkakataon.",
+  "The update could not be downloaded or started. Please try again.": "Hindi ma-download o masimulan ang update. Pakisubukang muli.",
   "Home": "Tahanan",
   "Premade": "Nakahanda",
   "Custom": "Pasadya",

@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "रिलीज़ से पहले के अपडेट शामिल करें",
+  "Unable to check for updates. Please try again later.": "अपडेट की जाँच नहीं हो सकी। कृपया बाद में फिर कोशिश करें।",
+  "The update could not be downloaded or started. Please try again.": "अपडेट डाउनलोड या शुरू नहीं हो सका। कृपया फिर कोशिश करें।",
   "Home": "मुखपृष्ठ",
   "Premade": "पूर्वनिर्धारित",
   "Custom": "कस्टम",

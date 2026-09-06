@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "Ön sürüm güncellemelerini dâhil et",
+  "Unable to check for updates. Please try again later.": "Güncellemeler kontrol edilemiyor. Lütfen daha sonra tekrar deneyin.",
+  "The update could not be downloaded or started. Please try again.": "Güncelleme indirilemedi veya başlatılamadı. Lütfen tekrar deneyin.",
   "Home": "Ana Sayfa",
   "Premade": "Hazır",
   "Custom": "Özel Özel Özel",

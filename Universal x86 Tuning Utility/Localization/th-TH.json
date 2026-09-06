@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "รวมการอัปเดตเวอร์ชันก่อนเผยแพร่",
+  "Unable to check for updates. Please try again later.": "ไม่สามารถตรวจสอบการอัปเดตได้ โปรดลองอีกครั้งในภายหลัง",
+  "The update could not be downloaded or started. Please try again.": "ไม่สามารถดาวน์โหลดหรือเริ่มการอัปเดตได้ โปรดลองอีกครั้ง",
   "Home": "หน้าหลัก",
   "Premade": "กำหนดไว้ล่วงหน้า",
   "Custom": "กำหนดเอง",

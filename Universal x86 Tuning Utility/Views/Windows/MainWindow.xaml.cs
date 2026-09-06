@@ -191,11 +191,12 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         private async void Misc_Tick(object sender, EventArgs e)
         {
-            if (Interlocked.Exchange(ref miscTickRunning, 1) != 0)
-                return;
-
             try
             {
+                if (Interlocked.Exchange(ref miscTickRunning, 1) != 0)
+                return;
+
+
                 try
                 {
                     await ProcessCpuUndervoltAsync();
@@ -220,123 +221,154 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                     iGpuController == null &&
                     monitor != null)
                 {
-                    monitor.Dispose();
+                    var stoppedMonitor = (object)monitor;
                     monitor = null;
+                    if (stoppedMonitor is IDisposable disposable)
+                        disposable.Dispose();
+                    else
+                        stoppedMonitor.GetType().GetMethod("Stop", Type.EmptyTypes)?.Invoke(stoppedMonitor, null);
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                Volatile.Write(ref miscTickRunning, 0);
+                DiagnosticLogger.LogError(ex, "Failed to release the adaptive undervolt monitor");
             }
         }
 
         private async Task ProcessCpuUndervoltAsync()
         {
-            if (!Settings.Default.isAutoUvCPU)
+            try
             {
-                await DisableCpuUndervoltAsync();
-                return;
+                if (!Settings.Default.isAutoUvCPU)
+                {
+                    await DisableCpuUndervoltAsync();
+                    return;
+                }
+
+                monitor ??= new InstabilityMonitor();
+
+                cpuController ??= new AdaptiveUndervoltController(
+                    monitor,
+                    minOffset: -50,
+                    stepSize: 1,
+                    stableThreshold: 8,
+                    cooldownThreshold: 4,
+                    isIgpu: false,
+                    minimumEvaluationIntervalMilliseconds: 1000,
+                    idleEntrySamples: 3,
+                    idleExitSamples: 2,
+                    idleExitMarginPercent: 2f
+                );
+
+                int requestedOffset = cpuController.UpdateOffset();
+
+                if (lastCPUUVOffset != requestedOffset)
+                {
+                    string commandValues = BuildCpuOffsetCommand(requestedOffset);
+                    await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
+                    lastCPUUVOffset = requestedOffset;
+                }
+
+                if (cpuController.GetLastAppliedOffset() != requestedOffset)
+                    cpuController.RecordAppliedOffset(requestedOffset);
             }
-
-            monitor ??= new InstabilityMonitor();
-
-            cpuController ??= new AdaptiveUndervoltController(
-                monitor,
-                minOffset: -50,
-                stepSize: 1,
-                stableThreshold: 8,
-                cooldownThreshold: 4,
-                isIgpu: false,
-                minimumEvaluationIntervalMilliseconds: 1000,
-                idleEntrySamples: 3,
-                idleExitSamples: 2,
-                idleExitMarginPercent: 2f
-            );
-
-            int requestedOffset = cpuController.UpdateOffset();
-
-            if (lastCPUUVOffset != requestedOffset)
+            catch (Exception ex)
             {
-                string commandValues = BuildCpuOffsetCommand(requestedOffset);
-                await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
-                lastCPUUVOffset = requestedOffset;
+                DiagnosticLogger.LogError(ex, "Failed CPU undervolt");
             }
-
-            if (cpuController.GetLastAppliedOffset() != requestedOffset)
-                cpuController.RecordAppliedOffset(requestedOffset);
         }
 
         private async Task ProcessIgpuUndervoltAsync()
         {
-            if (!Settings.Default.isAutoUviGPU)
+            try
             {
-                await DisableIgpuUndervoltAsync();
-                return;
+                if (!Settings.Default.isAutoUviGPU)
+                {
+                    await DisableIgpuUndervoltAsync();
+                    return;
+                }
+
+                monitor ??= new InstabilityMonitor();
+
+                iGpuController ??= new AdaptiveUndervoltController(
+                    monitor,
+                    minOffset: -50,
+                    stepSize: 1,
+                    stableThreshold: 8,
+                    cooldownThreshold: 4,
+                    isIgpu: true,
+                    minimumEvaluationIntervalMilliseconds: 1000
+                );
+
+                int requestedOffset = iGpuController.UpdateOffset();
+
+                if (lastiGPUUVOffset != requestedOffset)
+                {
+                    string commandValues = BuildIgpuOffsetCommand(requestedOffset);
+                    await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
+                    lastiGPUUVOffset = requestedOffset;
+                }
+
+                if (iGpuController.GetLastAppliedOffset() != requestedOffset)
+                    iGpuController.RecordAppliedOffset(requestedOffset);
             }
-
-            monitor ??= new InstabilityMonitor();
-
-            iGpuController ??= new AdaptiveUndervoltController(
-                monitor,
-                minOffset: -50,
-                stepSize: 1,
-                stableThreshold: 8,
-                cooldownThreshold: 4,
-                isIgpu: true,
-                minimumEvaluationIntervalMilliseconds: 1000
-            );
-
-            int requestedOffset = iGpuController.UpdateOffset();
-
-            if (lastiGPUUVOffset != requestedOffset)
+            catch (Exception ex)
             {
-                string commandValues = BuildIgpuOffsetCommand(requestedOffset);
-                await RyzenAdj_To_UXTU.TranslateAsync(commandValues, false, true);
-                lastiGPUUVOffset = requestedOffset;
+                DiagnosticLogger.LogError(ex, "Failed iGPU undervolt");
             }
-
-            if (iGpuController.GetLastAppliedOffset() != requestedOffset)
-                iGpuController.RecordAppliedOffset(requestedOffset);
         }
 
         private async Task DisableCpuUndervoltAsync()
         {
-            int appliedOffset = cpuController?.GetLastAppliedOffset() ?? lastCPUUVOffset;
-
-            if (appliedOffset != 0 || lastCPUUVOffset != 0)
+            try
             {
-                await RyzenAdj_To_UXTU.TranslateAsync(
-                    BuildCpuOffsetCommand(0),
-                    false,
-                    true
-                );
+                int appliedOffset = cpuController?.GetLastAppliedOffset() ?? lastCPUUVOffset;
 
-                lastCPUUVOffset = 0;
-                cpuController?.RecordAppliedOffset(0);
+                if (appliedOffset != 0 || lastCPUUVOffset != 0)
+                {
+                    await RyzenAdj_To_UXTU.TranslateAsync(
+                        BuildCpuOffsetCommand(0),
+                        false,
+                        true
+                    );
+
+                    lastCPUUVOffset = 0;
+                    cpuController?.RecordAppliedOffset(0);
+                }
+
+                cpuController?.Dispose();
+                cpuController = null;
+            } catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to disable CPU undervolt");
             }
-
-            cpuController?.Dispose();
-            cpuController = null;
         }
 
         private async Task DisableIgpuUndervoltAsync()
         {
-            int appliedOffset = iGpuController?.GetLastAppliedOffset() ?? lastiGPUUVOffset;
-
-            if (appliedOffset != 0 || lastiGPUUVOffset != 0)
+            try
             {
-                await RyzenAdj_To_UXTU.TranslateAsync(
-                    BuildIgpuOffsetCommand(0),
-                    false,
-                    true
-                );
+                int appliedOffset = iGpuController?.GetLastAppliedOffset() ?? lastiGPUUVOffset;
 
-                lastiGPUUVOffset = 0;
-                iGpuController?.RecordAppliedOffset(0);
+                if (appliedOffset != 0 || lastiGPUUVOffset != 0)
+                {
+                    await RyzenAdj_To_UXTU.TranslateAsync(
+                        BuildIgpuOffsetCommand(0),
+                        false,
+                        true
+                    );
+
+                    lastiGPUUVOffset = 0;
+                    iGpuController?.RecordAppliedOffset(0);
+                }
+
+                iGpuController?.Dispose();
+                iGpuController = null;
             }
-
-            iGpuController?.Dispose();
-            iGpuController = null;
+            catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to disable iGPU undervolt");
+            }
         }
 
         private string BuildCpuOffsetCommand(int offset)

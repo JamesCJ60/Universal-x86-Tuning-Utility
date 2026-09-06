@@ -62,7 +62,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "26.3.0";
+        public static string version = "26.3.1";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -306,11 +306,10 @@ namespace Universal_x86_Tuning_Utility
         {
             try
             {
-                var isInternetAvailable = await Task.Run(IsInternetAvailable);
-
-                if (isInternetAvailable && Settings.Default.UpdateCheck)
+                if (Settings.Default.UpdateCheck)
                     CheckForUpdate();
 
+                var isInternetAvailable = await Task.Run(IsInternetAvailable);
                 if (isInternetAvailable && PawnIoDetectionService.ShouldOpenInstaller())
                     new InstallpawnIo().Show();
             }
@@ -408,18 +407,22 @@ namespace Universal_x86_Tuning_Utility
 
         public static async void CheckForUpdate()
         {
-            var updateManager = new UpdateManager("JamesCJ60", "Universal-x86-Tuning-Utility", App.version, "C:\\");
-
-            var isUpdateAvailable = await updateManager.IsUpdateAvailable();
-
-            if (isUpdateAvailable)
+            try
             {
-                if (updateManager._newVersion.StartsWith("3."))
-                    ToastNotification.ShowToastNotification("Phantom Control Centre Now Available!",
-                        $"Head to the Phantom Control Centre GitHub releases page to easily download the latest build!");
-                else
+                var includePreReleases = Settings.Default.IncludePreReleases;
+                var updateManager = new UpdateManager(
+                    "JamesCJ60", "Universal-x86-Tuning-Utility", version,
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UXTU", "Updates"),
+                    includePreReleases);
+
+                if (await updateManager.IsUpdateAvailable() &&
+                    includePreReleases == Settings.Default.IncludePreReleases)
                     ToastNotification.ShowToastNotification("New Update Available!",
-                        $"Head to the settings menu to easily download the new Universal x86 Tuning Utility update!");
+                        "Head to the settings menu to easily download the new Universal x86 Tuning Utility update!");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to check GitHub for updates");
             }
         }
 

@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "接收预发布更新",
+  "Unable to check for updates. Please try again later.": "无法检查更新。请稍后重试。",
+  "The update could not be downloaded or started. Please try again.": "无法下载或启动更新。请重试。",
   "Home": "主页",
   "Premade": "预设",
   "Custom": "自定义",

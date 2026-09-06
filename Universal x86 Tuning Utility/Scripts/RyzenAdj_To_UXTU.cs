@@ -162,10 +162,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                                 if (ryzenAdjCommand.Contains("coper") && Settings.Default.isAutoUvCPU == true && isAutoOC == false) continue;
                                 if (ryzenAdjCommand.Contains("cogfx") && Settings.Default.isAutoUviGPU == true && isAutoOC == false) continue;
 
-                                if (ryzenAdjCommandValue <= 0 && !ryzenAdjCommandString.Contains("co")) SMUCommands.applySettings(ryzenAdjCommandString, 0x0);
-                                else SMUCommands.applySettings(ryzenAdjCommandString, ryzenAdjCommandValue);
-
-                                DiagnosticLogger.LogDebug($"SMU applied: {ryzenAdjCommandString}=0x{ryzenAdjCommandValue:X}");
+                                if (SMUCommands.applySettings(ryzenAdjCommandString, ryzenAdjCommandValue))
+                                    DiagnosticLogger.LogDebug($"SMU applied: {ryzenAdjCommandString}=0x{ryzenAdjCommandValue:X}");
+                                else
+                                    DiagnosticLogger.LogDebug($"SMU skipped unsupported command: {ryzenAdjCommandString} on {Family.FAM}");
                             }
                         }
                         catch (Exception ex)

@@ -13,6 +13,9 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private string _appVersion = String.Empty;
 
         [ObservableProperty]
+        private string _updateStatus = String.Empty;
+
+        [ObservableProperty]
         private Wpf.Ui.Appearance.ApplicationTheme _currentTheme = Wpf.Ui.Appearance.ApplicationTheme.Unknown;
 
         public void OnNavigatedTo()
@@ -27,12 +30,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
         private void InitializeViewModel()
         {
             CurrentTheme = Wpf.Ui.Appearance.ApplicationThemeManager.GetAppTheme();
-            AppVersion = $"Universal x86 Tuning Utility - {GetAssemblyVersion()}";
-        }
-
-        private string GetAssemblyVersion()
-        {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? String.Empty;
+            AppVersion = $"Universal x86 Tuning Utility - {App.version}";
         }
 
         [RelayCommand]

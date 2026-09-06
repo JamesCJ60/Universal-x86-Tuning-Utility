@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "Includi gli aggiornamenti delle versioni preliminari",
+  "Unable to check for updates. Please try again later.": "Impossibile verificare la disponibilità di aggiornamenti. Riprova più tardi.",
+  "The update could not be downloaded or started. Please try again.": "Impossibile scaricare o avviare l’aggiornamento. Riprova.",
   "Home": "Pagina iniziale",
   "Premade": "Predefiniti",
   "Custom": "Personalizzati",

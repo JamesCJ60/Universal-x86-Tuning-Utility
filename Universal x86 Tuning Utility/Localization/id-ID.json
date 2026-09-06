@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "Sertakan pembaruan prarilis",
+  "Unable to check for updates. Please try again later.": "Tidak dapat memeriksa pembaruan. Silakan coba lagi nanti.",
+  "The update could not be downloaded or started. Please try again.": "Pembaruan tidak dapat diunduh atau dimulai. Silakan coba lagi.",
   "Home": "Beranda",
   "Premade": "Siap Pakai",
   "Custom": "Gubahan",

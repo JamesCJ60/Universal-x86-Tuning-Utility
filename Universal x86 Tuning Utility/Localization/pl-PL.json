@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "Uwzględniaj aktualizacje wersji przedpremierowych",
+  "Unable to check for updates. Please try again later.": "Nie można sprawdzić dostępności aktualizacji. Spróbuj ponownie później.",
+  "The update could not be downloaded or started. Please try again.": "Nie udało się pobrać lub uruchomić aktualizacji. Spróbuj ponownie.",
   "Home": "Strona główna",
   "Premade": "Gotowe",
   "Custom": "Niestandardowe",

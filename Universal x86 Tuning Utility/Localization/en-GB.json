@@ -1,4 +1,12 @@
 {
+  "An update for Universal x86 Tuning Utility has been found!": "An update for Universal x86 Tuning Utility has been found!",
+  "Universal x86 Tuning Utility is up to date!": "Universal x86 Tuning Utility is up to date!",
+  "Universal x86 Tuning Utility will close and the installer will open when the download is complete": "Universal x86 Tuning Utility will close and the installer will open when the download is complete",
+  "New Update Available!": "New Update Available!",
+  "Head to the settings menu to easily download the new Universal x86 Tuning Utility update!": "Head to the settings menu to easily download the new Universal x86 Tuning Utility update!",
+  "Include pre-release updates": "Include pre-release updates",
+  "Unable to check for updates. Please try again later.": "Unable to check for updates. Please try again later.",
+  "The update could not be downloaded or started. Please try again.": "The update could not be downloaded or started. Please try again.",
   "STAPM Power Limit (W)": "Skin Temperature Aware Power Management (STAPM) Limit (W)",
   "PPT Limit (W)": "Package Power Tracking (PPT) Limit (W)",
   "EDC Limit (A)": "Electrical Design Current (EDC) Limit (A)",

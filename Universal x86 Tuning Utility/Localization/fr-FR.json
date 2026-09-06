@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "Inclure les mises à jour en préversion",
+  "Unable to check for updates. Please try again later.": "Impossible de rechercher des mises à jour. Veuillez réessayer plus tard.",
+  "The update could not be downloaded or started. Please try again.": "La mise à jour n’a pas pu être téléchargée ou démarrée. Veuillez réessayer.",
   "Home": "Accueil",
   "Premade": "Prédéfini",
   "Custom": "Personnalisé",

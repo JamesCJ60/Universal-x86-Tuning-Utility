@@ -1,4 +1,7 @@
 {
+  "Include pre-release updates": "プレリリース版の更新を含める",
+  "Unable to check for updates. Please try again later.": "更新を確認できません。しばらくしてからもう一度お試しください。",
+  "The update could not be downloaded or started. Please try again.": "更新をダウンロードまたは開始できませんでした。もう一度お試しください。",
   "Home": "ホーム",
   "Premade": "プリセット",
   "Custom": "カスタム",

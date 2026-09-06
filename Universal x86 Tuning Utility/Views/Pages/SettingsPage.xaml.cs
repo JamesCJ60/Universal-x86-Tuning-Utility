@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Windows;
 using Microsoft.Extensions.Logging;
 using Universal_x86_Tuning_Utility.Properties;
@@ -20,6 +19,10 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
     {
         private readonly ILogger<SettingsPage> _logger;
         private bool _languageSelectionReady;
+        private UpdateManager? _updateManager;
+        private bool _updateBusy;
+        private int _updateCheckGeneration;
+        private string _updateMessage = string.Empty;
 
         public ViewModels.SettingsViewModel ViewModel
         {
@@ -32,6 +35,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             _logger = logger;
 
             InitializeComponent();
+            Unloaded += SettingsPage_Unloaded;
 
             cbxLanguage.ItemsSource = LocalizationService.SupportedLanguages;
             cbxLanguage.SelectedItem = LocalizationService.SupportedLanguages.First(language => language.CultureName == LocalizationService.CurrentCultureName);
@@ -45,18 +49,15 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             nudAutoReapply.Value = Settings.Default.AutoReapplyTime;
             nudAutoReapply.Text = Convert.ToString(Settings.Default.AutoReapplyTime);
             cbAutoCheck.IsChecked = Settings.Default.UpdateCheck;
+            cbPreReleases.IsChecked = Settings.Default.IncludePreReleases;
             cbAdaptive.IsChecked = Settings.Default.isStartAdpative;
             cbTrack.IsChecked = Settings.Default.isTrack;
 
             cbxLogLevel.SelectedIndex = Settings.Default.DiagnosticLogLevel;
 
-            tbAppVerion.Text = $"Universal x86 Tuning Utility - {GetAssemblyVersion()}";
+            tbAppVerion.Text = $"Universal x86 Tuning Utility - {App.version}";
 
             checkUpdate();
-        }
-        private string GetAssemblyVersion()
-        {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? String.Empty;
         }
 
         private void cbStartBoot_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -135,78 +136,96 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             Settings.Default.Save();
         }
 
-        private async void btnCheck_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void btnCheck_Click(object sender, RoutedEventArgs e)
         {
             checkUpdate(true);
         }
 
+        private static UpdateManager CreateUpdateManager() => new(
+            "JamesCJ60",
+            "Universal-x86-Tuning-Utility",
+            App.version,
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UXTU", "Updates"),
+            Settings.Default.IncludePreReleases);
+
         private async void checkUpdate(bool isUserCheck = false)
         {
-            if (IsInternetAvailable())
-            {
-                var updateManager = new UpdateManager("JamesCJ60", "Universal-x86-Tuning-Utility", App.version, "C:\\");
+            if (_updateBusy)
+                return;
 
-                var isUpdateAvailable = await updateManager.IsUpdateAvailable();
+            var generation = ++_updateCheckGeneration;
+            _updateManager = null;
+            btnDownload.Visibility = Visibility.Collapsed;
+            btnCheck.IsEnabled = false;
+            SetUpdateMessage(string.Empty);
 
-                if (isUpdateAvailable)
-                {
-                    if (updateManager._newVersion.StartsWith("3.")) tbDownloadMsg.Text = LocalizationService.Get("Head to the Phantom Control Centre GitHub releases page to easily download the latest build!");
-                    else {
-                        tbDownloadMsg.Text = LocalizationService.Get("An update for Universal x86 Tuning Utility has been found!");
-                        btnDownload.Visibility = System.Windows.Visibility.Visible;
-                    }
-                }
-                else if(isUserCheck) tbDownloadMsg.Text = LocalizationService.Get("Universal x86 Tuning Utility is up to date!");
-            }
-            else if (isUserCheck) tbDownloadMsg.Text = LocalizationService.Get("No internet connection!");
-        }
-
-        private async void btnDownload_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            var updateManager = new UpdateManager("JamesCJ60", "Universal-x86-Tuning-Utility", App.version, "C:\\");
-
-            var isUpdateAvailable = await updateManager.IsUpdateAvailable();
-
-            if (isUpdateAvailable)
-            {
-                tbDownloadMsg.Text = LocalizationService.Get("Universal x86 Tuning Utility will close and the installer will open when the download is complete");
-
-                await updateManager.DownloadAndInstallUpdate();
-
-                string filePath = "C:\\Universal.x86.Tuning.Utility.msi";
-
-                try
-                {
-                    // show the MSI and close the main application
-                    Process p = new Process();
-                    p.StartInfo.FileName = "msiexec";
-                    p.StartInfo.Arguments = $"/i {filePath}";
-                    p.Start();
-                    System.Windows.Application.Current.Shutdown();
-                }
-                catch (Exception ex)
-                {
-                    // log error or display error message to user
-                    _logger.LogError(ex, "Failed to launch MSI");
-                    MessageBox.Show(LocalizationService.Format("Failed to launch MSI: {0}", ex.Message));
-                }
-            }
-        }
-
-        private static bool IsInternetAvailable()
-        {
             try
             {
-                using (var ping = new Ping())
+                var manager = CreateUpdateManager();
+                var available = await manager.IsUpdateAvailable();
+                if (generation != _updateCheckGeneration)
+                    return;
+
+                _updateManager = available ? manager : null;
+                btnDownload.Visibility = available ? Visibility.Visible : Visibility.Collapsed;
+                if (available)
+                    SetUpdateMessage("An update for Universal x86 Tuning Utility has been found!");
+                else if (isUserCheck)
+                    SetUpdateMessage("Universal x86 Tuning Utility is up to date!");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to check GitHub for updates");
+                if (generation == _updateCheckGeneration)
+                    SetUpdateMessage("Unable to check for updates. Please try again later.");
+            }
+            finally
+            {
+                if (generation == _updateCheckGeneration)
+                    btnCheck.IsEnabled = true;
+            }
+        }
+
+        private async void btnDownload_Click(object sender, RoutedEventArgs e)
+        {
+            if (_updateBusy || _updateManager == null)
+                return;
+
+            _updateBusy = true;
+            btnCheck.IsEnabled = false;
+            btnDownload.IsEnabled = false;
+            cbPreReleases.IsEnabled = false;
+            SetUpdateMessage("Universal x86 Tuning Utility will close and the installer will open when the download is complete");
+
+            try
+            {
+                if (await _updateManager.DownloadAndInstallUpdate())
+                    System.Windows.Application.Current.Shutdown();
+                else
                 {
-                    var result = ping.Send("8.8.8.8", 2000); // ping Google DNS server
-                    return result.Status == IPStatus.Success;
+                    btnDownload.Visibility = Visibility.Collapsed;
+                    SetUpdateMessage("Universal x86 Tuning Utility is up to date!");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                _logger.LogError(ex, "Failed to download or launch the update installer");
+                SetUpdateMessage("The update could not be downloaded or started. Please try again.");
             }
+            finally
+            {
+                _updateBusy = false;
+                btnCheck.IsEnabled = true;
+                btnDownload.IsEnabled = true;
+                cbPreReleases.IsEnabled = true;
+            }
+        }
+
+        private void cbPreReleases_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.IncludePreReleases = cbPreReleases.IsChecked == true;
+            Settings.Default.Save();
+            checkUpdate(true);
         }
 
         private void cbAutoCheck_Click(object sender, RoutedEventArgs e)
@@ -222,6 +241,25 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
 
         private void UiPage_Loaded(object sender, RoutedEventArgs e)
         {
+            LocalizationService.CultureChanged -= UpdateStatusLanguage;
+            LocalizationService.CultureChanged += UpdateStatusLanguage;
+            UpdateStatusLanguage(this, EventArgs.Empty);
+        }
+
+        private void SettingsPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            LocalizationService.CultureChanged -= UpdateStatusLanguage;
+        }
+
+        private void SetUpdateMessage(string message)
+        {
+            _updateMessage = message;
+            UpdateStatusLanguage(this, EventArgs.Empty);
+        }
+
+        private void UpdateStatusLanguage(object? sender, EventArgs e)
+        {
+            ViewModel.UpdateStatus = LocalizationService.Get(_updateMessage);
         }
 
         private void btnStressTest_Click(object sender, RoutedEventArgs e)

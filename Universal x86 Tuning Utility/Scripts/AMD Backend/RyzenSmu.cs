@@ -620,11 +620,11 @@ namespace RyzenSmu
         public static Smu RyzenAccess = new Smu();
         public static bool UseHsmp { get; set; }
 
-        public static void applySettings(string commandName, uint value)
+        public static bool applySettings(string commandName, uint value)
         {
             uint[] args = new uint[6];
             args[0] = value;
-            Execute(commandName, args);
+            return Execute(commandName, args);
         }
 
         public static void disableFeature(uint[] args)
@@ -637,29 +637,36 @@ namespace RyzenSmu
             Execute("enable-feature", args);
         }
 
-        private static void Execute(string commandName, uint[] args)
+        private static bool Execute(string commandName, uint[] args)
         {
-            if (!_commandIndex.TryGetValue(commandName, out (bool IsMp1, uint Address)[]? matchingCommands))
-                throw new ArgumentException($"Command '{commandName}' not found");
+            if (string.IsNullOrWhiteSpace(commandName) ||
+                !_commandIndex.TryGetValue(commandName, out (bool IsMp1, uint Address)[]? matchingCommands) ||
+                matchingCommands.Length == 0)
+                return false;
 
             if (!RyzenAccess.EnsureInitialised())
                 throw new InvalidOperationException("AMD PawnIO failed to initialise.");
 
             var originalArguments = (uint[])args.Clone();
-            Status lastStatus = Status.FAILED;
+            Status lastFailure = Status.UNKNOWN_CMD;
             foreach ((bool isMp1, uint address) in matchingCommands)
             {
                 Array.Copy(originalArguments, args, originalArguments.Length);
-                lastStatus = UseHsmp
+                var status = UseHsmp
                     ? RyzenAccess.SendHsmp(address, ref args)
                     : isMp1
                         ? RyzenAccess.SendMp1(address, ref args)
                         : RyzenAccess.SendRsmu(address, ref args);
-                if (lastStatus == Status.OK)
-                    return;
+                if (status == Status.OK)
+                    return true;
+                if (status != Status.UNKNOWN_CMD)
+                    lastFailure = status;
             }
 
-            throw new InvalidOperationException($"SMU command '{commandName}' failed with status {lastStatus}.");
+            if (lastFailure == Status.UNKNOWN_CMD)
+                return false;
+
+            throw new InvalidOperationException($"SMU command '{commandName}' failed with status {lastFailure}.");
         }
     }
 
