@@ -45,6 +45,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 if (string.IsNullOrWhiteSpace(ryzenAdjString))
                     return;
 
+                // A manual apply is the user's way to retry commands the firmware refused earlier.
+                if (!isAutoReapply)
+                    SMUCommands.ResetRejectedPrereqCommands();
+
                 string normalizedCommands = ryzenAdjString.Trim();
                 string[] ryzenAdjCommands = normalizedCommands
                     .Split(' ', StringSplitOptions.RemoveEmptyEntries)
