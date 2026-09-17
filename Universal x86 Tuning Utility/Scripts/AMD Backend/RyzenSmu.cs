@@ -14,10 +14,10 @@ using System.Threading;
 using System.Windows;
 using Universal_x86_Tuning_Utility.Properties;
 using Universal_x86_Tuning_Utility.Scripts;
-using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.GPUs.AMD;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
+using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Windows.Storage;
 using static RyzenSmu.RyzenSMU;
 
@@ -678,7 +678,7 @@ namespace RyzenSmu
                 if (status == Status.OK)
                     return true;
                 if (status == Status.CMD_REJECTED_PREREQ && cacheRejections && rejectedPrereqTargets.TryAdd((isMp1, address), 0))
-                    DiagnosticLogger.LogDebug($"SMU command '{commandName}' was refused with CMD_REJECTED_PREREQ and is now skipped until settings are applied manually.");
+                    DiagnosticLogger.LogDebug($"SMU command '{commandName}' was refused with CMD_REJECTED_PREREQ and will be skipped during automatic reapply until settings are applied manually or the command table is reloaded.");
                 if (status != Status.UNKNOWN_CMD)
                     lastFailure = status;
             }

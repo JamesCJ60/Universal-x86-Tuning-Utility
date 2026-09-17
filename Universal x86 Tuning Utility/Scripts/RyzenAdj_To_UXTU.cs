@@ -46,7 +46,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     return;
 
                 // A manual apply is the user's way to retry commands the firmware refused earlier.
-                if (!isAutoReapply)
+                // Automatic reapply and adaptive undervolt cycles keep the cache so refused commands are not retried.
+                if (!isAutoReapply && !isAutoOC)
                     SMUCommands.ResetRejectedPrereqCommands();
 
                 string normalizedCommands = ryzenAdjString.Trim();

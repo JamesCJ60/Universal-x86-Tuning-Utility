@@ -158,7 +158,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 }
                 else
                 {
-                    await RyzenAdj_To_UXTU.TranslateAsync(commands, isAutoReapply: true);
+                    await RyzenAdj_To_UXTU.TranslateAsync(commands);
                     ToastNotification.ShowToastNotification("Settings Reapplied!", "Your last applied settings have been reapplied!");
                 }
             }
