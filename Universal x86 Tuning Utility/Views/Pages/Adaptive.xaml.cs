@@ -593,7 +593,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
                             commandString = commandString + $"--NVIDIA-Clocks={nudNVMaxCore.Value}-{nudNVCore.Value}-{nudNVMem.Value} ";
                         }
 
-                        if (commandString != null && commandString != "") await RyzenAdj_To_UXTU.TranslateAsync(commandString, appliedName: "Adaptive Mode", localizeAppliedName: true);
+                        if (commandString != null && commandString != "") await RyzenAdj_To_UXTU.TranslateAsync(commandString, isAutoReapply: true, appliedName: "Adaptive Mode", localizeAppliedName: true);
                     }
 
                     if (RTSS.RTSSRunning() && tsRTSS.IsChecked == true) RTSS.setRTSSFPSLimit((int)nudRTSS.Value);

@@ -17,6 +17,7 @@ using Universal_x86_Tuning_Utility.Scripts;
 using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.GPUs.AMD;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
+using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Windows.Storage;
 using static RyzenSmu.RyzenSMU;
 
@@ -602,12 +603,21 @@ namespace RyzenSmu
         private static List<(string Name, bool IsMp1, uint Address)> _commands = new();
         private static Dictionary<string, (bool IsMp1, uint Address)[]> _commandIndex = new(StringComparer.Ordinal);
 
+        // Targets refused with CMD_REJECTED_PREREQ, which retrying cannot fix.
+        private static readonly ConcurrentDictionary<(bool IsMp1, uint Address), byte> rejectedPrereqTargets = new();
+
+        // Their prerequisites depend on runtime state, so a refusal is not necessarily permanent.
+        private static readonly HashSet<string> cacheExemptCommands = new(StringComparer.Ordinal) { "enable-feature", "disable-feature" };
+
+        public static void ResetRejectedPrereqCommands() => rejectedPrereqTargets.Clear();
+
         public static List<(string, bool, uint)> commands
         {
             get => _commands;
             set
             {
                 _commands = value ?? new List<(string, bool, uint)>();
+                rejectedPrereqTargets.Clear();
                 _commandIndex = _commands
                     .GroupBy(command => command.Name, StringComparer.Ordinal)
                     .ToDictionary(
@@ -644,6 +654,11 @@ namespace RyzenSmu
                 matchingCommands.Length == 0)
                 return false;
 
+            bool cacheRejections = !cacheExemptCommands.Contains(commandName);
+
+            if (cacheRejections && matchingCommands.All(target => rejectedPrereqTargets.ContainsKey(target)))
+                return false;
+
             if (!RyzenAccess.EnsureInitialised())
                 throw new InvalidOperationException("AMD PawnIO failed to initialise.");
 
@@ -651,6 +666,9 @@ namespace RyzenSmu
             Status lastFailure = Status.UNKNOWN_CMD;
             foreach ((bool isMp1, uint address) in matchingCommands)
             {
+                if (cacheRejections && rejectedPrereqTargets.ContainsKey((isMp1, address)))
+                    continue;
+
                 Array.Copy(originalArguments, args, originalArguments.Length);
                 var status = UseHsmp
                     ? RyzenAccess.SendHsmp(address, ref args)
@@ -659,6 +677,8 @@ namespace RyzenSmu
                         : RyzenAccess.SendRsmu(address, ref args);
                 if (status == Status.OK)
                     return true;
+                if (status == Status.CMD_REJECTED_PREREQ && cacheRejections && rejectedPrereqTargets.TryAdd((isMp1, address), 0))
+                    DiagnosticLogger.LogDebug($"SMU command '{commandName}' was refused with CMD_REJECTED_PREREQ and will be skipped during automatic reapply until settings are applied manually or the command table is reloaded.");
                 if (status != Status.UNKNOWN_CMD)
                     lastFailure = status;
             }
