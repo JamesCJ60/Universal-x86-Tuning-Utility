@@ -191,12 +191,11 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
 
         private async void Misc_Tick(object sender, EventArgs e)
         {
-            try
-            {
-                if (Interlocked.Exchange(ref miscTickRunning, 1) != 0)
+            if (Interlocked.Exchange(ref miscTickRunning, 1) != 0)
                 return;
 
-
+            try
+            {
                 try
                 {
                     await ProcessCpuUndervoltAsync();
@@ -232,6 +231,10 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             catch (Exception ex)
             {
                 DiagnosticLogger.LogError(ex, "Failed to release the adaptive undervolt monitor");
+            }
+            finally
+            {
+                Interlocked.Exchange(ref miscTickRunning, 0);
             }
         }
 
