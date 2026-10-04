@@ -60,13 +60,12 @@ public sealed class AdaptiveSensorService : IAdaptiveSensorService
         {
             foreach (var game in games)
             {
-                if (string.IsNullOrWhiteSpace(game.path) || presets.GetPreset(game.gameName)?.isAutoSwitch == false) continue;
-                var directory = game.path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+                if (presets.GetPreset(game.gameName)?.isAutoSwitch == false) continue;
                 foreach (var process in processes)
                 {
                     try
                     {
-                        if (process.MainModule?.FileName?.StartsWith(directory, StringComparison.OrdinalIgnoreCase) == true) return game.gameName;
+                        if (process.MainModule?.FileName is string executablePath && MatchesExecutable(game, executablePath)) return game.gameName;
                     }
                     catch (System.ComponentModel.Win32Exception) { }
                     catch (InvalidOperationException) { }
@@ -76,4 +75,27 @@ public sealed class AdaptiveSensorService : IAdaptiveSensorService
         }
         finally { foreach (var process in processes) process.Dispose(); }
     });
+
+        private static bool MatchesExecutable(Game_Manager.GameLauncherItem item, string executablePath)
+        {
+            if (!string.IsNullOrWhiteSpace(item.exe))
+            {
+                if (System.IO.Path.IsPathFullyQualified(item.exe))
+                    return string.Equals(System.IO.Path.GetFullPath(item.exe), System.IO.Path.GetFullPath(executablePath), StringComparison.OrdinalIgnoreCase);
+
+                if (string.Equals(System.IO.Path.GetFileNameWithoutExtension(item.exe), System.IO.Path.GetFileNameWithoutExtension(executablePath), StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(item.path))
+                return false;
+
+            if (!System.IO.Path.IsPathFullyQualified(item.path))
+                return string.Equals(System.IO.Path.GetFileNameWithoutExtension(item.path), System.IO.Path.GetFileNameWithoutExtension(executablePath), StringComparison.OrdinalIgnoreCase);
+
+            string gamePath = System.IO.Path.TrimEndingDirectorySeparator(System.IO.Path.GetFullPath(item.path));
+            string processPath = System.IO.Path.GetFullPath(executablePath);
+            return processPath.StartsWith(gamePath + System.IO.Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(processPath, gamePath, StringComparison.OrdinalIgnoreCase);
+        }
 }

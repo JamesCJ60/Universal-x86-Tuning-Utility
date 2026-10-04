@@ -22,7 +22,6 @@ public interface IGameLibraryService
 
 public sealed class GameLibraryService : IGameLibraryService, IDisposable
 {
-    private readonly List<GameLibraryEntry> _manualGames = new();
     private readonly SemaphoreSlim _loadGate = new(1, 1);
     private string? _iconsDirectory;
     private static GameDataManager CreateManager() => new(Settings.Default.Path + "gameData.json");
@@ -48,10 +47,9 @@ public sealed class GameLibraryService : IGameLibraryService, IDisposable
                     Path = game.path ?? "",
                     Executable = game.exe ?? "",
                     LaunchCommand = game.launchCommand,
-                    IconPath = await GetImages.GetIconImageUrl(game.gameName)
+                    IconPath = File.Exists(game.iconPath) ? game.iconPath : await GetImages.GetIconImageUrl(game.gameName)
                 });
             }
-            games.AddRange(_manualGames);
             RefreshStatistics(games);
             return games.OrderBy(g => g.Name).ToList();
         }
@@ -60,8 +58,8 @@ public sealed class GameLibraryService : IGameLibraryService, IDisposable
 
     public GameLibraryEntry AddExecutable(string path)
     {
-        _iconsDirectory ??= Directory.CreateTempSubdirectory("uxtu-game-icons-").FullName;
-        var iconPath = System.IO.Path.Combine(_iconsDirectory, Guid.NewGuid() + ".ico");
+        _iconsDirectory ??= Directory.CreateDirectory(System.IO.Path.Combine(Settings.Default.Path, "Assets", "GameImages", "Manual")).FullName;
+        var iconPath = System.IO.Path.Combine(_iconsDirectory, GetImages.CleanFileName(path) + ".ico");
         using (var icon = Icon.ExtractAssociatedIcon(path))
         {
             if (icon != null)
@@ -72,13 +70,20 @@ public sealed class GameLibraryService : IGameLibraryService, IDisposable
         }
         var entry = new GameLibraryEntry
         {
+            Id = "0",
+            LaunchCommand = path,
             Name = System.IO.Path.GetFileNameWithoutExtension(path),
             Launcher = "Manually added game",
             Path = System.IO.Path.GetDirectoryName(path) ?? "",
             Executable = path,
             IconPath = iconPath
         };
-        _manualGames.Add(entry);
+        Game_Manager.SaveManualGame(new Game_Manager.GameLauncherItem
+        {
+            gameID = entry.Id, gameName = entry.Name, appType = entry.Launcher,
+            path = entry.Path, exe = entry.Executable, launchCommand = entry.LaunchCommand,
+            iconPath = entry.IconPath
+        });
         var manager = CreateManager();
         if (manager.GetPreset(entry.Name) == null) manager.SavePreset(entry.Name, new GameData { fpsData = "No Data" });
         return entry;
@@ -106,17 +111,9 @@ public sealed class GameLibraryService : IGameLibraryService, IDisposable
             var suffix = "-" + game.Id + "-" + game.Name;
             if (command.StartsWith(prefix) && command.EndsWith(suffix))
                 command = command.Substring(prefix.Length, command.Length - prefix.Length - suffix.Length);
-            Game_Manager.LaunchApp(game.Id, game.Launcher, command, command);
+            Game_Manager.LaunchApp(game.Id, game.Launcher, command, game.Path);
         }
     });
 
-    public void Dispose()
-    {
-        try
-        {
-            if (_iconsDirectory != null && Directory.Exists(_iconsDirectory)) Directory.Delete(_iconsDirectory, true);
-        }
-        catch (IOException error) { Serilog.Log.Warning(error, "Could not remove temporary game icons"); }
-        catch (UnauthorizedAccessException error) { Serilog.Log.Warning(error, "Could not remove temporary game icons"); }
-    }
+    public void Dispose() => _loadGate.Dispose();
 }
