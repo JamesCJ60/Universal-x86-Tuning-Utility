@@ -12,7 +12,7 @@
       d:DesignHeight="700"
       d:DesignWidth="900"
       Title="Premade Presets"
-      Loaded="Page_Loaded"
+     
       SnapsToDevicePixels="True"
       UseLayoutRounding="True"
       ScrollViewer.CanContentScroll="False">
@@ -46,7 +46,7 @@
             <TextBlock x:Name="tbxMessage"
                        FontSize="26"
                        FontWeight="Medium"
-                       Text="Premade Presets" />
+                       Text="{Binding Title}" />
             <TextBlock Margin="0,4,0,0"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                        Text="Choose a tuning profile and review the commands before applying it."
@@ -62,7 +62,7 @@
 
             <Grid Grid.Column="0">
                 <Image x:Name="imgPackage"
-                       Source="pack://application:,,,/Assets/config.png"
+                       Source="{Binding PackageImage}"
                        MaxWidth="500"
                        MaxHeight="500"
                        HorizontalAlignment="Center"
@@ -85,13 +85,13 @@
                                    Margin="0,-3,0,0"
                                    FontSize="20"
                                    FontWeight="DemiBold"
-                                   Text="Performance Preset" />
+                                   Text="{Binding PresetName}" />
 
                         <ui:Badge x:Name="bdgCertified"
                                   Width="150"
                                   Margin="0,8,0,0"
                                   HorizontalAlignment="Left"
-                                  Appearance="Success">
+                                  Appearance="Success" Visibility="{Binding CertifiedVisibility}">
                             Device Certified Preset
                         </ui:Badge>
 
@@ -99,7 +99,7 @@
                                    Margin="0,8,0,0"
                                    FontSize="14"
                                    LineHeight="19"
-                                   Text="TEST TEST TEST"
+                                   Text="{Binding Description}"
                                    TextWrapping="Wrap" />
                     </StackPanel>
 
@@ -116,7 +116,7 @@
                                  IsReadOnly="True"
                                  TextWrapping="NoWrap"
                                  HorizontalScrollBarVisibility="Auto"
-                                 VerticalScrollBarVisibility="Disabled" />
+                                 VerticalScrollBarVisibility="Disabled"  Text="{Binding Commands}"/>
 
                         <TextBlock Margin="0,5,0,-1"
                                    FontSize="12"
@@ -139,7 +139,7 @@
                          VerticalAlignment="Center">
                 <ToggleButton x:Name="tbEco"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Click="tbEco_Click">
+                              Command="{Binding ApplyCommand}" CommandParameter="0" IsChecked="{Binding IsEco, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -152,7 +152,7 @@
 
                 <ToggleButton x:Name="tbBal"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Click="tbBal_Click">
+                              Command="{Binding ApplyCommand}" CommandParameter="1" IsChecked="{Binding IsBalanced, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -165,7 +165,7 @@
 
                 <ToggleButton x:Name="tbPerf"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Click="tbPerf_Click">
+                              Command="{Binding ApplyCommand}" CommandParameter="2" IsChecked="{Binding IsPerformance, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -178,7 +178,7 @@
 
                 <ToggleButton x:Name="tbEx"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Click="tbEx_Click">
+                              Command="{Binding ApplyCommand}" CommandParameter="3" IsChecked="{Binding IsExtreme, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">

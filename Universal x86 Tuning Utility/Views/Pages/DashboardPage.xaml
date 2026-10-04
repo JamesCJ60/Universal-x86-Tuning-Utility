@@ -71,7 +71,7 @@
                                    Padding="30,6"
                                    HorizontalAlignment="Left"
                                    Appearance="Transparent"
-                                   Command="{Binding ViewModel.NavigateCommand}"
+                                   Command="{Binding NavigateCommand}"
                                    CommandParameter="premade"
                                    Content="Try Out The Premade Presets"
                                    Foreground="{DynamicResource TextFillColorLightPrimaryBrush}" />
@@ -103,7 +103,7 @@
                            Grid.Row="0"
                            Grid.Column="0"
                            Margin="0,0,4,4"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="premade"
                            Icon="{ui:SymbolIcon Predictions20}"
                            IsChevronVisible="True">
@@ -115,7 +115,7 @@
             <ui:CardAction Grid.Row="0"
                            Grid.Column="1"
                            Margin="4,0,4,4"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="custom"
                            Icon="{ui:SymbolIcon Book20}"
                            IsChevronVisible="True">
@@ -127,7 +127,7 @@
             <ui:CardAction Grid.Row="0"
                            Grid.Column="2"
                            Margin="4,0,4,4"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="adaptive"
                            Icon="{ui:SymbolIcon Radar20}"
                            IsChevronVisible="True">
@@ -139,7 +139,7 @@
             <ui:CardAction Grid.Row="0"
                            Grid.Column="3"
                            Margin="4,0,0,4"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="auto"
                            Icon="{ui:SymbolIcon Transmission20}"
                            IsChevronVisible="True">
@@ -151,7 +151,7 @@
             <ui:CardAction Grid.Row="1"
                            Grid.Column="0"
                            Margin="0,4,4,0"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="games"
                            Icon="{ui:SymbolIcon Games20}"
                            IsChevronVisible="True">
@@ -163,7 +163,7 @@
             <ui:CardAction Grid.Row="1"
                            Grid.Column="1"
                            Margin="4,4,4,0"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="info"
                            Icon="{ui:SymbolIcon Info20}"
                            IsChevronVisible="True">
@@ -175,7 +175,7 @@
             <ui:CardAction Grid.Row="1"
                            Grid.Column="2"
                            Margin="4,4,4,0"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="help"
                            Icon="{ui:SymbolIcon ChatHelp20}"
                            IsChevronVisible="True">
@@ -187,7 +187,7 @@
             <ui:CardAction Grid.Row="1"
                            Grid.Column="3"
                            Margin="4,4,0,0"
-                           Command="{Binding ViewModel.NavigateCommand}"
+                           Command="{Binding NavigateCommand}"
                            CommandParameter="support"
                            Icon="{ui:SymbolIcon Money20}"
                            IsChevronVisible="True">

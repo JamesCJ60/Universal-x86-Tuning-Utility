@@ -1,4 +1,4 @@
-﻿using CpuAffinityUtility;
+using CpuAffinityUtility;
 using GameLib.Plugin.RiotGames.Model;
 using NvAPIWrapper.Display;
 using RyzenSmu;
@@ -32,8 +32,8 @@ namespace Universal_x86_Tuning_Utility.Scripts
         static string highPerformancePowerScheme = "DED574B5-45A0-4F42-8737-46345C09C238";
         static string powerSaverPowerScheme = "961CC777-2547-4F9D-8174-7D86181b8A7A";
 
-        public static void Translate(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false, string? appliedName = null, bool localizeAppliedName = false) =>
-            _ = TranslateAsync(ryzenAdjString, isAutoReapply, isAutoOC, appliedName, localizeAppliedName);
+        public static Task Translate(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false, string? appliedName = null, bool localizeAppliedName = false) =>
+            TranslateAsync(ryzenAdjString, isAutoReapply, isAutoOC, appliedName, localizeAppliedName);
 
         public static Task TranslateAsync(string ryzenAdjString, bool isAutoReapply = false, bool isAutoOC = false, string? appliedName = null, bool localizeAppliedName = false) =>
             Task.Run(() => TranslateCore(ryzenAdjString, isAutoReapply, isAutoOC, appliedName, localizeAppliedName));

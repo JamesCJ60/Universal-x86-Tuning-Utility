@@ -194,6 +194,26 @@ namespace Universal_x86_Tuning_Utility
                         services.AddScoped<ViewModels.MainWindowViewModel>();
 
                         // Views and ViewModels
+                        services.AddSingleton<ApplicationExitService>();
+                        services.AddSingleton<IPresetApplicationService, PresetApplicationService>();
+                        services.AddSingleton<IUserInteractionService, UserInteractionService>();
+                        services.AddSingleton<IPresetCatalogService, PresetCatalogService>();
+                        services.AddSingleton<ViewModels.AutomationsViewModel>();
+                        services.AddSingleton<ViewModels.AdaptiveViewModel>();
+                        services.AddSingleton<ViewModels.PremadePresetsViewModel>();
+                        services.AddSingleton<ViewModels.FanControlViewModel>();
+                        services.AddSingleton<IFanControlService, FanControlService>();
+                        services.AddSingleton<ISettingsActionsService, SettingsActionsService>();
+                        services.AddSingleton<ISystemInformationService, SystemInformationService>();
+                        services.AddSingleton<ViewModels.SystemInfoViewModel>();
+                        services.AddSingleton<IGameLibraryService, GameLibraryService>();
+                        services.AddSingleton<IGamePerformanceService, GamePerformanceService>();
+                        services.AddSingleton<ApplicationRuntimeService>();
+                        services.AddSingleton<IGraphicsHardwareService, GraphicsHardwareService>();
+                        services.AddSingleton<IPresetCommandBuilder, PresetCommandBuilder>();
+                        services.AddSingleton<IAutomationSettings, AutomationSettings>();
+                        services.AddSingleton<IAdaptiveSensorService, AdaptiveSensorService>();
+                        services.AddSingleton<IAdaptiveControlService, AdaptiveControlService>();
                         services.AddScoped<Views.Pages.DashboardPage>();
                         services.AddScoped<ViewModels.DashboardViewModel>();
                         services.AddScoped<Views.Pages.CustomPresets>();
@@ -457,6 +477,7 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnExit(object sender, ExitEventArgs e)
         {
+            if (_host == null) return;
             if (Family.TYPE != Family.ProcessorType.Intel) SMUCommands.RyzenAccess.Deinitialize();
             else Intel_Management.Deinitialize();
 
@@ -464,10 +485,6 @@ namespace Universal_x86_Tuning_Utility
 
             _host.Dispose();
 
-            if (Games.CustomGameIconsDirectoryPath != null) //will be refactored in the future
-            {
-                Directory.Delete(Games.CustomGameIconsDirectoryPath, true);
-            }
         }
 
         /// <summary>

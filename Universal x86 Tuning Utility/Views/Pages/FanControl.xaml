@@ -12,7 +12,7 @@
       d:DesignHeight="620"
       d:DesignWidth="800"
       Title="Fan Control"
-      Loaded="Page_Loaded"
+     
       SnapsToDevicePixels="True"
       UseLayoutRounding="True">
 
@@ -37,11 +37,11 @@
                                Margin="12,0"
                                VerticalAlignment="Center"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               TextWrapping="Wrap" />
+                               TextWrapping="Wrap"  Text="{Binding ConfigurationName}"/>
                     <ui:Button x:Name="btnCopy"
                                Grid.Column="2"
                                MinWidth="84"
-                               Click="btnCopy_Click">
+                               Command="{Binding CopyConfigurationNameCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Copy" />
                         </StackPanel>
@@ -63,7 +63,7 @@
                                Margin="12,0,0,0"
                                VerticalAlignment="Center"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               TextWrapping="Wrap" />
+                               TextWrapping="Wrap"  Text="{Binding Status}"/>
                 </Grid>
             </ui:CardControl.Header>
         </ui:CardControl>
@@ -88,7 +88,7 @@
                                   Width="160"
                                   Minimum="0"
                                   Maximum="100"
-                                  Value="50"
+                                  Value="{Binding Speed, Mode=TwoWay}"
                                   SmallChange="1"
                                   MaxDecimalPlaces="0" />
                 </Grid>
@@ -96,31 +96,31 @@
         </ui:CardControl>
 
         <WrapPanel Margin="0,14,0,0" HorizontalAlignment="Right">
-            <ui:Button x:Name="btnReload" MinWidth="138" Margin="0,0,8,8" Click="btnReload_Click">
+            <ui:Button x:Name="btnReload" MinWidth="138" Margin="0,0,8,8" Command="{Binding ReloadCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="ArrowSync20" Margin="0,0,7,0" />
                     <TextBlock Text="Reload Config" />
                 </StackPanel>
             </ui:Button>
-            <ui:Button x:Name="btnFanCurve" MinWidth="138" Margin="0,0,8,8" Click="btnFanCurve_Click">
+            <ui:Button x:Name="btnFanCurve" MinWidth="138" Margin="0,0,8,8" Command="{Binding ToggleCurveCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="Pulse20" Margin="0,0,7,0" />
                     <TextBlock Text="Test Fan Curve" />
                 </StackPanel>
             </ui:Button>
-            <ui:Button x:Name="btnFanSpeed" MinWidth="150" Margin="0,0,8,8" Appearance="Primary" Click="btnFanSpeed_Click">
+            <ui:Button x:Name="btnFanSpeed" MinWidth="150" Margin="0,0,8,8" Appearance="Primary" Command="{Binding ApplySpeedCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="Gauge20" Margin="0,0,7,0" />
                     <TextBlock Text="Update Fan Speed" />
                 </StackPanel>
             </ui:Button>
-            <ui:Button x:Name="btnEn" MinWidth="152" Margin="0,0,8,8" Appearance="Success" Click="btnEn_Click">
+            <ui:Button x:Name="btnEn" MinWidth="152" Margin="0,0,8,8" Appearance="Success" Command="{Binding EnableCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="Play20" Margin="0,0,7,0" />
                     <TextBlock Text="Enable Fan Control" />
                 </StackPanel>
             </ui:Button>
-            <ui:Button x:Name="btnDis" MinWidth="152" Margin="0,0,0,8" Appearance="Danger" Click="btnDis_Click">
+            <ui:Button x:Name="btnDis" MinWidth="152" Margin="0,0,0,8" Appearance="Danger" Command="{Binding DisableCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:SymbolIcon Symbol="Delete20" Margin="0,0,7,0" />
                     <TextBlock Text="Disable Fan Control" />
