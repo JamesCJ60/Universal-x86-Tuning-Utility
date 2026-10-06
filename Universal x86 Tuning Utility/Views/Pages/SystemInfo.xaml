@@ -3,9 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+      xmlns:vm="clr-namespace:Universal_x86_Tuning_Utility.ViewModels"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      d:DataContext="{d:DesignInstance local:SystemInfo, IsDesignTimeCreatable=False}"
+      d:DataContext="{d:DesignInstance Type=vm:SystemInfoViewModel, IsDesignTimeCreatable=False}"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       d:DesignHeight="3000"
       d:DesignWidth="800"
@@ -94,19 +94,19 @@
                                    Grid.Row="0"
                                    Grid.Column="2"
                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                   TextWrapping="Wrap" />
+                                   TextWrapping="Wrap"  Text="{Binding Information.DeviceNameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock x:Name="tbDeviceProducer"
                                    Grid.Row="1"
                                    Grid.Column="2"
                                    Margin="0,8,0,0"
                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                   TextWrapping="Wrap" />
+                                   TextWrapping="Wrap"  Text="{Binding Information.DeviceProducerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock x:Name="tbDeviceModel"
                                    Grid.Row="2"
                                    Grid.Column="2"
                                    Margin="0,8,0,0"
                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                   TextWrapping="Wrap" />
+                                   TextWrapping="Wrap"  Text="{Binding Information.DeviceModelText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </ui:CardExpander>
 
@@ -114,7 +114,7 @@
                                  Margin="0,8,15,0"
                                  IsEnabled="True"
                                  IsExpanded="True"
-                                 Icon="{ui:SymbolIcon DeveloperBoard20}">
+                                 Icon="{ui:SymbolIcon DeveloperBoard20}" Visibility="{Binding Information.CPUVisibility}">
                     <ui:CardExpander.Header>
                         <TextBlock FontSize="14"
                                    FontWeight="Medium"
@@ -144,7 +144,7 @@
 
                         <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="DemiBold" Text="Processor" />
                         <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Producer" />
-                        <TextBlock x:Name="tbCode" Grid.Row="2" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Codename" TextWrapping="Wrap" />
+                        <TextBlock x:Name="tbCode" Grid.Row="2" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Codename" TextWrapping="Wrap"  Visibility="{Binding Information.CodeVisibility}"/>
                         <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Caption" />
                         <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Cores" />
                         <TextBlock Grid.Row="5" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Threads" />
@@ -154,25 +154,25 @@
                         <TextBlock Grid.Row="9" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="L3 Cache" />
                         <TextBlock Grid.Row="10" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Instructions" />
 
-                        <TextBlock x:Name="tbProcessor" Grid.Row="0" Grid.Column="2" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbProducer" Grid.Row="1" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbCodename" Grid.Row="2" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbCaption" Grid.Row="3" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbCores" Grid.Row="4" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbThreads" Grid.Row="5" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbBaseClock" Grid.Row="6" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbL1Cache" Grid.Row="7" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbL2Cache" Grid.Row="8" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbL3Cache" Grid.Row="9" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbInstructions" Grid.Row="10" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
+                        <TextBlock x:Name="tbProcessor" Grid.Row="0" Grid.Column="2" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.ProcessorText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbProducer" Grid.Row="1" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.ProducerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbCodename" Grid.Row="2" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.CodenameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Information.CodenameVisibility}"/>
+                        <TextBlock x:Name="tbCaption" Grid.Row="3" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.CaptionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbCores" Grid.Row="4" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.CoresText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbThreads" Grid.Row="5" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.ThreadsText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbBaseClock" Grid.Row="6" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.BaseClockText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbL1Cache" Grid.Row="7" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.L1CacheText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbL2Cache" Grid.Row="8" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.L2CacheText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbL3Cache" Grid.Row="9" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.L3CacheText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbInstructions" Grid.Row="10" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.InstructionsText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </ui:CardExpander>
 
                 <ui:CardExpander x:Name="sdRAM"
-                                 Margin="0,8,15,0"
+                                 Margin="{Binding Information.RAMMargin}"
                                  IsEnabled="True"
                                  IsExpanded="True"
-                                 Icon="{ui:SymbolIcon Ram20}">
+                                 Icon="{ui:SymbolIcon Ram20}" Visibility="{Binding Information.RAMVisibility}">
                     <ui:CardExpander.Header>
                         <TextBlock FontSize="14"
                                    FontWeight="Medium"
@@ -201,19 +201,19 @@
                             <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Width" />
                             <TextBlock Grid.Row="4" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Modules" />
 
-                            <TextBlock x:Name="tbRAM" Grid.Row="0" Grid.Column="2" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                            <TextBlock x:Name="tbRAMProducer" Grid.Row="1" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                            <TextBlock x:Name="tbRAMModel" Grid.Row="2" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                            <TextBlock x:Name="tbWidth" Grid.Row="3" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                            <TextBlock x:Name="tbSlots" Grid.Row="4" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
+                            <TextBlock x:Name="tbRAM" Grid.Row="0" Grid.Column="2" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.RAMText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock x:Name="tbRAMProducer" Grid.Row="1" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.RAMProducerText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock x:Name="tbRAMModel" Grid.Row="2" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.RAMModelText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock x:Name="tbWidth" Grid.Row="3" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.WidthText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock x:Name="tbSlots" Grid.Row="4" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.SlotsText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
 
                         <StackPanel x:Name="spRAMTime"
-                                    Margin="24,8,0,0">
+                                    Margin="24,8,0,0" Visibility="{Binding Information.RAMTimeVisibility}">
                             <TextBlock FontWeight="DemiBold"
                                        Text="RAM Timings:" />
 
-                            <Grid Margin="0,8,0,0">
+                            <Grid Margin="0,8,0,0" DataContext="{Binding MemoryTimings}">
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*" />
@@ -421,7 +421,7 @@
                                  Margin="0,8,15,0"
                                  IsEnabled="True"
                                  IsExpanded="True"
-                                 Icon="{ui:SymbolIcon Battery920}">
+                                 Icon="{ui:SymbolIcon Battery920}" Visibility="{Binding Information.BatteryVisibility}">
                     <ui:CardExpander.Header>
                         <TextBlock FontSize="14"
                                    FontWeight="Medium"
@@ -447,10 +447,10 @@
                         <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Capacity" />
                         <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,8,0,0" FontWeight="DemiBold" Text="Charge Rate" />
 
-                        <TextBlock x:Name="tbHealth" Grid.Row="0" Grid.Column="2" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbCycle" Grid.Row="1" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbCapcity" Grid.Row="2" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
-                        <TextBlock x:Name="tbChargeRate" Grid.Row="3" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" />
+                        <TextBlock x:Name="tbHealth" Grid.Row="0" Grid.Column="2" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.HealthText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbCycle" Grid.Row="1" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.CycleText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbCapcity" Grid.Row="2" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.CapcityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock x:Name="tbChargeRate" Grid.Row="3" Grid.Column="2" Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" TextWrapping="Wrap"  Text="{Binding Information.ChargeRateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </ui:CardExpander>
             </StackPanel>

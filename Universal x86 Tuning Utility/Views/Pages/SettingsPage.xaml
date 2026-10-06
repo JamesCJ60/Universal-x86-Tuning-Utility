@@ -3,19 +3,18 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:helpers="clr-namespace:Universal_x86_Tuning_Utility.Helpers"
-      xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+      xmlns:vm="clr-namespace:Universal_x86_Tuning_Utility.ViewModels"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       Title="Settings"
-      d:DataContext="{d:DesignInstance local:SettingsPage,
-                              IsDesignTimeCreatable=False}"
+      d:DataContext="{d:DesignInstance Type=vm:SettingsViewModel, IsDesignTimeCreatable=False}"
       d:DesignHeight="850"
       d:DesignWidth="800"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       ScrollViewer.CanContentScroll="False"
       mc:Ignorable="d"
-      Loaded="UiPage_Loaded"
+     
       SnapsToDevicePixels="True"
       UseLayoutRounding="True">
 
@@ -71,23 +70,23 @@
 
                         <CheckBox x:Name="cbStartBoot"
                                   Margin="0,10,0,0"
-                                  Click="cbStartBoot_Click"
-                                  Content="Start on system boot" />
+                                 
+                                  Content="Start on system boot"  IsChecked="{Binding StartOnBoot, Mode=TwoWay}"/>
 
                         <CheckBox x:Name="cbStartMini"
                                   Margin="0,4,0,0"
-                                  Click="cbStartMini_Click"
-                                  Content="Start minimised" />
+                                 
+                                  Content="Start minimised"  IsChecked="{Binding StartMinimized, Mode=TwoWay}"/>
 
                         <CheckBox x:Name="cbMinimizeClose"
                                   Margin="0,4,0,0"
-                                  Click="cbMinimizeClose_Click"
-                                  Content="Minimise instead of closing" />
+                                 
+                                  Content="Minimise instead of closing"  IsChecked="{Binding MinimizeOnClose, Mode=TwoWay}"/>
 
                         <CheckBox x:Name="cbApplyStart"
                                   Margin="0,4,0,0"
-                                  Click="cbApplyStart_Click"
-                                  Content="Reapply settings on start" />
+                                 
+                                  Content="Reapply settings on start"  IsChecked="{Binding ApplyOnStart, Mode=TwoWay}"/>
 
                         <Grid Margin="0,4,0,0">
                             <Grid.ColumnDefinitions>
@@ -98,8 +97,8 @@
 
                             <CheckBox x:Name="cbAutoReapply"
                                       VerticalAlignment="Center"
-                                      Click="cbAutoReapply_Click"
-                                      Content="Automatically reapply every" />
+                                     
+                                      Content="Automatically reapply every"  IsChecked="{Binding AutoReapply, Mode=TwoWay}"/>
 
                             <ui:NumberBox x:Name="nudAutoReapply"
                                           Grid.Column="1"
@@ -108,8 +107,8 @@
                                           Minimum="1"
                                           Maximum="90"
                                           MaxDecimalPlaces="0"
-                                          TextChanged="nudAutoReapply_TextChanged"
-                                          ValueChanged="nudAutoReapply_ValueChanged" />
+                                          
+                                           Value="{Binding ReapplyInterval, Mode=TwoWay}"/>
 
                             <TextBlock Grid.Column="2"
                                        Margin="8,0,0,0"
@@ -119,18 +118,18 @@
 
                         <CheckBox x:Name="cbAutoCheck"
                                   Margin="0,4,0,0"
-                                  Click="cbAutoCheck_Click"
-                                  Content="Check for updates automatically" />
+                                 
+                                  Content="Check for updates automatically"  IsChecked="{Binding CheckUpdates, Mode=TwoWay}"/>
 
                         <CheckBox x:Name="cbAdaptive"
                                   Margin="0,4,0,0"
-                                  Click="cbAdaptive_Click"
-                                  Content="Start Adaptive Mode automatically" />
+                                 
+                                  Content="Start Adaptive Mode automatically"  IsChecked="{Binding StartAdaptive, Mode=TwoWay}"/>
 
                         <CheckBox x:Name="cbTrack"
                                   Margin="0,4,0,0"
-                                  Click="cbTrack_Click"
-                                  Content="Track games" />
+                                 
+                                  Content="Track games"  IsChecked="{Binding TrackGames, Mode=TwoWay}"/>
                     </StackPanel>
                 </ui:Card>
 
@@ -216,7 +215,7 @@
                                    Margin="0,14,0,0"
                                    HorizontalAlignment="Left"
                                    Appearance="Caution"
-                                   Click="btnStressTest_Click">
+                                   Command="{Binding StartStressTestCommand}">
 
                             <StackPanel Orientation="Horizontal">
                                 <ui:SymbolIcon Symbol="Fire20"
@@ -256,7 +255,7 @@
                         <StackPanel Orientation="Horizontal">
                             <ui:Button x:Name="btnCheck"
                                        Width="178"
-                                       Click="btnCheck_Click">
+                                       Command="{Binding CheckUpdateCommand}">
 
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="ArrowSync20"
@@ -272,8 +271,8 @@
                                        Width="178"
                                        Margin="9,0,0,0"
                                        Appearance="Primary"
-                                       Visibility="Collapsed"
-                                       Click="btnDownload_Click">
+                                       Visibility="{Binding DownloadVisibility}"
+                                       Command="{Binding DownloadUpdateCommand}">
 
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="ArrowDownload20"
@@ -287,7 +286,7 @@
                         </StackPanel>
 
                         <TextBlock x:Name="tbDownloadMsg"
-                                   Text="{Binding ViewModel.UpdateStatus, RelativeSource={RelativeSource AncestorType=Page}}"
+                                   Text="{Binding UpdateMessage}"
                                    Margin="0,10,0,0"
                                    HorizontalAlignment="Stretch"
                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"

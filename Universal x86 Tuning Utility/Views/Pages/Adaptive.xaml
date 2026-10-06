@@ -3,15 +3,15 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+      xmlns:vm="clr-namespace:Universal_x86_Tuning_Utility.ViewModels"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      d:DataContext="{d:DesignInstance local:Adaptive, IsDesignTimeCreatable=False}"
+      d:DataContext="{d:DesignInstance Type=vm:AdaptiveViewModel, IsDesignTimeCreatable=False}"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d"
       d:DesignHeight="1000" d:DesignWidth="800"
       Title="Adaptive Mode"
-      Loaded="Page_Loaded"
+     
       ScrollViewer.CanContentScroll="False"
       SnapsToDevicePixels="True"
       UseLayoutRounding="True">
@@ -50,8 +50,8 @@
             <DockPanel Grid.Row="1" Margin="0,9,18,0">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" HorizontalAlignment="Left">
                     <TextBlock FontSize="17" FontWeight="Medium" Margin="0,0,12,0" VerticalAlignment="Center">Games/Apps:</TextBlock>
-                    <ComboBox Width="225" Name="cbxPowerPreset" SelectionChanged="cbxPowerPreset_SelectionChanged" Height="37"></ComboBox>
-                    <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnReloadApps" ToolTip="Updates dropdown list with games/apps" Click="btnReloadApps_Click" Margin="9,0,0,0">
+                    <ComboBox Width="225" Name="cbxPowerPreset" Height="37" ItemsSource="{Binding PowerPresetOptions}" SelectedItem="{Binding SelectedPresetName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                    <ui:Button  HorizontalAlignment="Right" VerticalAlignment="Center" Height="37" DockPanel.Dock="Bottom" Width="50" Name="btnReloadApps" ToolTip="Updates dropdown list with games/apps" Margin="9,0,0,0" Command="{Binding ReloadGamesCommand}">
                         <ui:SymbolIcon Symbol="ArrowSync20" FontSize="24"/>
                     </ui:Button>
                 </StackPanel>
@@ -61,15 +61,15 @@
 
             <StackPanel Grid.Row="4" Panel.ZIndex="10" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,9,9,6">
                 <TextBlock FontSize="14" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,9,9">Polling Rate</TextBlock>
-                <ui:NumberBox Margin="0,0,9,9" x:Name="nudPolling" Minimum="1" Maximum="8" Value="2" SmallChange="0.05" MaxDecimalPlaces="2"></ui:NumberBox>
-                <CheckBox Name="cbAutoSwitch" Content="Auto switch app profile" Margin="0,0,9,9" VerticalAlignment="Center" Click="cbAutoSwitch_Click"/>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings" Click="btnSave_Click" IsEnabled="False">
+                <ui:NumberBox Margin="0,0,9,9" x:Name="nudPolling" Minimum="1" Maximum="8" Value="{Binding Polling, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SmallChange="0.05" MaxDecimalPlaces="2"></ui:NumberBox>
+                <CheckBox Name="cbAutoSwitch" Content="Auto switch app profile" Margin="0,0,9,9" VerticalAlignment="Center" IsChecked="{Binding IsAutoSwitchEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SaveAutoSwitchCommand}"/>
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="50" Name="btnSave" ToolTip="Save current settings" IsEnabled="{Binding CanSave}" Command="{Binding SavePresetCommand}">
                     <ui:SymbolIcon Symbol="Save20" FontSize="24"/>
                 </ui:Button>
-                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="185" Name="btnStart" Click="btnStart_Click" IsEnabled="False">
+                <ui:Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,9,9" Height="40" DockPanel.Dock="Bottom" Width="185" Name="btnStart" IsEnabled="{Binding CanStart}" Command="{Binding ToggleAdaptiveCommand}">
                     <StackPanel Orientation="Horizontal">
-                        <ui:SymbolIcon Name="siStartIcon" Symbol="Play20" FontSize="24"/>
-                        <TextBlock Name="tbxStartText" VerticalAlignment="Center" Margin="9,0,0,0">Start Adaptive Mode</TextBlock>
+                        <ui:SymbolIcon Name="siStartIcon" Symbol="{Binding StartIconSymbol}" FontSize="24"/>
+                        <TextBlock Name="tbxStartText" VerticalAlignment="Center" Margin="9,0,0,0" Text="{Binding StartTextText}"></TextBlock>
                     </StackPanel>
                 </ui:Button>
             </StackPanel>
@@ -126,7 +126,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                         Text="Enable this preset for automatic switching. Can be used to exclude games/apps from auto switch."/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                    <ui:ToggleSwitch Name="tsAutoSwitch" Margin="0,0,9,0"/>
+                                    <ui:ToggleSwitch Name="tsAutoSwitch" Margin="0,0,9,0" IsChecked="{Binding IsPresetAutoSwitchEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardControl.Header>
@@ -168,8 +168,8 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <ui:NumberBox Name="nudTemp" Value="{Binding ElementName=sdTemp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="105" Minimum="10" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
-                                <Slider Name="sdTemp" Maximum="105" Minimum="10" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                <ui:NumberBox Name="nudTemp" Value="{Binding Temp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="105" Minimum="10" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
+                                <Slider Name="sdTemp" Maximum="105" Minimum="10" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudTemp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </StackPanel>
                         <StackPanel Margin="0,8,0,0">
@@ -184,11 +184,11 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <ui:NumberBox Name="nudPowerLimit" Value="{Binding ElementName=sdPowerLimit, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="300" Minimum="8" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
-                                <Slider Name="sdPowerLimit" Maximum="300" Minimum="8" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                <ui:NumberBox Name="nudPowerLimit" Value="{Binding PowerLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="300" Minimum="8" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
+                                <Slider Name="sdPowerLimit" Maximum="300" Minimum="8" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudPowerLimit, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </StackPanel>
-                        <StackPanel Margin="0,8,0,0" Name="spCO">
+                        <StackPanel Margin="0,8,0,0" Name="spCO" Visibility="{Binding COVisibility}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontWeight="DemiBold" FontSize="13" Foreground="{DynamicResource TextFillColorPrimaryBrush}">Max Curve Optimiser Limit (-)</TextBlock>
                                 <ui:SymbolIcon Symbol="Info20" Margin="6,0,0,-2" Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="Controls the max negative curve optimiser limit adpative mode is allowed to set" VerticalAlignment="Bottom"/>
@@ -199,9 +199,9 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="150" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Name="cbCurve"/>
-                                <ui:NumberBox Name="nudCurve" Value="{Binding ElementName=sdCurve, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="50" Minimum="0" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0" />
-                                <Slider Name="sdCurve" Maximum="50" Minimum="0" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                <CheckBox Name="cbCurve" IsChecked="{Binding IsCurveEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <ui:NumberBox Name="nudCurve" Value="{Binding Curve, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="50" Minimum="0" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
+                                <Slider Name="sdCurve" Maximum="50" Minimum="0" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudCurve, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </StackPanel>
                     </StackPanel>
@@ -210,7 +210,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                 <ui:CardExpander Name="sdTBOiGPU"
             IsEnabled="True"
             IsExpanded="False"
-            Icon="{ui:SymbolIcon Pulse20}" VerticalAlignment="Top" Margin="0,8,15,0">
+            Icon="{ui:SymbolIcon Pulse20}" VerticalAlignment="Top" Margin="0,8,15,0" Visibility="{Binding TBOiGPUVisibility}">
                     <ui:CardExpander.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -228,7 +228,7 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                             Text="Provides the ability to toggle/set Turbo Boost Overdrive iGPU targets."/>
                             </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                    <ui:ToggleSwitch Name="tsTBOiGPU" Margin="0,0,9,0"/>
+                                    <ui:ToggleSwitch Name="tsTBOiGPU" Margin="0,0,9,0" IsChecked="{Binding IsTBOiGPUEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
                     </ui:CardExpander.Header>
@@ -247,8 +247,8 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                    <ui:NumberBox Name="nudMaxGfxClk" Value="{Binding ElementName=sdMaxGfxClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="3400" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0" />
-                                    <Slider Name="sdMaxGfxClk" Maximum="3400" Minimum="200" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudMaxGfxClk" Value="{Binding MaxGfxClk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="3400" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdMaxGfxClk" Maximum="3400" Minimum="200" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudMaxGfxClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </StackPanel>
 
@@ -265,8 +265,8 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <ui:NumberBox Name="nudMinGfxClk" Value="{Binding ElementName=sdMinGfxClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="3400" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
-                                    <Slider Name="sdMinGfxClk" Maximum="3400" Minimum="200" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudMinGfxClk" Value="{Binding MinGfxClk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="3400" Minimum="200" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdMinGfxClk" Maximum="3400" Minimum="200" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudMinGfxClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -282,8 +282,8 @@ BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <ui:NumberBox Name="nudMinCpuClk" Value="{Binding ElementName=sdMinCpuClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="4000" Minimum="1000" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
-                                    <Slider Name="sdMinCpuClk" Maximum="4000" Minimum="1000" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudMinCpuClk" Value="{Binding MinCpuClk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="4000" Minimum="1000" Grid.Column="1" SmallChange="25" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdMinCpuClk" Maximum="4000" Minimum="1000" Grid.Column="2" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudMinCpuClk, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}">Notes: Ensure you balance CPU and iGPU clocks out for the best performance!</TextBlock>
@@ -310,7 +310,7 @@ Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0">
                 Text="Powered by a customised version of Magpie. Use Alt+F to toggle."/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                    <ui:ToggleSwitch Name="tsUXTUSR" Margin="0,0,9,0"/>
+                                    <ui:ToggleSwitch Name="tsUXTUSR" Margin="0,0,9,0" IsChecked="{Binding IsUXTUSREnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -323,7 +323,7 @@ Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox Name="cbVSync" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Enable VSync" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <CheckBox Name="cbVSync" FontSize="13" FontWeight="DemiBold" Content="Enable VSync" Foreground="{DynamicResource TextFillColorPrimaryBrush}" IsChecked="{Binding IsVSyncEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                         <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Synchronises capture frame rate to display refresh rate." VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Grid>
@@ -335,7 +335,7 @@ Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox Width="130" Name="cbAutoCap" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Auto Recapture" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <CheckBox Width="130" Name="cbAutoCap" FontSize="13" FontWeight="DemiBold" Content="Auto Recapture" Foreground="{DynamicResource TextFillColorPrimaryBrush}" IsChecked="{Binding IsAutoCapEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                         <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Auto recaptures the previous capture window after focus was lost and restored." VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Grid>
@@ -352,8 +352,8 @@ Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudSharp" Value="{Binding ElementName=sdSharp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="5" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0"  />
-                                    <Slider Name="sdSharp" Maximum="100" Minimum="5" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudSharp" Value="{Binding Sharp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="5" Grid.Column="0" SmallChange="1" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdSharp" Maximum="100" Minimum="5" Grid.Column="1" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudSharp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
 
@@ -369,7 +369,7 @@ Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0">
                                     </Grid.ColumnDefinitions>
                                     <ComboBox
 Grid.Column="1"
-VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" Height="37">
+VerticalAlignment="Center" SelectedIndex="{Binding ResScaleIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="138" Name="cbxResScale" Height="37">
                                         <ComboBoxItem>Application Controlled</ComboBoxItem>
                                         <ComboBoxItem>Ultra Quality (77%)</ComboBoxItem>
                                         <ComboBoxItem>Quality (67%)</ComboBoxItem>
@@ -384,7 +384,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                     <ui:CardExpander Name="sdADLX"
             IsEnabled="True"
             IsExpanded="False"
-            Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0">
+            Icon="{ui:SymbolIcon Image24}" Margin="0,8,15,0" Visibility="{Binding ADLXVisibility}">
                         <ui:CardExpander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -402,7 +402,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                             Text="Provides the ability to customise driver graphics options"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                    <ui:ToggleSwitch Name="tsRadeonGraph" Margin="0,0,9,0"/>
+                                    <ui:ToggleSwitch Name="tsRadeonGraph" Margin="0,0,9,0" IsChecked="{Binding IsRadeonGraphEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -415,7 +415,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox Name="cbAntiLag" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Radeon™ Anti-Lag" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <CheckBox Name="cbAntiLag" FontSize="13" FontWeight="DemiBold" Content="Radeon™ Anti-Lag" Foreground="{DynamicResource TextFillColorPrimaryBrush}" IsChecked="{Binding IsAntiLagEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                         <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Enables AMD Radeon™ Anti-Lag within drivers on supported hardware." VerticalAlignment="Center" />
                                     </StackPanel>
 
@@ -433,9 +433,9 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Name="cbRSR" Checked="cb_Checked"/>
-                                    <ui:NumberBox Name="nudRSR" Value="{Binding ElementName=sdRSR, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="5" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
-                                    <Slider Name="sdRSR" Maximum="100" Minimum="5" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <CheckBox Name="cbRSR" IsChecked="{Binding IsRSREnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox Name="nudRSR" Value="{Binding RSR, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="5" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdRSR" Maximum="100" Minimum="5" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudRSR, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -450,9 +450,9 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Name="cbBoost" Checked="cb_Checked"/>
-                                    <ui:NumberBox Name="nudBoost" Value="{Binding ElementName=sdBoost, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="83" Minimum="50" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
-                                    <Slider Name="sdBoost" Maximum="83" Minimum="50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <CheckBox Name="cbBoost" IsChecked="{Binding IsBoostEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox Name="nudBoost" Value="{Binding Boost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="83" Minimum="50" Grid.Column="1" SmallChange="1" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdBoost" Maximum="83" Minimum="50" Grid.Column="2" Margin="12,0,0,0" TickFrequency="1" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudBoost, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -467,9 +467,9 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox Name="cbImageSharp" Checked="cb_Checked"/>
-                                    <ui:NumberBox Name="nudImageSharp" Value="{Binding ElementName=sdImageSharp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="10" Grid.Column="1" SmallChange="5" MaxDecimalPlaces="0"/>
-                                    <Slider Name="sdImageSharp" Maximum="100" Minimum="10" Grid.Column="2" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <CheckBox Name="cbImageSharp" IsChecked="{Binding IsImageSharpEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox Name="nudImageSharp" Value="{Binding ImageSharp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="100" Minimum="10" Grid.Column="1" SmallChange="5" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdImageSharp" Maximum="100" Minimum="10" Grid.Column="2" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudImageSharp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
 
@@ -480,7 +480,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox Name="cbSync" Checked="cb_Checked" FontSize="13" FontWeight="DemiBold" Content="Enhanced Sync" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                        <CheckBox Name="cbSync" FontSize="13" FontWeight="DemiBold" Content="Enhanced Sync" Foreground="{DynamicResource TextFillColorPrimaryBrush}" IsChecked="{Binding IsSyncEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                         <ui:SymbolIcon Symbol="Info20" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="6,0,0,-4" ToolTip="Enables AMD Enhanced Sync within drivers on supported hardware." VerticalAlignment="Center" />
                                     </StackPanel>
 
@@ -491,7 +491,7 @@ VerticalAlignment="Center" SelectedIndex="0" MinWidth="138" Name="cbxResScale" H
                     <ui:CardExpander Name="sdNVIDIA"
 IsEnabled="True"
 IsExpanded="False"
-Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
+Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0" Visibility="{Binding NVIDIAVisibility}">
                         <ui:CardExpander.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -510,7 +510,7 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                    <ui:ToggleSwitch Name="tsNV" Margin="0,0,9,0"/>
+                                    <ui:ToggleSwitch Name="tsNV" Margin="0,0,9,0" IsChecked="{Binding IsNVEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -527,8 +527,8 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVMaxCore" Value="{Binding ElementName=sdNVMaxCore, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="4000" Minimum="400" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
-                                    <Slider Name="sdNVMaxCore" Maximum="4000" Minimum="400" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudNVMaxCore" Value="{Binding NVMaxCore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="4000" Minimum="400" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdNVMaxCore" Maximum="4000" Minimum="400" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudNVMaxCore, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -542,8 +542,8 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVCore" Value="{Binding ElementName=sdNVCore, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0" />
-                                    <Slider Name="sdNVCore" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudNVCore" Value="{Binding NVCore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="5" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdNVCore" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="5" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudNVCore, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,8,0,0">
@@ -557,8 +557,8 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudNVMem" Value="{Binding ElementName=sdNVMem, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0" />
-                                    <Slider Name="sdNVMem" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudNVMem" Value="{Binding NVMem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="2000" Minimum="-500" Grid.Column="0" SmallChange="25" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdNVMem" Maximum="2000" Minimum="-500" Grid.Column="1" Margin="12,0,0,0" TickFrequency="25" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudNVMem, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
 
@@ -589,7 +589,7 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                     <TextBlock FontSize="13" FontWeight="DemiBold" Text="Processor Boost Mode" />
                                     <TextBlock FontSize="12" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Text="Selects how Windows requests processor boost performance." TextWrapping="Wrap" />
                                 </StackPanel>
-                                <ComboBox x:Name="cbxWindowsBoostMode" Grid.Column="1" Height="37" SelectedIndex="0">
+                                <ComboBox x:Name="cbxWindowsBoostMode" Grid.Column="1" Height="37" SelectedIndex="{Binding WindowsBoostModeIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                     <ComboBoxItem>System Controlled</ComboBoxItem>
                                     <ComboBoxItem>Disabled</ComboBoxItem>
                                     <ComboBoxItem>Enabled</ComboBoxItem>
@@ -611,9 +611,9 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="cbWindowsMinState" />
-                                    <ui:NumberBox x:Name="nudWindowsMinState" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMinState, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Slider x:Name="sdWindowsMinState" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                    <CheckBox x:Name="cbWindowsMinState"  IsChecked="{Binding IsWindowsMinStateEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox x:Name="nudWindowsMinState" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding WindowsMinState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMinState" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown"  Value="{Binding ElementName=nudWindowsMinState, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,12,0,0">
@@ -627,9 +627,9 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="cbWindowsMaxState" />
-                                    <ui:NumberBox x:Name="nudWindowsMaxState" Grid.Column="1" Minimum="1" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMaxState, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Slider x:Name="sdWindowsMaxState" Grid.Column="2" Margin="12,0,0,0" Minimum="1" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                    <CheckBox x:Name="cbWindowsMaxState"  IsChecked="{Binding IsWindowsMaxStateEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox x:Name="nudWindowsMaxState" Grid.Column="1" Minimum="1" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding WindowsMaxState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMaxState" Grid.Column="2" Margin="12,0,0,0" Minimum="1" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown"  Value="{Binding ElementName=nudWindowsMaxState, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,12,0,0">
@@ -643,9 +643,9 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="cbWindowsMaxFrequency" />
-                                    <ui:NumberBox x:Name="nudWindowsMaxFrequency" Grid.Column="1" Minimum="100" Maximum="8000" SmallChange="100" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMaxFrequency, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Slider x:Name="sdWindowsMaxFrequency" Grid.Column="2" Margin="12,0,0,0" Minimum="100" Maximum="8000" TickFrequency="100" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                    <CheckBox x:Name="cbWindowsMaxFrequency"  IsChecked="{Binding IsWindowsMaxFrequencyEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox x:Name="nudWindowsMaxFrequency" Grid.Column="1" Minimum="100" Maximum="8000" SmallChange="100" MaxDecimalPlaces="0" Value="{Binding WindowsMaxFrequency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMaxFrequency" Grid.Column="2" Margin="12,0,0,0" Minimum="100" Maximum="8000" TickFrequency="100" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown"  Value="{Binding ElementName=nudWindowsMaxFrequency, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,12,0,0">
@@ -659,9 +659,9 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="cbWindowsEpp" />
-                                    <ui:NumberBox x:Name="nudWindowsEpp" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsEpp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Slider x:Name="sdWindowsEpp" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                    <CheckBox x:Name="cbWindowsEpp"  IsChecked="{Binding IsWindowsEppEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox x:Name="nudWindowsEpp" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding WindowsEpp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsEpp" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown"  Value="{Binding ElementName=nudWindowsEpp, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,12,0,0">
@@ -675,9 +675,9 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="cbWindowsCoreParking" />
-                                    <ui:NumberBox x:Name="nudWindowsCoreParking" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsCoreParking, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Slider x:Name="sdWindowsCoreParking" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                    <CheckBox x:Name="cbWindowsCoreParking"  IsChecked="{Binding IsWindowsCoreParkingEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox x:Name="nudWindowsCoreParking" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding WindowsCoreParking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsCoreParking" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown"  Value="{Binding ElementName=nudWindowsCoreParking, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Margin="0,12,0,0">
@@ -691,16 +691,16 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <CheckBox x:Name="cbWindowsMaxUnparkedCores" />
-                                    <ui:NumberBox x:Name="nudWindowsMaxUnparkedCores" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding ElementName=sdWindowsMaxUnparkedCores, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Slider x:Name="sdWindowsMaxUnparkedCores" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown" />
+                                    <CheckBox x:Name="cbWindowsMaxUnparkedCores"  IsChecked="{Binding IsWindowsMaxUnparkedCoresEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <ui:NumberBox x:Name="nudWindowsMaxUnparkedCores" Grid.Column="1" Minimum="0" Maximum="100" SmallChange="1" MaxDecimalPlaces="0" Value="{Binding WindowsMaxUnparkedCores, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Slider x:Name="sdWindowsMaxUnparkedCores" Grid.Column="2" Margin="12,0,0,0" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" TouchDown="SizeSlider_TouchDown"  Value="{Binding ElementName=nudWindowsMaxUnparkedCores, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
                         </StackPanel>
                     </ui:CardExpander>
                     <ui:CardControl Name="sdAsusPower"
 IsEnabled="True"
-Icon="{ui:SymbolIcon Power20}" Margin="0,8,15,0">
+Icon="{ui:SymbolIcon Power20}" Margin="0,8,15,0" Visibility="{Binding AsusPowerVisibility}">
                         <ui:CardControl.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -719,7 +719,7 @@ Icon="{ui:SymbolIcon Power20}" Margin="0,8,15,0">
                                 </StackPanel>
                                 <ComboBox
             Grid.Column="1"
-            VerticalAlignment="Center" SelectedIndex="0" MinWidth="164" Name="cbxAsusPower" Height="37">
+            VerticalAlignment="Center" SelectedIndex="{Binding AsusPowerIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="164" Name="cbxAsusPower" Height="37">
                                     <ComboBoxItem>AC Controlled</ComboBoxItem>
                                     <ComboBoxItem>Silent</ComboBoxItem>
                                     <ComboBoxItem>Performance</ComboBoxItem>
@@ -752,7 +752,7 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                    <ui:ToggleSwitch Name="tsRTSS" Margin="0,0,9,0"/>
+                                    <ui:ToggleSwitch Name="tsRTSS" Margin="0,0,9,0" IsChecked="{Binding IsRTSSEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
                         </ui:CardExpander.Header>
@@ -769,8 +769,8 @@ Icon="{ui:SymbolIcon Pulse20}" Margin="0,8,15,0">
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <ui:NumberBox Name="nudRTSS" Value="{Binding ElementName=sdRTSSLim, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="999" Minimum="0" Grid.Column="0" SmallChange="2" MaxDecimalPlaces="0" />
-                                    <Slider Name="sdRTSSLim" Maximum="999" Minimum="0" Grid.Column="1" Margin="12,0,0,0" TickFrequency="2" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown"/>
+                                    <ui:NumberBox Name="nudRTSS" Value="{Binding FrameRateLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="999" Minimum="0" Grid.Column="0" SmallChange="2" MaxDecimalPlaces="0"/>
+                                    <Slider Name="sdRTSSLim" Maximum="999" Minimum="0" Grid.Column="1" Margin="12,0,0,0" TickFrequency="2" VerticalAlignment="Center" IsSnapToTickEnabled="True" TouchDown="SizeSlider_TouchDown" Value="{Binding ElementName=nudRTSS, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
                             </StackPanel>
 

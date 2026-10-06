@@ -14,6 +14,7 @@ namespace Universal_x86_Tuning_Utility.Views.Pages
             ViewModel = viewModel;
 
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }

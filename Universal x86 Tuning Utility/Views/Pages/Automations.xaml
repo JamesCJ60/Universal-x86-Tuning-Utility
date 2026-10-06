@@ -3,16 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+      xmlns:vm="clr-namespace:Universal_x86_Tuning_Utility.ViewModels"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      d:DataContext="{d:DesignInstance local:Automations, IsDesignTimeCreatable=False}"
+      d:DataContext="{d:DesignInstance Type=vm:AutomationsViewModel, IsDesignTimeCreatable=False}"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d"
       d:DesignHeight="650"
       d:DesignWidth="800"
       Title="Automations"
-      Loaded="Page_Loaded"
+     
       SnapsToDevicePixels="True"
       UseLayoutRounding="True">
 
@@ -59,7 +59,7 @@
                                   MinWidth="150"
                                   Height="37"
                                   SelectedIndex="0"
-                                  SelectionChanged="cbxCharge_SelectionChanged">
+                                  ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedAcPreset, Mode=TwoWay}">
                             <ComboBoxItem>None</ComboBoxItem>
                         </ComboBox>
                         <ui:Button x:Name="btnChargeLoad"
@@ -67,7 +67,7 @@
                                    Height="37"
                                    Margin="8,0,0,0"
                                    ToolTip="Refresh the preset list"
-                                   Click="btnChargeLoad_Click">
+                                   Command="{Binding ReloadPresetsCommand}">
                             <ui:SymbolIcon Symbol="ArrowSync20" FontSize="20" />
                         </ui:Button>
                     </StackPanel>
@@ -94,7 +94,7 @@
                                   MinWidth="150"
                                   Height="37"
                                   SelectedIndex="0"
-                                  SelectionChanged="cbxDischarge_SelectionChanged">
+                                  ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedDcPreset, Mode=TwoWay}">
                             <ComboBoxItem>None</ComboBoxItem>
                         </ComboBox>
                         <ui:Button x:Name="btnDischargeLoad"
@@ -102,7 +102,7 @@
                                    Height="37"
                                    Margin="8,0,0,0"
                                    ToolTip="Refresh the preset list"
-                                   Click="btnDischargeLoad_Click">
+                                   Command="{Binding ReloadPresetsCommand}">
                             <ui:SymbolIcon Symbol="ArrowSync20" FontSize="20" />
                         </ui:Button>
                     </StackPanel>
@@ -129,7 +129,7 @@
                                   MinWidth="150"
                                   Height="37"
                                   SelectedIndex="0"
-                                  SelectionChanged="cbxResume_SelectionChanged">
+                                  ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedResumePreset, Mode=TwoWay}">
                             <ComboBoxItem>None</ComboBoxItem>
                         </ComboBox>
                         <ui:Button x:Name="btnResumeLoad"
@@ -137,7 +137,7 @@
                                    Height="37"
                                    Margin="8,0,0,0"
                                    ToolTip="Refresh the preset list"
-                                   Click="btnResume_Click">
+                                   Command="{Binding ReloadPresetsCommand}">
                             <ui:SymbolIcon Symbol="ArrowSync20" FontSize="20" />
                         </ui:Button>
                     </StackPanel>
@@ -164,7 +164,7 @@
                     <CheckBox x:Name="cbCPUUV"
                               Grid.Column="1"
                               VerticalAlignment="Center"
-                              Click="CheckBox_Click" />
+                              IsChecked="{Binding IsCpuUndervoltEnabled, Mode=TwoWay}" />
                 </Grid>
             </ui:CardControl.Header>
         </ui:CardControl>
@@ -188,7 +188,7 @@
                     <CheckBox x:Name="cbiGPUUV"
                               Grid.Column="1"
                               VerticalAlignment="Center"
-                              Click="CheckBox_Click" />
+                              IsChecked="{Binding IsGpuUndervoltEnabled, Mode=TwoWay}" />
                 </Grid>
             </ui:CardControl.Header>
         </ui:CardControl>

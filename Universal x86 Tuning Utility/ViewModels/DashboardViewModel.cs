@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using Settings = Universal_x86_Tuning_Utility.Properties.Settings;
 namespace Universal_x86_Tuning_Utility.ViewModels
 {
     public partial class DashboardViewModel :
-        ObservableObject,
+        PageViewModel,
         INavigationAware
     {
         private readonly INavigationService _navigationService;
@@ -30,6 +30,7 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                 Interval = TimeSpan.FromSeconds(1)
             };
 
+            OwnTimer(_autoAdaptiveTimer);
             _autoAdaptiveTimer.Tick += AutoAdaptiveTimer_Tick;
         }
 
@@ -74,6 +75,9 @@ namespace Universal_x86_Tuning_Utility.ViewModels
                     break;
             }
         }
+
+        protected override void OnActivated() => _ = OnNavigatedToAsync();
+        protected override void OnDeactivated() => _autoAdaptiveTimer.Stop();
 
         public Task OnNavigatedToAsync()
         {

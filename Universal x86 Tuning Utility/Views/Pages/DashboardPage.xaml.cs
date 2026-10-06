@@ -1,24 +1,23 @@
-﻿using System;
+using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Universal_x86_Tuning_Utility.ViewModels;
 using Wpf.Ui.Abstractions.Controls;
 
-namespace Universal_x86_Tuning_Utility.Views.Pages
+namespace Universal_x86_Tuning_Utility.Views.Pages;
+
+public partial class DashboardPage : INavigableView<DashboardViewModel>
 {
-    public partial class DashboardPage :
-        Page,
-        INavigableView<DashboardViewModel>
+    public DashboardViewModel ViewModel { get; }
+
+    public DashboardPage(DashboardViewModel viewModel)
     {
-        public DashboardViewModel ViewModel { get; }
-
-        public DashboardPage(DashboardViewModel viewModel)
-        {
-            ViewModel = viewModel
-                ?? throw new ArgumentNullException(nameof(viewModel));
-
-            DataContext = this;
-
-            InitializeComponent();
-        }
+        ViewModel = viewModel;
+        InitializeComponent();
+        DataContext = viewModel;
+        Loaded += async (_, _) => await ViewModel.ActivateAsync();
+        Unloaded += (_, _) => ViewModel.Deactivate();
     }
+
 }

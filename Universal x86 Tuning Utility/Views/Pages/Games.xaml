@@ -3,16 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:Universal_x86_Tuning_Utility.Views.Pages"
+      xmlns:vm="clr-namespace:Universal_x86_Tuning_Utility.ViewModels"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      d:DataContext="{d:DesignInstance local:Games, IsDesignTimeCreatable=False}"
+      d:DataContext="{d:DesignInstance Type=vm:GamesViewModel, IsDesignTimeCreatable=False}"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d"
       d:DesignHeight="650"
       d:DesignWidth="900"
       Title="Games"
-      Loaded="Page_Loaded"
+     
       ScrollViewer.CanContentScroll="False"
       SnapsToDevicePixels="True"
       UseLayoutRounding="True">
@@ -46,7 +46,7 @@
                      ScrollViewer.PanningMode="VerticalOnly"
                      ScrollViewer.IsDeferredScrollingEnabled="False"
                      VirtualizingPanel.IsVirtualizing="True"
-                     VirtualizingPanel.VirtualizationMode="Recycling">
+                     VirtualizingPanel.VirtualizationMode="Recycling" ItemsSource="{Binding Games}">
                 <ListBox.Resources>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="Padding" Value="0" />
@@ -85,23 +85,23 @@
                                         CornerRadius="8"
                                         ClipToBounds="True">
                                     <Border.Background>
-                                        <ImageBrush ImageSource="{Binding iconPath}" Stretch="UniformToFill" />
+                                        <ImageBrush ImageSource="{Binding IconPath}" Stretch="UniformToFill" />
                                     </Border.Background>
                                 </Border>
                                 <StackPanel Grid.Column="1" Margin="16,0,20,0" VerticalAlignment="Center">
                                     <TextBlock FontSize="18"
                                                FontWeight="Medium"
-                                               Text="{Binding gameName}"
+                                               Text="{Binding Name}"
                                                TextTrimming="CharacterEllipsis" />
                                     <TextBlock Margin="0,2,0,0"
                                                FontSize="13"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                               Text="{Binding appType}"
+                                               Text="{Binding Launcher}"
                                                TextTrimming="CharacterEllipsis" />
                                     <TextBlock Margin="0,2,0,0"
                                                FontSize="12"
                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                               Text="{Binding path}"
+                                               Text="{Binding Path}"
                                                TextTrimming="CharacterEllipsis" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" MinWidth="100" Margin="0,0,18,0" VerticalAlignment="Center">
@@ -109,14 +109,14 @@
                                                FontSize="12"
                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                Text="Average FPS" />
-                                    <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{Binding fpsData}" />
+                                    <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{Binding FramesPerSecond}" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="3" MinWidth="118" Margin="0,0,18,0" VerticalAlignment="Center">
                                     <TextBlock HorizontalAlignment="Center"
                                                FontSize="12"
                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                Text="Average Frametime" />
-                                    <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{Binding msData}" />
+                                    <TextBlock HorizontalAlignment="Center" FontSize="18" Text="{Binding FrameTime}" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
                                     <ui:Button Width="44"
@@ -133,7 +133,7 @@
                                                Appearance="Primary"
                                                Tag="{Binding}"
                                                ToolTip="Launch game"
-                                               Click="Button_Click">
+                                               Command="{Binding DataContext.LaunchCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}">
                                         <ui:SymbolIcon Symbol="Play20" FontSize="22" />
                                     </ui:Button>
                                 </StackPanel>
@@ -147,7 +147,7 @@
                         Grid.Row="1"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Visibility="Collapsed">
+                        Visibility="{Binding EmptyVisibility}">
                 <ui:SymbolIcon Symbol="Games24" FontSize="42" HorizontalAlignment="Center" />
                 <TextBlock Margin="0,12,0,0"
                            FontSize="20"
@@ -164,20 +164,20 @@
                         Grid.Row="2"
                         Margin="18,4,18,0"
                         Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+                        HorizontalAlignment="Right" IsEnabled="{Binding CanEdit}">
                 <ui:Button x:Name="btnLoad"
                            Width="48"
                            Height="40"
                            Margin="0,0,8,0"
                            ToolTip="Reload the game library"
-                           Click="btnLoad_Click">
+                           Command="{Binding ReloadCommand}">
                     <ui:SymbolIcon Symbol="ArrowSync20" FontSize="22" />
                 </ui:Button>
                 <ui:Button Width="48"
                            Height="40"
                            Appearance="Primary"
                            ToolTip="Add a game manually"
-                           Click="addGameBtn_Click">
+                           Command="{Binding AddGameCommand}">
                     <ui:SymbolIcon Symbol="Add20" FontSize="22" />
                 </ui:Button>
             </StackPanel>
@@ -188,7 +188,7 @@
                      Padding="56,34"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     HorizontalContentAlignment="Center">
+                     HorizontalContentAlignment="Center" Visibility="{Binding LoadingVisibility}">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock FontSize="22" FontWeight="Medium" HorizontalAlignment="Center" Text="Locating games" />
                     <TextBlock Margin="0,4,0,0"

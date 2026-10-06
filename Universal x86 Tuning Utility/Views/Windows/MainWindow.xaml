@@ -12,7 +12,7 @@
     Height="640"
     MinWidth="980"
     MinHeight="420"
-    d:DataContext="{d:DesignInstance local:MainWindow, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance local:MainWindow, IsDesignTimeCreatable=False}"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     ExtendsContentIntoTitleBar="True"
