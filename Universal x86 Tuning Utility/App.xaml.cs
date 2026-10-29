@@ -29,16 +29,14 @@ using Universal_x86_Tuning_Utility.Scripts.ASUS;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Services;
+using Universal_x86_Tuning_Utility.Services.Performance;
 using Universal_x86_Tuning_Utility.Views.Pages;
 using Universal_x86_Tuning_Utility.Views.Windows;
-using Wpf.Ui.Mvvm.Contracts;
-using Wpf.Ui.Mvvm.Services;
+using Wpf.Ui;
+using Wpf.Ui.Abstractions;
 
 namespace Universal_x86_Tuning_Utility
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
         // The.NET Generic Host provides dependency injection, configuration, logging, and other services.
@@ -64,7 +62,7 @@ namespace Universal_x86_Tuning_Utility
             return _host.Services.GetService(typeof(T)) as T;
         }
 
-        public static string version = "26.2.0";
+        public static string version = "26.3.1";
         private Mutex mutex;
         private const string MutexName = "UniversalX86TuningUtility";
 
@@ -72,6 +70,7 @@ namespace Universal_x86_Tuning_Utility
         public static readonly string LOGS_FOLDER = ".\\logs\\";
 
         public static string product = "";
+        public static Task DisplaySetupTask { get; private set; } = Task.CompletedTask;
 
         /// <summary>
         /// Occurs when the application is loading.
@@ -79,6 +78,7 @@ namespace Universal_x86_Tuning_Utility
         private async void OnStartup(object sender, StartupEventArgs e)
         {
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            LocalizationService.Initialize(Settings.Default.Language);
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(Scripts.Misc.DiagnosticLogger.LevelSwitch)
@@ -93,9 +93,8 @@ namespace Universal_x86_Tuning_Utility
 
             if (!IsVcRedistInstalled("x64") && !IsVcRedistInstalled("x86"))
             {
-                var downloadVcRedist = MessageBox.Show("Microsoft Visual C++ Redistributable is not installed.\n" +
-                                                       "Would you like to download it now?",
-                    "Missing VC Redistributable",
+                var downloadVcRedist = MessageBox.Show(LocalizationService.Get("Microsoft Visual C++ Redistributable is not installed.\nWould you like to download it now?"),
+                    LocalizationService.Get("Missing VC Redistributable"),
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
                 if (downloadVcRedist == MessageBoxResult.Yes)
@@ -113,8 +112,18 @@ namespace Universal_x86_Tuning_Utility
             {
                 try
                 {
-                    await Task.Run(() => product = GetSystemInfo.Product);
-                    Display.setUpLists();
+                    product = GetSystemInfo.Product;
+                    DisplaySetupTask = Task.Run(() =>
+                    {
+                        try
+                        {
+                            Display.setUpLists();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Logger.Error(ex, "Failed to setup display refresh rates");
+                        }
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -138,7 +147,7 @@ namespace Universal_x86_Tuning_Utility
                         services.AddHostedService<ApplicationHostService>();
 
                         // Page resolver service
-                        services.AddSingleton<IPageService, PageService>();
+                        services.AddSingleton<INavigationViewPageProvider, PageService>();
 
                         try
                         {
@@ -172,11 +181,39 @@ namespace Universal_x86_Tuning_Utility
                         // Service containing navigation, same as INavigationWindow... but without window
                         services.AddSingleton<INavigationService, NavigationService>();
 
+                        services.AddSingleton<IHardwareMonitoringService, HardwareMonitoringService>();
+                        services.AddSingleton<GpuInventoryService>();
+                        services.AddSingleton<IFpsMonitoringService, FpsMonitoringService>();
+                        services.AddSingleton<OverlaySettingsStore>();
+                        services.AddSingleton<OverlayManagerService>();
+                        services.AddHostedService(provider => provider.GetRequiredService<OverlayManagerService>());
+                        services.AddHostedService<GamePerformanceTrackingService>();
+
                         // Main window with navigation
                         services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
                         services.AddScoped<ViewModels.MainWindowViewModel>();
 
                         // Views and ViewModels
+                        services.AddSingleton<ApplicationExitService>();
+                        services.AddSingleton<IPresetApplicationService, PresetApplicationService>();
+                        services.AddSingleton<IUserInteractionService, UserInteractionService>();
+                        services.AddSingleton<IPresetCatalogService, PresetCatalogService>();
+                        services.AddSingleton<ViewModels.AutomationsViewModel>();
+                        services.AddSingleton<ViewModels.AdaptiveViewModel>();
+                        services.AddSingleton<ViewModels.PremadePresetsViewModel>();
+                        services.AddSingleton<ViewModels.FanControlViewModel>();
+                        services.AddSingleton<IFanControlService, FanControlService>();
+                        services.AddSingleton<ISettingsActionsService, SettingsActionsService>();
+                        services.AddSingleton<ISystemInformationService, SystemInformationService>();
+                        services.AddSingleton<ViewModels.SystemInfoViewModel>();
+                        services.AddSingleton<IGameLibraryService, GameLibraryService>();
+                        services.AddSingleton<IGamePerformanceService, GamePerformanceService>();
+                        services.AddSingleton<ApplicationRuntimeService>();
+                        services.AddSingleton<IGraphicsHardwareService, GraphicsHardwareService>();
+                        services.AddSingleton<IPresetCommandBuilder, PresetCommandBuilder>();
+                        services.AddSingleton<IAutomationSettings, AutomationSettings>();
+                        services.AddSingleton<IAdaptiveSensorService, AdaptiveSensorService>();
+                        services.AddSingleton<IAdaptiveControlService, AdaptiveControlService>();
                         services.AddScoped<Views.Pages.DashboardPage>();
                         services.AddScoped<ViewModels.DashboardViewModel>();
                         services.AddScoped<Views.Pages.CustomPresets>();
@@ -192,6 +229,7 @@ namespace Universal_x86_Tuning_Utility
                         services.AddScoped<ViewModels.DataViewModel>();
                         services.AddScoped<Views.Pages.SettingsPage>();
                         services.AddScoped<ViewModels.SettingsViewModel>();
+                        services.AddScoped<Views.Pages.OverlaySettingsPage>();
 
                         // Configuration
                         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
@@ -264,13 +302,6 @@ namespace Universal_x86_Tuning_Utility
                     Settings.Default.FirstBoot = false;
                     Settings.Default.Save();
 
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFAUTONOMOUS", 1, false);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP", 50, false);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, true);
-                    //PowerPlans.SetPowerValue("scheme_current", "sub_processor", "PERFEPP1", 50, false);
-
                     try
                     {
                         Task.Run(() => UnblockFilesInDirectory(path));
@@ -281,47 +312,39 @@ namespace Universal_x86_Tuning_Utility
                     }
                 }
 
-                try
-                {
-                    if (IsInternetAvailable())
-                        if (Settings.Default.UpdateCheck)
-                            CheckForUpdate();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to check for updates");
-                }
-
-                try
-                {
-                    if (IsInternetAvailable())
-                        if (PawnIoDetectionService.ShouldOpenInstaller())
-                        {
-                            InstallpawnIo installerWindow = new InstallpawnIo();
-
-                            installerWindow.Show();
-                        }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to check for PawnIO");
-                }
-
                 await _host.StartAsync();
-
-                try
-                {
-                    await Task.Run(() => Game_Manager.installedGames = Game_Manager.syncGame_Library());
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Failed to sync game library");
-                }
+                _ = RunPostStartupTasksAsync();
             }
             catch (Exception ex)
             {
                 Log.Logger.Fatal(ex, "Failed to build and start a host");
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async Task RunPostStartupTasksAsync()
+        {
+            try
+            {
+                if (Settings.Default.UpdateCheck)
+                    CheckForUpdate();
+
+                var isInternetAvailable = await Task.Run(IsInternetAvailable);
+                if (isInternetAvailable && PawnIoDetectionService.ShouldOpenInstaller())
+                    new InstallpawnIo().Show();
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed during deferred update and PawnIO checks");
+            }
+
+            try
+            {
+                Game_Manager.installedGames = await Task.Run(() => Game_Manager.syncGame_Library());
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to sync game library");
             }
         }
 
@@ -404,18 +427,22 @@ namespace Universal_x86_Tuning_Utility
 
         public static async void CheckForUpdate()
         {
-            var updateManager = new UpdateManager("JamesCJ60", "Universal-x86-Tuning-Utility", App.version, "C:\\");
-
-            var isUpdateAvailable = await updateManager.IsUpdateAvailable();
-
-            if (isUpdateAvailable)
+            try
             {
-                if (updateManager._newVersion.StartsWith("3."))
-                    ToastNotification.ShowToastNotification("Phantom Control Centre Now Available!",
-                        $"Head to the Phantom Control Centre GitHub releases page to easily download the latest build!");
-                else
+                var includePreReleases = Settings.Default.IncludePreReleases;
+                var updateManager = new UpdateManager(
+                    "JamesCJ60", "Universal-x86-Tuning-Utility", version,
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UXTU", "Updates"),
+                    includePreReleases);
+
+                if (await updateManager.IsUpdateAvailable() &&
+                    includePreReleases == Settings.Default.IncludePreReleases)
                     ToastNotification.ShowToastNotification("New Update Available!",
-                        $"Head to the settings menu to easily download the new Universal x86 Tuning Utility update!");
+                        "Head to the settings menu to easily download the new Universal x86 Tuning Utility update!");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(ex, "Failed to check GitHub for updates");
             }
         }
 
@@ -450,6 +477,7 @@ namespace Universal_x86_Tuning_Utility
         /// </summary>
         private async void OnExit(object sender, ExitEventArgs e)
         {
+            if (_host == null) return;
             if (Family.TYPE != Family.ProcessorType.Intel) SMUCommands.RyzenAccess.Deinitialize();
             else Intel_Management.Deinitialize();
 
@@ -457,10 +485,6 @@ namespace Universal_x86_Tuning_Utility
 
             _host.Dispose();
 
-            if (Games.CustomGameIconsDirectoryPath != null) //will be refactored in the future
-            {
-                Directory.Delete(Games.CustomGameIconsDirectoryPath, true);
-            }
         }
 
         /// <summary>

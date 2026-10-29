@@ -1,12 +1,9 @@
-﻿using Accord.Math.Distances;
-using AutoOC.Controllers;
-using AutoOC.Monitors;
+using Accord.Math.Distances;
 using DuoVia.FuzzyStrings;
 using GameLib.Plugin.RiotGames.Model;
 using Gma.System.MouseKeyHook;
 using HidSharp.Utility;
 using Microsoft.Win32;
-using RTSSSharedMemoryNET;
 using RyzenSmu;
 using Serilog;
 using System;
@@ -18,6 +15,7 @@ using System.Linq;
 using System.Management;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,8 +31,8 @@ using Universal_x86_Tuning_Utility.Scripts.Misc;
 using Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution;
 using Universal_x86_Tuning_Utility.Services;
 using Wpf.Ui.Controls;
-using Wpf.Ui.Controls.Interfaces;
-using Wpf.Ui.Mvvm.Contracts;
+using Wpf.Ui;
+using Wpf.Ui.Abstractions;
 using static Universal_x86_Tuning_Utility.Scripts.Game_Manager;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -46,20 +44,21 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
     {
         public ViewModels.MainWindowViewModel ViewModel { get; set; }
 
-        DispatcherTimer GC = new DispatcherTimer();
-        DispatcherTimer Misc = new DispatcherTimer();
-        public DispatcherTimer autoReapply = new DispatcherTimer();
-        public DispatcherTimer autoRestore = new DispatcherTimer();
-
+        private readonly ApplicationRuntimeService _runtime;
+        private readonly ApplicationExitService _exit;
+        private bool _forceClose, _closing, _shutdownComplete;
         public static bool isMini { get; private set; }
-        public static NavigationStore _mainWindowNav;
+        public static NavigationView _mainWindowNav;
         private static INavigationService _navigationService;
-        private static bool _firstRun = true;
-        private static List<GameLauncherItem> _gamesList;
-        private int _garbageCounter;
+        private bool _isTrayPresetApplying;
+        public static bool IsPageSelected(Type pageType) =>
+            _mainWindowNav?.SelectedItem is INavigationViewItem item && item.TargetPageType == pageType;
 
-        public MainWindow(ViewModels.MainWindowViewModel viewModel, IPageService pageService, INavigationService navigationService)
+        public MainWindow(ViewModels.MainWindowViewModel viewModel, INavigationViewPageProvider pageProvider, INavigationService navigationService, ApplicationRuntimeService runtime, ApplicationExitService exit)
         {
+            _runtime = runtime;
+            _exit = exit;
+            _exit.ExitRequested += OnExitRequested;
             ViewModel = viewModel;
             DataContext = this;
             InitializeComponent();
@@ -67,531 +66,38 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             _navigationService = navigationService;
             _mainWindowNav = RootNavigation;
 
-            GC.Interval = TimeSpan.FromSeconds(2);
-            GC.Tick += GC_Tick;
-            GC.Start();
-
-            Misc.Interval = TimeSpan.FromSeconds(1);
-            Misc.Tick += Misc_Tick;
-            Misc.Start();
-
-            autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
-            autoReapply.Tick += AutoReapply_Tick;
-            autoReapply.Start();
-
-            autoRestore.Interval = TimeSpan.FromSeconds(1);
-            autoRestore.Tick += Controller.AutoRestore_Tick;
-            autoRestore.Start();
-
-            SetupNavigationService(pageService);
+            SetupNavigationService(pageProvider);
 
             SetupUI();
-            ApplyOnStart();
-
-            SystemEvents.PowerModeChanged += HandlePowerModeChange;
+            Loaded += async (_, _) => { try { await _runtime.StartAsync(); } catch (Exception error) { DiagnosticLogger.LogError(error, "Failed to start application runtime"); } };
         }
 
-        private void SetupNavigationService(IPageService pageService)
+        private void SetupNavigationService(INavigationViewPageProvider pageProvider)
         {
             _navigationService.SetNavigationControl(RootNavigation);
-            RootNavigation.PageService = pageService;
+            RootNavigation.SetPageProviderService(pageProvider);
         }
 
         private void SetupUI()
         {
             tbMain.Title = $"Universal x86 Tuning Utility - {Family.CPUName}";
-            Controller.SetUpMagWindow(this);
-            Wpf.Ui.Appearance.Watcher.Watch(this, Wpf.Ui.Appearance.BackgroundType.Mica, true);
-        }
-
-        private async void ApplyOnStart()
-        {
-            if (Settings.Default.ApplyOnStart)
-                if (Settings.Default.CommandString != null && Settings.Default.CommandString != "")
-                {
-
-                    await Task.Run(() => GetBatteryStatus());
-                    await Task.Run(() => GetBatteryStatus());
-
-                    if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
-                    {
-                        if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "")
-                        {
-                            Settings.Default.CommandString = Settings.Default.acCommandString;
-                            Settings.Default.Save();
-                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.acCommandString));
-                            ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
-                        }
-                        else
-                        {
-                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
-                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
-                        }
-                    }
-                    else
-                    {
-                        if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "")
-                        {
-                            Settings.Default.CommandString = Settings.Default.dcCommandString;
-                            Settings.Default.Save();
-                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.dcCommandString));
-                            ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
-                        }
-                        else
-                        {
-                            await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.CommandString));
-                            ToastNotification.ShowToastNotification("Settings Reapplied!", $"Your last applied settings have been reapplied!");
-                        }
-                    }
-                }
-        }
-
-
-        static bool firstTime = true;
-        private static List<GameLauncherItem> listOfGames = null;
-        int garbage = -1;
-
-        InstabilityMonitor monitor = null;
-
-        AdaptiveUndervoltController cpuController = null;
-        AdaptiveUndervoltController iGpuController = null;
-
-        int lastCPUUVOffset = 0;
-        int lastiGPUUVOffset = 0;
-        private async void Misc_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (File.Exists(Settings.Default.Path + "\\gameData.json") && Settings.Default.isTrack == true)
-                {
-                    if (RTSS.RTSSRunning())
-                    {
-                        var osd = new OSD("RTSSDemo");
-                        var appEntries = OSD.GetAppEntries().Where(x => (x.Flags & AppFlags.MASK) != AppFlags.None).ToArray();
-                        if (!firstTime)
-                        {
-                            foreach (Game_Manager.GameLauncherItem item in listOfGames)
-                            {
-                                foreach (var app in appEntries)
-                                {
-                                    if (item.path != null && app.Name.ToLower().Contains(item.path.ToLower()) || app.Name.ToLower().Contains(GetImages.CleanFileName(item.gameName.ToLower())) || item.exe != null && app.Name.ToLower().Contains(item.exe))
-                                    {
-                                        GameDataManager gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
-                                        //string graphAPI = "";
-                                        //if (Convert.ToInt32(app.Flags) == 196616) graphAPI = "D3D12";
-                                        //else if (app.Flags == AppFlags.Direct3D11 || Convert.ToInt32(app.Flags) == 65543) graphAPI = "D3D11";
-                                        //else if (app.Flags == AppFlags.Direct3D10) graphAPI = "D3D10";
-                                        //else if (app.Flags == AppFlags.Direct3D9 || app.Flags == AppFlags.Direct3D9Ex) graphAPI = "D3D9";
-                                        //else if (app.Flags == AppFlags.Direct3D8) graphAPI = "D3D8";
-                                        //else if (app.Flags == AppFlags.OpenGL) graphAPI = "OpenGL";
-                                        //else if (Convert.ToInt32(app.Flags) == 65546) graphAPI = "Vulkan";
-
-                                        GameData gameData = gameDataManager.GetPreset(item.gameName);
-                                        uint fps = app.InstantaneousFrames;
-
-                                        string fpsString = gameData.fpsAvData;
-
-                                        uint[] fpsArray = fpsString.Split(',').Select(uint.Parse).ToArray();
-
-                                        Array.Resize(ref fpsArray, fpsArray.Length + 1);
-                                        fpsArray[fpsArray.Length - 1] = fps;
-
-                                        for (int i = 0; i < fpsArray.Length - 1; i++)
-                                        {
-                                            fpsArray[i] = fpsArray[i + 1];
-                                        }
-
-                                        uint totalFps = fpsArray.Aggregate((uint)0, (sum, fps) => sum + fps);
-                                        uint averageFps = (uint)(totalFps / (uint)fpsArray.Length);
-
-                                        fpsString = string.Join(",", fpsArray);
-
-                                        string timeSpanString = gameData.msAvData;
-
-                                        string[] timeSpanArray = timeSpanString.Split(',');
-
-                                        TimeSpan[] timeSpans = timeSpanArray.Select(TimeSpan.Parse).ToArray();
-                                        TimeSpan newTimeSpan = app.InstantaneousFrameTime;
-
-                                        Array.Resize(ref timeSpans, timeSpans.Length + 1);
-                                        timeSpans[timeSpans.Length - 1] = newTimeSpan;
-
-                                        for (int i = 0; i < timeSpans.Length - 1; i++)
-                                        {
-                                            timeSpans[i] = timeSpans[i + 1];
-                                        }
-
-                                        TimeSpan totalTimeSpan = new TimeSpan(timeSpans.Select(ts => ts.Ticks).Sum());
-                                        TimeSpan averageTimeSpan = TimeSpan.FromTicks(totalTimeSpan.Ticks / timeSpans.Length);
-
-                                        timeSpanString = string.Join(",", timeSpans);
-
-                                        GameData preset = new GameData
-                                        {
-                                            fpsData = averageFps.ToString(),
-                                            fpsAvData = fpsString,
-                                            msData = string.Format("{0:0.##}", averageTimeSpan.TotalMilliseconds),
-                                            msAvData = timeSpanString,
-                                        };
-                                        gameDataManager.SavePreset(item.gameName, preset);
-
-                                        garbage++;
-
-                                        if (garbage >= 20)
-                                        {
-                                            await Task.Run(() => {
-                                                Garbage.Garbage_Collect();
-                                            });
-
-                                            garbage = -1;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Misc.Stop();
-                            await Task.Run(() => {
-                                listOfGames = Game_Manager.syncGame_Library();
-                                Garbage.Garbage_Collect();
-                            });
-                            firstTime = false;
-                            Misc.Start();
-                        }
-                    }
-                    else RTSS.startRTSS();
-                }
-
-                if(Settings.Default.isAutoUvCPU == true)
-                {
-
-                    if(monitor == null) monitor = new InstabilityMonitor();
-
-                    if (cpuController == null) cpuController = new AdaptiveUndervoltController(
-                        monitor,
-                        minOffset: -50,
-                        stepSize: 1,
-                        stableThreshold: 8,
-                        cooldownThreshold: 4,
-                        isIgpu: false
-                    );
-
-                    var newOffset = cpuController.UpdateOffset();
-                    var commandValues = "";
-
-                    if (Family.FAM < Family.RyzenFamily.Renoir) commandValues = $"--set-coper={(0 << 20) | (newOffset & 0xFFFF)} ";
-                    else
-                    {
-                        if (newOffset >= 0) commandValues = commandValues + $"--set-coall={newOffset} ";
-                        if (newOffset < 0) commandValues = commandValues + $"--set-coall={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)newOffset))} ";
-                    }
-
-                    if (lastCPUUVOffset != newOffset)
-                    {
-                        await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandValues, false, true));
-                        lastCPUUVOffset = newOffset;
-                    }
-
-                    cpuController.RecordAppliedOffset(newOffset);
-                }
-                else if (Settings.Default.isAutoUvCPU == false && cpuController != null)
-                {
-                    cpuController.Dispose();
-                    cpuController = null;
-                }
-
-
-                if (Settings.Default.isAutoUviGPU == true)
-                {
-                    if (monitor == null) monitor = new InstabilityMonitor();
-
-                    if(iGpuController == null) iGpuController = new AdaptiveUndervoltController(
-                        monitor,
-                        minOffset: -50,
-                        stepSize: 1,
-                        stableThreshold: 8,
-                        cooldownThreshold: 4,
-                        isIgpu : true
-                    );
-
-                    var newOffset = iGpuController.UpdateOffset();
-                    var commandValues = "";
-
-                    if (newOffset >= 0) commandValues = commandValues + $"--set-cogfx={newOffset} ";
-                    if (newOffset < 0) commandValues = commandValues + $"--set-cogfx={Convert.ToUInt32(0x100000 - (uint)(-1 * (int)newOffset))} ";
-
-                    if (lastiGPUUVOffset != newOffset)
-                    {
-                        await Task.Run(() => RyzenAdj_To_UXTU.Translate(commandValues, false, true));
-                        lastiGPUUVOffset = newOffset;
-                    }
-
-                    iGpuController.RecordAppliedOffset(newOffset);
-                }
-                else if (Settings.Default.isAutoUviGPU == false && iGpuController != null)
-                {
-                    iGpuController.Dispose();
-                    iGpuController = null;
-                }
-
-                if(Settings.Default.isAutoUvCPU == false && Settings.Default.isAutoUviGPU == false && monitor != null)
-                {
-                    monitor.Stop();
-                    monitor = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                DiagnosticLogger.LogError(ex, "Failed during RTSS performance tracking tick");
-            }
-        }
-
-        private async Task ProcessGamePerformanceData(GameLauncherItem game)
-        {
-            var appEntries = RTSSSharedMemoryNET.OSD.GetAppEntries().Where(app => (app.Flags & AppFlags.MASK) != AppFlags.None).ToArray();
-
-            foreach (var app in appEntries)
-            {
-                if (!IsGameMatched(game, app.Name)) continue;
-
-                var gameDataManager = new GameDataManager(Settings.Default.Path + "gameData.json");
-                var gameData = gameDataManager.GetPreset(game.gameName);
-
-                UpdateGamePerformanceData(app, ref gameData);
-                gameDataManager.SavePreset(game.gameName, gameData);
-            }
-        }
-
-        private static bool IsGameMatched(GameLauncherItem game, string appName)
-        {
-            return !string.IsNullOrWhiteSpace(game.path) && appName.Contains(game.path, StringComparison.OrdinalIgnoreCase)
-                   || appName.Contains(GetImages.CleanFileName(game.gameName), StringComparison.OrdinalIgnoreCase)
-                   || !string.IsNullOrWhiteSpace(game.exe) && appName.Contains(game.exe, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static void UpdateGamePerformanceData(AppEntry app, ref GameData gameData)
-        {
-            var fpsArray = ParseAndUpdateData(app.InstantaneousFrames, gameData.fpsAvData, out var averageFps);
-            var timeSpans = ParseAndUpdateData(app.InstantaneousFrameTime, gameData.msAvData, out var averageTimeSpan);
-
-            gameData.fpsData = averageFps.ToString();
-            gameData.fpsAvData = fpsArray;
-            gameData.msData = averageTimeSpan.TotalMilliseconds.ToString("0.##");
-            gameData.msAvData = timeSpans;
-        }
-
-        private static string ParseAndUpdateData<T>(T newData, string existingData, out T average)
-        {
-            var dataList = existingData.Split(',').Select(s => (T)Convert.ChangeType(s, typeof(T))).ToList();
-            dataList.Add(newData);
-
-            if (dataList.Count > 100) dataList.RemoveAt(0);
-
-            average = (T)Convert.ChangeType(dataList.Average(x => Convert.ToDouble(x)), typeof(T));
-            return string.Join(",", dataList);
-        }
-
-        private static ushort statuscode;
-
-        public static void GetBatteryStatus()
-        {
-            try
-            {
-                var batteryClass = new ManagementClass("Win32_Battery");
-                var batteries = batteryClass.GetInstances();
-
-                foreach (var battery in batteries)
-                {
-                    statuscode = (ushort)battery["BatteryStatus"];
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions if necessary
-                DiagnosticLogger.LogError(ex, "Failed to get battery status");
-            }
-        }
-
-        private void PerformGarbageCollection(object sender, EventArgs e)
-        {
-            if (!isMini) Task.Run(Garbage.Garbage_Collect);
-        }
-
-        private async void AutoReapply_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (niTray.Visibility == Visibility.Hidden && this.Visibility == Visibility.Hidden) niTray.Visibility = Visibility.Visible;
-
-                if ((bool)Settings.Default.AutoReapply == true && (bool)Settings.Default.isAdaptiveModeRunning == false)
-                {
-                    string commands = (string)Settings.Default.CommandString;
-                    //Check if RyzenAdjArguments is populated
-                    if (commands != null && commands != "")
-                    {
-                        await Task.Run(() => RyzenAdj_To_UXTU.Translate(commands));
-                    }
-
-                    if (autoReapply.Interval != TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime))
-                    {
-                        autoReapply.Stop();
-                        autoReapply.Interval = TimeSpan.FromSeconds((int)Settings.Default.AutoReapplyTime);
-                        autoReapply.Start();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                DiagnosticLogger.LogError(ex, "Failed during auto-reapply tick");
-            }
-        }
-        int i = 0;
-        async void GC_Tick(object sender, EventArgs e)
-        {
-            await Task.Run(() => Garbage.Garbage_Collect());
-            if (Settings.Default.StartMini == true && this.WindowState == WindowState.Minimized && i < 2) this.ShowInTaskbar = false;
-            if (i > 8) GC.Stop();
-            i++;
-        }
-
-        private static void UpdateTimerInterval(DispatcherTimer timer, int newInterval)
-        {
-            if (timer.Interval == TimeSpan.FromSeconds(newInterval)) return;
-
-            timer.Stop();
-            timer.Interval = TimeSpan.FromSeconds(newInterval);
-            timer.Start();
-        }
-
-        static string lastAppliedState = "";
-        private async void HandlePowerModeChange(object sender, PowerModeChangedEventArgs e)
-        {
-            try
-            {
-                if ((bool)Settings.Default.isAdaptiveModeRunning == false)
-                {
-                    if (e.Mode == PowerModes.StatusChange)
-                    {
-                        await Task.Run(() => GetBatteryStatus());
-                        await Task.Run(() => PremadePresets.SetPremadePresets());
-
-                        if (statuscode == 2 || statuscode == 6 || statuscode == 7 || statuscode == 8)
-                        {
-                            if (Settings.Default.acCommandString != null && Settings.Default.acCommandString != "" && Settings.Default.acPreset != "None")
-                            {
-                                if (Settings.Default.acPreset.Contains("PM - Eco"))
-                                {
-                                    Settings.Default.premadePreset = 0;
-                                    Settings.Default.acCommandString = PremadePresets.EcoPreset;
-                                }
-                                else if (Settings.Default.acPreset.Contains("PM - Bal"))
-                                {
-                                    Settings.Default.premadePreset = 1;
-                                    Settings.Default.acCommandString = PremadePresets.BalPreset;
-                                }
-                                else if (Settings.Default.acPreset.Contains("PM - Perf"))
-                                {
-                                    Settings.Default.premadePreset = 2;
-                                    Settings.Default.acCommandString = PremadePresets.PerformancePreset;
-                                }
-                                else if (Settings.Default.acPreset.Contains("PM - Ext"))
-                                {
-                                    Settings.Default.premadePreset = 3;
-                                    Settings.Default.acCommandString = PremadePresets.ExtremePreset;
-                                }
-
-                                Settings.Default.CommandString = Settings.Default.acCommandString;
-                                Settings.Default.Save();
-                                await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.acCommandString));
-
-                                if (lastAppliedState != "ac") ToastNotification.ShowToastNotification("Charge Preset Applied!", $"Your charge preset settings have been applied!");
-                                lastAppliedState = "ac";
-                            }
-                        }
-                        else
-                        {
-                            if (Settings.Default.dcCommandString != null && Settings.Default.dcCommandString != "" && Settings.Default.dcPreset != "None")
-                            {
-                                if (Settings.Default.dcPreset.Contains("PM - Eco"))
-                                {
-                                    Settings.Default.premadePreset = 0;
-                                    Settings.Default.dcCommandString = PremadePresets.EcoPreset;
-                                }
-                                else if (Settings.Default.dcPreset.Contains("PM - Bal"))
-                                {
-                                    Settings.Default.premadePreset = 1;
-                                    Settings.Default.dcCommandString = PremadePresets.BalPreset;
-                                }
-                                else if (Settings.Default.dcPreset.Contains("PM - Perf"))
-                                {
-                                    Settings.Default.premadePreset = 2;
-                                    Settings.Default.dcCommandString = PremadePresets.PerformancePreset;
-                                }
-                                else if (Settings.Default.dcPreset.Contains("PM - Ext"))
-                                {
-                                    Settings.Default.premadePreset = 3;
-                                    Settings.Default.dcCommandString = PremadePresets.ExtremePreset;
-                                }
-                                Settings.Default.CommandString = Settings.Default.dcCommandString;
-                                Settings.Default.Save();
-                                await Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.dcCommandString));
-
-                                if (lastAppliedState != "dc") ToastNotification.ShowToastNotification("Discharge Preset Applied!", $"Your discharge preset settings have been applied!");
-                                lastAppliedState = "dc";
-                            }
-                        }
-                    }
-
-                    if (e.Mode == PowerModes.Resume)
-                    {
-                        if (Settings.Default.resumeCommandString != null && Settings.Default.resumeCommandString != "" && Settings.Default.resumePreset != "None")
-                        {
-                            if (Settings.Default.resumePreset.Contains("PM - Eco"))
-                            {
-                                Settings.Default.premadePreset = 0;
-                                Settings.Default.resumeCommandString = PremadePresets.EcoPreset;
-                            }
-                            else if (Settings.Default.resumePreset.Contains("PM - Bal"))
-                            {
-                                Settings.Default.premadePreset = 1;
-                                Settings.Default.resumeCommandString = PremadePresets.BalPreset;
-                            }
-                            else if (Settings.Default.resumePreset.Contains("PM - Perf"))
-                            {
-                                Settings.Default.premadePreset = 2;
-                                Settings.Default.resumeCommandString = PremadePresets.PerformancePreset;
-                            }
-                            else if (Settings.Default.resumePreset.Contains("PM - Ext"))
-                            {
-                                Settings.Default.premadePreset = 3;
-                                Settings.Default.resumeCommandString = PremadePresets.ExtremePreset;
-                            }
-                            Settings.Default.CommandString = Settings.Default.resumeCommandString;
-                            Settings.Default.Save();
-                            Task.Run(() => RyzenAdj_To_UXTU.Translate(Settings.Default.resumeCommandString));
-
-                            if (lastAppliedState != "resume") ToastNotification.ShowToastNotification("Resume Preset Applied!", $"Your resume preset settings have been applied!");
-                            lastAppliedState = "resume";
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                DiagnosticLogger.LogError(ex, "Failed during power mode change handling");
-            }
+            miPremadePresets.Visibility = Visibility.Visible;
+            Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this, WindowBackdropType.Mica, true);
         }
 
         #region INavigationWindow Methods
 
-        public Frame GetFrame() => RootFrame;
-
-        public INavigation GetNavigation() => RootNavigation;
+        public INavigationView GetNavigation() => RootNavigation;
 
         public bool Navigate(Type pageType) => RootNavigation.Navigate(pageType);
 
-        public void SetPageService(IPageService pageService) => RootNavigation.PageService = pageService;
+        public void SetPageService(INavigationViewPageProvider pageProvider) => RootNavigation.SetPageProviderService(pageProvider);
+
+        public void SetServiceProvider(IServiceProvider serviceProvider)
+        {
+            if (serviceProvider.GetService(typeof(INavigationViewPageProvider)) is INavigationViewPageProvider pageProvider)
+                SetPageService(pageProvider);
+        }
 
         public void ShowWindow() => Show();
 
@@ -620,10 +126,9 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 this.ShowInTaskbar = true;
             }
 
-            Task.Run(Garbage.Garbage_Collect);
         }
 
-        private void NotifyIcon_LeftClick(Wpf.Ui.Controls.NotifyIcon sender, RoutedEventArgs e)
+        private void NotifyIcon_LeftClick(Wpf.Ui.Tray.Controls.NotifyIcon sender, RoutedEventArgs e)
         {
             if (this.WindowState != WindowState.Minimized)
             {
@@ -635,34 +140,204 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 this.Activate();
             }
 
-            Task.Run(Garbage.Garbage_Collect);
         }
 
-        private void miClose_Click(object sender, RoutedEventArgs e)
+        private async void TrayPremadePresets_SubmenuOpened(object sender, RoutedEventArgs e)
         {
-            Settings.Default.isAdaptiveModeRunning = false;
-            Settings.Default.Save();
-            Controller.magWindow?.Dispose();
-            Application.Current.Shutdown();
+            await Task.Run(PremadePresets.SetPremadePresets);
+            RefreshTrayPremadePresetChecks();
         }
 
-        private void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void TrayPremadePreset_Click(object sender, RoutedEventArgs e)
         {
-            if (Settings.Default.MinimizeClose)
+            if (_isTrayPresetApplying || sender is not System.Windows.Controls.MenuItem { Tag: string presetId })
             {
-                WindowState = WindowState.Minimized;
-                e.Cancel = true;
                 return;
             }
-            
-            Settings.Default.isAdaptiveModeRunning = false;
-            Settings.Default.Save();
-            Controller.magWindow?.Dispose();
-            //Fan_Control.disableFanControl();
+
+            _isTrayPresetApplying = true;
+            try
+            {
+                await Task.Run(PremadePresets.SetPremadePresets);
+
+                var selection = presetId switch
+                {
+                    "eco" => (0, PremadePresets.EcoPreset, "Eco Preset", "Eco Preset Applied!", "The eco premade power preset has been applied!"),
+                    "balanced" => (1, PremadePresets.BalPreset, "Balanced Preset", "Balanced Preset Applied!", "The balanced premade power preset has been applied!"),
+                    "performance" => (2, PremadePresets.PerformancePreset, "Performance Preset", "Performance Preset Applied!", "The performance premade power preset has been applied!"),
+                    "extreme" => (3, PremadePresets.ExtremePreset, "Extreme Preset", "Extreme Preset Applied!", "The extreme premade power preset has been applied!"),
+                    _ => (-1, string.Empty, string.Empty, string.Empty, string.Empty)
+                };
+
+                if (selection.Item1 < 0 || string.IsNullOrWhiteSpace(selection.Item2))
+                {
+                    return;
+                }
+
+                await RyzenAdj_To_UXTU.TranslateAsync(selection.Item2, appliedName: selection.Item3, localizeAppliedName: true);
+                Settings.Default.CommandString = selection.Item2;
+                Settings.Default.premadePreset = selection.Item1;
+                Settings.Default.Save();
+                ToastNotification.ShowToastNotification(selection.Item4, selection.Item5);
+            }
+            catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to apply a premade preset from the tray menu");
+            }
+            finally
+            {
+                RefreshTrayPremadePresetChecks();
+                _isTrayPresetApplying = false;
+            }
+        }
+
+        private void TrayMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            miCustomPresets.Items.Clear();
+            try
+            {
+                var manager = CreateCustomPresetManager();
+                var names = manager.GetPresetNames()
+                    .Where(name => !string.IsNullOrWhiteSpace(name))
+                    .OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase)
+                    .ToArray();
+
+                if (names.Length == 0)
+                {
+                    miCustomPresets.Items.Add(new System.Windows.Controls.MenuItem
+                    {
+                        Header = LocalizationService.Get("No custom presets found"),
+                        IsEnabled = false
+                    });
+                    return;
+                }
+
+                foreach (var name in names)
+                {
+                    var item = new System.Windows.Controls.MenuItem
+                    {
+                        Header = name,
+                        Tag = name
+                    };
+                    item.Click += TrayCustomPreset_Click;
+                    miCustomPresets.Items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to populate custom presets in the tray menu");
+                miCustomPresets.Items.Add(new System.Windows.Controls.MenuItem
+                {
+                    Header = LocalizationService.Get("No custom presets found"),
+                    IsEnabled = false
+                });
+            }
+        }
+
+        private async void TrayCustomPreset_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isTrayPresetApplying || sender is not System.Windows.Controls.MenuItem { Tag: string presetName })
+            {
+                return;
+            }
+
+            _isTrayPresetApplying = true;
+            try
+            {
+                var preset = CreateCustomPresetManager().GetPreset(presetName);
+                if (preset == null)
+                {
+                    return;
+                }
+
+                var command = preset.commandValue ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(command))
+                {
+                    await RyzenAdj_To_UXTU.TranslateAsync(command, appliedName: presetName);
+                    ToastNotification.ShowToastNotification("Preset Applied", "Your custom preset settings have been applied!");
+                }
+
+                Settings.Default.cstmPreset = presetName;
+                Settings.Default.CommandString = command;
+                Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                DiagnosticLogger.LogError(ex, "Failed to apply a custom preset from the tray menu");
+            }
+            finally
+            {
+                RefreshTrayPremadePresetChecks();
+                _isTrayPresetApplying = false;
+            }
+        }
+
+        private static PresetManager CreateCustomPresetManager()
+        {
+            var fileName = Family.TYPE switch
+            {
+                Family.ProcessorType.Amd_Apu => "apuPresets.json",
+                Family.ProcessorType.Amd_Desktop_Cpu => "amdDtCpuPresets.json",
+                Family.ProcessorType.Intel => "intelPresets.json",
+                _ => "apuPresets.json"
+            };
+
+            return new PresetManager(Settings.Default.Path + fileName);
+        }
+
+        private static Task TranslatePresetAsync(string commands, string? configuredName)
+        {
+            var context = configuredName switch
+            {
+                string value when value.Contains("PM - Eco", StringComparison.Ordinal) => ("Eco Preset", true),
+                string value when value.Contains("PM - Bal", StringComparison.Ordinal) => ("Balanced Preset", true),
+                string value when value.Contains("PM - Perf", StringComparison.Ordinal) => ("Performance Preset", true),
+                string value when value.Contains("PM - Ext", StringComparison.Ordinal) => ("Extreme Preset", true),
+                string value when !string.IsNullOrWhiteSpace(value) && !string.Equals(value, "None", StringComparison.OrdinalIgnoreCase) => (value, false),
+                _ => ((string?)null, false)
+            };
+
+            return RyzenAdj_To_UXTU.TranslateAsync(commands, appliedName: context.Item1, localizeAppliedName: context.Item2);
+        }
+
+        private void RefreshTrayPremadePresetChecks()
+        {
+            var command = Settings.Default.CommandString;
+            miTrayEcoPreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.EcoPreset) && string.Equals(command, PremadePresets.EcoPreset, StringComparison.Ordinal);
+            miTrayBalancedPreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.BalPreset) && string.Equals(command, PremadePresets.BalPreset, StringComparison.Ordinal);
+            miTrayPerformancePreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.PerformancePreset) && string.Equals(command, PremadePresets.PerformancePreset, StringComparison.Ordinal);
+            miTrayExtremePreset.IsChecked = !string.IsNullOrWhiteSpace(PremadePresets.ExtremePreset) && string.Equals(command, PremadePresets.ExtremePreset, StringComparison.Ordinal);
+        }
+
+        private void OnExitRequested() { _forceClose = true; Close(); }
+        private void miClose_Click(object sender, RoutedEventArgs e) => OnExitRequested();
+        private async void UiWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_shutdownComplete) return;
+            e.Cancel = true;
+            if (!_forceClose && Settings.Default.MinimizeClose) { WindowState = WindowState.Minimized; return; }
+            if (_closing) return;
+            _closing = true;
+            try
+            {
+                await _runtime.StopAsync();
+                await ViewModels.PageViewModel.StopAllAsync();
+                Settings.Default.isAdaptiveModeRunning = false;
+                Settings.Default.Save();
+                Controller.magWindow?.Dispose();
+                _exit.ExitRequested -= OnExitRequested;
+                _exit.CompleteExit();
+            }
+            catch (Exception error) { DiagnosticLogger.LogError(error, "Failed during shutdown"); }
+            finally { _shutdownComplete = true; Application.Current.Shutdown(); }
         }
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Dispatcher.BeginInvoke(
+                DispatcherPriority.ApplicationIdle,
+                new Action(() => Controller.SetUpMagWindow(this)));
+
             if (Settings.Default.StartMini == true)
             {
                 this.WindowState = WindowState.Minimized;
@@ -680,9 +355,7 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                 }
             }
 
-            PremadePresets.SetPremadePresets();
-
-            Task.Run(Garbage.Garbage_Collect);
+            _ = Task.Run(PremadePresets.SetPremadePresets);
         }
     }
 }

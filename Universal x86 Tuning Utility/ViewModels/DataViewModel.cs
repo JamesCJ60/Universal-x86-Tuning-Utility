@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 using Universal_x86_Tuning_Utility.Models;
-using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Abstractions.Controls;
 
 namespace Universal_x86_Tuning_Utility.ViewModels
 {

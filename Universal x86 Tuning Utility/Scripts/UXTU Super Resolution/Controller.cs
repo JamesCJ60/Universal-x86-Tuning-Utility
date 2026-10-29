@@ -204,7 +204,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
             return IntPtr.Zero;
         }
 
-        public static async void SetUpMagWindow(MainWindow main)
+        public static void SetUpMagWindow(MainWindow main)
         {
             Handle = new WindowInteropHelper(main).Handle;
 
@@ -213,7 +213,6 @@ namespace Universal_x86_Tuning_Utility.Scripts.UXTU_Super_Resolution
 
             OnHotkeyChanged();
 
-            await Task.Run(() => Garbage.Garbage_Collect());
         }
 
         private static void MagWindow_Closed()

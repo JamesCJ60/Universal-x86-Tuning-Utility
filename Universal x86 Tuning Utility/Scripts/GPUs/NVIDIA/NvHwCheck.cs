@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Universal_x86_Tuning_Utility.Scripts.Misc;
+using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA
 {
@@ -19,7 +20,7 @@ namespace Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA
                 int ropCheck = GetROPCount(gpu.ArchitectInformation.PhysicalGPU.ToString());
                 
                 // If the GPU has less ROPs than the expected amount
-                if (ropCheck > 0 && ropCheck > gpu.ArchitectInformation.NumberOfROPs) ToastNotification.ShowToastNotification("NVIDIA GPU Warning", $"ROP count is lower than expected on {gpu.ArchitectInformation.PhysicalGPU} ({gpu.ArchitectInformation.NumberOfROPs } ROPs out of {ropCheck} ROPs)");
+                if (ropCheck > 0 && ropCheck > gpu.ArchitectInformation.NumberOfROPs) ToastNotification.ShowToastNotification(LocalizationService.Get("NVIDIA GPU Warning"), LocalizationService.Format("ROP count is lower than expected on {0} ({1} ROPs out of {2} ROPs)", gpu.ArchitectInformation.PhysicalGPU, gpu.ArchitectInformation.NumberOfROPs, ropCheck));
             }
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Scripts.Misc
 {
@@ -21,8 +22,8 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                 iconUri = path + "Assets\\icon.png";
 
                 new ToastContentBuilder()
-                   .AddText(title)
-                   .AddText(body)
+                   .AddText(LocalizationService.Get(title))
+                   .AddText(LocalizationService.Get(body))
                    .AddAppLogoOverride(new Uri(iconUri))
                    .Show();
             }

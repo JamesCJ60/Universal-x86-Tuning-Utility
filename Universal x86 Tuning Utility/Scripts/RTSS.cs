@@ -55,8 +55,15 @@ namespace Universal_x86_Tuning_Utility.Scripts
         public static bool RTSSRunning()
         {
             Process[] pname = Process.GetProcessesByName("rtss");
-            if (pname.Length != 0) return true;
-            else return false;
+            try
+            {
+                return pname.Length != 0;
+            }
+            finally
+            {
+                foreach (Process process in pname)
+                    process.Dispose();
+            }
         }
 
         public static void setRTSSFPSLimit(int frameLimit)

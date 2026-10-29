@@ -251,6 +251,11 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
             {
                 try
                 {
+                    using RegistryKey? biosKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\BIOS");
+                    string? productName = biosKey?.GetValue("SystemProductName")?.ToString();
+                    if (!string.IsNullOrWhiteSpace(productName))
+                        return productName;
+
                     foreach (ManagementObject queryObj in ComputerSsystemInfo.Get())
                     {
                         return queryObj["Name"].ToString();
@@ -707,6 +712,12 @@ namespace Universal_x86_Tuning_Utility.Scripts.Misc
                         return "Krackan Point 2";
                     case RyzenFamily.StrixHalo:
                         return "Strix Halo";
+                    case RyzenFamily.Medusa1:
+                        return "Medusa 1";
+                    case RyzenFamily.OlympicRidge:
+                        return "Olympic Ridge";
+                    case RyzenFamily.Medusa2:
+                        return "Medusa 2";
                     default:
                         return "";
                 }

@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Management;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
 using Universal_x86_Tuning_Utility.Scripts.AMD_Backend;
 using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
 
@@ -46,6 +45,9 @@ namespace Universal_x86_Tuning_Utility.Scripts
             StrixPoint,
             KrackanPoint,
             KrackanPoint2,
+            Medusa1,
+            Medusa2,
+            OlympicRidge,
         }
 
         public static RyzenFamily FAM = RyzenFamily.Unknown;
@@ -64,7 +66,7 @@ namespace Universal_x86_Tuning_Utility.Scripts
 
         public static string CPUName = "";
         public static int CPUFamily = 0, CPUModel = 0, CPUStepping = 0;
-        public static async void setCpuFamily()
+        public static void setCpuFamily()
         {
             try
             {
@@ -83,13 +85,10 @@ namespace Universal_x86_Tuning_Utility.Scripts
                 CPUModel = int.Parse(words[modelIndex]);
                 CPUStepping = int.Parse(words[steppingIndex].TrimEnd(','));
 
-                ManagementObjectSearcher mos = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
-                foreach (ManagementObject mo in mos.Get())
-                {
-                   CPUName = mo["Name"].ToString();
-                }
+                using RegistryKey? processorKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+                CPUName = processorKey?.GetValue("ProcessorNameString")?.ToString()?.Trim() ?? processorIdentifier;
             }
-            catch (ManagementException e)
+            catch (Exception e)
             {
                 Debug.WriteLine("Error: " + e.Message);
             }
@@ -97,7 +96,6 @@ namespace Universal_x86_Tuning_Utility.Scripts
             if (CPUName.Contains("Intel"))
             {
                 TYPE = ProcessorType.Intel;
-                Intel_Management.determineCPU();
             }
             else
             {
@@ -171,9 +169,15 @@ namespace Universal_x86_Tuning_Utility.Scripts
                     if (CPUModel == 32 || CPUModel == 36) FAM = RyzenFamily.StrixPoint;
 
                     if (CPUModel == 112) FAM = RyzenFamily.StrixHalo;
+
+                    if (CPUModel >= 128 && CPUModel <= 135) FAM = RyzenFamily.Medusa1;
+
+                    if (CPUModel >= 136 && CPUModel <= 143) FAM = RyzenFamily.OlympicRidge;
+
+                    if (CPUModel >= 224 && CPUModel <= 227) FAM = RyzenFamily.Medusa2;
                 }
 
-                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
+                if (FAM == RyzenFamily.SummitRidge || FAM == RyzenFamily.PinnacleRidge || FAM == RyzenFamily.Matisse || FAM == RyzenFamily.Vermeer || FAM == RyzenFamily.Raphael || FAM == RyzenFamily.GraniteRidge || FAM == RyzenFamily.OlympicRidge) TYPE = ProcessorType.Amd_Desktop_Cpu;
                 else TYPE = ProcessorType.Amd_Apu;
 
                 Addresses.setAddresses();

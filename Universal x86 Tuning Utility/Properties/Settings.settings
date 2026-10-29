@@ -53,6 +53,9 @@
     <Setting Name="UpdateCheck" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="IncludePreReleases" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="isAdaptiveModeRunning" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -193,6 +196,9 @@
     </Setting>
     <Setting Name="DiagnosticLogLevel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="Language" Type="System.String" Scope="User">
+      <Value Profile="(Default)">en-GB</Value>
     </Setting>
   </Settings>
 </SettingsFile>

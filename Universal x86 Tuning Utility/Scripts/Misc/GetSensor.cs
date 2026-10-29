@@ -1,76 +1,48 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using System;
-using System.Linq;
+using Universal_x86_Tuning_Utility.Services;
 
 namespace Universal_x86_Tuning_Utility.Scripts.Misc
 {
     internal class GetSensor
     {
-        private static readonly Computer thisPC = new Computer
-        {
-            IsCpuEnabled = true,
-            IsGpuEnabled = true,
-            IsMemoryEnabled = true
-        };
+        private static readonly object Sync = new();
+        private static IDisposable? _lease;
 
-        private static DateTime lastUpdate;
-        private static readonly TimeSpan updateInterval = TimeSpan.FromSeconds(1);
+        private static IHardwareMonitoringService MonitoringService =>
+            App.GetService<IHardwareMonitoringService>()
+            ?? throw new InvalidOperationException("Hardware monitoring is not available.");
 
         public static void OpenSensor()
         {
-            thisPC.Open();
+            lock (Sync)
+                _lease ??= MonitoringService.Acquire(HardwareMonitoringCategory.Cpu);
         }
 
         public static void CloseSensor()
         {
-            thisPC.Close();
-        }
-
-        private static void UpdateAllHardware()
-        {
-            if (DateTime.UtcNow - lastUpdate < updateInterval)
+            lock (Sync)
             {
-                return;
+                _lease?.Dispose();
+                _lease = null;
             }
-
-            foreach (var hardware in thisPC.Hardware)
-            {
-                hardware.Update();
-            }
-
-            lastUpdate = DateTime.UtcNow;
         }
 
         public static float GetCPUInfo(SensorType sensorType, string sensorName)
         {
-            UpdateAllHardware();
-            return GetSensorValue(thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Cpu), sensorType, sensorName);
+            return MonitoringService.ReadSensor(HardwareType.Cpu, sensorType, sensorName);
         }
 
         public static float GetAMDGPUInfo(SensorType sensorType, string sensorName)
         {
-            UpdateAllHardware();
-            return GetSensorValue(thisPC.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.GpuAmd), sensorType, sensorName);
+            using IDisposable lease = MonitoringService.Acquire(HardwareMonitoringCategory.Gpu);
+            return MonitoringService.ReadSensor(HardwareType.GpuAmd, sensorType, sensorName);
         }
 
         public static float GetNVGPUInfo(SensorType sensorType, string sensorName)
         {
-            UpdateAllHardware();
-            return thisPC.Hardware
-                .Where(h => h.HardwareType == HardwareType.GpuNvidia)
-                .Select(h => GetSensorValue(h, sensorType, sensorName))
-                .FirstOrDefault();
-        }
-
-        private static float GetSensorValue(IHardware hardware, SensorType sensorType, string sensorName)
-        {
-            if (hardware == null)
-            {
-                return 0;
-            }
-
-            var sensor = hardware.Sensors.FirstOrDefault(s => s.SensorType == sensorType && s.Name.Contains(sensorName));
-            return sensor?.Value ?? 0;
+            using IDisposable lease = MonitoringService.Acquire(HardwareMonitoringCategory.Gpu);
+            return MonitoringService.ReadSensor(HardwareType.GpuNvidia, sensorType, sensorName);
         }
     }
 }

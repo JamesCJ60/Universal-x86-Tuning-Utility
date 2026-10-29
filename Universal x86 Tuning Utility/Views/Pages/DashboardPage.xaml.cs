@@ -1,46 +1,23 @@
-﻿using RyzenSmu;
+using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using Universal_x86_Tuning_Utility.Scripts;
-using Universal_x86_Tuning_Utility.Scripts.GPUs.NVIDIA;
-using Universal_x86_Tuning_Utility.Scripts.Intel_Backend;
-using Universal_x86_Tuning_Utility.Scripts.Misc;
-using Wpf.Ui.Common.Interfaces;
+using Universal_x86_Tuning_Utility.ViewModels;
+using Wpf.Ui.Abstractions.Controls;
 
-namespace Universal_x86_Tuning_Utility.Views.Pages
+namespace Universal_x86_Tuning_Utility.Views.Pages;
+
+public partial class DashboardPage : INavigableView<DashboardViewModel>
 {
-    /// <summary>
-    /// Interaction logic for DashboardPage.xaml
-    /// </summary>
-    public partial class DashboardPage : INavigableView<ViewModels.DashboardViewModel>
+    public DashboardViewModel ViewModel { get; }
+
+    public DashboardPage(DashboardViewModel viewModel)
     {
-        public ViewModels.DashboardViewModel ViewModel
-        {
-            get;
-        }
-
-        public DashboardPage(ViewModels.DashboardViewModel viewModel)
-        {
-            ViewModel = viewModel;
-            InitializeComponent();
-            _ = Tablet.TabletDevices;
-
-            Garbage.Garbage_Collect();
-
-            if (Family.TYPE == Family.ProcessorType.Intel)
-            {
-                caPremade.IsEnabled = false;
-                btnPremade.IsEnabled = false;
-            }
-
-            try
-            {
-                NvHwCheck.CheckROPCount();
-            }
-            catch
-            {
-               
-            }
-        }
+        ViewModel = viewModel;
+        InitializeComponent();
+        DataContext = viewModel;
+        Loaded += async (_, _) => await ViewModel.ActivateAsync();
+        Unloaded += (_, _) => ViewModel.Deactivate();
     }
+
 }

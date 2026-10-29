@@ -230,6 +230,18 @@ namespace Universal_x86_Tuning_Utility.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IncludePreReleases {
+            get {
+                return ((bool)(this["IncludePreReleases"]));
+            }
+            set {
+                this["IncludePreReleases"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool isAdaptiveModeRunning {
             get {
                 return ((bool)(this["isAdaptiveModeRunning"]));
@@ -788,6 +800,18 @@ namespace Universal_x86_Tuning_Utility.Properties {
             }
             set {
                 this["DiagnosticLogLevel"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("en-GB")]
+        public string Language {
+            get {
+                return ((string)(this["Language"]));
+            }
+            set {
+                this["Language"] = value;
             }
         }
     }
