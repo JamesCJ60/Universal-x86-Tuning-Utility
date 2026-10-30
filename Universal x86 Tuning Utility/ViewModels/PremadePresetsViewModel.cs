@@ -60,9 +60,23 @@ public partial class PremadePresetsViewModel : PageViewModel
             CertifiedVisibility = Title == "Premade Presets" ? Visibility.Collapsed : Visibility.Visible;
         }
         if (Settings.Default.premadePreset is >= 0 and <= 3)
-            await ApplyAsync(Settings.Default.premadePreset.ToString());
+            await SelectAsync(Settings.Default.premadePreset.ToString());
     }
 
+    // Selects a premade preset on this page without applying anything.
+    // Only updates the UI preview (selection, name, description, command output).
+    [RelayCommand]
+    private Task SelectAsync(string? index) => RunCommandAsync(async () =>
+    {
+        if (!int.TryParse(index, out var selected) || selected < 0 || selected >= Names.Length) return;
+        var name = Names[selected];
+        SelectedIndex = selected;
+        PresetName = LocalizationService.Get(name + " Preset");
+        Description = LocalizationService.Get(Descriptions[selected]);
+        Commands = _catalog.GetCommands($"PM - {name} Preset");
+    });
+
+    // Applies the given premade preset.
     [RelayCommand]
     private Task ApplyAsync(string? index) => RunCommandAsync(async () =>
     {
@@ -79,4 +93,9 @@ public partial class PremadePresetsViewModel : PageViewModel
         Settings.Default.Save();
         _interaction.Notify(name + " Preset Applied!", $"The {name.ToLowerInvariant()} premade power preset has been applied!");
     });
+
+    // Applies the premade preset currently selected on this page.
+    // Bound to the "Apply Preset" button; the preset cards themselves only select.
+    [RelayCommand]
+    private Task ApplySelectedPresetAsync() => ApplyAsync(SelectedIndex.ToString());
 }
