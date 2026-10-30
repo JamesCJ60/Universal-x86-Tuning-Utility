@@ -186,16 +186,20 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             }
             finally
             {
-                RefreshTrayPremadePresetChecks();
+                RefreshTrayPresetChecks();
                 _isTrayPresetApplying = false;
             }
         }
 
-        private void TrayMenu_Opened(object sender, RoutedEventArgs e)
+        private async void TrayMenu_Opened(object sender, RoutedEventArgs e)
         {
             miCustomPresets.Items.Clear();
             try
             {
+                // Make sure the premade preset command strings are populated so the
+                // active-preset detection below is reliable.
+                await Task.Run(PremadePresets.SetPremadePresets);
+
                 var manager = CreateCustomPresetManager();
                 var names = manager.GetPresetNames()
                     .Where(name => !string.IsNullOrWhiteSpace(name))
@@ -217,9 +221,11 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
                     var item = new System.Windows.Controls.MenuItem
                     {
                         Header = name,
-                        Tag = name
+                        Tag = name,
+                        IsCheckable = true
                     };
                     item.Click += TrayCustomPreset_Click;
+                    item.IsChecked = IsCustomPresetActive(name);
                     miCustomPresets.Items.Add(item);
                 }
             }
@@ -267,8 +273,51 @@ namespace Universal_x86_Tuning_Utility.Views.Windows
             }
             finally
             {
-                RefreshTrayPremadePresetChecks();
+                RefreshTrayPresetChecks();
                 _isTrayPresetApplying = false;
+            }
+        }
+
+        // A premade preset is considered active when the recorded command string
+        // matches one of the four premade preset command strings.
+        private static bool IsPremadePresetActive()
+        {
+            var command = Settings.Default.CommandString;
+            if (string.IsNullOrWhiteSpace(command))
+                return false;
+
+            return string.Equals(command, PremadePresets.EcoPreset, StringComparison.Ordinal)
+                || string.Equals(command, PremadePresets.BalPreset, StringComparison.Ordinal)
+                || string.Equals(command, PremadePresets.PerformancePreset, StringComparison.Ordinal)
+                || string.Equals(command, PremadePresets.ExtremePreset, StringComparison.Ordinal);
+        }
+
+        // A custom preset is considered active when it is the recorded current custom
+        // preset and no premade preset is currently active.
+        private static bool IsCustomPresetActive(string presetName)
+        {
+            if (string.IsNullOrWhiteSpace(presetName))
+                return false;
+
+            if (!string.Equals(Settings.Default.cstmPreset, presetName, StringComparison.Ordinal))
+                return false;
+
+            return !IsPremadePresetActive();
+        }
+
+        // Refreshes the check marks of both the premade and the custom preset tray items.
+        private void RefreshTrayPresetChecks()
+        {
+            RefreshTrayPremadePresetChecks();
+            RefreshTrayCustomPresetChecks();
+        }
+
+        private void RefreshTrayCustomPresetChecks()
+        {
+            foreach (var item in miCustomPresets.Items.OfType<System.Windows.Controls.MenuItem>())
+            {
+                if (item.Tag is string name)
+                    item.IsChecked = IsCustomPresetActive(name);
             }
         }
 
