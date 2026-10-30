@@ -123,6 +123,22 @@
                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                    Text="Note: Some output commands may not be compatible with RyzenAdj"
                                    TextWrapping="Wrap" />
+
+                        <ui:Button x:Name="btnApplyPreset"
+                                   HorizontalAlignment="Stretch"
+                                   Margin="0,12,0,0"
+                                   Command="{Binding ApplySelectedPresetCommand}">
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Play20"
+                                               Margin="0,0,8,0"
+                                               FontSize="18" />
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="14"
+                                           Text="Apply Preset" />
+                            </StackPanel>
+                        </ui:Button>
                     </StackPanel>
                 </DockPanel>
             </ui:Card>
@@ -139,7 +155,7 @@
                          VerticalAlignment="Center">
                 <ToggleButton x:Name="tbEco"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Command="{Binding ApplyCommand}" CommandParameter="0" IsChecked="{Binding IsEco, Mode=OneWay}">
+                              Command="{Binding SelectCommand}" CommandParameter="0" IsChecked="{Binding IsEco, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -152,7 +168,7 @@
 
                 <ToggleButton x:Name="tbBal"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Command="{Binding ApplyCommand}" CommandParameter="1" IsChecked="{Binding IsBalanced, Mode=OneWay}">
+                              Command="{Binding SelectCommand}" CommandParameter="1" IsChecked="{Binding IsBalanced, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -165,7 +181,7 @@
 
                 <ToggleButton x:Name="tbPerf"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Command="{Binding ApplyCommand}" CommandParameter="2" IsChecked="{Binding IsPerformance, Mode=OneWay}">
+                              Command="{Binding SelectCommand}" CommandParameter="2" IsChecked="{Binding IsPerformance, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -178,7 +194,7 @@
 
                 <ToggleButton x:Name="tbEx"
                               Style="{StaticResource PresetToggleButtonStyle}"
-                              Command="{Binding ApplyCommand}" CommandParameter="3" IsChecked="{Binding IsExtreme, Mode=OneWay}">
+                              Command="{Binding SelectCommand}" CommandParameter="3" IsChecked="{Binding IsExtreme, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
